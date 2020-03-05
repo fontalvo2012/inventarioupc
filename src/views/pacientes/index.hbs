@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-6">
         <form action="/addpacientes" method="POST">
             <div class="card">
                 <div class="card-header">
@@ -13,7 +13,13 @@
                     </div>
                     <div class="form-group">
                         <span class="small"><b>Nombres</b></span>
-                        <input type="text" class="form-control form-control-sm" id="nombre" name="nombres" placeholder="Nombres" required>
+                        <div class="row m-2">
+                            <div class="col m-0 p-1"><input type="text" class="form-control form-control-sm" id="nombre" name="nombre" placeholder="Nombre" required></div>
+                            <div class="col m-0 p-1"><input type="text" class="form-control form-control-sm" id="snombre" name="snombre" placeholder="2do Nombre" required></div>
+                            <div class="col m-0 p-1"><input type="text" class="form-control form-control-sm" id="apellido" name="apellido" placeholder="Apellido" required></div>
+                            <div class="col m-0 p-1"><input type="text" class="form-control form-control-sm" id="sapellido" name="sapellido" placeholder="2do Apellido" required></div>
+
+                        </div>
                     </div>
                     <div class="form-group">
                         <span class="small"><b>direccion pacientes</b></span>
@@ -40,7 +46,7 @@
             <button  onclick="actualizarpaciente()" id="actualizar" class="btn btn-warning btn-block" style="visibility: hidden;">Actualizar</button>
         </div>
     </div>
-    <div class="col-sm-8">
+    <div class="col-sm-6">
         <table class="table">
             <thead>
                 <tr>
@@ -57,7 +63,7 @@
                     {{#each valores}}
                     <tr>
                     <th scope="row" class="small">{{cedula}}</th>
-                    <td class="small">{{nombres}}</td>
+                    <td class="small">{{nombre}} {{apellido}} {{sapellido}}</td>
                     <td class="small">{{telefono}}</td>
                     <td class="small">{{direccion}}</td> 
                     <td>
@@ -79,3 +85,4 @@
 
     </div>
 </div>
+

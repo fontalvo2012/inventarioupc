@@ -78,4 +78,21 @@ router.post('/actualizarentidad',(req,res)=>{
             res.redirect('Error en Actualizar');
         });
 });
+
+
+router.post('/selectEntidad',(req,res)=>{
+    db.collection('entidades').get()
+    .then((snapshot) => {
+        var valores=[];
+        snapshot.forEach((doc) => {
+            console.log(doc.id, '=>', doc.data());
+            valores.push({id:doc.id,nit:doc.data().nit,rsocial:doc.data().rsocial,telefono:doc.data().telefono,email:doc.data().email,direccion:doc.data().direccion,regimen:doc.data().regimen});
+        });       
+        res.send(valores);
+    })
+    .catch((err) => {
+        console.log('Error getting documents', err);
+        res.send({valor:'error'})
+    });
+});
 module.exports = router;

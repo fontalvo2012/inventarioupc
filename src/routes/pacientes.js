@@ -23,9 +23,8 @@ router.get('/addpacientes',(req,res)=>{
     db.collection('pacientes').get()
     .then((snapshot) => {
         var valores=[];
-        snapshot.forEach((doc) => {
-            console.log(doc.id, '=>', doc.data());
-            valores.push({id:doc.id,direccion:doc.data().direccion,cedula:doc.data().cedula,telefono:doc.data().telefono,email:doc.data().email,nombres:doc.data().nombres});
+        snapshot.forEach((doc) => {           
+            valores.push({id:doc.id,direccion:doc.data().direccion,cedula:doc.data().cedula,telefono:doc.data().telefono,email:doc.data().email,nombre:doc.data().nombre,snombre:doc.data().snombre,apellido:doc.data().apellido,sapellido:doc.data().sapellido});
         });       
         res.render('pacientes/index',{valores});
     })
@@ -36,11 +35,14 @@ router.get('/addpacientes',(req,res)=>{
 });
 
 router.post('/addpacientes',(req,res)=>{
-    const { cedula,nombres,email,direccion,telefono} = req.body;
+    const { cedula,nombre,snombre,apellido,sapellido,email,direccion,telefono} = req.body;
     let docRef = db.collection('pacientes').doc();
     let setAda = docRef.set({
         cedula: cedula,
-        nombres: nombres,
+        nombre: nombre,
+        snombre:snombre,
+        apellido:apellido,
+        sapellido:sapellido,
         email: email,
         direccion:direccion,
         telefono:telefono
@@ -50,8 +52,7 @@ router.post('/addpacientes',(req,res)=>{
 
 router.get('/delpaciente/:id',(req,res)=>{
     const {id}= req.params;   
-    db.collection("pacientes").doc(id).delete().then(function () {
-        console.log("Document successfully deleted!");
+    db.collection("pacientes").doc(id).delete().then(function () {       
         res.redirect('/addpacientes');
     }).catch(function (error) {
         console.error("Error removing document: ", error);
@@ -60,10 +61,13 @@ router.get('/delpaciente/:id',(req,res)=>{
 });
 
 router.post('/actualizarpaciente',(req,res)=>{
-    const {nombres,email,direccion,telefono,id} = req.body;
+    const {nombre,snombre,apellido,sapellido,email,direccion,telefono,id} = req.body;
     var washingtonRef = db.collection("pacientes").doc(id);  
     return washingtonRef.update({        
-        nombres: nombres,
+        nombre: nombre,
+        snombre:snombre,
+        sapellido:sapellido,
+        apellido:apellido,
         email: email,
         direccion:direccion,
         telefono:telefono      

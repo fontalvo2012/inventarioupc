@@ -66,3 +66,26 @@ function consultarmedico(id){
   }
 
 //   MEDICOS
+
+
+// selects
+
+function selectEntidad(){ 
+  console.log('Select Entidad');
+  $.ajax({
+    url: '/selectEntidad',
+    type: 'POST',
+    datatype: 'json',   
+    success: (data) => { 
+      var cadena=`
+      <select name="entidad" id="entidad" class="form-control form-control-sm">
+      <option value="">Seleccionar Entidad</option>
+      `;
+      data.forEach(element => {
+        cadena+=` <option value="${element.nit}">${element.rsocial}</option>`;
+      });
+      cadena+=`</select>`;
+      $('.entidades').html(cadena);
+    }
+  });  
+}
