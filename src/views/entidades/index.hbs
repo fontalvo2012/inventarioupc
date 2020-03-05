@@ -1,0 +1,92 @@
+<div class="row">
+    <div class="col-sm-4">
+        <form action="/addentidades" method="POST">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-titel"> Entidades</h3>
+                </div>
+                <div class="card-body">
+                    
+                    <div class="form-group">
+                        <span class="small"><b>Nit. </b></span>
+                        <input type="text" class="form-control form-control-sm" id="nit" name="nit" onblur=" blurentidadCedula()"  placeholder="Nit." required>
+                    </div>
+                    <div class="form-group">
+                        <span class="small"><b>Razon Social</b></span>
+                        <input type="text" class="form-control form-control-sm" id="rsocial" name="rsocial" placeholder="Razon Social" required>
+                    </div>
+                    <div class="form-group">
+                        <span class="small"><b>Direccion</b></span>
+                        <input type="text" class="form-control form-control-sm" id="direccion" name="direccion"
+                            placeholder="Direccion" required>
+                    </div>
+                    <div class="form-group">
+                        <span class="small"><b>Telefono</b></span>
+                        <input type="text" class="form-control form-control-sm" id="telefono" name="telefono" placeholder="Telfonos" required>
+                    </div>
+                    <div class="form-group">
+                        <span class="small"><b>Email</b></span>
+                        <input type="text" class="form-control form-control-sm" id="email" name="email" placeholder="email" required>
+                    </div>
+                    <div class="form-group">
+                        <span class="small"><b>Regimen</b></span>
+
+                        <select name="regimen" id="regimen" class="form-control form-control-sm">
+                            <option value="">Seleccione Regimne</option>
+                            <option value="subsidiado">Subsidiado</option>
+                            <option value="contributivo">Contributivo</option>
+                            <option value="particular">Particular</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+                    <input type="hidden" id="id" name="id"> 
+                    <div class="form-group">
+                        <button id="ingresar" class="btn btn-primary btn-block">Ingresar</button>
+                        
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="form-group">
+            <button  onclick="actualizarentidad()" id="actualizar" class="btn btn-warning btn-block" style="visibility: hidden;">Actualizar</button>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Nit</th>
+                    <th scope="col" >R.Social</th>
+                    <th scope="col">Telefono</th>
+                    <th scope="col">Email</th>                    
+                    <th> Acciones </th>
+                  
+                </tr>
+            </thead>
+            <tbody>
+                {{#if valores}}
+                    {{#each valores}}
+                    <tr>
+                    <th scope="row" class="small">{{nit}}</th>
+                    <td class="small">{{rsocial}}</td>
+                    <td class="small">{{telefono}}</td>
+                    <td class="small">{{email}}</td> 
+                    <td>
+                        <a href="/delentidad/{{id}}" class="btn btn-danger btn-sm" >del</a>
+                        {{!-- <button class="btn btn-success btn-sm" onclick="consultarentidad({{cedula}});">mod</button> --}}
+                    </td>                
+                    </tr>
+                    {{/each}}
+
+                {{else}}
+                 <tr>
+                    <th scope="row" colspan="4">No hay  Registros de  entidad</th>                    
+                </tr>
+                {{/if}}
+
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
