@@ -11,7 +11,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <span class="small"><b>T.Doc</b></span>
-                                <select name="td" id="td" class="form-control form-control-sm">
+                                <select name="td" id="td" class="form-control form-control-sm" required>
                                     <option value="">T.Doc</option>
                                     <option value="CC">Cedula ciudadania</option>
                                     <option value="CE">Cedula de extramgeria</option>
@@ -31,7 +31,7 @@
                             <div class="form-group">
                                 <span class="small"><b>Cedula pacientes</b></span>
                                 <input type="text" class="form-control form-control-sm" id="cedula" name="cedula"
-                                    onblur="" placeholder="Cedula" required>
+                                    onblur="MostrarLocalidad()" placeholder="Cedula" required>
                             </div>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                             <div class="col-sm-3"><input type="text" class="form-control form-control-sm" id="nombre"
                                     name="nombre" placeholder="Nombre" required></div>
                             <div class="col-sm-3"><input type="text" class="form-control form-control-sm" id="snombre"
-                                    name="snombre" placeholder="2do Nombre" required></div>
+                                    name="snombre" placeholder="2do Nombre"></div>
                             <div class="col-sm-3"><input type="text" class="form-control form-control-sm" id="apellido"
                                     name="apellido" placeholder="Apellido" required></div>
                             <div class="col-sm-3"><input type="text" class="form-control form-control-sm" id="sapellido"
@@ -54,7 +54,7 @@
                             <div class="form-group">
                                 <span class="small"><b>Sexo</b></span>
                                 <select name="sexo" id="sexo" class="form-control form-control-sm">
-                                    <option value="">Seleccione Sexo</option>
+                                    <option value="">Sexo</option>
                                     <option value="F">FEMENINO</option>
                                     <option value="M">MASCULINO</option>
                                 </select>
@@ -64,14 +64,14 @@
                             <span class="small"><b>F. Nacimiento</b></span>
                             <div class="form-group">
                                 <input type="date" class="form-control form-control-sm" id="nacimiento"
-                                    name="nacimiento">
+                                    name="nacimiento" onblur="calculateAge()" required >
                             </div>
                         </div>
                         <div class="col-sm-3">
-                            <span class="small"><b>F. Nacimiento</b></span>
+                            <span class="small"><b>Edad</b></span>
                             <div class="form-group">
                                 <input type="number" name="edad" id="edad" class="form-control form-control-sm"
-                                    placeholder="Edad">
+                                    placeholder="Edad" readonly>
                             </div>
                         </div>
                         <div class="col-sm-3">
@@ -91,7 +91,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <span class="small"><b>E.C</b></span>
-                                <select name="sexo" id="sexo" class="form-control form-control-sm">
+                                <select name="ecivil" id="ecivil" class="form-control form-control-sm" required>
                                     <option value="">Estado Civil</option>
                                     <option value="S">Soltero</option>
                                     <option value="C">casado</option>
@@ -115,41 +115,57 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-3">
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <span class="small"><b>Email</b></span>
                                 <input type="text" class="form-control form-control-sm small" id="email" name="email"
                                     placeholder="email" required>
                             </div>
                         </div>
-                           <div class="col-sm-3">
-                            <div class="form-group">
-                                <span class="small"><b>Departamento</b></span>
-                                <select name="departamento" id="departamento" class="form-control form-control-sm">
-                                    <option value="">Departamento</option>                                    
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3 m-0 p-1">
                             <div class="form-group">
                                 <span class="small"><b>Municipio</b></span>
-                                <select name="municipio" id="municipio" onclick="localidades()" class="form-control form-control-sm">
-                                    <option value="">Municipio</option>                                    
-                                </select>
+                                <div id="munis">
+                                    <input type="text" placeholder="municipio" readonly class="form-control form-control-sm">
+                                </div>
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                          <div class="col-sm-2 m-0 p-1">
+                            <div class="form-group">
+                                <span class="small"><b>cd</b></span>
+                                <div id="munis">
+                                    <input type="text" placeholder="cdM" id="cdm" name="cdM" class="form-control form-control-sm" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 m-0 p-1">
+                            <div class="form-group">
+                                <span class="small"><b>Dep.</b></span>
+                                <input type="text" name="departamento" id="departamento"
+                                    class="form-control form-control-sm" placeholder="departamento" readonly>
+                            </div>
+                        </div>
+                          <div class="col-sm-1 m-0 pt-1 pl-0 pr-0">
+                            <div class="form-group">
+                                <span class="small"><b>cd</b></span>
+                                <input type="text" name="cddep" id="cddep"
+                                    class="form-control form-control-sm " placeholder="cod" readonly>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 m-0 p-1">
                             <div class="form-group">
                                 <span class="small"><b>Z.residencial</b></span>
                                 <select name="zresidencial" id="zresidencial" class="form-control form-control-sm">
-                                    <option value="U">Urbana</option>                                    
-                                    <option value="R">Rural</option>                                    
+                                    <option value="U">Urbana</option>
+                                    <option value="R">Rural</option>
                                 </select>
                             </div>
                         </div>
                     </div>
 
-                
+
                     <input type="hidden" id="id" name="id">
                     <div class="form-group">
                         <button id="ingresar" class="btn btn-primary btn-block">Ingresar</button>

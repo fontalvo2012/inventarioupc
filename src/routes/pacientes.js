@@ -24,7 +24,25 @@ router.get('/addpacientes',(req,res)=>{
     .then((snapshot) => {
         var valores=[];
         snapshot.forEach((doc) => {           
-            valores.push({id:doc.id,direccion:doc.data().direccion,cedula:doc.data().cedula,telefono:doc.data().telefono,email:doc.data().email,nombre:doc.data().nombre,snombre:doc.data().snombre,apellido:doc.data().apellido,sapellido:doc.data().sapellido});
+            valores.push({
+                id:doc.id,
+                direccion:doc.data().direccion,
+                cedula:doc.data().cedula,
+                telefono:doc.data().telefono,
+                email:doc.data().email,
+                nombre:doc.data().nombre,
+                snombre:doc.data().snombre,
+                apellido:doc.data().apellido,
+                sapellido:doc.data().sapellido,
+                sexo:doc.data().sexo,
+                nacimiento:doc.data().nacimiento,
+                edad:doc.data().edad,
+                unidad:doc.data().unidad,
+                ecivil:doc.data().ecivil,
+                cdM:doc.data().cdM,
+                cddep:doc.data().cddep,
+                zresidencial:doc.data().zresidencial
+            });
         });       
         res.render('pacientes/index',{valores});
     })
@@ -35,7 +53,7 @@ router.get('/addpacientes',(req,res)=>{
 });
 
 router.post('/addpacientes',(req,res)=>{
-    const { cedula,nombre,snombre,apellido,sapellido,email,direccion,telefono} = req.body;
+    const { td,cedula,nombre,snombre,apellido,sapellido,sexo,nacimiento,edad,unidad,ecivil,cdM,cddep,zresidencial,email,direccion,telefono} = req.body;
     let docRef = db.collection('pacientes').doc();
     let setAda = docRef.set({
         cedula: cedula,
@@ -45,7 +63,16 @@ router.post('/addpacientes',(req,res)=>{
         sapellido:sapellido,
         email: email,
         direccion:direccion,
-        telefono:telefono
+        telefono:telefono,
+        td:td,
+        sexo:sexo,
+        nacimiento:nacimiento,
+        edad:edad,
+        unidad:unidad,
+        ecivil:ecivil,
+        cdM:cdM,
+        cddep:cddep,
+        zresidencial:zresidencial
     });
     res.redirect('/addpacientes');
 });
@@ -61,16 +88,25 @@ router.get('/delpaciente/:id',(req,res)=>{
 });
 
 router.post('/actualizarpaciente',(req,res)=>{
-    const {nombre,snombre,apellido,sapellido,email,direccion,telefono,id} = req.body;
+    const { id,td,nombre,snombre,apellido,sapellido,sexo,nacimiento,edad,unidad,ecivil,cdM,cddep,zresidencial,email,direccion,telefono} = req.body;
     var washingtonRef = db.collection("pacientes").doc(id);  
-    return washingtonRef.update({        
+    return washingtonRef.update({
         nombre: nombre,
         snombre:snombre,
-        sapellido:sapellido,
         apellido:apellido,
+        sapellido:sapellido,
         email: email,
         direccion:direccion,
-        telefono:telefono      
+        telefono:telefono,
+        td:td,
+        sexo:sexo,
+        nacimiento:nacimiento,
+        edad:edad,
+        unidad:unidad,
+        ecivil:ecivil,
+        cdM:cdM,
+        cddep:cddep,
+        zresidencial:zresidencial    
     })
         .then(function () {
             res.send('Actualizado Correctamente');
@@ -79,5 +115,9 @@ router.post('/actualizarpaciente',(req,res)=>{
             res.redirect('Error en Actualizar');
         });
 });
+
+
+
+
 
 module.exports = router;

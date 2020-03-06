@@ -68,6 +68,7 @@ function consultarmedico(id){
 //   MEDICOS
 
 
+
 // --- SELECT ---
 
 function selectEntidad(){ 

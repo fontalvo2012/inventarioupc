@@ -1,4 +1,56 @@
-var localidades = [
+function MostrarLocalidad() {
+    var obj = JSON.parse(localidades);
+    var oJSON = sortJSON(obj, 'municipio', 'asc');
+    console.log(oJSON);
+    var cadena=`<select name="municipio" id="municipio" onchange="selectDepartamento()"  class="form-control form-control-sm" required>
+    <option value="">Municipio</option> `;
+    oJSON.forEach(element => {
+        cadena+=`<option value="${element.municipio}">${element.municipio}</option>`;
+    });
+    cadena+=`</select>`;
+    $('#munis').html(cadena);
+    
+}
+
+function selectDepartamento() {
+    var mun=$('#municipio').val();
+    var obj = JSON.parse(localidades);
+    obj.forEach(element => {
+        if (mun==element.municipio) {
+            $('#departamento').val(element.departamento);
+            $('#cddep').val(element.coddepartamento);
+            $('#cdm').val(element.codmunicipio);
+        }
+    });
+    
+}
+
+function sortJSON(data, key, orden) {
+    return data.sort(function (a, b) {
+        var x = a[key],
+        y = b[key];
+
+        if (orden === 'asc') {
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        }
+
+        if (orden === 'desc') {
+            return ((x > y) ? -1 : ((x < y) ? 1 : 0));
+        }
+    });
+}
+
+function calculateAge() {
+    var birthday=$('#nacimiento').val();
+    var birthday_arr = birthday.split("-");
+    var birthday_date = new Date(birthday_arr[0], birthday_arr[1] - 1, birthday_arr[1]);
+    var ageDifMs = Date.now() - birthday_date.getTime();
+    var ageDate = new Date(ageDifMs);
+    $('#edad').val(Math.abs(ageDate.getUTCFullYear() - 1970));
+}
+
+
+var localidades = `[
         {
             "coddepartamento": "05",
             "departamento": "Antioquia",
@@ -483,7 +535,7 @@ var localidades = [
             "coddepartamento": "05",
             "departamento": "Antioquia",
             "codmunicipio": "585",
-            "municipio": "PUERTO NARE (LA\r\nMAGDALENA)"
+            "municipio": "PUERTO NARE (LAMAGDALENA)"
         },
         {
             "coddepartamento": "05",
@@ -753,7 +805,7 @@ var localidades = [
             "coddepartamento": "08",
             "departamento": "Atlantico",
             "codmunicipio": "001",
-            "municipio": "BARRANQUILLA (DISTRITO ESPECIAL, INDUSTRIAL Y PORTUARIO DE\r\nBARRANQUILLA)"
+            "municipio": "BARRANQUILLA (DISTRITO ESPECIAL, INDUSTRIAL Y PORTUARIO DEBARRANQUILLA)"
         },
         {
             "coddepartamento": "08",
@@ -897,127 +949,127 @@ var localidades = [
             "coddepartamento": "11",
             "departamento": "Santa Fe de Bogotá",
             "codmunicipio": "001",
-            "municipio": "SANTAFE DE BOGOTA D.C.-\r\nUSAQUEN"
+            "municipio": "SANTAFE DE BOGOTA D.C.-USAQUEN"
         },
         {
             "coddepartamento": "11",
             "departamento": "Santa Fe de Bogotá",
             "codmunicipio": "002",
-            "municipio": "SANTAFE DE BOGOTA D.C.-\r\nCHAPINERO"
+            "municipio": "SANTAFE DE BOGOTA D.C.-CHAPINERO"
         },
         {
             "coddepartamento": "11",
             "departamento": "Santa Fe de Bogotá",
             "codmunicipio": "003",
-            "municipio": "SANTAFE DE BOGOTA D.C.-\r\nSANTA FE"
+            "municipio": "SANTAFE DE BOGOTA D.C.-SANTA FE"
         },
         {
             "coddepartamento": "11",
             "departamento": "Santa Fe de Bogotá",
             "codmunicipio": "004",
-            "municipio": "SANTAFE DE BOGOTA D.C.-\r\nSAN CRISTOBAL"
+            "municipio": "SANTAFE DE BOGOTA D.C.-SAN CRISTOBAL"
         },
         {
             "coddepartamento": "11",
             "departamento": "Santa Fe de Bogotá",
             "codmunicipio": "005",
-            "municipio": "SANTAFE DE BOGOTA D.C.-\r\nUSME"
+            "municipio": "SANTAFE DE BOGOTA D.C.-USME"
         },
         {
             "coddepartamento": "11",
             "departamento": "Santa Fe de Bogotá",
             "codmunicipio": "006",
-            "municipio": "SANTAFE DE BOGOTA D.C.-\r\nTUNJUELITO"
+            "municipio": "SANTAFE DE BOGOTA D.C.-TUNJUELITO"
         },
         {
             "coddepartamento": "11",
             "departamento": "Santa Fe de Bogotá",
             "codmunicipio": "007",
-            "municipio": "SANTAFE DE BOGOTA D.C.-\r\nBOSA"
+            "municipio": "SANTAFE DE BOGOTA D.C.-BOSA"
         },
         {
             "coddepartamento": "11",
             "departamento": "Santa Fe de Bogotá",
             "codmunicipio": "008",
-            "municipio": "SANTAFE DE BOGOTA D.C.-\r\nKENNEDY"
+            "municipio": "SANTAFE DE BOGOTA D.C.-KENNEDY"
         },
         {
             "coddepartamento": "11",
             "departamento": "Santa Fe de Bogotá",
             "codmunicipio": "009",
-            "municipio": "SANTAFE DE BOGOTA D.C.-\r\nFONTIBON"
+            "municipio": "SANTAFE DE BOGOTA D.C.-FONTIBON"
         },
         {
             "coddepartamento": "11",
             "departamento": "Santa Fe de Bogotá",
             "codmunicipio": "010",
-            "municipio": "SANTAFE DE BOGOTA D.C.-\r\nENGATIVA"
+            "municipio": "SANTAFE DE BOGOTA D.C.-ENGATIVA"
         },
         {
             "coddepartamento": "11",
             "departamento": "Santa Fe de Bogotá",
             "codmunicipio": "011",
-            "municipio": "SANTAFE DE BOGOTA D.C.-\r\nSUBA"
+            "municipio": "SANTAFE DE BOGOTA D.C.-SUBA"
         },
         {
             "coddepartamento": "11",
             "departamento": "Santa Fe de Bogotá",
             "codmunicipio": "012",
-            "municipio": "SANTAFE DE BOGOTA D.C.-\r\nBARRIOS UNIDOS"
+            "municipio": "SANTAFE DE BOGOTA D.C.-BARRIOS UNIDOS"
         },
         {
             "coddepartamento": "11",
             "departamento": "Santa Fe de Bogotá",
             "codmunicipio": "013",
-            "municipio": "SANTAFE DE BOGOTA D.C.-\r\nTEUSAQUILLO"
+            "municipio": "SANTAFE DE BOGOTA D.C.-TEUSAQUILLO"
         },
         {
             "coddepartamento": "11",
             "departamento": "Santa Fe de Bogotá",
             "codmunicipio": "014",
-            "municipio": "SANTAFE DE BOGOTA D.C.-\r\nMARTIRES"
+            "municipio": "SANTAFE DE BOGOTA D.C.-MARTIRES"
         },
         {
             "coddepartamento": "11",
             "departamento": "Santa Fe de Bogotá",
             "codmunicipio": "015",
-            "municipio": "SANTAFE DE BOGOTA D.C.-\r\nANTONIO NARIÑO"
+            "municipio": "SANTAFE DE BOGOTA D.C.-ANTONIO NARIÑO"
         },
         {
             "coddepartamento": "11",
             "departamento": "Santa Fe de Bogotá",
             "codmunicipio": "016",
-            "municipio": "SANTAFE DE BOGOTA D.C.-\r\nPUENTE ARANDA"
+            "municipio": "SANTAFE DE BOGOTA D.C.-PUENTE ARANDA"
         },
         {
             "coddepartamento": "11",
             "departamento": "Santa Fe de Bogotá",
             "codmunicipio": "017",
-            "municipio": "SANTAFE DE BOGOTA D.C.-\r\nCANDELARIA"
+            "municipio": "SANTAFE DE BOGOTA D.C.-CANDELARIA"
         },
         {
             "coddepartamento": "11",
             "departamento": "Santa Fe de Bogotá",
             "codmunicipio": "018",
-            "municipio": "SANTAFE DE BOGOTA D.C.-\r\nRAFAEL URIBE"
+            "municipio": "SANTAFE DE BOGOTA D.C.-RAFAEL URIBE"
         },
         {
             "coddepartamento": "11",
             "departamento": "Santa Fe de Bogotá",
             "codmunicipio": "019",
-            "municipio": "SANTAFE DE BOGOTA D.C.-\r\nCIUDAD BOLIVAR"
+            "municipio": "SANTAFE DE BOGOTA D.C.-CIUDAD BOLIVAR"
         },
         {
             "coddepartamento": "11",
             "departamento": "Santa Fe de Bogotá",
             "codmunicipio": "020",
-            "municipio": "SANTAFE DE BOGOTA D.C.-\r\nSUMAPAZ"
+            "municipio": "SANTAFE DE BOGOTA D.C.-SUMAPAZ"
         },
         {
             "coddepartamento": "13",
             "departamento": "Bolivar",
             "codmunicipio": "001",
-            "municipio": "CARTAGENA (DISTRITO TURISTICO Y CULTURAL DE\r\nCARTAGENA)"
+            "municipio": "CARTAGENA (DISTRITO TURISTICO Y CULTURAL DE CARTAGENA)"
         },
         {
             "coddepartamento": "13",
@@ -2613,7 +2665,7 @@ var localidades = [
             "coddepartamento": "20",
             "departamento": "Cesar",
             "codmunicipio": "443",
-            "municipio": "MANAURE (BALCON DEL\r\nCESAR)"
+            "municipio": "MANAURE (BALCON DELCESAR)"
         },
         {
             "coddepartamento": "20",
@@ -2811,7 +2863,7 @@ var localidades = [
             "coddepartamento": "23",
             "departamento": "Cordova",
             "codmunicipio": "675",
-            "municipio": "SAN BERNARDO DEL\r\nVIENTO"
+            "municipio": "SAN BERNARDO DELVIENTO"
         },
         {
             "coddepartamento": "23",
@@ -3297,7 +3349,7 @@ var localidades = [
             "coddepartamento": "25",
             "departamento": "Cundinamarca",
             "codmunicipio": "645",
-            "municipio": "SAN  ANTONIO DEL\r\nTEQUENDAMA"
+            "municipio": "SAN  ANTONIO DELTEQUENDAMA"
         },
         {
             "coddepartamento": "25",
@@ -3537,7 +3589,7 @@ var localidades = [
             "coddepartamento": "27",
             "departamento": "Choco",
             "codmunicipio": "001",
-            "municipio": "QUIBDO (SAN FRANCISCO\r\nDE QUIBDO)"
+            "municipio": "QUIBDO (SAN FRANCISCO DE QUIBDO)"
         },
         {
             "coddepartamento": "27",
@@ -3585,7 +3637,7 @@ var localidades = [
             "coddepartamento": "27",
             "departamento": "Choco",
             "codmunicipio": "135",
-            "municipio": "CANTON DE SAN PABLO\r\n(MANAGRU)"
+            "municipio": "CANTON DE SAN PABLO(MANAGRU)"
         },
         {
             "coddepartamento": "27",
@@ -3603,7 +3655,7 @@ var localidades = [
             "coddepartamento": "27",
             "departamento": "Choco",
             "codmunicipio": "250",
-            "municipio": "LITORAL DEL BAJO SAN JUAN (SANTA GENOVEVA DE\r\nDOCORDO)"
+            "municipio": "LITORAL DEL BAJO SAN JUAN (SANTA GENOVEVA DE DOCORDO)"
         },
         {
             "coddepartamento": "27",
@@ -3999,7 +4051,7 @@ var localidades = [
             "coddepartamento": "47",
             "departamento": "Magdalena",
             "codmunicipio": "001",
-            "municipio": "SANTA MARTA (DISTRITO TURISTICO, CULTURAL E HISTORICODE SANTA\r\nMARTA)"
+            "municipio": "SANTA MARTA (DISTRITO TURISTICO, CULTURAL E HISTORICODE SANTAMARTA)"
         },
         {
             "coddepartamento": "47",
@@ -4083,7 +4135,7 @@ var localidades = [
             "coddepartamento": "47",
             "departamento": "Magdalena",
             "codmunicipio": "545",
-            "municipio": "PIJIÑO DEL CARMEN\r\n(PIJIÑO)"
+            "municipio": "PIJIÑO DEL CARMEN(PIJIÑO)"
         },
         {
             "coddepartamento": "47",
@@ -4125,7 +4177,7 @@ var localidades = [
             "coddepartamento": "47",
             "departamento": "Magdalena",
             "codmunicipio": "692",
-            "municipio": "SAN SEBASTIAN DE\r\nBUENAVISTA"
+            "municipio": "SAN SEBASTIAN DEBUENAVISTA"
         },
         {
             "coddepartamento": "47",
@@ -4329,7 +4381,7 @@ var localidades = [
             "coddepartamento": "52",
             "departamento": "Nariño",
             "codmunicipio": "001",
-            "municipio": "PASTO (SAN JUAN DE\r\nPASTO)"
+            "municipio": "PASTO (SAN JUAN DEPASTO)"
         },
         {
             "coddepartamento": "52",
@@ -4563,7 +4615,7 @@ var localidades = [
             "coddepartamento": "52",
             "departamento": "Nariño",
             "codmunicipio": "490",
-            "municipio": "OLAYA HERRERA (BOCAS\r\nDE SATINGA)"
+            "municipio": "OLAYA HERRERA (BOCASDE SATINGA)"
         },
         {
             "coddepartamento": "52",
@@ -4575,7 +4627,7 @@ var localidades = [
             "coddepartamento": "52",
             "departamento": "Nariño",
             "codmunicipio": "520",
-            "municipio": "FRANCISCO PIZARRO\r\n(SALAHONDA)"
+            "municipio": "FRANCISCO PIZARRO(SALAHONDA)"
         },
         {
             "coddepartamento": "52",
@@ -4617,7 +4669,7 @@ var localidades = [
             "coddepartamento": "52",
             "departamento": "Nariño",
             "codmunicipio": "621",
-            "municipio": "ROBERTO PAYAN (SAN\r\nJOSE)"
+            "municipio": "ROBERTO PAYAN (SANJOSE)"
         },
         {
             "coddepartamento": "52",
@@ -4659,7 +4711,7 @@ var localidades = [
             "coddepartamento": "52",
             "departamento": "Nariño",
             "codmunicipio": "696",
-            "municipio": "SANTA BARBARA\r\n(ISCUANDE)"
+            "municipio": "SANTA BARBARA(ISCUANDE)"
         },
         {
             "coddepartamento": "52",
@@ -5661,7 +5713,7 @@ var localidades = [
             "coddepartamento": "70",
             "departamento": "Sucre",
             "codmunicipio": "235",
-            "municipio": "GALERAS (NUEVA\r\nGRANADA)"
+            "municipio": "GALERAS (NUEVAGRANADA)"
         },
         {
             "coddepartamento": "70",
@@ -6525,7 +6577,7 @@ var localidades = [
             "coddepartamento": "86",
             "departamento": "Putumayo",
             "codmunicipio": "865",
-            "municipio": "LA HORMIGA (VALLE DEL\r\nGUAMUEZ)"
+            "municipio": "LA HORMIGA (VALLE DELGUAMUEZ)"
         },
         {
             "coddepartamento": "86",
@@ -6651,13 +6703,13 @@ var localidades = [
             "coddepartamento": "94",
             "departamento": "Guainia",
             "codmunicipio": "887",
-            "municipio": "PANA PANA (CAMPO\r\nALEGRE)"
+            "municipio": "PANA PANA (CAMPOALEGRE)"
         },
         {
             "coddepartamento": "94",
             "departamento": "Guainia",
             "codmunicipio": "888",
-            "municipio": "MORICHAL (MORICHAL\r\nNUEVO)"
+            "municipio": "MORICHAL (MORICHALNUEVO)"
         },
         {
             "coddepartamento": "95",
@@ -6755,9 +6807,5 @@ var localidades = [
             "codmunicipio": "773",
             "municipio": "CUMARIBO"
         }
-    ];
+    ]`;
 
-    
-function localidades() {    
-    console.log('localidades');    
-   };
