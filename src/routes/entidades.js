@@ -23,9 +23,16 @@ router.get('/addentidades',(req,res)=>{
     db.collection('entidades').get()
     .then((snapshot) => {
         var valores=[];
-        snapshot.forEach((doc) => {
-            console.log(doc.id, '=>', doc.data());
-            valores.push({id:doc.id,nit:doc.data().nit,rsocial:doc.data().rsocial,telefono:doc.data().telefono,email:doc.data().email,direccion:doc.data().direccion,regimen:doc.data().regimen});
+        snapshot.forEach((doc) => {            
+            valores.push({
+                id:doc.id,
+                nit:doc.data().nit,
+                rsocial:doc.data().rsocial,
+                telefono:doc.data().telefono,
+                email:doc.data().email,
+                direccion:doc.data().direccion,
+                regimen:doc.data().regimen
+            });
         });       
         res.render('entidades/index',{valores});
     })
@@ -36,12 +43,15 @@ router.get('/addentidades',(req,res)=>{
 });
 
 router.post('/addentidades',(req,res)=>{
-    const {nit,rsocial,email,direccion,telefono,regimen} = req.body;
+    const {nit,rsocial,email,direccion,telefono,regimen,tipoid,cdeps,contrato} = req.body;
     let docRef = db.collection('entidades').doc();
     let setAda = docRef.set({
+        tipoid:tipoid,
         nit: nit,
         rsocial: rsocial,
         email: email,
+        cdeps:cdeps,
+        contrato:contrato,
         direccion:direccion,
         telefono:telefono,
         regimen:regimen
