@@ -8,6 +8,7 @@ const app = express();
 //setting
 app.set('port',process.env.PORT || 4000);
 app.set('views',path.join(__dirname,'views'));
+app.set('file',path.join(__dirname,'file'));
 
 app.engine('.hbs',exphbs({
     defaultLayout:'main',
@@ -27,6 +28,7 @@ app.use(require('./routes/medicos'));
 app.use(require('./routes/item'));
 app.use(require('./routes/pacientes'));
 app.use(require('./routes/entidades'));
+app.use(require('./routes/miempresa'));
 
 
 

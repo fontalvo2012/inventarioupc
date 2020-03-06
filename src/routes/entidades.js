@@ -54,7 +54,10 @@ router.post('/addentidades',(req,res)=>{
         contrato:contrato,
         direccion:direccion,
         telefono:telefono,
-        regimen:regimen
+        regimen:regimen,
+        planbeneficio:'',
+        poliza:'',
+        
     });
     res.redirect('/addentidades');
 });
@@ -72,14 +75,19 @@ router.get('/delentidad/:id',(req,res)=>{
 });
 
 router.post('/actualizarentidad',(req,res)=>{
-    const {nombres,email,registro,telefono,id} = req.body;
+    const {nit,rsocial,email,direccion,telefono,regimen,tipoid,cdeps,contrato,id} = req.body;
     var washingtonRef = db.collection("entidades").doc(id);
   
-    return washingtonRef.update({        
-        nombres: nombres,
+    return washingtonRef.update({    
+        tipoid:tipoid,
+        nit: nit,
+        rsocial: rsocial,
         email: email,
-        registro:registro,
-        telefono:telefono      
+        cdeps:cdeps,
+        contrato:contrato,
+        direccion:direccion,
+        telefono:telefono,
+        regimen:regimen     
     })
         .then(function () {
             res.send('Actualizado Correctamente');
