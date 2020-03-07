@@ -131,9 +131,15 @@ function consultarPaciente(){
     success: (data) => {
       if (data[0]) {
         paciente=data[0];
-      $('#nombres').val(data[0].nombre +" "+data[0].apellido+" "+data[0].sapellido);
-      $('#edad').val(data[0].edad);
-      selectEntidad();
+        $('#nombres').val(data[0].nombre +" "+data[0].apellido+" "+data[0].sapellido);
+        $('#edad').val(data[0].edad);
+        selectEntidad();
+      }else{
+        if (confirm("El Paciente no Existe en la Base de datos desea crearlo ? ")) {
+          location.href = "/addpacientes";
+        } else {
+          $('#cc').val("");
+        }
       }
     }
   });  
@@ -171,23 +177,25 @@ function consultarItem(){
   });  
 }
 
-function additem() {
- 
+function additem() { 
   var aut=$('#autorizacion').val();
-   listitem.push({cups:item.cups,tarifa:item.valor,procedimiento:item.nombre,autorizacion:aut});
- 
-  var cad="";
-  listitem.forEach(element => {
-    cad+=`   
-      <tr>
-      <th>${element.procedimiento}</th>
-      <td>${element.cups}</td>
-      <td>${element.autorizacion}</td>
-      <td>${element.tarifa}</td>
-      </tr>`;
-  });
+  if (aut!="" && $('item').val()!="") {
+    listitem.push({cups:item.cups,tarifa:item.valor,procedimiento:item.nombre,autorizacion:aut}); 
+    var cad="";
+    listitem.forEach(element => {
+      cad+=`   
+        <tr>
+        <th>${element.procedimiento}</th>
+        <td>${element.cups}</td>
+        <td>${element.autorizacion}</td>
+        <td>${element.tarifa}</td>
+        </tr>`;
+    });
+     $('#res').html(cad);
+  }else{
+    alert('Debe llenar los campos ');
+  }
 
-   $('#res').html(cad);
 }
 
 function facturar() {
@@ -207,22 +215,26 @@ function facturar() {
   }
   var fac= JSON.stringify(factura);
  
-
-$.ajax({
-  url: '/facturar',
-  type: 'POST',
-  datatype: 'json',
-  data:{      
-    fac:fac  
-  },
-  success: (data) => {      
-    console.log(data);
-    if (data=="ingresado") {
-      location.href = "/facturar";
+if($('#cc').val()!="" && $('#entidad').val()!="" && $('#autorizacion').val()!="" && listitem[0]){
+  $.ajax({
+    url: '/facturar',
+    type: 'POST',
+    datatype: 'json',
+    data:{      
+      fac:fac  
+    },
+    success: (data) => {      
+      console.log(data);
+      if (data=="ingresado") {
+        location.href = "/facturar";
+      }
+     
     }
-   
-  }
-});  
+  }); 
+}else{
+  alert('Ha datos que no han sido agregados!');
+}
+ 
  
 }
 
