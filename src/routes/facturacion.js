@@ -31,4 +31,37 @@ router.get('/facturar',(req,res)=>{
     });
 });
 
+router.post('/facturar',(req,res)=>{
+   const {fac} = req.body; 
+  
+    let docRef = db.collection('facturas').doc();
+    let setAda = docRef.set(JSON.parse(fac))
+    .then(function () {
+        res.send('ingresado');
+    })
+    .catch(function (error) {          
+        res.send('error');
+    });  
+   
+});
+
+router.post('/consecutivo',(req,res)=>{    
+    db.collection("facturas")
+    .orderBy("consecutivo", "desc").limit(1).get()
+    .then((snapshot) => {
+        var valores=[];
+        snapshot.forEach((doc) => {
+            valores.push({
+                cons:doc.data().consecutivo,        
+            });
+         
+        });       
+        res.send(valores);
+    })
+    .catch((err) => {
+        console.log('Error getting documents', err);
+        res.send({'valor':'error'});
+    });
+});
+
 module.exports = router;

@@ -129,10 +129,12 @@ function consultarPaciente(){
       cedula:cedula  
     },
     success: (data) => {
-      paciente=data[0];
+      if (data[0]) {
+        paciente=data[0];
       $('#nombres').val(data[0].nombre +" "+data[0].apellido+" "+data[0].sapellido);
       $('#edad').val(data[0].edad);
       selectEntidad();
+      }
     }
   });  
 }
@@ -149,7 +151,7 @@ function consultarEntidad(){
     },
     success: (data) => {
       eps=data[0];
-      console.log(eps);
+    
     }
   });  
 }
@@ -173,7 +175,7 @@ function additem() {
  
   var aut=$('#autorizacion').val();
    listitem.push({cups:item.cups,tarifa:item.valor,procedimiento:item.nombre,autorizacion:aut});
-  console.log(item.cups);
+ 
   var cad="";
   listitem.forEach(element => {
     cad+=`   
@@ -186,4 +188,54 @@ function additem() {
   });
 
    $('#res').html(cad);
+}
+
+function facturar() {
+  var consecutivo=parseInt($('#consecutivo').val());
+  var factura={
+    razon:'CARLOS PARRA BUSINESS MEDICAL CENTER SAS',
+    nit:'90098069-3',
+    habilitacion:'1300102937',
+    direccion:'',
+    telefonos:'6552095-3023513182',
+    email:'gerencia@carlosparra.co',
+    prefijo:'CP',
+    consecutivo:consecutivo,
+    paciente:paciente,
+    eps:eps,
+    items:listitem
+  }
+  var fac= JSON.stringify(factura);
+ 
+
+$.ajax({
+  url: '/facturar',
+  type: 'POST',
+  datatype: 'json',
+  data:{      
+    fac:fac  
+  },
+  success: (data) => {      
+    console.log(data);
+    if (data=="ingresado") {
+      location.href = "/facturar";
+    }
+   
+  }
+});  
+ 
+}
+
+function verConsecutivo() {
+  $.ajax({
+    url: '/consecutivo',
+    type: 'POST',
+    datatype: 'json',    
+    success: (data) => {      
+      console.log(data);
+     $('#consecutivo').val(parseInt(data[0].cons)+1);
+     
+    }
+  });  
+   
 }
