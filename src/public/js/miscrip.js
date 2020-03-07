@@ -4,6 +4,7 @@ var paciente = [];
 var eps = [];
 var item = [];
 var listitem = [];
+var total=0;
 
 function consultarmedico(id) {
   $.ajax({
@@ -180,6 +181,7 @@ function consultarItem() {
 function additem() {
   var aut = $('#autorizacion').val();
   if (aut != "" && $('item').val() != "") {
+    total+=parseInt(item.valor);
     listitem.push({ cups: item.cups, tarifa: item.valor, procedimiento: item.nombre, autorizacion: aut });
     var cad = "";
     listitem.forEach(element => {
@@ -207,6 +209,30 @@ function facturar() {
   if(parseInt(month)<10) month='0'+month;
   fecha = day + '/' + month + '/' + year ;
 
+  var fechai = new Date($('#inicio').val());
+  var dias = 1; // Número de días a agregar
+  fechai.setDate(fechai.getDate() + dias);  
+  var day = fechai.getDate();
+  var month = fechai.getMonth()+1;
+  var year = fechai.getFullYear();
+  if(parseInt(day)<10) day='0'+day;
+  if(parseInt(month)<10) month='0'+month;
+  pinicio = day + '/' + month + '/' + year ;
+  console.log('inicio: '+pinicio);
+
+  var fechaf = new Date($('#fin').val());
+  var dias = 1; // Número de días a agregar
+  fechaf.setDate(fechaf.getDate() + dias);
+  var day = fechaf.getDate();
+  var month = fechaf.getMonth()+1;
+  var year = fechaf.getFullYear();
+  if(parseInt(day)<10) day='0'+day;
+  if(parseInt(month)<10) month='0'+month;
+  pfinal = day + '/' + month + '/' + year ;
+  console.log('Final: '+pfinal);
+
+ 
+
   var consecutivo = parseInt($('#consecutivo').val());
   var factura = {
     razon: 'CARLOS PARRA BUSINESS MEDICAL CENTER SAS',
@@ -216,7 +242,10 @@ function facturar() {
     telefonos: '6552095-3023513182',
     email: 'gerencia@carlosparra.co',
     prefijo: 'CP',
+    total:total,
     fecha:fecha,
+    pinicio:pinicio,
+    pfinal:pfinal,
     consecutivo: consecutivo,
     paciente: paciente,
     eps: eps,

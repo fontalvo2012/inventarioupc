@@ -72,12 +72,12 @@
             {{/each}}
             <hr>
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <span class="small"><b>Cedula Paciente</b></span>
                     <input type="text" class="form-control form-control-sm" name="cc" id="cc"
                         onblur="consultarPaciente();verConsecutivo();" id="cc" placeholder="Cedula">
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2 ml-0 pr-0">
                     <span class="small"><b>Nombres</b></span>
                     <input type="text" class="fac" name="nombres" id="nombres" placeholder="Nombres" readonly>
                 </div>
@@ -85,7 +85,15 @@
                     <span class="small"><b>Edad</b></span>
                     <input type="text" class="fac" name="edad" id="edad" placeholder="Edad" readonly>
                 </div>
-
+                <div class="col-sm-3">
+                     <span class="small"><b>P.inicio</b></span>
+                    <input type="date" class="form-control form-control-sm" name="inicio" id="inicio" >
+                </div>
+                <div class="col-sm-3">
+                     <span class="small"><b>P.fin</b></span>
+                    <input type="date" class="form-control form-control-sm" name="fin" id="fin" >
+                </div>
+    
             </div>
             <div class="row">
                 <div class="col-sm-3">

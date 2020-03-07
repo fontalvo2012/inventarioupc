@@ -16,7 +16,15 @@ router.post('/ajaxentidad',(req,res)=>{
                 telefono:doc.data().telefono,
                 email:doc.data().email,
                 direccion:doc.data().direccion,
-                regimen:doc.data().regimen});
+                regimen:doc.data().regimen,
+                cdeps:doc.data().cdeps,
+                beneficio:doc.data().beneficio,
+                comision:doc.data().comision,
+                copago:doc.data().copago,
+                contrato:doc.data().contrato,
+                descuento:doc.data().descuento,
+                poliza:doc.data().poliza
+            });
         });       
         res.send(valores);
     })
@@ -62,8 +70,11 @@ router.post('/addentidades',(req,res)=>{
         direccion:direccion,
         telefono:telefono,
         regimen:regimen,
-        planbeneficio:'',
+        beneficio:'',
         poliza:'',
+        copago:'0',
+        comision:'0',
+        descuento:'0'
         
     });
     res.redirect('/addentidades');

@@ -36,7 +36,6 @@ router.get('/file', (req, res) => {
     res.redirect('/');
 });
 
-
 router.get('/facturips', (req, res) => {
     db.collection('facturas').get()
         .then((snapshot) => {
@@ -44,13 +43,13 @@ router.get('/facturips', (req, res) => {
             snapshot.forEach((doc) => {
                 console.log(doc.id, '=>', doc.data());
                 valores.push(doc.data());
-                fs.appendFile('file/AF00001.txt', `${doc.data().habilitacion},${doc.data().razon},NI,${doc.data().nit},CP${doc.data().consecutivo},${doc.data().fecha}\n`, (error) => {
+                fs.appendFile('file/AF00001.txt',`${doc.data().habilitacion},${doc.data().razon},NI,${doc.data().nit},CP${doc.data().consecutivo},${doc.data().fecha},${doc.data().pinicio},${doc.data().pfinal},${doc.data().eps.cdeps},${doc.data().eps.rsocial},${doc.data().eps.contrato},${doc.data().eps.beneficio},${doc.data().eps.poliza},${doc.data().eps.copago},${doc.data().eps.comision},${doc.data().eps.descuento},${doc.data().total}\n`, (error) => {
                     if (error) {
                         throw error;
                     }
                 });
             });
-            res.send(valores[0].eps.rsocial);
+            res.send(valores[0]);
         })
         .catch((err) => {
             console.log('Error getting documents', err);
