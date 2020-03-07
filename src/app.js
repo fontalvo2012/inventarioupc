@@ -29,6 +29,7 @@ app.use(require('./routes/item'));
 app.use(require('./routes/pacientes'));
 app.use(require('./routes/entidades'));
 app.use(require('./routes/miempresa'));
+app.use(require('./routes/facturacion'));
 
 
 

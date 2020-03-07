@@ -3,15 +3,45 @@ const router = Router();
 var admin = require("firebase-admin");
 const db=admin.firestore();
 
-
-
-router.post('/itemcups',(req,res)=>{
+router.post('/ajaxitems',(req,res)=>{
     const {id} = req.body;
-    db.collection('items').where("cups", "==", id ).get()
+    db.collection('items').get()
     .then((snapshot) => {
         var valores=[];
         snapshot.forEach((doc) => {            
-            valores.push({id:doc.id,registro:doc.data().registro,cups:doc.data().cups,valor:doc.data().valor,nombre:doc.data().nombre,entidad:doc.data().entidad});
+          if (doc.id==id) {
+            valores.push({
+                id:doc.id,
+                registro:doc.data().registro,
+                cups:doc.data().cups,
+                valor:doc.data().valor,
+                nombre:doc.data().nombre,
+                entidad:doc.data().entidad
+            });
+          }
+        });       
+        res.send(valores);
+    })
+    .catch((err) => {
+        console.log('Error getting documents', err);
+        res.send({'valor':'error'});
+    });
+});
+
+router.post('/itemcups',(req,res)=>{
+    const {entidad} = req.body;
+    db.collection('items').where("entidad", "==", entidad ).get()
+    .then((snapshot) => {
+        var valores=[];
+        snapshot.forEach((doc) => {            
+            valores.push({
+                id:doc.id,
+                registro:doc.data().registro,
+                cups:doc.data().cups,
+                valor:doc.data().valor,
+                nombre:doc.data().nombre,
+                entidad:doc.data().entidad
+            });
         });       
         res.send(valores);
     })

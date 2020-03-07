@@ -4,12 +4,30 @@ var admin = require("firebase-admin");
 const db=admin.firestore();
 
 router.post('/ajaxpaciente',(req,res)=>{
-    const {id} = req.body;
-    db.collection('pacientes').where("cedula", "==", id ).get()
+    const {cedula} = req.body;
+    db.collection('pacientes').where("cedula", "==", cedula ).get()
     .then((snapshot) => {
         var valores=[];
         snapshot.forEach((doc) => {            
-            valores.push({id:doc.id,direccion:doc.data().direccion,cedula:doc.data().cedula,telefono:doc.data().telefono,email:doc.data().email,nombres:doc.data().nombres});
+            valores.push({
+                id:doc.id,
+                direccion:doc.data().direccion,
+                cedula:doc.data().cedula,
+                telefono:doc.data().telefono,
+                email:doc.data().email,
+                nombre:doc.data().nombre,
+                snombre:doc.data().snombre,
+                apellido:doc.data().apellido,
+                sapellido:doc.data().sapellido,
+                sexo:doc.data().sexo,
+                nacimiento:doc.data().nacimiento,
+                edad:doc.data().edad,
+                unidad:doc.data().unidad,
+                ecivil:doc.data().ecivil,
+                cdM:doc.data().cdM,
+                cddep:doc.data().cddep,
+                zresidencial:doc.data().zresidencial
+            });
         });       
         res.send(valores);
     })

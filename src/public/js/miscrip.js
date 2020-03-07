@@ -1,4 +1,10 @@
 // MEDICOS
+
+var paciente=[];
+var eps=[];
+var item=[];
+var listitem=[];
+
 function consultarmedico(id){
     $.ajax({
       url: '/ajaxmedico',
@@ -64,13 +70,9 @@ function consultarmedico(id){
       }
     });  
   }
-
 //   MEDICOS
 
-
-
 // --- SELECT ---
-
 function selectEntidad(){ 
   console.log('Select Entidad');
   $.ajax({
@@ -79,7 +81,7 @@ function selectEntidad(){
     datatype: 'json',   
     success: (data) => { 
       var cadena=`
-      <select name="entidad" id="entidad" class="form-control form-control-sm">
+      <select name="entidad" id="entidad" onchange="consultarEntidad();selectItems();" class="form-control form-control-sm">
       <option value="">Seleccionar Entidad</option>
       `;
       data.forEach(element => {
@@ -91,5 +93,97 @@ function selectEntidad(){
   });  
 }
 
-
+function selectItems(){ 
+  console.log('Select Entidad');
+  var entidad=$('#entidad').val();
+  $.ajax({
+    url: '/itemcups',
+    type: 'POST',
+    datatype: 'json',
+    data:{      
+      entidad:entidad  
+    },   
+    success: (data) => { 
+      var cadena=`
+      <select name="item" id="item" onchange="consultarItem();" class="form-control form-control-sm">
+      <option value="">Seleccionar Item</option>`;
+      data.forEach(element => {
+        cadena+=` <option value="${element.id}">${element.nombre}</option>`;
+      });
+      cadena+=`</select>`;
+      $('.items').html(cadena);
+    }
+  });  
+}
 // --- SELECT ---
+
+
+//---PACIENTE---
+function consultarPaciente(){
+  var cedula=$('#cc').val();
+  $.ajax({
+    url: '/ajaxpaciente',
+    type: 'POST',
+    datatype: 'json',
+    data:{      
+      cedula:cedula  
+    },
+    success: (data) => {
+      paciente=data[0];
+      $('#nombres').val(data[0].nombre +" "+data[0].apellido+" "+data[0].sapellido);
+      $('#edad').val(data[0].edad);
+      selectEntidad();
+    }
+  });  
+}
+
+
+function consultarEntidad(){
+  var nit=$('#entidad').val();
+  $.ajax({
+    url: '/ajaxentidad',
+    type: 'POST',
+    datatype: 'json',
+    data:{      
+      nit:nit  
+    },
+    success: (data) => {
+      eps=data[0];
+      console.log(eps);
+    }
+  });  
+}
+function consultarItem(){
+  var id=$('#item').val();
+  $.ajax({
+    url: '/ajaxitems',
+    type: 'POST',
+    datatype: 'json',
+    data:{      
+      id:id  
+    },
+    success: (data) => {      
+      console.log(data[0]);
+      item=data[0];
+    }
+  });  
+}
+
+function additem() {
+ 
+  var aut=$('#autorizacion').val();
+   listitem.push({cups:item.cups,tarifa:item.valor,procedimiento:item.nombre,autorizacion:aut});
+  console.log(item.cups);
+  var cad="";
+  listitem.forEach(element => {
+    cad+=`   
+      <tr>
+      <th>${element.procedimiento}</th>
+      <td>${element.cups}</td>
+      <td>${element.autorizacion}</td>
+      <td>${element.tarifa}</td>
+      </tr>`;
+  });
+
+   $('#res').html(cad);
+}

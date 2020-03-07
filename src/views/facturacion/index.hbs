@@ -1,0 +1,139 @@
+<div class="row">
+    <div class="col-sm-10">
+        <div class="m-4 p-4" style="background-color: azure;">
+            <div class="alert alert-info" role="alert">
+                <h4>Facturacion Carlos Parra.</h4>
+            </div>
+            <hr>
+            {{#each valores}}
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <span class="small"><b>Nit:</b></span>
+                        <input type="text" name="nit" id="nit" value="{{nit}}" class="fac" placeholder="Nit" readonly>
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <span class="small"><b>Razon Social:</b></span>
+                        <input type="text" name="rs" id="rs" value="{{rzocial}}" class="fac" placeholder="Razon Social"
+                            readonly>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <span class="small"><b>Resol.</b></span>
+                        <input type="text" name="rsl" id="rsl" value="{{resolfac}}" class="fac" placeholder="Resol Fac"
+                            readonly>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <span class="small"><b>Habilitacion:</b></span>
+                        <input type="text" name="hb" id="hb" value="{{habilitacion}}" class="fac"
+                            placeholder="Habilitacion" readonly>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <span class="small"><b>Telefonos:</b></span>
+                        <input type="text" name="tel" id="tel" value="{{telefono}}" class="fac" placeholder="Telfonos"
+                            readonly>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <span class="small"><b>Email:</b></span>
+                        <input type="text" name="email" id="email" value="{{email}}" class="fac"
+                            placeholder="Habilitacion" readonly>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <span class="small"><b>Direccion:</b></span>
+                        <input type="text" name="dr" id="dr" value="{{direccion}}" class="fac" placeholder="Direccion"
+                            readonly>
+                    </div>
+                </div>
+
+            </div>
+            {{/each}}
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <span class="small"><b>Cedula Paciente</b></span>
+                    <input type="text" class="form-control form-control-sm" name="cc" id="cc"
+                        onblur="consultarPaciente()" id="cc" placeholder="Cedula">
+                </div>
+                <div class="col-sm-3">
+                    <span class="small"><b>Nombres</b></span>
+                    <input type="text" class="fac" name="nombres" id="nombres" placeholder="Nombres" readonly>
+                </div>
+                <div class="col-sm-2">
+                    <span class="small"><b>Edad</b></span>
+                    <input type="text" class="fac" name="edad" id="edad" placeholder="Edad" readonly>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <span class="small"><b>Entidad</b></span>
+                    <div class="entidades">
+                        <select name="" id="" class="form-control form-control-sm">
+                            <option value="">::Eps::</option>
+                        </select>
+                    </div>
+                </div>
+                 <div class="col-sm-3">
+                    <span class="small"><b>Autorizacion</b></span>
+                    <div class="form-group">
+                        <input type="text" id="autorizacion" name="autorizacion" class="form-control form-control-sm" placeholder="Aurizacion">
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <span class="small"><b>Items</b></span>
+                    <div class="items">
+                        <select name="" id="" class="form-control form-control-sm">
+                            <option value="">::Items::</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <span class="small"><b>...</b></span>
+                    <div class="form-group">
+                        <button class="btn btn-success btn-sm" onclick=" additem()"> Add</button>
+                    </div>
+                </div>
+            </div>
+          
+            <div class="row">
+                <div class="col">
+                    <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Procedimiento</th>
+                        <th scope="col">cups</th>
+                        <th scope="col">autorizacion</th>
+                        <th scope="col">Tarifa</th>
+                    </tr>
+                </thead>
+                <tbody id="res">
+                 
+                </tbody>
+            </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div>
+
+        </div>
+    </div>
+</div>
+
+{{!-- row --}}

@@ -4,12 +4,19 @@ var admin = require("firebase-admin");
 const db=admin.firestore();
 
 router.post('/ajaxentidad',(req,res)=>{
-    const {id} = req.body;
-    db.collection('entidades').where("cedula", "==", id ).get()
+    const {nit} = req.body;
+    db.collection('entidades').where("nit", "==", nit ).get()
     .then((snapshot) => {
         var valores=[];
         snapshot.forEach((doc) => {            
-            valores.push({id:doc.id,nit:doc.data().nit,rsocial:doc.data().rsocial,telefono:doc.data().telefono,email:doc.data().email,direccion:doc.data().direccion});
+            valores.push({
+                id:doc.id,
+                nit:doc.data().nit,
+                rsocial:doc.data().rsocial,
+                telefono:doc.data().telefono,
+                email:doc.data().email,
+                direccion:doc.data().direccion,
+                regimen:doc.data().regimen});
         });       
         res.send(valores);
     })
