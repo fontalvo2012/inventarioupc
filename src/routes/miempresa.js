@@ -21,13 +21,10 @@ router.get('/miempresas', (req, res) => {
 });
 
 router.get('/file', (req, res) => {
-
     var day = diaActual.getDate();
     var month = diaActual.getMonth() + 1;
     var year = diaActual.getFullYear();
     fecha = day + '/' + month + '/' + year;
-
-
     fs.appendFile('file/ejemplo2.txt', 'Ejemplo texto\n', (error) => {
         if (error) {
             throw error;
@@ -40,7 +37,11 @@ router.get('/AF', (req, res) => {
     db.collection('facturas').get()
         .then((snapshot) => {
             var valores = [];
+            var cant=0;
+            var consecutivo=1;
+            var nombre='AF00001.txt';            
             snapshot.forEach((doc) => {
+                cant++;
                 console.log(doc.id, '=>', doc.data());
                 valores.push(doc.data());
                fs.appendFile('file/AF00001.txt',`${doc.data().habilitacion},${doc.data().razon},NI,${doc.data().nit},CP${doc.data().consecutivo},${doc.data().fecha},${doc.data().pinicio},${doc.data().pfinal},${doc.data().eps.cdeps},${doc.data().eps.rsocial},${doc.data().eps.contrato},${doc.data().eps.beneficio},${doc.data().eps.poliza},${doc.data().eps.copago},${doc.data().eps.comision},${doc.data().eps.descuento},${doc.data().total}\n`, (error) => {                
@@ -50,7 +51,8 @@ router.get('/AF', (req, res) => {
                 });             
             });       
             res.send(valores);
-
+            var rips={consecutivo:consecutivo, perdido_init:'',perdido_fin:'',cantidad:cant,nombre:nombre,rip:'AF'};
+            IngresarRips(rips);
         })
         .catch((err) => {
             console.log('Error getting documents', err);
@@ -62,7 +64,11 @@ router.get('/US', (req, res) => {
     db.collection('facturas').get()
         .then((snapshot) => {
             var valores = [];
+            var cant=0;
+            var consecutivo=1;
+            var nombre='US00001.txt';   
             snapshot.forEach((doc) => {
+                cant++;
                 console.log(doc.id, '=>', doc.data());
                 valores.push(doc.data());             
             });
@@ -75,7 +81,8 @@ router.get('/US', (req, res) => {
                 });
             });
             res.send(valores);
-
+            var rips={consecutivo:consecutivo, perdido_init:'',perdido_fin:'',cantidad:cant,nombre:nombre,rip:'AF'};
+            IngresarRips(rips);
         })
         .catch((err) => {
             console.log('Error getting documents', err);
@@ -86,6 +93,30 @@ router.get('/US', (req, res) => {
 router.get('/descargas', (req, res) => {
     res.download('file/ejemplo2.txt');
 });
+
+router.get('/rips',(req,res)=>{
+    const rips={consecutivo:1,perdido_init:'',perdido_fin:'',cantidad:0,nombre:'',rip:''};  
+     let docRef = db.collection('facturas').doc();
+     let setAda = docRef.set(rips)
+     .then(function () {
+         res.send('ingresado');
+     })
+     .catch(function (error) {          
+         res.send('error');
+     });  
+    
+ });
+function IngresarRips(rip) {
+    let docRef = db.collection('rips').doc();
+    let setAda = docRef.set(rip)
+    .then(function () {
+        console.log('Ingresado')
+    })
+    .catch(function (error) {          
+        console.log('error');
+    });  
+   
+}
 
 function eliminarObjetosDuplicados(arr, prop) {
      var nuevoArray = [];
