@@ -15,10 +15,9 @@ router.get('/',(req,res)=>{
   const datos={
     nombre:''
   };
-  console.log(datos);
+
   res.render('index',{datos});  
 });
-
 
 
 
