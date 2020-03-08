@@ -1,0 +1,38 @@
+  <div class="card m-4">
+      <div class="card-header">
+          <h4 class="card-title">
+              Rips
+          </h4>
+      </div>
+          <div class="card-body">
+             
+              <div class="row">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Rips</th>
+                            <th scope="col">contenido</th>
+                            <th scope="col">Periodo Inicial</th>
+                            <th scope="col">Periodo perido final</th>
+                            <th scope="col">Accion</th>
+                        </tr>
+                    </thead>
+                    <tbody> 
+                         {{#each valores}}
+                        <tr>
+                            <th scope="row">{{consecutivo}}</th>
+                            <td>{{rip}}{{nombre}}</td>                            
+                            <td>#{{cantidad}}</td>                            
+                            <td><b>{{perdido_init}}</b></td>                            
+                            <td><b>{{perdido_fin}}</b></td>                            
+                            <td><a href="/descarga/{{rip}}{{nombre}}" class="btn btn-success btn-sm">Descargar</a></td>
+                        </tr>
+                         {{/each}}
+                    </tbody>
+                </table>
+            </div>
+           
+          </div>
+      </div>
+  </div>

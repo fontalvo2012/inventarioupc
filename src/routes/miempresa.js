@@ -5,7 +5,7 @@ const db = admin.firestore();
 const fs = require('fs');
 
 
-router.get('/miempresas', (req, res) => {
+router.get('/inicial', (req, res) => {
     let docRef = db.collection('carlosparra').doc();
     let setAda = docRef.set({
         nit: '111',
@@ -20,139 +20,150 @@ router.get('/miempresas', (req, res) => {
     res.redirect('/');
 });
 
-router.get('/file', (req, res) => {
-    var day = diaActual.getDate();
-    var month = diaActual.getMonth() + 1;
-    var year = diaActual.getFullYear();
-    fecha = day + '/' + month + '/' + year;
-    fs.appendFile('file/ejemplo2.txt', 'Ejemplo texto\n', (error) => {
-        if (error) {
-            throw error;
-        }
-    });
-    res.redirect('/');
+router.get('/rips', (req, res) => {
+    db.collection("rips")
+        .orderBy("consecutivo", "desc").limit(1).get()
+        .then((snapshot) => {
+            var valores = [];
+            snapshot.forEach((doc) => {
+                valores.push(doc.data());
+            });
+            const c = conseRit(valores[0].consecutivo);
+            valores[0].nombre = c + ".txt"
+            console.log(valores);
+            res.render('facturacion/rips', { valores });
+        })
+        .catch((err) => {
+            console.log('Error getting documents', err);
+            res.render('facturacion/rips');
+        });
+
 });
 
-router.get('/AF', (req, res) => {
+router.post('/rips', (req, res) => {
+    const { nombre, consecutivo, finicio, ffinal } = req.body;
+    const c = parseInt(consecutivo) + 1;
+    console.log(req.body);
+    CrearUs(nombre, c, finicio, ffinal);
+    CrearAF(nombre, c, finicio, ffinal);
+    res.redirect('/descargaRips');
+});
+
+router.get('/descargaRips', (req, res) => {
+    db.collection("rips")
+        .orderBy("consecutivo", "desc").get()
+        .then((snapshot) => {
+            var valores = [];
+            snapshot.forEach((doc) => {
+                valores.push(doc.data());
+            });    
+            console.log(valores);
+            res.render('facturacion/descargaRips', { valores });
+        })
+        .catch((err) => {
+            console.log('Error getting documents', err);
+            res.render('facturacion/descargaRips');
+        });
+
+});
+
+
+
+router.get('/descarga/:nombre', (req, res) => {
+    const {nombre}=req.params;
+    res.download(`file/${nombre}`);
+});
+
+function CrearAF(nombre,consecutivo,f1,f2) {
     db.collection('facturas').get()
         .then((snapshot) => {
             var valores = [];
-            var cant=0;
-            var consecutivo=1;
-            var nombre='AF00001.txt';            
+            var cant = 0;
             snapshot.forEach((doc) => {
                 cant++;
                 console.log(doc.id, '=>', doc.data());
                 valores.push(doc.data());
-               fs.appendFile('file/AF00001.txt',`${doc.data().habilitacion},${doc.data().razon},NI,${doc.data().nit},CP${doc.data().consecutivo},${doc.data().fecha},${doc.data().pinicio},${doc.data().pfinal},${doc.data().eps.cdeps},${doc.data().eps.rsocial},${doc.data().eps.contrato},${doc.data().eps.beneficio},${doc.data().eps.poliza},${doc.data().eps.copago},${doc.data().eps.comision},${doc.data().eps.descuento},${doc.data().total}\n`, (error) => {                
-                    if (error) {
-                        throw error;
-                    }
-                });             
-            });       
-            res.send(valores);
-            var rips={consecutivo:consecutivo, perdido_init:'',perdido_fin:'',cantidad:cant,nombre:nombre,rip:'AF'};
-            IngresarRips(rips);
-        })
-        .catch((err) => {
-            console.log('Error getting documents', err);
-            res.send(valores);
-        });
-});
-
-router.get('/US', (req, res) => {
-    db.collection('facturas').get()
-        .then((snapshot) => {
-            var valores = [];
-            var cant=0;
-            var consecutivo=1;
-            var nombre='US00001.txt';   
-            snapshot.forEach((doc) => {
-                cant++;
-                console.log(doc.id, '=>', doc.data());
-                valores.push(doc.data());             
-            });
-            var US=eliminarObjetosDuplicados(valores, 'cedula');
-            US.forEach(element => {
-                fs.appendFile('file/US00001.txt',`${element.paciente.td},${element.paciente.cedula},${element.eps.cdeps},${element.eps.regimen},${element.paciente.apellido},${element.paciente.sapellido},${element.paciente.nombre},${element.paciente.snombre},${element.paciente.edad},${element.paciente.unidad},${element.paciente.sexo},${element.paciente.cddep},${element.paciente.cdM},${element.paciente.zresidencial}\n`, (error) => {
+                fs.appendFile(`file/AF${nombre}`, `${doc.data().habilitacion},${doc.data().razon},NI,${doc.data().nit},CP${doc.data().consecutivo},${doc.data().fecha},${doc.data().pinicio},${doc.data().pfinal},${doc.data().eps.cdeps},${doc.data().eps.rsocial},${doc.data().eps.contrato},${doc.data().eps.beneficio},${doc.data().eps.poliza},${doc.data().eps.copago},${doc.data().eps.comision},${doc.data().eps.descuento},${doc.data().total}\n`, (error) => {
                     if (error) {
                         throw error;
                     }
                 });
             });
-            res.send(valores);
-            var rips={consecutivo:consecutivo, perdido_init:'',perdido_fin:'',cantidad:cant,nombre:nombre,rip:'AF'};
+            console.log('Creado AF')
+            var rips = { consecutivo: consecutivo, perdido_init: f1, perdido_fin: f2, cantidad: cant, nombre: nombre, rip: 'AF' };
             IngresarRips(rips);
         })
         .catch((err) => {
             console.log('Error getting documents', err);
-            res.send(valores);
+
         });
-});
+}
 
-router.get('/descargas', (req, res) => {
-    res.download('file/ejemplo2.txt');
-});
+function CrearUs(nombre, consecutivo, f1, f2) {
+    db.collection('facturas').get()
+        .then((snapshot) => {
+            var valores = [];
+            var cant = 0;
+            snapshot.forEach((doc) => {
+               
+                valores.push(doc.data());
+            });
+            var US = eliminarObjetosDuplicados(valores, 'cedula');
+            US.forEach(element => {
+                cant++;
+                fs.appendFile(`file/US${nombre}`, `${element.paciente.td},${element.paciente.cedula},${element.eps.cdeps},${element.eps.regimen},${element.paciente.apellido},${element.paciente.sapellido},${element.paciente.nombre},${element.paciente.snombre},${element.paciente.edad},${element.paciente.unidad},${element.paciente.sexo},${element.paciente.cddep},${element.paciente.cdM},${element.paciente.zresidencial}\n`, (error) => {
+                    if (error) {
+                        throw error;
+                    }
+                });
+            });
+            console.log(valores);
+            var rips = { consecutivo: consecutivo, perdido_init: f1, perdido_fin: f2, cantidad: cant, nombre: nombre, rip: 'US' };
+            IngresarRips(rips);
+        })
+        .catch((err) => {
+            console.log('Error getting documents', err);
 
-router.get('/rips',(req,res)=>{
-    const rips={consecutivo:1,perdido_init:'',perdido_fin:'',cantidad:0,nombre:'',rip:''};  
-     let docRef = db.collection('facturas').doc();
-     let setAda = docRef.set(rips)
-     .then(function () {
-         res.send('ingresado');
-     })
-     .catch(function (error) {          
-         res.send('error');
-     });  
-    
- });
+        });
+}
 function IngresarRips(rip) {
     let docRef = db.collection('rips').doc();
     let setAda = docRef.set(rip)
-    .then(function () {
-        console.log('Ingresado')
-    })
-    .catch(function (error) {          
-        console.log('error');
-    });  
-   
+        .then(function () {
+            console.log('Ingresado')
+        })
+        .catch(function (error) {
+            console.log('error');
+        });
+
 }
 
 function eliminarObjetosDuplicados(arr, prop) {
-     var nuevoArray = [];
-     var lookup  = {};
- 
-     for (var i in arr) {
-         lookup[arr[i][prop]] = arr[i];
-     }
- 
-     for (i in lookup) {
-         nuevoArray.push(lookup[i]);
-     }
- 
-     return nuevoArray;
+    var nuevoArray = [];
+    var lookup = {};
+    for (var i in arr) {
+        lookup[arr[i][prop]] = arr[i];
+    }
+    for (i in lookup) {
+        nuevoArray.push(lookup[i]);
+    }
+    return nuevoArray;
 }
 
 function conseRit(num) {
-    switch (num) {
-        case num < 10:
-            return '00000' + num;
-            break;
-        case num < 100:
-            return '0000' + num;
-            break;
-        case num < 1000:
-            return '000' + num;
-            break;
-        case num < 10000:
-            return '00' + num;
-            break;
-        case num < 100000:
-            return '0' + num;
-            break;
-        default:
-            return num;
-            break;
+    num = parseInt(num) + 1;
+    if (num < 10) {
+        return '00000' + num;
+    } else if (num > 10 && num < 100) {
+        return '0000' + num;
+    } else if (num > 100 && num < 1000) {
+        return '000' + num;
+    } else if (num > 1000 && num < 10000) {
+        return '00' + num;
+    } else if (num > 10000 && num < 100000) {
+        return '0' + num;
+    } else {
+        return num;
     }
 }
 
