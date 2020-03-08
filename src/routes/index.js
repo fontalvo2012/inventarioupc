@@ -12,7 +12,11 @@ const db=admin.firestore();
 
 
 router.get('/',(req,res)=>{
-   res.render('index')
+  const datos={
+    nombre:''
+  };
+  console.log(datos);
+  res.render('index',{datos});  
 });
 
 

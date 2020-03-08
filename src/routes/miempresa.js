@@ -5,6 +5,7 @@ const db = admin.firestore();
 const fs = require('fs');
 
 
+
 router.get('/inicial', (req, res) => {
     let docRef = db.collection('carlosparra').doc();
     let setAda = docRef.set({
@@ -46,12 +47,15 @@ router.post('/rips', (req, res) => {
     console.log(req.body);
     CrearUs(nombre, c, finicio, ffinal);
     CrearAF(nombre, c, finicio, ffinal);
-    res.redirect('/descargaRips');
+    const datos={
+        nombre:`Rips ${nombre} Fue creado`
+      };   
+    res.render('index',{datos});
 });
 
 router.get('/descargaRips', (req, res) => {
     db.collection("rips")
-        .orderBy("consecutivo", "desc").get()
+        .orderBy("consecutivo", "desc").limit(8).get()
         .then((snapshot) => {
             var valores = [];
             snapshot.forEach((doc) => {
@@ -66,8 +70,6 @@ router.get('/descargaRips', (req, res) => {
         });
 
 });
-
-
 
 router.get('/descarga/:nombre', (req, res) => {
     const {nombre}=req.params;
@@ -104,11 +106,11 @@ function CrearUs(nombre, consecutivo, f1, f2) {
         .then((snapshot) => {
             var valores = [];
             var cant = 0;
-            snapshot.forEach((doc) => {
-               
+            snapshot.forEach((doc) => {               
                 valores.push(doc.data());
             });
-            var US = eliminarObjetosDuplicados(valores, 'cedula');
+            var US = removeDuplicates(valores);
+            console.log(US);
             US.forEach(element => {
                 cant++;
                 fs.appendFile(`file/US${nombre}`, `${element.paciente.td},${element.paciente.cedula},${element.eps.cdeps},${element.eps.regimen},${element.paciente.apellido},${element.paciente.sapellido},${element.paciente.nombre},${element.paciente.snombre},${element.paciente.edad},${element.paciente.unidad},${element.paciente.sexo},${element.paciente.cddep},${element.paciente.cdM},${element.paciente.zresidencial}\n`, (error) => {
@@ -136,6 +138,19 @@ function IngresarRips(rip) {
             console.log('error');
         });
 
+}
+function removeDuplicates(arrayIn) {
+    var arrayOut = [];
+    arrayIn.forEach(item=> {
+      try {
+        if (JSON.stringify(arrayOut[arrayOut.length-1].paciente.cedula) !== JSON.stringify(item.paciente.cedula)) {
+          arrayOut.push(item);
+        }
+      } catch(err) {
+        arrayOut.push(item);
+       }
+    })
+    return arrayOut;
 }
 
 function eliminarObjetosDuplicados(arr, prop) {
