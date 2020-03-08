@@ -26,7 +26,8 @@ router.post('/ajaxpaciente',(req,res)=>{
                 ecivil:doc.data().ecivil,
                 cdM:doc.data().cdM,
                 cddep:doc.data().cddep,
-                zresidencial:doc.data().zresidencial
+                zresidencial:doc.data().zresidencial,
+                td:doc.data().td
             });
         });       
         res.send(valores);
@@ -59,7 +60,8 @@ router.get('/addpacientes',(req,res)=>{
                 ecivil:doc.data().ecivil,
                 cdM:doc.data().cdM,
                 cddep:doc.data().cddep,
-                zresidencial:doc.data().zresidencial
+                zresidencial:doc.data().zresidencial,
+                td:doc.data().td
             });
         });       
         res.render('pacientes/index',{valores});

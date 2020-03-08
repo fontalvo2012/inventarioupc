@@ -94,8 +94,7 @@ router.get('/delentidad/:id',(req,res)=>{
 
 router.post('/actualizarentidad',(req,res)=>{
     const {nit,rsocial,email,direccion,telefono,regimen,tipoid,cdeps,contrato,id} = req.body;
-    var washingtonRef = db.collection("entidades").doc(id);
-  
+    var washingtonRef = db.collection("entidades").doc(id);  
     return washingtonRef.update({    
         tipoid:tipoid,
         nit: nit,
