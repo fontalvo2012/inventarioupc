@@ -182,15 +182,16 @@ function additem() {
   var aut = $('#autorizacion').val();
   if (aut != "" && $('item').val() != "") {
     total+=parseInt(item.valor);
-    listitem.push({ cups: item.cups, tarifa: item.valor, procedimiento: item.nombre, autorizacion: aut });
+    item.autorizacion=aut;
+    listitem.push(item);
     var cad = "";
     listitem.forEach(element => {
       cad += `   
         <tr>
-        <th>${element.procedimiento}</th>
+        <th>${element.nombre}</th>
         <td>${element.cups}</td>
         <td>${element.autorizacion}</td>
-        <td>${element.tarifa}</td>
+        <td>${element.valor}</td>
         </tr>`;
     });
     $('#res').html(cad);

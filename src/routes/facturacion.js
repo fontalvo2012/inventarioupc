@@ -32,8 +32,7 @@ router.get('/facturar',(req,res)=>{
 });
 
 router.post('/facturar',(req,res)=>{
-   const {fac} = req.body; 
-  
+   const {fac} = req.body;     
     let docRef = db.collection('facturas').doc();
     let setAda = docRef.set(JSON.parse(fac))
     .then(function () {

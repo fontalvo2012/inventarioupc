@@ -1,70 +1,187 @@
 <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-6">
         <form action="/items" method="POST">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-titel"> Items</h3>
                 </div>
                 <div class="card-body">
-                    
-                    <div class="form-group">
-                        <span class="small"><b>Cups</b></span>
-                        <input type="text" class="form-control form-control-sm" onblur="selectEntidad()" id="cups" name="cups" placeholder="Cups" required>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <span class="small"><b>Cups</b></span>
+                                <input type="text" class="form-control form-control-sm" onblur="selectEntidad()"
+                                    id="cups" name="cups" placeholder="Cups" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <span class="small"><b>Nombres</b></span>
+                                <input type="text" class="form-control form-control-sm" id="nombre" name="nombre"
+                                    placeholder="Nombre" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <span class="small"><b>Nombres</b></span>
-                        <input type="text" class="form-control form-control-sm" id="nombre" name="nombre" placeholder="Nombre" required>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="small"><b>Entidad</b></span>
+                                <div class="entidades">
+                                    <select name="" id="" class="form-control form-control-sm">
+                                        <option value="">::Entidad::</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="small"><b>Valor</b></span>
+                                <input type="text" class="form-control form-control-sm" id="valor" name="valor"
+                                    placeholder="Registro Medicos" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="small"> <b>Copago</b></span>
+                                <input type="number" name="copago" id="copago" placeholder="Copago" class="form-control form-control-sm">
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <span class="small"><b>Valor</b></span>
-                        <input type="text" class="form-control form-control-sm" id="valor" name="valor"
-                            placeholder="Registro Medicos" required>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <span class="small"><b>Finalidad</b> <b style="color: blue;">*Procedimiento</b></span>
+                                <select name="finalidad" id="finalidad" class="form-control form-control-sm">
+                                    <option value="">Ninguna</option>
+                                    <option value="1">Diagnostico</option>
+                                    <option value="2">Terapeutico</option>
+                                    <option value="3">Proteccion espesifica</option>
+                                    <option value="4">Deteccion Temprana enfermedad General</option>
+                                    <option value="5">Deteccion temprana enfermedad Laboral</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <span class="small"><b>Ambito</b> <b style="color: blue;">*Procedimiento</b></span>
+                                <select name="ambito" id="ambito" class="form-control form-control-sm">
+                                    <option value="">Ninguno</option>
+                                    <option value="1">Ambulatorio</option>
+                                    <option value="2">Hospitalario</option>
+                                    <option value="3">Urgencias</option>
+                                </select>
+                            </div>
+                        </div>
+
                     </div>
-                    <div class="form-group">
-                        <span class="small"><b>Entidad</b></span>
-                        <div class="entidades"></div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <span class="small"><b>Atencion </b> <b style="color: blue;">*Procedimiento</b></span>
+                                <select name="atiende" id="atiende" class="form-control form-control-sm">
+                                    <option value="1">Medico(a) Especialista</option>
+                                    <option value="2">Medico(a) General</option>
+                                    <option value="3">Enfermera (o)</option>
+                                    <option value="4">Auxiliar Enfermeria</option>
+                                    <option value="5">Otro</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <span class="small"><b>D.Principal</b></span>
+                                <input type="text" name="dprincipal" id="dprincipal" placeholder="Codigo"
+                                    class="form-control form-control-sm">
+                            </div>
+                        </div>
+
                     </div>
-                   
-                    <input type="hidden" id="id" name="id"> 
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <span class="small"><b>D. relacionado</b></span>
+                                <input type="text" name="drelacionado" id="drelacionado" placeholder="Codigo"
+                                    class="form-control form-control-sm">
+                            </div>
+                        </div>
+                           <div class="col-sm-6">
+                            <div class="form-group">
+                                <span class="small"><b>Acto quirúrgico </b> <b style="color: blue;">*Procedimiento</b></span>
+                                <select name="a_quirurgico" id="a_quirurgico" class="form-control form-control-sm">
+                                    <option value="">Ninguno</option>
+                                    <option value="1">Único o unilateral</option>
+                                    <option value="2">Múltiple o bilateral,misma vía, diferente especialidad</option>
+                                    <option value="3">Múltiple o bilateral,misma vía, igual especialidad</option>
+                                    <option value="4">Múltiple o bilateral,diferente vía, diferente especialidad</option>
+                                    <option value="5"> Múltiple o bilateral,diferente vía, igual especialidad</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="small"><b>T.Diagnostico</b><b style="color:brown;">*Consulta</b></span>
+                                <select name="t_diagnostico" id="t_diagnostico" class="form-control form-control-sm">
+                                    <option value="">Ninguno</option>
+                                    <option value="1">Impresion Diagnostica</option>
+                                    <option value="2">Confirmado Nuevo</option>
+                                    <option value="3">Confirmado Repetido</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-5">
+                            <div class="form-group">
+                                <span class="small"><b>Complicacion</b><b style="color: blue;">*Procedimiento</b></span>
+                                <input type="text" name="complicacion" id="complicacion" class="form-control form-control-sm" placeholder="codigo">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <input type="hidden" id="id" name="id">
                     <div class="form-group">
                         <button id="ingresar" class="btn btn-primary btn-block">Ingresar</button>
-                        
+
                     </div>
                 </div>
             </div>
         </form>
         <div class="form-group">
-            <button  onclick="actualizarMedico()" id="actualizar" class="btn btn-warning btn-block" style="visibility: hidden;">Actualizar</button>
+            <button onclick="actualizarMedico()" id="actualizar" class="btn btn-warning btn-block"
+                style="visibility: hidden;">Actualizar</button>
         </div>
     </div>
-    <div class="col-sm-8">
+    <div class="col-sm-6">
         <table class="table">
             <thead>
                 <tr>
                     <th scope="col">Cups</th>
-                    <th scope="col" >Nombres</th>
+                    <th scope="col">Nombres</th>
                     <th scope="col">Valor</th>
                     <th scope="col">Entidad</th>
-                    <th> Acciones </th>                  
+                    <th> Acciones </th>
                 </tr>
             </thead>
             <tbody>
                 {{#if valores}}
-                    {{#each valores}}
-                    <tr>
+                {{#each valores}}
+                <tr>
                     <th scope="row" class="small">{{cups}}</th>
                     <td class="small">{{nombre}}</td>
                     <td class="small">{{valor}}</td>
-                    <td class="small">{{entidad}}</td> 
+                    <td class="small">{{entidad}}</td>
                     <td>
-                        <a href="/delitems/{{id}}" class="btn btn-danger btn-sm" >del</a>
+                        <a href="/delitems/{{id}}" class="btn btn-danger btn-sm">del</a>
                         {{!-- <button class="btn btn-success btn-sm" onclick="consultarmedico({{cedula}});">mod</button> --}}
-                    </td>                
-                    </tr>
-                    {{/each}}
+                    </td>
+                </tr>
+                {{/each}}
                 {{else}}
-                 <tr>
-                    <th scope="row" colspan="4">No hay  Items Creados</th>                    
+                <tr>
+                    <th scope="row" colspan="4">No hay Items Creados</th>
                 </tr>
                 {{/if}}
 

@@ -47,11 +47,8 @@ router.get('/AF', (req, res) => {
                     if (error) {
                         throw error;
                     }
-                });
-             
-            });
-
-       
+                });             
+            });       
             res.send(valores);
 
         })
@@ -67,16 +64,8 @@ router.get('/US', (req, res) => {
             var valores = [];
             snapshot.forEach((doc) => {
                 console.log(doc.id, '=>', doc.data());
-                valores.push(doc.data());
-              //  fs.appendFile('file/AF00001.txt',`${doc.data().habilitacion},${doc.data().razon},NI,${doc.data().nit},CP${doc.data().consecutivo},${doc.data().fecha},${doc.data().pinicio},${doc.data().pfinal},${doc.data().eps.cdeps},${doc.data().eps.rsocial},${doc.data().eps.contrato},${doc.data().eps.beneficio},${doc.data().eps.poliza},${doc.data().eps.copago},${doc.data().eps.comision},${doc.data().eps.descuento},${doc.data().total}\n`, (error) => {
-                // fs.appendFile('file/US00001.txt',`${doc.data().paciente.td},${doc.data().paciente.cedula},${doc.data().eps.cdeps},${doc.data().eps.regimen},${doc.data().paciente.apellido},${doc.data().paciente.sapellido},${doc.data().paciente.nombre},${doc.data().paciente.snombre},${doc.data().paciente.edad},${doc.data().paciente.unidad},${doc.data().paciente.sexo},${doc.data().paciente.cddep},${doc.data().paciente.cdM},${doc.data().paciente.zresidencial}\n`, (error) => {
-                //     if (error) {
-                //         throw error;
-                //     }
-                // });
-             
+                valores.push(doc.data());             
             });
-
             var US=eliminarObjetosDuplicados(valores, 'cedula');
             US.forEach(element => {
                 fs.appendFile('file/US00001.txt',`${element.paciente.td},${element.paciente.cedula},${element.eps.cdeps},${element.eps.regimen},${element.paciente.apellido},${element.paciente.sapellido},${element.paciente.nombre},${element.paciente.snombre},${element.paciente.edad},${element.paciente.unidad},${element.paciente.sexo},${element.paciente.cddep},${element.paciente.cdM},${element.paciente.zresidencial}\n`, (error) => {
