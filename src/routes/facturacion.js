@@ -1,7 +1,23 @@
 const { Router } = require('express');
+const pdf = require('html-pdf');
+
 const router = Router();
 var admin = require("firebase-admin");
 const db=admin.firestore();
+
+const content = `
+<h1>Título en el PDF creado con el paquete html-pdf</h1>
+<p>Generando un PDF con un HTML sencillo</p>
+`;
+
+// pdf.create(content).toFile('./html-pdf.pdf', function(err, res) {
+//     if (err){
+//         console.log(err);
+//     } else {
+//         console.log(res);
+//     }
+// });
+
 
 router.get('/facturar',(req,res)=>{    
     db.collection('carlosparra').get()
@@ -39,7 +55,7 @@ router.post('/facturar',(req,res)=>{
     })
     .catch(function (error) {          
         res.send('error');
-    });  
+    }); 
    
 });
 router.get('/consultarFactura',(req,res)=>{
@@ -96,6 +112,24 @@ router.post('/consecutivo',(req,res)=>{
         res.send({'valor':'error'});
     });
 });
+
+router.post('/getfac',(req,res)=>{
+    const {con}=req.body;  
+    db.collection("facturas")
+    .where("consecutivo", "==", parseInt(con)).get()
+    .then((snapshot) => {
+        var valores=[];
+        snapshot.forEach((doc) => {
+            valores.push(doc.data());         
+        });       
+        res.send(valores);
+    })
+    .catch((err) => {
+        console.log('Error getting documents', err);
+        res.send({'valor':'error'});
+    });
+});
+
 
 function Betwen2(f1,f2,fc) {
     fc=formatDate2(fc);

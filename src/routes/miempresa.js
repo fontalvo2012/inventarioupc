@@ -45,7 +45,7 @@ router.post('/rips', (req, res) => {
     const c = parseInt(consecutivo) + 1;  
     CrearUs(nombre, c, finicio, ffinal);
     CrearAF(nombre, c, finicio, ffinal);
-    
+    CrearAC(nombre, c, finicio, ffinal);
     const datos={
         nombre:`Rips ${nombre} Fue creado`
       };   
@@ -81,6 +81,8 @@ router.get('/descarga/:nombre', (req, res) => {
 });
 
 function CrearAF(nombre,consecutivo,f1,f2) {
+    var f = new Date();
+    fechaA=f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear();
     db.collection('facturas').get()
         .then((snapshot) => {
             var valores = [];
@@ -103,11 +105,56 @@ function CrearAF(nombre,consecutivo,f1,f2) {
             
             if(valores[0]){
                 console.log('Creado AF')
-                var rips = { consecutivo: consecutivo, perdido_init: f1, perdido_fin: f2, cantidad: cant, nombre: nombre, rip: 'AF' };
+                var rips = { consecutivo: consecutivo, perdido_init: f1, perdido_fin: f2, cantidad: cant, nombre: nombre, rip: 'AF',fecha:fechaA,habilitacion:valores[0].habilitacion };
                 IngresarRips(rips);
              
             }else{
-                var rips = { consecutivo: parseInt(consecutivo), perdido_init: f1, perdido_fin: f2, cantidad:0, nombre: 'ror.txt', rip: 'er' };
+                var rips = { consecutivo: parseInt(consecutivo), perdido_init: f1, perdido_fin: f2, cantidad:0, nombre: 'ror.txt', rip: 'er',fecha:fechaA };
+                IngresarRips(rips);
+            }
+           
+        })
+        .catch((err) => {
+            console.log('Error getting documents', err);
+
+        });
+}
+
+router.get('/p',(req,res)=>{
+    CrearAC('PPOO1',0,'2020-03-01','2020-03-30');
+    res.send('probadno rips');
+})
+function CrearAC(nombre,consecutivo,f1,f2) {
+    var f = new Date();
+    fechaA=f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear();
+    db.collection('facturas').get()
+        .then((snapshot) => {
+            var valores = [];
+            var cant = 0;
+            var c="";
+            snapshot.forEach((doc) => {
+                cant++;               
+                if(Betwen(f1,f2,doc.data().fecha)){
+                    console.log('se encuentra dentro del periodo');
+                    valores.push(doc.data());                    
+                    fs.appendFile(`file/AC${nombre}`, `CP${doc.data().consecutivo},${doc.data().habilitacion},${doc.data().paciente.td},${doc.data().paciente.cedula},${doc.data().pinicio},${doc.data().items[0].autorizacion},${doc.data().items[0].cups},${doc.data().items[0].f_consulta},${doc.data().items[0].c_externa},${doc.data().items[0].c_diagnostico},${doc.data().items[0].c_diagnostico2},${doc.data().items[0].c_diagnostico2},${doc.data().items[0].c_diagnostico3},1,${doc.data().items[0].valor},${doc.data().items[0].copago},${parseInt(doc.data().items[0].copago)+parseInt(doc.data().items[0].valor)}\n`, (error) => {
+                        if (error) {
+                            throw error;
+                        }
+                    });
+                    
+                }else{
+                    console.log('No se encuentra dentro del periodo');                   
+                }
+            });
+            
+            if(valores[0]){
+                console.log('Creado AC')
+                var rips = { consecutivo: consecutivo, perdido_init: f1, perdido_fin: f2, cantidad: cant, nombre: nombre, rip: 'AC',fecha:fechaA,habilitacion:valores[0].habilitacion };
+                IngresarRips(rips);
+             
+            }else{
+                var rips = { consecutivo: parseInt(consecutivo), perdido_init: f1, perdido_fin: f2, cantidad:0, nombre: 'ror.txt', rip: 'er',fecha:fechaA };
                 IngresarRips(rips);
             }
            
@@ -119,6 +166,8 @@ function CrearAF(nombre,consecutivo,f1,f2) {
 }
 
 function CrearUs(nombre, consecutivo, f1, f2) {
+    var f = new Date();
+    fechaA=f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear();
     db.collection('facturas').get()
         .then((snapshot) => {
             var valores = [];
@@ -141,6 +190,36 @@ function CrearUs(nombre, consecutivo, f1, f2) {
                             throw error;
                         }
                     });
+                });            
+                var rips = { consecutivo: consecutivo, perdido_init: f1, perdido_fin: f2, cantidad: cant, nombre: nombre, rip: 'US',fecha:fechaA,habilitacion:valore[0].habilitacion};
+                IngresarRips(rips);
+            }
+
+        })
+        .catch((err) => {
+            console.log('Error getting documents', err);
+
+        });
+}
+
+function CrearCT(nombre, consecutivo, f1, f2) {
+    db.collection('rips').where("consecutivo","==",parseInt(consecutivo)).get()
+        .then((snapshot) => {
+            var valores = [];
+            var cant = 0;
+            snapshot.forEach((doc) => {  
+                    valores.push(doc.data());
+                    fs.appendFile(`file/CT${doc.data.nombre}`, `${element.paciente.td},${element.paciente.cedula},${element.eps.cdeps},${element.eps.regimen},${element.paciente.apellido},${element.paciente.sapellido},${element.paciente.nombre},${element.paciente.snombre},${element.paciente.edad},${element.paciente.unidad},${element.paciente.sexo},${element.paciente.cddep},${element.paciente.cdM},${element.paciente.zresidencial}\n`, (error) => {
+                        if (error) {
+                            throw error;
+                        }
+                    });
+            });
+            if (valores[0]) {
+                var US = removeDuplicates(valores);            
+                US.forEach(element => {
+                    cant++;
+                   
                 });            
                 var rips = { consecutivo: consecutivo, perdido_init: f1, perdido_fin: f2, cantidad: cant, nombre: nombre, rip: 'US' };
                 IngresarRips(rips);

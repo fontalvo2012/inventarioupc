@@ -39,7 +39,7 @@ router.post('/ajaxpaciente',(req,res)=>{
 });
 
 router.get('/addpacientes',(req,res)=>{
-    db.collection('pacientes').get()
+    db.collection('pacientes').orderBy('nombre','asc').get()
     .then((snapshot) => {
         var valores=[];
         snapshot.forEach((doc) => {           
