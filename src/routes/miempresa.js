@@ -26,7 +26,7 @@ router.get('/rips', (req, res) => {
         .orderBy("consecutivo", "desc").limit(1).get()
         .then((snapshot) => {
             var valores = [];
-            snapshot.forEach((doc) => {
+            snapshot.forEach((doc) => {                
                 valores.push(doc.data());
             });
             const c = conseRit(valores[0].consecutivo);
@@ -44,8 +44,8 @@ router.post('/rips', (req, res) => {
     const { nombre, consecutivo, finicio, ffinal } = req.body;
     const c = parseInt(consecutivo) + 1;  
     CrearUs(nombre, c, finicio, ffinal);
-    var cad = CrearAF(nombre, c, finicio, ffinal);
-    console.log(cad);
+    CrearAF(nombre, c, finicio, ffinal);
+    
     const datos={
         nombre:`Rips ${nombre} Fue creado`
       };   
@@ -53,7 +53,7 @@ router.post('/rips', (req, res) => {
 });
 
 router.get('/initrips', (req, res) => {
-    var rips = { consecutivo: 1, perdido_init: '2020-01-01', perdido_fin: '', cantidad: 0, nombre: '', rip: '' };
+    var rips = { consecutivo: 0, perdido_init: '2020-01-01', perdido_fin: '2020-01-30', cantidad: 0, nombre: 'none', rip: 'In' };
     IngresarRips(rips);
     res.render('index');
 });
@@ -86,8 +86,10 @@ function CrearAF(nombre,consecutivo,f1,f2) {
             var valores = [];
             var cant = 0;
             snapshot.forEach((doc) => {
-                cant++; 
-                if(Betwen(f1,f2,new Date(doc.data().fecha))){
+                cant++;
+               
+                if(Betwen(f1,f2,doc.data().fecha)){
+                    console.log('se encuentra dentro del periodo');
                     valores.push(doc.data());
                     fs.appendFile(`file/AF${nombre}`, `${doc.data().habilitacion},${doc.data().razon},NI,${doc.data().nit},CP${doc.data().consecutivo},${doc.data().fecha},${doc.data().pinicio},${doc.data().pfinal},${doc.data().eps.cdeps},${doc.data().eps.rsocial},${doc.data().eps.contrato},${doc.data().eps.beneficio},${doc.data().eps.poliza},${doc.data().eps.copago},${doc.data().eps.comision},${doc.data().eps.descuento},${doc.data().total}\n`, (error) => {
                         if (error) {
@@ -103,9 +105,10 @@ function CrearAF(nombre,consecutivo,f1,f2) {
                 console.log('Creado AF')
                 var rips = { consecutivo: consecutivo, perdido_init: f1, perdido_fin: f2, cantidad: cant, nombre: nombre, rip: 'AF' };
                 IngresarRips(rips);
-               resultado= 'good';
+             
             }else{
-               resultado= 'bad';
+                var rips = { consecutivo: parseInt(consecutivo), perdido_init: f1, perdido_fin: f2, cantidad:0, nombre: 'ror.txt', rip: 'er' };
+                IngresarRips(rips);
             }
            
         })
@@ -120,8 +123,8 @@ function CrearUs(nombre, consecutivo, f1, f2) {
         .then((snapshot) => {
             var valores = [];
             var cant = 0;
-            snapshot.forEach((doc) => {
-                if(Betwen(f1,f2,new Date(doc.data().fecha))){
+            snapshot.forEach((doc) => {             
+                if(Betwen(f1,f2,doc.data().fecha)){
                     console.log('Se encuentra en el rango');
                     valores.push(doc.data());
                 }else{
@@ -142,12 +145,15 @@ function CrearUs(nombre, consecutivo, f1, f2) {
                 var rips = { consecutivo: consecutivo, perdido_init: f1, perdido_fin: f2, cantidad: cant, nombre: nombre, rip: 'US' };
                 IngresarRips(rips);
             }
+
         })
         .catch((err) => {
             console.log('Error getting documents', err);
 
         });
 }
+
+
 function IngresarRips(rip) {
     let docRef = db.collection('rips').doc();
     let setAda = docRef.set(rip)
@@ -173,6 +179,13 @@ function removeDuplicates(arrayIn) {
     return arrayOut;
 }
 
+function formatDate(fecha) {
+    var dia = fecha.substr(0,2);
+    var mes = fecha.substr(3,2);
+    var ano = fecha.substr(6,4);
+    return ano+'-'+mes+'-'+dia;
+
+}
 
 
 function conseRit(num) {
@@ -192,44 +205,13 @@ function conseRit(num) {
     }
 }
 
-function compare_dates(fecha, fecha2)  
-  {  
-    var xMonth=fecha.substring(3, 5);  
-    var xDay=fecha.substring(0, 2);  
-    var xYear=fecha.substring(6,10);  
-    var yMonth=fecha2.substring(3, 5);  
-    var yDay=fecha2.substring(0, 2);  
-    var yYear=fecha2.substring(6,10);  
-    if (xYear> yYear)  
-    {  
-        return(true)  
-    }  
-    else  
-    {  
-      if (xYear == yYear)  
-      {   
-        if (xMonth> yMonth)  
-        {  
-            return(true)  
-        }  
-        else  
-        {   
-          if (xMonth == yMonth)  
-          {  
-            if (xDay> yDay)  
-              return(true);  
-            else  
-              return(false);  
-          }  
-          else  
-            return(false);  
-        }  
-      }  
-      else  
-        return(false);  
-    }  
-}  
+
 function Betwen(f1,f2,fc) {
+    fc=formatDate(fc);
+    console.log(f1);
+    console.log(f2);
+    console.log(fc);
+   
     if(combertirfecha(fc)>=combertirfecha(f1)){
        if(combertirfecha(fc)<=combertirfecha(f2)){
          return true;
