@@ -290,3 +290,42 @@ function verConsecutivo() {
   });
 
 }
+
+
+function consultarFactura() {
+  $.ajax({
+    url: '/consultasFactura',
+    type: 'POST',
+    datatype: 'json',
+    data:{
+      ini:$('#ini').val(),
+      fin:$('#fin').val()
+    },
+    success: (data) => {
+      console.log(data);
+      var cadena="";
+      data.forEach(element => {
+        cadena+=
+        `<tr>
+          <td><b>${element.prefijo}${element.consecutivo}</b></td>
+          <td><${element.eps.rsocial}/td>
+          <td>${element.fecha}</td>
+          <td>${element.paciente.nombre}${element.paciente.apellido}${element.paciente.sapellido}</td>
+          <td>$${element.total}</td>
+            <td><a href="#" class="btn btn-warning btn-sm">ver</a></td>
+          </tr>`;
+      });
+      $('#res').html(cadena);
+    }
+  });
+
+}
+
+function imprSelec(nombre) {
+  var ficha = document.getElementById(nombre);
+  var ventimp = window.open(' ', 'popimpr');
+  ventimp.document.write( ficha.innerHTML );
+  ventimp.document.close();
+  ventimp.print( );
+  ventimp.close();
+}

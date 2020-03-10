@@ -3,8 +3,7 @@ const router = Router();
 var admin = require("firebase-admin");
 const db=admin.firestore();
 
-router.get('/facturar',(req,res)=>{
-    
+router.get('/facturar',(req,res)=>{    
     db.collection('carlosparra').get()
     .then((snapshot) => {
         var valores=[];
@@ -43,6 +42,41 @@ router.post('/facturar',(req,res)=>{
     });  
    
 });
+router.get('/consultarFactura',(req,res)=>{
+    db.collection("facturas").orderBy('consecutivo','desc').get()
+    .then((snapshot) => {
+        var valores=[];
+        snapshot.forEach((doc) => {
+            valores.push(doc.data());
+        });       
+        res.render('facturacion/consultar',{valores});
+    })
+    .catch((err) => {
+        console.log('Error getting documents', err);
+        res.render('facturacion/consultar');
+    });
+    
+})
+
+router.post('/consultasFactura',(req,res)=>{
+   const {ini,fin}=req.body;
+   console.log(req.body);
+    db.collection("facturas").get()
+    .then((snapshot) => {
+        var valores=[];
+        snapshot.forEach((doc) => {
+            if (Betwen2(ini,fin,doc.data().fecha)) {
+                valores.push(doc.data());
+            }
+            
+        });       
+        res.send(valores);
+    })
+    .catch((err) => {
+        console.log('Error getting documents', err);
+        res.send({'valor':'error'});
+    });
+})
 
 router.post('/consecutivo',(req,res)=>{    
     db.collection("facturas")
@@ -62,5 +96,34 @@ router.post('/consecutivo',(req,res)=>{
         res.send({'valor':'error'});
     });
 });
+
+function Betwen2(f1,f2,fc) {
+    fc=formatDate2(fc);
+    console.log(f1);
+    console.log(f2);
+    console.log(fc);
+   
+    if(combertirfecha2(fc)>=combertirfecha2(f1)){
+       if(combertirfecha2(fc)<=combertirfecha2(f2)){
+         return true;
+       }else{
+         return false;
+       }
+    }else{
+      return false;
+    }
+   }
+   
+   function combertirfecha2(f) {
+     var fecha=new Date(f);
+     return Date.parse(fecha);
+   }
+   function formatDate2(fecha) {
+    var dia = fecha.substr(0,2);
+    var mes = fecha.substr(3,2);
+    var ano = fecha.substr(6,4);
+    return ano+'-'+mes+'-'+dia;
+
+}
 
 module.exports = router;
