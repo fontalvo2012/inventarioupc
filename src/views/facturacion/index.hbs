@@ -75,7 +75,7 @@
                 <div class="col-sm-2">
                     <span class="small"><b>Cedula Paciente</b></span>
                     <input type="text" class="form-control form-control-sm" name="cc" id="cc"
-                        onblur="consultarPaciente();verConsecutivo();" id="cc" placeholder="Cedula">
+                        onblur="consultarPaciente();verConsecutivo();MostrarCie();" id="cc" placeholder="Cedula">
                 </div>
                 <div class="col-sm-2 ml-0 pr-0">
                     <span class="small"><b>Nombres</b></span>
@@ -93,14 +93,16 @@
                      <span class="small"><b>P.fin</b></span>
                     <input type="date" class="form-control form-control-sm" name="fin" id="fin" >
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-2" >
                      <span class="small"><b>Diag.</b></span>
-                     <Select id="diag" name="diag" class="form-control form-control-sm">
+                    <div id="cie">
+                         <Select id="diag" name="diag" class="form-control form-control-sm">
                          <option value="">::Diagnostico::</option>
                          <option value="K050">kO50</option>
                          <option value="K021">kO21</option>
                          <option value="K010">kO10</option>
                      </Select>
+                    </div>
                 </div>
     
             </div>

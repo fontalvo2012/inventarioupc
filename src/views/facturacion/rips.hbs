@@ -1,5 +1,5 @@
 {{#each valores}}
-<div class="card m-4">
+<div class="card m-5" style="width: 55%;">
     <div class="card-header">
         <h4 class="card-title">Creacion de Rips</h4>
     </div>
@@ -8,29 +8,30 @@
         <input type="hidden" value="{{nombre}}" name="nombre" id="nombre">
         <input type="hidden" value="{{consecutivo}}" name="consecutivo" id="consecutivo">
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <div class="form-group">
                         <span class="small"><b>Inicio</b></span>
                         <input type="date" class="form-control form-control-sm" min="{{perdido_fin}}" id="finicio"
                             name="finicio">
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <div class="form-group">
                         <span class="small"><b>Final</b></span>
                         <input type="date" class="form-control form-control-sm" min="{{perdido_fin}}" id="ffinal"
                             name="ffinal">
                     </div>
                 </div>
+                  <div class="col-sm-3 pl-0 mr-0">
+                      <span class="small"><b>..</b></span>
+                    <div class="form-group mr-0">                        
+                         <button class="btn btn-success btn-sm btn-block">Generar</button>
+                    </div>
+                </div>              
+             
             </div>
           
-            <div class="row">
-                <div class="col">
-                    <div class="form-group">
-                        <button class="btn btn-success btn-sm">Generar</button>
-                    </div>
-                </div>
-            </div>
+            
         </form>
     </div>
 </div>

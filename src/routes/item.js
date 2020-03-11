@@ -28,7 +28,8 @@ router.post('/ajaxitems', (req, res) => {
                         atiende: doc.data().atiende,
                         complicacion:doc.data().complicacion,
                         a_quirurgico:doc.data().a_quirurgico,
-                        autorizacion:doc.data().autorizacion
+                        autorizacion:doc.data().autorizacion,
+                        tipo:doc.data().tipo
                     });
                 }
             });
@@ -64,7 +65,8 @@ router.post('/itemcups', (req, res) => {
                     atiende: doc.data().atiende,
                     complicacion:doc.data().complicacion,
                     a_quirurgico:doc.data().a_quirurgico,
-                    autorizacion:doc.data().autorizacion
+                    autorizacion:doc.data().autorizacion,
+                    tipo:doc.data().tipo
                 });
             });
             res.send(valores);
@@ -92,7 +94,7 @@ router.get('/item', (req, res) => {
 });
 
 router.post('/items', (req, res) => {
-    const { cups, nombre, valor, entidad, id, t_diagnostico, finalidad, copago, ambito, atiende, complicacion, a_quirurgico } = req.body;
+    const { cups,tipo, nombre, valor, entidad, id, t_diagnostico, finalidad, copago, ambito, atiende, complicacion, a_quirurgico } = req.body;
     let docRef = db.collection('items').doc();
     let setAda = docRef.set({
         cups: cups,
@@ -111,7 +113,8 @@ router.post('/items', (req, res) => {
         atiende: atiende,
         complicacion: complicacion,
         a_quirurgico: a_quirurgico,
-        autorizacion:''
+        autorizacion:'',
+        tipo:tipo
     });
     res.redirect('/item');
 });
