@@ -115,10 +115,9 @@ function CrearAF(nombre, consecutivo, f1, f2) {
         .then((snapshot) => {
             var valores = [];
             var cant = 0;
-            snapshot.forEach((doc) => {
-                cant++;
-
+            snapshot.forEach((doc) => {   
                 if (Betwen(f1, f2, doc.data().fecha)) {
+                    cant++;
                     console.log('se encuentra dentro del periodo');
                     valores.push(doc.data());
                     fs.appendFile(`file/AF${nombre}`, `${doc.data().habilitacion},${doc.data().razon},NI,${doc.data().nit},CP${doc.data().consecutivo},${doc.data().fecha},${doc.data().pinicio},${doc.data().pfinal},${doc.data().eps.cdeps},${doc.data().eps.rsocial},${doc.data().eps.contrato},${doc.data().eps.beneficio},${doc.data().eps.poliza},${doc.data().eps.copago},${doc.data().eps.comision},${doc.data().eps.descuento},${doc.data().total}\n`, (error) => {
@@ -161,17 +160,21 @@ function CrearAP(nombre, consecutivo, f1, f2) {
             var valores = [];
             var cant = 0;
             var c = "";
-            snapshot.forEach((doc) => {
-                cant++;
+            snapshot.forEach((doc) => {                
                 if (Betwen(f1, f2, doc.data().fecha)) {
                     console.log('se encuentra dentro del periodo');
                     valores.push(doc.data());
-                    fs.appendFile(`file/AP${nombre}`, `CP${doc.data().consecutivo},${doc.data().habilitacion},${doc.data().paciente.td},${doc.data().paciente.cedula},${doc.data().pinicio},${doc.data().items[0].autorizacion},${doc.data().items[0].cups},${doc.data().items[0].ambito},${doc.data().items[0].f_procedimiento},${doc.data().items[0].atiende},${doc.data().items[0].c_diagnostico},${doc.data().items[0].c_diagnostico2},${doc.data().items[0].complicacion},1,${doc.data().items[0].valor}\n`, (error) => {
-                        if (error) {
-                            throw error;
-                        }
-                    });
-
+                    if(doc.data().items[0].tipo =='p'){
+                        cant++;
+                        fs.appendFile(`file/AP${nombre}`, `CP${doc.data().consecutivo},${doc.data().habilitacion},${doc.data().paciente.td},${doc.data().paciente.cedula},${doc.data().pinicio},${doc.data().items[0].autorizacion},${doc.data().items[0].cups},${doc.data().items[0].ambito},${doc.data().items[0].f_procedimiento},${doc.data().items[0].atiende},${doc.data().items[0].c_diagnostico},${doc.data().items[0].c_diagnostico2},${doc.data().items[0].complicacion},1,${doc.data().items[0].valor}\n`, (error) => {
+                            if (error) {
+                                throw error;
+                            }
+                        });    
+                    }else{
+                        console.log(doc.data());
+                    }
+                    
                 } else {
                     console.log('No se encuentra dentro del periodo');
                 }
@@ -201,17 +204,20 @@ function CrearAC(nombre, consecutivo, f1, f2) {
             var valores = [];
             var cant = 0;
             var c = "";
-            snapshot.forEach((doc) => {
-                cant++;
+            snapshot.forEach((doc) => {               
                 if (Betwen(f1, f2, doc.data().fecha)) {
                     console.log('se encuentra dentro del periodo');
                     valores.push(doc.data());
-                    fs.appendFile(`file/AC${nombre}`, `CP${doc.data().consecutivo},${doc.data().habilitacion},${doc.data().paciente.td},${doc.data().paciente.cedula},${doc.data().pinicio},${doc.data().items[0].autorizacion},${doc.data().items[0].cups},${doc.data().items[0].f_consulta},${doc.data().items[0].c_externa},${doc.data().items[0].c_diagnostico},${doc.data().items[0].c_diagnostico2},${doc.data().items[0].c_diagnostico2},${doc.data().items[0].c_diagnostico3},1,${doc.data().items[0].valor},${doc.data().items[0].copago},${parseInt(doc.data().items[0].copago) + parseInt(doc.data().items[0].valor)}\n`, (error) => {
-                        if (error) {
-                            throw error;
-                        }
-                    });
-
+                    if(doc.data().items[0].tipo =='c'){
+                        cant++;
+                        fs.appendFile(`file/AC${nombre}`,`CP${doc.data().consecutivo},${doc.data().habilitacion},${doc.data().paciente.td},${doc.data().paciente.cedula},${doc.data().pinicio},${doc.data().items[0].autorizacion},${doc.data().items[0].cups},${doc.data().items[0].f_consulta},${doc.data().items[0].c_externa},${doc.data().items[0].c_diagnostico},${doc.data().items[0].c_diagnostico2},${doc.data().items[0].c_diagnostico2},${doc.data().items[0].c_diagnostico3},1,${doc.data().items[0].valor},${doc.data().items[0].copago},${parseInt(doc.data().items[0].copago) + parseInt(doc.data().items[0].valor)}\n`, (error) => {
+                            if (error) {
+                                throw error;
+                            }
+                        });
+                    }else{
+                        console.log(doc.data())
+                    }
                 } else {
                     console.log('No se encuentra dentro del periodo');
                 }

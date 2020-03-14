@@ -1,0 +1,27 @@
+CC,73578642,ESS024,1,aguilar ,roa,felix,,41,1,M,13,001,U
+CC,1048435093,ESS024,1,soto, soto,silvia,cardona,38,1,F,13,001,U
+CC,9146767,ESS024,1,rodriguez,martinez,eduar,antonio,39,1,M,13,001,U
+CC,45536050,ESS024,1,cuevas,paternina,hilda, carolina,38,1,F,13,001,U
+CC,1003288520,ESS024,1,ESCOBAR, CASILLO,OMAR ,YESID,22,1,M,13,001,U
+CC,45536050,ESS024,1,cuevas,paternina,hilda, carolina,38,1,F,13,001,U
+CC,33148058,ESS024,1,blanco,orozco,ana,cleotilde,66,1,F,13,001,U
+CC,33152677,ESS024,1,paternina,alvear,ermelinda,,,1,F,13,001,U
+CC,45689860,ESS024,1,zambrano,carreazo,yesenia ,,41,1,F,13,001,U
+CC,1047490895,ESS024,1,nieves,rengifo,natalia ,,23,1,F,13,001,U
+CC,1047434248,ESS024,1,barcasnegra, padilla,yarsenis ,,29,1,F,13,001,U
+CC,1047508262,ESS024,1,Julio, Bello,Malori,,21,1,F,13,001,U
+CC,1102871007,ESS024,1,ramirez,pau,maria ,,31,1,F,76,100,U
+CC,1048935603,ESS024,1,agamez,almagro,daly,luz,30,1,F,76,100,U
+CC,1102871007,ESS024,1,ramirez,pau,maria ,,31,1,F,76,100,U
+CC,73580997,ESS024,1,sepulveda,mercado,73580997,manuel,44,1,M,76,100,U
+CC,33152677,ESS024,1,paternina,alvear,ermelinda,,,1,F,13,001,U
+CC,1051891254,ESS024,1,yances,rada,adela,de jesus,24,1,F,13,673,R
+CC,1048435093,ESS024,1,soto, soto,silvia,cardona,38,1,F,13,001,U
+CC,1047487814,ESS024,1,ortiz,barrientos,maria, fernanda,24,1,F,13,001,U
+CC,45765620,ESS024,1,ortega , montalvo,mary , luz,44,1,F,13,001,U
+RC,1142936743,ESS024,1,rodriguez,castro,esteban,,7,1,M,13,001,U
+CC,32937497,ESS024,1,paez , padilla,sirley,,35,1,F,13,001,U
+RC,1142936743,ESS024,1,rodriguez,castro,esteban,,7,1,M,13,001,U
+CC,45536050,ESS024,1,cuevas,paternina,hilda, carolina,38,1,F,13,001,U
+CC,1128062794,ESS024,1,espinoza,lozano,diana,margarita,31,1,F,13,001,U
+CC,1048435093,ESS024,1,soto, soto,silvia,cardona,38,1,F,13,001,U
