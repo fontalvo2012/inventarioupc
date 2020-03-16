@@ -3,7 +3,14 @@ const router = Router();
 var admin = require("firebase-admin");
 const db=admin.firestore();
 
-router.post('/ajaxentidad',(req,res)=>{
+function checkAuthentication(req,res,next){
+    if(req.isAuthenticated()){        
+        next();
+    } else{
+        res.redirect("/singIn");
+    }
+}
+router.post('/ajaxentidad',checkAuthentication,(req,res)=>{
     const {nit} = req.body;
     db.collection('entidades').where("nit", "==", nit ).get()
     .then((snapshot) => {
@@ -34,7 +41,7 @@ router.post('/ajaxentidad',(req,res)=>{
     });
 });
 
-router.get('/addentidades',(req,res)=>{
+router.get('/addentidades',checkAuthentication,(req,res)=>{
     db.collection('entidades').get()
     .then((snapshot) => {
         var valores=[];
@@ -57,7 +64,7 @@ router.get('/addentidades',(req,res)=>{
     });
 });
 
-router.post('/addentidades',(req,res)=>{
+router.post('/addentidades',checkAuthentication,(req,res)=>{
     const {nit,rsocial,email,direccion,telefono,regimen,tipoid,cdeps,contrato} = req.body;
     let docRef = db.collection('entidades').doc();
     let setAda = docRef.set({
@@ -80,7 +87,7 @@ router.post('/addentidades',(req,res)=>{
     res.redirect('/addentidades');
 });
 
-router.get('/delentidad/:id',(req,res)=>{
+router.get('/delentidad/:id',checkAuthentication,(req,res)=>{
     const {id}= req.params;
    
     db.collection("entidades").doc(id).delete().then(function () {
@@ -92,7 +99,7 @@ router.get('/delentidad/:id',(req,res)=>{
     });   
 });
 
-router.post('/actualizarentidad',(req,res)=>{
+router.post('/actualizarentidad',checkAuthentication,(req,res)=>{
     const {nit,rsocial,email,direccion,telefono,regimen,tipoid,cdeps,contrato,id} = req.body;
     var washingtonRef = db.collection("entidades").doc(id);  
     return washingtonRef.update({    
@@ -115,7 +122,7 @@ router.post('/actualizarentidad',(req,res)=>{
 });
 
 
-router.post('/selectEntidad',(req,res)=>{
+router.post('/selectEntidad',checkAuthentication,(req,res)=>{
     db.collection('entidades').get()
     .then((snapshot) => {
         var valores=[];

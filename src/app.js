@@ -2,6 +2,9 @@ const express = require('express');
 const morgan = require('morgan');
 const exphbs = require('express-handlebars');
 const path = require('path');
+const passport = require('passport');
+const session = require('express-session');
+const flash = require('connect-flash');
 const app = express();
 
 
@@ -19,7 +22,19 @@ app.set('view engine','.hbs');
 //middelware
 app.use(morgan('dev'));
 app.use(express.urlencoded({extended:false}));
-
+app.use(session({
+    secret:'myscretsession',
+    resave: false,
+    saveUninitialized:false
+}));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+app.use((req,res,next)=>{
+    app.locals.login=req.flash('login');
+    app.locals.user=req.user;
+    next();
+}) 
 //route
 app.use(require('./routes'));
 app.use(require('./routes/index'));
@@ -30,10 +45,7 @@ app.use(require('./routes/pacientes'));
 app.use(require('./routes/entidades'));
 app.use(require('./routes/miempresa'));
 app.use(require('./routes/facturacion'));
-
-
-
-
+app.use(require('./routes/login'));
 //static file
 app.use(express.static(path.join(__dirname,'public')));
 

@@ -1,0 +1,10 @@
+
+	.::Facturacion::.
+
++)Cambiar la NavBar.(ok)
++)Quitar Home(ok)
++)Login
++)Separar Item de consulta de item
++)Agregar Filtro consulta de item
++)Separa Registro de entidad de consulta de entidad
++)

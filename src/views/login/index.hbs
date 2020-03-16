@@ -1,0 +1,30 @@
+{{!-- {{#if login}}
+<div class="alert alert-danger" role="alert">
+ <h4>{{login}}</h4>
+</div>
+
+{{/if}} --}}
+<div class="row" style="margin-left: 25%; margin-top: 10%;" >
+    <div class="col-sm-5">
+        <div class="card">
+            <div class="card-header">
+              <h5><b>Registros de Usuarios</b></h5>
+            </div>
+            <div class="card-body">
+                  <form action="/login" method="post">
+                <div class="form-group">
+                    <input type="text" name="user" id="user" class="form-control form-control-sm"
+                        placeholder="Usuario:">
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" id="password" class="form-control form-control-sm"
+                        placeholder="Contraseña">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success btn-sm btn-block">Ingresar</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>

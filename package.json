@@ -10,11 +10,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "connect-flash": "^0.1.1",
     "express": "^4.17.1",
     "express-handlebars": "^3.1.0",
+    "express-session": "^1.17.0",
     "firebase-admin": "^8.9.2",
     "html-pdf": "^2.2.0",
-    "morgan": "^1.9.1"
+    "morgan": "^1.9.1",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

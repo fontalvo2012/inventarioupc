@@ -9,13 +9,17 @@ admin.initializeApp({
 });
 const db=admin.firestore();
 
+function checkAuthentication(req,res,next){
+  if(req.isAuthenticated()){        
+      next();
+  } else{
+      res.redirect("/singIn");
+  }
+}
 
 
-router.get('/',(req,res)=>{
-  const datos={
-    nombre:''
-  };
-  res.render('index',{datos});  
+router.get('/',checkAuthentication,(req,res)=>{ 
+  res.render('index');  
 });
 
 
