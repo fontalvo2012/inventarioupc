@@ -309,6 +309,34 @@ function verConsecutivo() {
 
 }
 
+function consularPaciente(){
+  var cc=$('#cc').val();
+  $.ajax({
+    url: '/ajax_consultarpacientes',
+    type: 'POST',
+    datatype: 'json',
+    data:{
+      cc:cc
+    },
+    success: (data) => {
+      var cadena="";
+      data.forEach(element => {
+        cadena+=`
+          <tr>
+            <td>${element.cedula}</td>
+            <td>${element.nombre} ${element.apellido} ${element.sapellido}</td>
+            <td>${element.telefono}</td>
+            <td>${element.direccion}</td>
+            <td> <a href="/delpaciente/${element.cedula}" class="btn btn-danger btn-sm">del</a></td>
+          </tr>
+        `;
+      });
+      $('#cuerpo').html(cadena);
+      console.log(cadena);
+    }
+  });
+}
+
 
 function getfac(id) {
   $.ajax({

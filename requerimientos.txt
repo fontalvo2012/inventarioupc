@@ -3,8 +3,9 @@
 
 +)Cambiar la NavBar.(ok)
 +)Quitar Home(ok)
-+)Login
++)Login(ok)
 +)Separar Item de consulta de item
 +)Agregar Filtro consulta de item
 +)Separa Registro de entidad de consulta de entidad
-+)
++)consulta pacientes(ok)
++)Filtro pacientes(ok)

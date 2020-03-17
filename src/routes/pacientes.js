@@ -3,7 +3,14 @@ const router = Router();
 var admin = require("firebase-admin");
 const db=admin.firestore();
 
-router.post('/ajaxpaciente',(req,res)=>{
+function checkAuthentication(req,res,next){
+    if(req.isAuthenticated()){        
+        next();
+    } else{
+        res.redirect("/singIn");
+    }
+}
+router.post('/ajaxpaciente',checkAuthentication,(req,res)=>{
     const {cedula} = req.body;
     db.collection('pacientes').where("cedula", "==", cedula ).get()
     .then((snapshot) => {
@@ -38,7 +45,7 @@ router.post('/ajaxpaciente',(req,res)=>{
     });
 });
 
-router.get('/addpacientes',(req,res)=>{
+router.get('/addpacientes',checkAuthentication,(req,res)=>{
     db.collection('pacientes').orderBy('nombre','asc').get()
     .then((snapshot) => {
         var valores=[];
@@ -72,7 +79,51 @@ router.get('/addpacientes',(req,res)=>{
     });
 });
 
-router.post('/addpacientes',(req,res)=>{
+router.get('/consultarpacientes',checkAuthentication,(req,res)=>{
+    db.collection('pacientes').orderBy('nombre','asc').get()
+    .then((snapshot) => {
+        var valores=[];
+        snapshot.forEach((doc) => {           
+            valores.push(doc.data());
+        });
+        console.log(valores);
+        res.render('pacientes/consultar',{valores});
+    })
+    .catch((err) => {
+        console.log('Error getting documents', err);
+        res.render('pacientes/consultar');
+    });
+});
+
+router.post('/ajax_consultarpacientes',checkAuthentication,(req,res)=>{
+    const {cc} = req.body;
+    db.collection('pacientes').get()
+    .then((snapshot) => {
+        var valores=[];
+        snapshot.forEach((doc) => {
+        if ( validarcedula(cc,doc.data().cedula)) {
+            valores.push(doc.data());
+        }           
+        });
+        console.log(valores);
+        res.send(valores)
+    })
+    .catch((err) => {
+        console.log('Error getting documents', err);
+        res.send('null')
+    });
+});
+
+
+function validarcedula(c1,c2) {
+    if(c1.substr(0,c1.length)==c2.substr(0,c1.length)){
+        return true;
+    }
+    return false;
+}
+
+
+router.post('/addpacientes',checkAuthentication,(req,res)=>{
     const { td,cedula,nombre,snombre,apellido,sapellido,sexo,nacimiento,edad,unidad,ecivil,cdM,cddep,zresidencial,email,direccion,telefono} = req.body;
     let docRef = db.collection('pacientes').doc();
     let setAda = docRef.set({
@@ -97,7 +148,7 @@ router.post('/addpacientes',(req,res)=>{
     res.redirect('/addpacientes');
 });
 
-router.get('/delpaciente/:id',(req,res)=>{
+router.get('/delpaciente/:id',checkAuthentication,(req,res)=>{
     const {id}= req.params;   
     db.collection("pacientes").doc(id).delete().then(function () {       
         res.redirect('/addpacientes');
@@ -107,7 +158,7 @@ router.get('/delpaciente/:id',(req,res)=>{
     });   
 });
 
-router.post('/actualizarpaciente',(req,res)=>{
+router.post('/actualizarpaciente',checkAuthentication,(req,res)=>{
     const { id,td,nombre,snombre,apellido,sapellido,sexo,nacimiento,edad,unidad,ecivil,cdM,cddep,zresidencial,email,direccion,telefono} = req.body;
     var washingtonRef = db.collection("pacientes").doc(id);  
     return washingtonRef.update({
