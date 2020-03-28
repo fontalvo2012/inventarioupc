@@ -3,6 +3,15 @@ const router = Router();
 var admin = require("firebase-admin");
 const db=admin.firestore();
 
+function checkAuthentication(req,res,next){
+    if(req.isAuthenticated()){        
+        next();
+    } else{
+        res.redirect("/singIn");
+    }
+  }
+  
+
 router.post('/ajaxmedico',(req,res)=>{
     const {id} = req.body;
     db.collection('medicos').where("cedula", "==", id ).get()
@@ -19,7 +28,7 @@ router.post('/ajaxmedico',(req,res)=>{
     });
 });
 
-router.get('/addmedicos',(req,res)=>{
+router.get('/addmedicos',checkAuthentication,(req,res)=>{
     db.collection('medicos').get()
     .then((snapshot) => {
         var valores=[];
