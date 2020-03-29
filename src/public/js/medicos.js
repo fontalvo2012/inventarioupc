@@ -1,94 +1,111 @@
-var orario=[];
-var medico=[];
+var orario = [];
+var medico = [];
 
 function agregarHorario() {
-    var dia=$('#dia').val();
-    var hi=$('#hi').val();
-    var hf=$('#hf').val();
-    if(hi<hf){
-        orario.push(   
+    var dia = $('#dia').val();
+    var hi = $('#hi').val();
+    var hf = $('#hf').val();
+    var d = $('#duracion').val();
+    if (hi < hf) {
+        orario.push(
             {
-                dia : dia,
-                horaInicio:hi,
-                horaFin:hf
+                dia: dia,
+                horaInicio: hi,
+                horaFin: hf,
+                duracion:d
             }
         );
         mostrarAgenda();
         console.log(orario);
-    }else{
+    } else {
         console.log('datos erroneos')
     }
-    
+
 }
 function agregarMedico() {
-    if(orario[0]){
-        medico=[{
-            cedula:$('#cedula').val(),
-            nombres:$('#nombre').val(),
-            registro:$('#registro').val(),
-            epecialidad:$('#especialidad').val(),
-            telefono:$('#telefono').val(),
-            email:$('#email').val(),
-            agenda:orario
-        }];
-        validarCamposMedicos();
-        console.log(medico);
-    }else{
-        console.log('No hay agenda');        
-    }
+    if (orario[0]) {
+        medicos = {
+            cedula: $('#cedula').val(),
+            nombres: $('#nombre').val(),
+            registro: $('#registro').val(),
+            especialidad: $('#especialidad').val(),
+            telefono: $('#telefono').val(),
+            email: $('#email').val(),
+            agenda: orario
+        };
+        var medi = JSON.stringify(medicos);
     
+        if(validarCamposMedicos()=='0'){
+            $.ajax({
+                url: '/ajaxaddmedicos',
+                type: 'POST',
+                datatype: 'json',
+                data: {
+                    medi: medi
+                },
+                success: (data) => {
+                    console.log(data);
+                    if (data == "ingresado") {
+                        location.href = "/addmedicos";
+                    }
+    
+                }
+            });       
+        }       
+    } else {
+        console.log('Debe Registrar la agenda');
+    }
+
 }
 
-function validarCamposMedicos(){
-    var cont=0;
-    var dato="";
-    if($('#cedula').val()==""){
+function validarCamposMedicos() {
+    var cont = 0;
+    var dato = "";
+    if ($('#cedula').val() == "") {
         cont++;
-        $('#cedula').css('border-color','red');
-        $('#cedula').css('color','black');
+        $('#cedula').css('border-color', 'red');
+        $('#cedula').css('color', 'black');
     };
-    if($('#nombre').val()==""){
+    if ($('#nombre').val() == "") {
         cont++;
-        $('#nombre').css('border-color','red');
-        $('#nombre').css('color','black');
-     }
-    if($('#registro').val()==""){
-        cont++; 
-        $('#registro').css('border-color','red');
-        $('#registro').css('color','black');
+        $('#nombre').css('border-color', 'red');
+        $('#nombre').css('color', 'black');
     }
-    if($('#especialidad').val()==""){
+    if ($('#registro').val() == "") {
         cont++;
-        $('#especialidad').css('border-color','red');
-        $('#especialidad').css('color','black');
+        $('#registro').css('border-color', 'red');
+        $('#registro').css('color', 'black');
     }
-    if($('#telefono').val()==""){
+    if ($('#especialidad').val() == "") {
         cont++;
-        $('#telefono').css('border-color','red');
-        $('#telefono').css('color','black');    
+        $('#especialidad').css('border-color', 'red');
+        $('#especialidad').css('color', 'black');
     }
-    if($('#email').val()==""){
+    if ($('#telefono').val() == "") {
         cont++;
-        $('#email').css('border-color','red');
-        $('#email').css('color','black'); 
+        $('#telefono').css('border-color', 'red');
+        $('#telefono').css('color', 'black');
     }
-
-    
-    console.log(cont);
+    if ($('#email').val() == "") {
+        cont++;
+        $('#email').css('border-color', 'red');
+        $('#email').css('color', 'black');
+    }
+    return cont;
 }
 
 function mostrarAgenda() {
-    var cadena='';
-    var cont=0;
+    var cadena = '';
+    var cont = 0;
     orario.forEach(element => {
-        
-        cadena+=`
+
+        cadena += `
             <tr>
             <td>${cont}</td>
             <td>${element.dia}</td>
             <td>${element.horaInicio}</td>
             <td>${element.horaFin}</td>
-            <td><button class="btn-danger btn-danger btn-sm" onclick="borrarAgenda(${cont})">del</button></td>
+            <td><button class="btn-danger btn-danger btn-sm" onclick="borrarAgenda(${cont})"><i class="far fa-trash-alt" style="font-size='16px'"></i></button></td>
             </tr>
         `;
         cont++;
@@ -96,7 +113,73 @@ function mostrarAgenda() {
     $('#agenda').html(cadena);
 }
 
-function borrarAgenda(id){
-    orario.splice(id,1);
+function borrarAgenda(id) {
+    orario.splice(id, 1);
     mostrarAgenda();
 }
+function actualizarMedico() {
+    medicos = {
+        cedula: $('#cedula').val(),
+        nombres: $('#nombre').val(),
+        registro: $('#registro').val(),
+        especialidad: $('#especialidad').val(),
+        telefono: $('#telefono').val(),
+        email: $('#email').val(),
+        agenda: orario
+    };
+    var medi = JSON.stringify(medicos);
+    if(validarCamposMedicos()==0){
+        $.ajax({
+            url: '/actualizarmedico',
+            type: 'POST',
+            datatype: 'json',
+            data: {
+              id:$('#id').val(),
+              medi: medi     
+            },
+            success: (data) => {
+              console.log(data);
+              location.href = "/addmedicos";
+            }
+        });
+    }
+    
+  }
+
+function blurMedicoCedula() {
+    var id = $('#cedula').val();
+    $.ajax({
+      url: '/ajaxmedico',
+      type: 'POST',
+      datatype: 'json',
+      data: {
+        id: id
+      },
+      success: (data) => {
+        console.log(data);         
+        if(data){     
+            $('#id').val(data.id)       
+            $('#cedula').val(data.data.cedula);
+            $('#especialidad').val(data.data.especialidad);
+            $('#nombre').val(data.data.nombres);
+            $('#email').val(data.data.email);
+            $('#registro').val(data.data.registro);
+            $('#telefono').val(data.data.telefono);
+            $('#ingresar').css('visibility', 'hidden');
+            $('#actualizar').css('visibility', 'visible');
+            orario=data.data.agenda;
+            mostrarAgenda();
+        }else{                   
+            $('#nombre').val("");
+            $('#especialidad').val("");
+            $('#email').val("");
+            $('#registro').val("");
+            $('#telefono').val("");
+            $('#ingresar').css('visibility', 'visible');
+            $('#actualizar').css('visibility', 'hidden');
+            orario=[];
+            mostrarAgenda();
+        }
+      }
+    });
+  }

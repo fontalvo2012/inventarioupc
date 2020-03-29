@@ -18,9 +18,10 @@ router.post('/ajaxmedico',(req,res)=>{
     .then((snapshot) => {
         var valores=[];
         snapshot.forEach((doc) => {            
-            valores.push({id:doc.id,registro:doc.data().registro,cedula:doc.data().cedula,telefono:doc.data().telefono,email:doc.data().email,nombres:doc.data().nombres});
+            valores.push({data:doc.data(),id:doc.id});
+            
         });       
-        res.send(valores);
+        res.send(valores[0]);
     })
     .catch((err) => {
         console.log('Error getting documents', err);
@@ -57,6 +58,13 @@ router.post('/addmedicos',(req,res)=>{
     res.redirect('/addmedicos');
 });
 
+router.post('/ajaxaddmedicos',(req,res)=>{
+    const { medi } = req.body;
+    let docRef = db.collection('medicos').doc();    
+    let setAda = docRef.set(JSON.parse(medi));
+    res.send('ingresado');
+});
+
 router.get('/delmedico/:id',(req,res)=>{
     const {id}= req.params;
    
@@ -70,15 +78,9 @@ router.get('/delmedico/:id',(req,res)=>{
 });
 
 router.post('/actualizarmedico',(req,res)=>{
-    const {nombres,email,registro,telefono,id} = req.body;
-    var washingtonRef = db.collection("medicos").doc(id);
-  
-    return washingtonRef.update({        
-        nombres: nombres,
-        email: email,
-        registro:registro,
-        telefono:telefono      
-    })
+    const {id,medi} = req.body;
+    var washingtonRef = db.collection("medicos").doc(id);  
+    return washingtonRef.update(JSON.parse(medi))
         .then(function () {
             res.send('Actualizado Correctamente');
         })
