@@ -1,4 +1,4 @@
-    <div class="col-sm-8">
+    <div class="col-sm-12 mt-3">
         <table class="table">
             <thead>
                 <tr>
@@ -6,6 +6,8 @@
                     <th scope="col" >Nombres</th>
                     <th scope="col">Telefono</th>
                     <th scope="col">R.Medico</th>
+                    <th scope="col">Especialidad</th>
+                    <th scope="col">Email</th>
                     <th> Acciones </th>
                   
                 </tr>
@@ -18,6 +20,8 @@
                     <td class="small">{{nombres}}</td>
                     <td class="small">{{telefono}}</td>
                     <td class="small">{{registro}}</td> 
+                    <td class="small">{{especialidad}}</td> 
+                    <td class="small">{{email}}</td> 
                     <td>
                         <a href="/delmedico/{{id}}" class="btn btn-danger btn-sm" >del</a>
                         {{!-- <button class="btn btn-success btn-sm" onclick="consultarmedico({{cedula}});">mod</button> --}}
@@ -30,7 +34,6 @@
                     <th scope="row" colspan="4">No hay  Registros de  Medico</th>                    
                 </tr>
                 {{/if}}
-
 
             </tbody>
         </table>

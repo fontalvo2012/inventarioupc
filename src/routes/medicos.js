@@ -45,7 +45,7 @@ router.get('/addmedicos',checkAuthentication,(req,res)=>{
     });
 });
 
-router.post('/addmedicos',(req,res)=>{
+router.post('/addmedicos',checkAuthentication,(req,res)=>{
     const { cedula,nombres,email,registro,telefono} = req.body;
     let docRef = db.collection('medicos').doc();
     let setAda = docRef.set({
@@ -58,14 +58,14 @@ router.post('/addmedicos',(req,res)=>{
     res.redirect('/addmedicos');
 });
 
-router.post('/ajaxaddmedicos',(req,res)=>{
+router.post('/ajaxaddmedicos',checkAuthentication,(req,res)=>{
     const { medi } = req.body;
     let docRef = db.collection('medicos').doc();    
     let setAda = docRef.set(JSON.parse(medi));
     res.send('ingresado');
 });
 
-router.get('/delmedico/:id',(req,res)=>{
+router.get('/delmedico/:id',checkAuthentication,(req,res)=>{
     const {id}= req.params;
    
     db.collection("medicos").doc(id).delete().then(function () {
@@ -77,7 +77,23 @@ router.get('/delmedico/:id',(req,res)=>{
     });   
 });
 
-router.post('/actualizarmedico',(req,res)=>{
+router.get('/vermedicos',checkAuthentication,(req,res)=>{
+    db.collection('medicos').get()
+    .then((snapshot) => {
+        var valores=[];
+        snapshot.forEach((doc) => {
+            console.log(doc.id, '=>', doc.data());
+            valores.push({id:doc.id,registro:doc.data().registro,especialidad:doc.data().especialidad,cedula:doc.data().cedula,telefono:doc.data().telefono,email:doc.data().email,nombres:doc.data().nombres});
+        });       
+        res.render('medicos/consultas',{valores});
+    })
+    .catch((err) => {
+        console.log('Error getting documents', err);
+        res.render('medicos/consultas');
+    });
+})
+
+router.post('/actualizarmedico',checkAuthentication,(req,res)=>{
     const {id,medi} = req.body;
     var washingtonRef = db.collection("medicos").doc(id);  
     return washingtonRef.update(JSON.parse(medi))

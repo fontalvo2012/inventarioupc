@@ -17,8 +17,9 @@ function agregarHorario() {
         );
         mostrarAgenda();
         console.log(orario);
+        $('#alert').html(''); 
     } else {
-        console.log('datos erroneos')
+        $('#alert').html(` <div class="alert alert-danger" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> La hora inicial es mayor que la final </div>` );
     }
 
 }
@@ -46,14 +47,17 @@ function agregarMedico() {
                 success: (data) => {
                     console.log(data);
                     if (data == "ingresado") {
-                        location.href = "/addmedicos";
+                        location.href = "/addmedicos";                        
                     }
     
                 }
-            });       
+            }); 
+            $('#alert').html('');      
+        }else{
+            $('#alert').html(` <div class="alert alert-danger" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> Debe ingresar datos al Medico </div>` );
         }       
     } else {
-        console.log('Debe Registrar la agenda');
+        $('#alert').html(` <div class="alert alert-danger" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> Debe ingresar agenda al Medico </div>` );
     }
 
 }
@@ -65,31 +69,48 @@ function validarCamposMedicos() {
         cont++;
         $('#cedula').css('border-color', 'red');
         $('#cedula').css('color', 'black');
-    };
+    }else{
+        $('#cedula').css('border-color', 'black');
+        $('#cedula').css('color', 'black');     
+    }
     if ($('#nombre').val() == "") {
         cont++;
         $('#nombre').css('border-color', 'red');
         $('#nombre').css('color', 'black');
+    }else{
+        $('#nombre').css('border-color', 'black'); 
+        $('#nombre').css('color', 'black');     
     }
     if ($('#registro').val() == "") {
         cont++;
         $('#registro').css('border-color', 'red');
         $('#registro').css('color', 'black');
+    }else{
+        $('#registro').css('border-color', 'black');      
     }
     if ($('#especialidad').val() == "") {
         cont++;
         $('#especialidad').css('border-color', 'red');
         $('#especialidad').css('color', 'black');
+    }else{
+        $('#especialidad').css('border-color', 'black');      
     }
     if ($('#telefono').val() == "") {
         cont++;
         $('#telefono').css('border-color', 'red');
         $('#telefono').css('color', 'black');
+    }else{
+        $('#telefono').css('border-color', 'black');      
     }
+
     if ($('#email').val() == "") {
         cont++;
         $('#email').css('border-color', 'red');
         $('#email').css('color', 'black');
+    }else{
+        $('#email').css('border-color', 'black');
+        $('#email').css('color', 'black');
+
     }
     return cont;
 }
@@ -140,6 +161,7 @@ function actualizarMedico() {
             success: (data) => {
               console.log(data);
               location.href = "/addmedicos";
+              $('#alert').html(` <div class="alert alert-success" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> Datos Actualizados</div>` );
             }
         });
     }
