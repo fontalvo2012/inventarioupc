@@ -1,0 +1,37 @@
+<div class="row mt-1">
+    <div class="col-sm-4 p-1 m-1">
+        <div class="card">
+            <div class="card-header">
+                 <div class="row">
+                    <div class="col-sm-12">
+                        <select name="medico" id="medico" class="form-control form-control-sm" onchange="fechas()">
+                            <option value="">.::Seleccione::.</option>
+                            {{#each valores}}
+                            <option value="{{cedula}}">{{nombres}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">               
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div id="datepicker"></div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3 m-1 p-1">
+       <div class="card  p-1">
+           <div class="card-header">
+               selecciones Horario
+               <input type="text" name="fecha" id="fecha" class="form-control form-control-sm" readonly>
+           </div>
+           <div class="card-body">
+                <div id="contenido"></div>
+           </div>
+       </div>
+    </div>
+</div>

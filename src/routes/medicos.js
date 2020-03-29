@@ -10,16 +10,13 @@ function checkAuthentication(req,res,next){
         res.redirect("/singIn");
     }
   }
-  
-
 router.post('/ajaxmedico',(req,res)=>{
     const {id} = req.body;
     db.collection('medicos').where("cedula", "==", id ).get()
     .then((snapshot) => {
         var valores=[];
         snapshot.forEach((doc) => {            
-            valores.push({data:doc.data(),id:doc.id});
-            
+            valores.push({data:doc.data(),id:doc.id});            
         });       
         res.send(valores[0]);
     })
@@ -28,6 +25,23 @@ router.post('/ajaxmedico',(req,res)=>{
         res.send({'valor':'error'});
     });
 });
+
+router.post('/agendaMedicos',(req,res)=>{
+    const {cc}=req.body;    
+    db.collection('medicos').where('cedula','==',cc).get()
+    .then((snapshot) => {
+        var valores=[];
+        snapshot.forEach((doc) => {            
+            valores.push(doc.data());            
+        });       
+        res.send(valores[0]);
+    })
+    .catch((err) => {
+        console.log('Error getting documents', err);
+        res.send({'valor':'error'});
+    });
+});
+
 
 router.get('/addmedicos',checkAuthentication,(req,res)=>{
     db.collection('medicos').get()
@@ -66,8 +80,7 @@ router.post('/ajaxaddmedicos',checkAuthentication,(req,res)=>{
 });
 
 router.get('/delmedico/:id',checkAuthentication,(req,res)=>{
-    const {id}= req.params;
-   
+    const {id}= req.params;   
     db.collection("medicos").doc(id).delete().then(function () {
         console.log("Document successfully deleted!");
         res.redirect('/addmedicos');
@@ -104,4 +117,7 @@ router.post('/actualizarmedico',checkAuthentication,(req,res)=>{
             res.redirect('Error en Actualizar');
         });
 });
+
+
+
 module.exports = router;
