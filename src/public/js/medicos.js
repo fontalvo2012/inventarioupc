@@ -28,7 +28,7 @@ function agregarMedico() {
     if (orario[0]) {
         medicos = {
             cedula: $('#cedula').val(),
-            nombres: $('#nombre').val(),
+            nombres: $('#nombre').val().toUpperCase(),
             registro: $('#registro').val(),
             especialidad: $('#especialidad').val(),
             telefono: $('#telefono').val(),
@@ -142,7 +142,7 @@ function borrarAgenda(id) {
 function actualizarMedico() {
     medicos = {
         cedula: $('#cedula').val(),
-        nombres: $('#nombre').val(),
+        nombres: $('#nombre').val().toUpperCase(),
         registro: $('#registro').val(),
         especialidad: $('#especialidad').val(),
         telefono: $('#telefono').val(),
@@ -249,6 +249,9 @@ function agenda(dia) {
             $('#contenido').html(contenido);  
             citasUsadas();
            
+
+
+
         }
     });
 }
@@ -324,20 +327,35 @@ function crearCitas(hora) {
         hora:hora,
         estado:'agendado',
         paciente:$('#cc').val(),
-        nombres:$('#nombres').val()
+        nombres:$('#nombres').val(),
+        entidad:$('#entidad').val(),
+        diagnostico:$('#diag').val(),
+        motivo:$('#item').val(),
+        telefono:$('#telefono').val(),
+        copago:'0',
+        autorizacion:''
     };
     var c = JSON.stringify(cita);
-    $.ajax({
-        url: '/addcitas',
-        type: 'POST',
-        datatype: 'json',
-        data: {
-            cita: c
-        },
-        success: (data) => {           
-            citasUsadas();
-        }
-    });
+    if ($('#cc').val()=="") {       
+        $('#alert').html(` <div class="alert alert-danger" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> Debe ingresar cedula</div>`);
+    }else{
+        $('#alert').html('');
+        $.ajax({
+            url: '/addcitas',
+            type: 'POST',
+            datatype: 'json',
+            data: {
+                cita: c
+            },
+            success: (data) => {           
+                citasUsadas();
+                $('#cc').val('');
+                $('#nombres').val('');
+                $('#entidad').val('');
+            }
+        });
+    }
+
 }
 function citasUsadas(){    
     $.ajax({
@@ -351,6 +369,7 @@ function citasUsadas(){
            data.forEach(element => {              
                $('#'+element.hora.replace(':','')).html('<b>Asignada</b>');
            });
+          
         }
     });  
 }

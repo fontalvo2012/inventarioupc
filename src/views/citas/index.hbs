@@ -1,29 +1,65 @@
 <div class="row mt-1">
-    <div class="col-sm-4 p-1 m-1">
+    <div class="col-sm-6 p-1 m-1">
         <div class="card">
             <div class="card-header">
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="form-group">
-                            <span class="small"><b>Cedula Paciente</b></span>
-                            <input type="text" class="form-control form-control-sm" name="cc" id="cc"
-                                onblur="consultarPaciente()" id="cc" placeholder="Cedula">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <span class="small"><b>Cedula Paciente</b></span>
+                                <input type="text" class="form-control form-control-sm" name="cc" id="cc"
+                                    onblur="consultarPaciente();MostrarCie();" id="cc" placeholder="Cedula">
+                            </div>
+                            <div class="col-sm-6"><span class="small"><b>Nombres</b></span>
+                                <input type="text" class="form-control form-control-sm" name="nombres" id="nombres"
+                                    placeholder="Nombres" readonly></div>
                         </div>
-                        <div class="form-group">
-                            <span class="small"><b>Nombres</b></span>
-                            <input type="text" class="form-control form-control-sm" name="nombres" id="nombres" placeholder="Nombres" readonly>
+                        <div class="row mt-3">
+                            <div class="col-sm-4">
+                                 <span class="small"><b>Eps</b></span>
+                                <div class="entidades">                                   
+                                    <select name="" id="" id="entidad" class="form-control form-control-sm">
+                                        <option value="">::Eps::</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <span class="small"><b>Diag.</b></span>
+                                <div id="cie">
+                                    <Select id="diag" name="diag" class="form-control form-control-sm">
+                                        <option value="">::Diagnostico::</option>
+                                        <option value="K050">kO50</option>
+                                        <option value="K021">kO21</option>
+                                        <option value="K010">kO10</option>
+                                    </Select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <span class="small"><b>Items</b></span>
+                                <div class="items">
+                                    <select name="" id="item" class="form-control form-control-sm">
+                                        <option value="">::Items::</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <span class="small"><b>Medicos</b></span>
-                            <select name="medico" id="medico" class="form-control form-control-sm"
-                                onchange="diasmendicos()">
-                                <option value="">.::Seleccione::.</option>
-                                {{#each valores}}
-                                <option value="{{cedula}}">{{nombres}}</option>
-                                {{/each}}
-                            </select>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <span class="small"><b>Telefono</b></span>
+                                <input type="number" id="telefono" name="telefono" class="form-control form-control-sm" placeholder="Telefono">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <span class="small"><b>Medicos</b></span>
+                                    <select name="medico" id="medico" class="form-control form-control-sm" onchange="diasmendicos()">
+                                        <option value="">.::Seleccione::.</option>
+                                        {{#each valores}}
+                                        <option value="{{cedula}}">{{nombres}}</option>
+                                        {{/each}}
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -47,7 +83,6 @@
                 <div id="contenido"></div>
             </div>
 
-            <button class="btn btn-success" onclick="ejemplo();">k</button>
         </div>
     </div>
 </div>
