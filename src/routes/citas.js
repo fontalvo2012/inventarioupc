@@ -33,4 +33,29 @@ router.get('/citas',(req,res)=>{
   
 });
 
+router.post('/addcitas',(req,res)=>{
+    const {cita}=req.body;
+    console.log(JSON.parse(cita));
+    let docRef = db.collection('citas').doc();
+    docRef.set(JSON.parse(cita));
+    res.send('realizado');
+})
+
+router.post('/consultarcitas',(req,res)=>{
+    const {fecha}=req.body;
+  
+    db.collection('citas').where('fecha','==',fecha).get()
+    .then((snapshot) => {
+        var valores=[];
+        snapshot.forEach((doc) => {            
+            valores.push(doc.data());            
+        });       
+        res.send(valores)
+    })
+    .catch((err) => {
+        console.log('Error getting documents', err);
+        res.send('{error:error}');
+    });
+})
+
 module.exports = router;

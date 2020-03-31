@@ -1,6 +1,7 @@
 var orario = [];
 var medico = [];
-
+var citas=[];
+var estado=false;
 function agregarHorario() {
     var dia = $('#dia').val();
     var hi = $('#hi').val();
@@ -16,7 +17,7 @@ function agregarHorario() {
             }
         );
         mostrarAgenda();
-        console.log(orario);
+        
         $('#alert').html('');
     } else {
         $('#alert').html(` <div class="alert alert-danger" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> La hora inicial es mayor que la final </div>`);
@@ -45,7 +46,7 @@ function agregarMedico() {
                     medi: medi
                 },
                 success: (data) => {
-                    console.log(data);
+                   
                     if (data == "ingresado") {
                         location.href = "/addmedicos";
                     }
@@ -159,7 +160,7 @@ function actualizarMedico() {
                 medi: medi
             },
             success: (data) => {
-                console.log(data);
+               
                 location.href = "/addmedicos";
                 $('#alert').html(` <div class="alert alert-success" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> Datos Actualizados</div>`);
             }
@@ -178,7 +179,7 @@ function blurMedicoCedula() {
             id: id
         },
         success: (data) => {
-            console.log(data);
+           
             if (data) {
                 $('#id').val(data.id)
                 $('#cedula').val(data.data.cedula);
@@ -207,8 +208,8 @@ function blurMedicoCedula() {
 }
 
 function agenda(dia) {
-    var cc = $('#medico').val();
-    console.log(diasemana('2020-06-06'));
+    var cc = $('#medico').val();  
+    
     $.ajax({
         url: '/agendaMedicos',
         type: 'POST',
@@ -217,8 +218,7 @@ function agenda(dia) {
             cc: cc
         },
         success: (data) => {
-            var contenido = '<div class="row">';
-           
+            var contenido = '<div class="row">';           
             data.agenda.forEach(element => {
                 if (element.dia==dia) {                   
                 contenido += '<div class="col-sm-12">';                
@@ -228,15 +228,27 @@ function agenda(dia) {
                 var hi = d.getHours() * 60 + d.getMinutes();
                 var tiempo = hf - hi;
                 var h = 0;
-                for (var x = 0; x <= tiempo; x += parseInt(element.duracion)) {
-                    contenido += `<div class="row m-1 p-1 border"><div class="col-sm-12"><button class="btn btn-warning btn-sm btn-block"><i class='far fa-address-book' style='font-size:16px'></i> ${comvertirHora(parseInt(hi) + h)}</button></div></div>`;                   
+                contenido += `
+                <div class="row m-1 p-1 border"><div class="col-sm-12">
+                <table border="0">               
+                `;                   
+                for (var x = 0; x <= tiempo; x += parseInt(element.duracion)) {    
+               
+                    contenido+=` 
+                        <tr>
+                        <td><b class='small ml-3 mr-3'> ${comvertirHora(parseInt(hi) + h)}</b></td>
+                        <td><b class="small ml-3 mr-3" id="${comvertirHora(parseInt(hi)+h).replace(':','')}" ><a href="#" onclick="crearCitas('${comvertirHora(parseInt(hi) + h)}')"><i class='far fa-address-book' style='font-size:16px'> Agendar</b></a></td>
+                        
+                        </tr>`
                     h += parseInt(element.duracion);
                 }
-                contenido += '</div>';                
+                contenido += '</table></div></div></div>';                
                 }   
             });
             contenido += '</div>';
-            $('#contenido').html(contenido);
+            $('#contenido').html(contenido);  
+            citasUsadas();
+           
         }
     });
 }
@@ -256,22 +268,90 @@ function diasemana(fecha) {
     var dt = new Date(fecha);
     return dias[dt.getUTCDay()];
 }
-function fechas() {
-    agenda('');
-    var medico = $('#medico').val(); 
-    console.log(medico);
-    $.datepicker.setDefaults($.datepicker.regional["es"]);
+
+function fechas(dia) {
+    $("#datepicker").datepicker('destroy');
+    agenda(''); 
+    var dias={};
+    dia.forEach(element => {
+        dias[element.dia]=element.dia;
+    });
+         
     $("#datepicker").datepicker({
         onSelect : function (date) {           
-           agenda(diasemana(date))
+           agenda(diasemana(date));
            $('#fecha').val(date);
         },
-        beforeShowDay: function (date) {           
-            if (diasemana(date)=='lunes') {
-                return [true, "event", medico];
+        beforeShowDay: function (date) {            
+            var d=dias[diasemana(date)];
+            if (d) {
+                return [true, "event", "Si atiende"];
             } else {
                 return [true, '', ''];
-            }
+            }          
+        }
+    
+    });
+}
+
+function diasmendicos() {
+    var id = $('#medico').val();
+    var diasfinal=[];
+    $.ajax({
+        url: '/ajaxmedico',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            id: id
+        },
+        success: (data) => {
+            var c=0;
+            data.data.agenda.forEach(element => {                
+                var d=element.dia;
+                diasfinal.push({dia:d});
+                c++;
+           });
+           fechas(diasfinal);
+           
         }
     });
 }
+
+function crearCitas(hora) {
+    const cita={
+        medico:$('#medico').val(),
+        fecha:$('#fecha').val(),
+        hora:hora,
+        estado:'agendado',
+        paciente:$('#cc').val(),
+        nombres:$('#nombres').val()
+    };
+    var c = JSON.stringify(cita);
+    $.ajax({
+        url: '/addcitas',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            cita: c
+        },
+        success: (data) => {           
+            citasUsadas();
+        }
+    });
+}
+function citasUsadas(){    
+    $.ajax({
+        url: '/consultarcitas',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            fecha: $('#fecha').val()
+        },           
+        success: (data) => {           
+           data.forEach(element => {              
+               $('#'+element.hora.replace(':','')).html('<b>Asignada</b>');
+           });
+        }
+    });  
+}
+

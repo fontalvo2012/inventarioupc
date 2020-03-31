@@ -2,36 +2,52 @@
     <div class="col-sm-4 p-1 m-1">
         <div class="card">
             <div class="card-header">
-                 <div class="row">
+                <div class="row">
                     <div class="col-sm-12">
-                        <select name="medico" id="medico" class="form-control form-control-sm" onchange="fechas()">
-                            <option value="">.::Seleccione::.</option>
-                            {{#each valores}}
-                            <option value="{{cedula}}">{{nombres}}</option>
-                            {{/each}}
-                        </select>
+                        <div class="form-group">
+                            <span class="small"><b>Cedula Paciente</b></span>
+                            <input type="text" class="form-control form-control-sm" name="cc" id="cc"
+                                onblur="consultarPaciente()" id="cc" placeholder="Cedula">
+                        </div>
+                        <div class="form-group">
+                            <span class="small"><b>Nombres</b></span>
+                            <input type="text" class="form-control form-control-sm" name="nombres" id="nombres" placeholder="Nombres" readonly>
+                        </div>
+                        <div class="form-group">
+                            <span class="small"><b>Medicos</b></span>
+                            <select name="medico" id="medico" class="form-control form-control-sm"
+                                onchange="diasmendicos()">
+                                <option value="">.::Seleccione::.</option>
+                                {{#each valores}}
+                                <option value="{{cedula}}">{{nombres}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+
                     </div>
                 </div>
             </div>
-            <div class="card-body">               
+            <div class="card-body">
                 <div class="row">
                     <div class="col-sm-12">
                         <div id="datepicker"></div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
     </div>
     <div class="col-sm-3 m-1 p-1">
-       <div class="card  p-1">
-           <div class="card-header">
-               selecciones Horario
-               <input type="text" name="fecha" id="fecha" class="form-control form-control-sm" readonly>
-           </div>
-           <div class="card-body">
+        <div class="card  p-1">
+            <div class="card-header">
+                selecciones Horario
+                <input type="text" name="fecha" id="fecha" class="form-control form-control-sm" readonly>
+            </div>
+            <div class="card-body">
                 <div id="contenido"></div>
-           </div>
-       </div>
+            </div>
+
+            <button class="btn btn-success" onclick="ejemplo();">k</button>
+        </div>
     </div>
 </div>

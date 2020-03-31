@@ -28,6 +28,7 @@ router.post('/ajaxmedico',(req,res)=>{
 
 router.post('/agendaMedicos',(req,res)=>{
     const {cc}=req.body;    
+    
     db.collection('medicos').where('cedula','==',cc).get()
     .then((snapshot) => {
         var valores=[];
@@ -117,6 +118,8 @@ router.post('/actualizarmedico',checkAuthentication,(req,res)=>{
             res.redirect('Error en Actualizar');
         });
 });
+
+
 
 
 

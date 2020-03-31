@@ -88,7 +88,7 @@ function consultarPaciente() {
     success: (data) => {
       if (data[0]) {
         paciente = data[0];
-        $('#nombres').val(data[0].nombre + " " + data[0].apellido + " " + data[0].sapellido);
+        $('#nombres').val(data[0].nombre.toUpperCase() + " " + data[0].apellido.toUpperCase() + " " + data[0].sapellido.toUpperCase());
         $('#edad').val(data[0].edad);
         selectEntidad();
       } else {
