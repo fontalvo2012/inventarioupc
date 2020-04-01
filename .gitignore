@@ -3,7 +3,7 @@
 # dependencies
 
 # testing
-/src/routes/index.js
+/rc/routes/index.js
 
 # production
 
