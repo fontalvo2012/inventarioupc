@@ -119,7 +119,20 @@ router.post('/actualizarmedico',checkAuthentication,(req,res)=>{
         });
 });
 
-
+router.post('/selecmedico',(req,res)=>{
+    db.collection('medicos').get()
+    .then((snapshot) => {
+        var valores=[];
+        snapshot.forEach((doc) => {           
+            valores.push({id:doc.id,registro:doc.data().registro,cedula:doc.data().cedula,telefono:doc.data().telefono,email:doc.data().email,nombres:doc.data().nombres});
+        });       
+        res.send(valores);
+    })
+    .catch((err) => {
+        console.log('Error getting documents', err);
+        res.send(valores);
+    });
+})
 
 
 

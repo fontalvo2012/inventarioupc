@@ -232,8 +232,7 @@ function agenda(dia) {
                 <div class="row m-1 p-1 border"><div class="col-sm-12">
                 <table border="0">               
                 `;                   
-                for (var x = 0; x <= tiempo; x += parseInt(element.duracion)) {    
-               
+                for (var x = 0; x <= tiempo; x += parseInt(element.duracion)) {                 
                     contenido+=` 
                         <tr>
                         <td><b class='small ml-3 mr-3'> ${comvertirHora(parseInt(hi) + h)}</b></td>
@@ -248,11 +247,7 @@ function agenda(dia) {
             contenido += '</div>';
             $('#contenido').html(contenido);  
             citasUsadas();
-           
-
-
-
-        }
+            }
     });
 }
 function comvertirHora(minutos) {
@@ -321,11 +316,15 @@ function diasmendicos() {
 }
 
 function crearCitas(hora) {
+    var nmedico=$('select[name="medico"] option:selected').text();
+    var nentidad=$('select[name="entidad"] option:selected').text();
+    var nitem=$('select[name="item"] option:selected').text(); 
     const cita={
+        id:parseInt(hora.replace(':','')),
         medico:$('#medico').val(),
         fecha:$('#fecha').val(),
         hora:hora,
-        estado:'agendado',
+        estado:'',
         paciente:$('#cc').val(),
         nombres:$('#nombres').val(),
         entidad:$('#entidad').val(),
@@ -333,7 +332,10 @@ function crearCitas(hora) {
         motivo:$('#item').val(),
         telefono:$('#telefono').val(),
         copago:'0',
-        autorizacion:''
+        autorizacion:'',
+        nmedico:nmedico,
+        nitem:nitem,
+        nentidad:nentidad
     };
     var c = JSON.stringify(cita);
     if ($('#cc').val()=="") {       
@@ -374,3 +376,20 @@ function citasUsadas(){
     });  
 }
 
+function selectMedico() {
+    $.ajax({
+        url: '/selecmedico',
+        type: 'POST',
+        datatype: 'json',                  
+        success: (data) => {           
+           var contenido=`<select name="medico" id="medico" class="form-control form-control-sm">
+           <option value="">Seleciones</option>
+        `; 
+           data.forEach(element => { 
+               contenido+=`<option value="${element.cedula}">${element.nombres}</option>`;
+           });
+           contenido+=`</select>`;
+           $('#selectmedico').html(contenido);          
+        }
+    }); 
+}
