@@ -136,6 +136,4 @@ router.post('/selecmedico',(req,res)=>{
     });
 })
 
-
-
 module.exports = router;

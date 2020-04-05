@@ -34,7 +34,6 @@ router.get('/hclinicas/:id',checkAuthentication,(req,res)=>{
 
 
 router.post('/crearhc',checkAuthentication,(req,res)=>{ 
-
     diaActual = new Date();  
     var day = diaActual.getDate();
     var month = diaActual.getMonth() + 1;
@@ -51,8 +50,8 @@ router.post('/crearhc',checkAuthentication,(req,res)=>{
     if(parseInt(day)<10) day='0'+day;
     if(parseInt(month)<10) month='0'+month;
     vence = day + '/' + month + '/' + year ;
-
     const {cedula,nombres,id,motivo,actual,antecedentes,fisico,clinico,plan,terapeutico}= req.body;
+
     const consulta={
         cedula,
         nombres,
@@ -68,7 +67,10 @@ router.post('/crearhc',checkAuthentication,(req,res)=>{
         pinicio:fecha,
         pfinal:fecha,
     }
-    console.log(consulta)
+    console.log(consulta);
+    let docRef = db.collection('hclinica').doc();    
+    docRef.set(consulta);
+    finalizarConsulta(id);
     res.redirect('/consultashclinicas');
 });
 
@@ -91,4 +93,16 @@ router.get('/consultashclinicas',checkAuthentication,(req,res)=>{
     });   
 })
 
+function finalizarConsulta(id) {
+    var washingtonRef = db.collection("citas").doc(id);  
+    return washingtonRef.update({
+        estado:'atendido'
+    })
+        .then(function () {
+            console.log('actualizado')
+        })
+        .catch(function (error) {           
+           console.log('error')
+        });
+}
 module.exports = router;
