@@ -18,7 +18,9 @@ router.post('/ajaxmedico',(req,res)=>{
         snapshot.forEach((doc) => {            
             valores.push({data:doc.data(),id:doc.id});            
         });       
+        
         res.send(valores[0]);
+
     })
     .catch((err) => {
         console.log('Error getting documents', err);

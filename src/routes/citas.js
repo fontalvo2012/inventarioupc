@@ -3,8 +3,6 @@ const router = Router();
 var admin = require("firebase-admin");
 const db=admin.firestore();
 
-
-
 router.get('/localidades',(req,res)=>{
     const { cups,nombre,valor,entidad,id} = req.body;
     let docRef = db.collection('items').doc();

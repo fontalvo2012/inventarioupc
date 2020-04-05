@@ -11,9 +11,8 @@ function checkAuthentication(req,res,next){
     }
   }
 
-router.get('/hclinicas',checkAuthentication,(req,res)=>{ 
-    const {id} = req.body;
-    console.log(req.body);
+router.get('/hclinicas/:id',checkAuthentication,(req,res)=>{ 
+    const {id} = req.params;    
     db.collection('citas').get()
     .then((snapshot) => {
         var valores=[];
@@ -30,9 +29,9 @@ router.get('/hclinicas',checkAuthentication,(req,res)=>{
     .catch((err) => {
         console.log('Error getting documents', err);
         res.render('hclinicas/index');
-    });
-   
+    });   
 }) 
+
 
 router.post('/crearhc',checkAuthentication,(req,res)=>{ 
 

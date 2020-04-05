@@ -268,6 +268,7 @@ function diasemana(fecha) {
 }
 
 function fechas(dia) {
+   
     $("#datepicker").datepicker('destroy');
     agenda(''); 
     var dias={};
@@ -309,6 +310,7 @@ function diasmendicos() {
                 diasfinal.push({dia:d});
                 c++;
            });
+          
            fechas(diasfinal);
            
         }

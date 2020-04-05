@@ -50,7 +50,7 @@ app.use(require('./routes/login'));
 app.use(require('./routes/hclinicas'));
 
 //static file
-app.use('/public',express.static(path.join(__dirname,'public')));
+app.use(express.static(path.join(__dirname,'public')));
 
 
 module.exports= app;

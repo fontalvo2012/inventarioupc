@@ -19,18 +19,17 @@ db.collection("citas").onSnapshot((querySnapshot) => {
   var contenido = '';
   var cont=0;
     querySnapshot.forEach((doc) => { 
-      if(doc.data().medico==$('#medico').val()){
+      if(doc.data().medico==$('#usermedico').val()){
         if (doc.data().estado=='ensala'){          
            console.log(doc.data());
-           contenido+=`
-          
+           contenido+=`          
            <input type="hidden" name="id" value="${doc.id}">
            <tr>
            <td>${doc.data().fecha}</td>
            <td>${doc.data().paciente.cedula}</td>
            <td>${doc.data().nombres}</td>
            <td>${doc.data().nentidad}</td>
-           <td><a href="/hclinicas?id=${doc.id}" class="btn btn-warning btn-sm"> <i class='fas fa-user-edit' style='font-size:16px'></i></a></td> 
+           <td><a href="/hclinicas/${doc.id}" class="btn btn-warning btn-sm"> <i class='fas fa-user-edit' style='font-size:16px'></i></a></td> 
            </tr>                 
            `;         
         } 
