@@ -35,7 +35,8 @@ passport.use('local-singup', new strategy({
     const userIn = {
         username: user,
         password: bcrypt.hashSync(password),
-        perfil: 0
+        perfil: 0,
+        medico:''
     };
     db.collection('users').where('username', '==', userIn.username).get()
         .then((snapshot) => {

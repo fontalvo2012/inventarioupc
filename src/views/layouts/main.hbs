@@ -10,11 +10,14 @@
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
    <link rel="stylesheet" href="css/style.css">
    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
-
+   
+   <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-app.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-firestore.js"></script>
   <title>Citas Medicas</title>
 </head>
 
 <body>
+  <input type="hidden" value="{{user.medico}}" id="medico">
   {{#if user}}
   <nav class="navbar navbar-expand-lg navbar-primary bg-light">
     <a class="navbar-brand" href="#">Hc Carlos Parra  </a>
@@ -57,7 +60,8 @@
             <a class="dropdown-item" href="/rips">Crear Rips</a>
             <a class="dropdown-item" href="/descargaRips">Descargar Rips</a>            
             <a class="dropdown-item" href="/citas">Citas</a>            
-            <a class="dropdown-item" href="/vercitas  ">verCitas</a>            
+            <a class="dropdown-item" href="/vercitas  ">Ver citas</a>            
+            <a class="dropdown-item" href="/consultashclinicas">Historias</a>
           </div>
         </li>  
          <li class="nav-item dropdown">
@@ -116,6 +120,7 @@
      <script src="js/cie10.js"></script>   
     <script src="js/miscrip.js"></script>
     <script src="js/medicos.js"></script>
+    <script src="js/hclinicas.js"></script>
     {{!-- datapicker --}}
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>

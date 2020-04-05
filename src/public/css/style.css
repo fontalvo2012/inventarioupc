@@ -21,3 +21,14 @@
     color: red !important;
 }
 
+.padre{
+    position:relative;
+  }
+  
+  .hijo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto; 
+  }

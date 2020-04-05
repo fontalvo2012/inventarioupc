@@ -1,0 +1,69 @@
+<form action="/crearhc" method="POST">
+<div class="row mt-3" style="margin-left: 5%;">    
+    <div class="col-sm-12">   
+        {{#each valores}}
+        <div class="row mt-3 mb-3">
+            <div class="col-sm-2"><span class="small"><b>Cedula</b></span><input type="text" name="cedula" value="{{data.paciente.cedula}}" class="form-control form-control-sm" readonly></div>
+            <div class="col-sm-3"><span class="small"><b>Nombres</b></span><input type="text" name="nombres" value="{{data.nombres}}" class="form-control form-control-sm" readonly></div>
+            <div class="col-sm-2"><button class="btn btn-success btn-sm btn-block mt-4"><i class='fas fa-save' style='font-size:12px'></i> Guardar</button></div>
+        <input type="hidden" name="id" value="{{id}}" class="form-control form-control-sm">
+        </div>
+        {{/each}}   
+
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" id="a" href="#"><b>Motivo de consulta</b></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="b" href="#"><b>Enfermedad Actual</b></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="c" href="#"><b>Antecedentes</b></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="d" href="#"><b>Examen fisco</b></a>
+            </li>
+             <li class="nav-item">
+                <a class="nav-link" id="e" href="#"><b>para Clinicos</b></a>
+            </li>
+             <li class="nav-item">
+                <a class="nav-link" id="f" href="#"><b>Plan</b></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="g" href="#"><b>Plan Terapeutico</b></a>
+            </li>
+       </ul>
+<div class="padre">
+    <div class="form-group hijo" style="visibility: hidden;">
+        <textarea name="motivo" id="motivo" class="form-control" cols="30" rows="5"
+            placeholder="Motivo de la Consulta" required></textarea>
+    </div>
+    <div class="form-group hijo" style="visibility: hidden;  position: relative; top: 1%;">
+        <textarea name="actual" id="actual" class="form-control" cols="30" rows="5"
+            placeholder="Enfermedad Actual" required></textarea>
+    </div>
+    <div class="form-group hijo"  style="visibility: hidden;">
+        <textarea name="antecedentes" id="antecedentes" class="form-control" cols="30" rows="5"
+            placeholder="Antecedentes" required></textarea>
+    </div>
+    <div class="form-group hijo" style="visibility: hidden;">
+        <textarea name="fisico" id="fisico" class="form-control" cols="30" rows="5"
+            placeholder="Examen Fisico" required></textarea>
+    </div>
+    <div class="form-group hijo" style="visibility: hidden;">
+        <textarea name="clinico" id="clinico" class="form-control" cols="30" rows="5"
+            placeholder="Paraclinicos" required></textarea>
+    </div>
+    <div class="form-group hijo" style="visibility: hidden;">
+        <textarea name="plan" id="plan" class="form-control" cols="30" rows="5" placeholder="Plan" required></textarea>
+    </div>
+    <div class="form-group hijo" style="visibility: hidden;">
+        <textarea name="terapeutico" id="terapeutico" class="form-control" cols="30" rows="5"
+            placeholder="Plan Terapeutico" required></textarea>
+    </div>
+</div>
+
+</div>
+        
+</div>
+</form>

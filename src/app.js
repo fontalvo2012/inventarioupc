@@ -22,6 +22,7 @@ app.set('view engine','.hbs');
 //middelware
 app.use(morgan('dev'));
 app.use(express.urlencoded({extended:false}));
+app.use(express.json());
 app.use(session({
     secret:'myscretsession',
     resave: false,
@@ -46,8 +47,10 @@ app.use(require('./routes/entidades'));
 app.use(require('./routes/miempresa'));
 app.use(require('./routes/facturacion'));
 app.use(require('./routes/login'));
+app.use(require('./routes/hclinicas'));
+
 //static file
-app.use(express.static(path.join(__dirname,'public')));
+app.use('/public',express.static(path.join(__dirname,'public')));
 
 
 module.exports= app;

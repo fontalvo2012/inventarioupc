@@ -7,7 +7,39 @@ var item = [];
 var listitem = [];
 var total=0;
 
+firebase.initializeApp({
+  apiKey: "AIzaSyCyNQn6OPNMLe_2JyTfU7l09tM3spK23Ro",
+  authDomain: "gpsview-15f80.firebaseapp.com",
+  projectId: "gpsview-15f80",
+});
 
+var db = firebase.firestore();
+
+db.collection("citas").onSnapshot((querySnapshot) => {
+  var contenido = '';
+  var cont=0;
+    querySnapshot.forEach((doc) => { 
+      if(doc.data().medico==$('#medico').val()){
+        if (doc.data().estado=='ensala'){          
+           console.log(doc.data());
+           contenido+=`
+          
+           <input type="hidden" name="id" value="${doc.id}">
+           <tr>
+           <td>${doc.data().fecha}</td>
+           <td>${doc.data().paciente.cedula}</td>
+           <td>${doc.data().nombres}</td>
+           <td>${doc.data().nentidad}</td>
+           <td><a href="/hclinicas?id=${doc.id}" class="btn btn-warning btn-sm"> <i class='fas fa-user-edit' style='font-size:16px'></i></a></td> 
+           </tr>                 
+           `;         
+        } 
+      }             
+      cont++;
+  });
+  $('#citas').html(contenido);
+ 
+});
 
 function consultarmedico(id) {
   $.ajax({
@@ -88,6 +120,7 @@ function consultarPaciente() {
     success: (data) => {
       if (data[0]) {
         paciente = data[0];
+        console.log(paciente);
         $('#nombres').val(data[0].nombre.toUpperCase() + " " + data[0].apellido.toUpperCase() + " " + data[0].sapellido.toUpperCase());
         $('#edad').val(data[0].edad);
         selectEntidad();
@@ -201,8 +234,6 @@ function facturar() {
   if(parseInt(month)<10) month='0'+month;
   pfinal = day + '/' + month + '/' + year ;
   console.log('Final: '+pfinal);
-
- 
 
   var consecutivo = parseInt($('#consecutivo').val());
   var factura = {

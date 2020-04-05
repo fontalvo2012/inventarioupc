@@ -118,13 +118,12 @@ router.post('/vercitasfiltro',(req,res)=>{
 });
 
 router.post('/vercitaspaciente',(req,res)=>{
-    const {cc}=req.body;
-     console.log(formatDate(fecha));
+    const {cc}=req.body;   
      db.collection('citas').orderBy('id','asc').get()
      .then((snapshot) => {
          var valores=[];
          snapshot.forEach((doc) => {            
-             if(doc.data().paciente==cc){
+             if(doc.data().paciente.cedula == cc){
                 if(doc.data().estado!='atendido'){
                     valores.push({data:doc.data(),id:doc.id});  
                 } 

@@ -16,6 +16,7 @@ function checkAuthentication(req,res,next){
       next();
   } else{
       res.redirect("/singIn");
+
   }
 }
 
