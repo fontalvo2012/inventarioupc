@@ -13,8 +13,10 @@ function checkAuthentication(req,res,next){
 
 router.get('/hclinicas/:id',checkAuthentication,(req,res)=>{ 
     const {id} = req.params;
+   
     db.collection('citas').get()
     .then((snapshot) => {
+        console.log(snapshot.docs.length)
         var valores=[];        
         snapshot.forEach((doc) =>{            
             if(doc.id==id){
@@ -42,27 +44,44 @@ router.post('/crearhc',checkAuthentication,(req,res)=>{
         console.log('Error getting documents', err);       
     }); 
 
-    const consulta={
-        cedula,
-        nombres,
-        id,
-        motivo,
-        actual,
-        antecedentes,
-        fisico,
-        clinico,
-        plan,
-        terapeutico,
-        fecha:fechaActual(),
-        pinicio:fechaActual(),
-        pfinal:fechaActual(),
-    }
+    
+    db.collection('hclinica').get()
+    .then((snapshot) => {  
+        var num= snapshot.docs.length+1;      
+        const consulta={ 
+            codigo:'HC'+num,       
+            cedula,
+            nombres,
+            id,
+            motivo,
+            actual,
+            antecedentes,
+            fisico,
+            clinico,
+            plan,
+            terapeutico,
+            fecha:fechaActual(),
+            pinicio:fechaActual(),
+            pfinal:fechaActual(),
+        }
+    
+        let docRef = db.collection('hclinica').doc();    
+        docRef.set(consulta);
+        finalizarConsulta(id);
+        res.redirect('/consultashclinicas');  
+    })
+    .catch((err) => {
+        console.log('Error getting documents', err);   
+        res.redirect('/consultashclinicas');     
+    }); 
 
-    let docRef = db.collection('hclinica').doc();    
-    docRef.set(consulta);
-    finalizarConsulta(id);
-    res.redirect('/consultashclinicas');
+  
 });
+
+function crearConsulta(cod) {
+
+    
+}
 
 function fechaActual() {
     diaActual = new Date();  
