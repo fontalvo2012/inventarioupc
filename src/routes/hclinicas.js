@@ -12,19 +12,16 @@ function checkAuthentication(req,res,next){
   }
 
 router.get('/hclinicas/:id',checkAuthentication,(req,res)=>{ 
-    const {id} = req.params;    
+    const {id} = req.params;
     db.collection('citas').get()
     .then((snapshot) => {
-        var valores=[];
-        var paciente=[];
+        var valores=[];        
         snapshot.forEach((doc) =>{            
-            if(doc.id==id){              
-                paciente.push(doc.data().paciente)
+            if(doc.id==id){
                 valores.push({data:doc.data(),id:doc.id});
             }
-        }); 
-        
-        res.render('hclinicas/index',{valores,paciente});
+        });         
+        res.render('hclinicas/index',{valores});
     })
     .catch((err) => {
         console.log('Error getting documents', err);
@@ -34,23 +31,16 @@ router.get('/hclinicas/:id',checkAuthentication,(req,res)=>{
 
 
 router.post('/crearhc',checkAuthentication,(req,res)=>{ 
-    diaActual = new Date();  
-    var day = diaActual.getDate();
-    var month = diaActual.getMonth() + 1;
-    var year = diaActual.getFullYear();
-    if(parseInt(day)<10) day='0'+day;
-    if(parseInt(month)<10) month='0'+month;
-    fecha = day + '/' + month + '/' + year ;
-  
-    vencimiento= new Date();
-    vencimiento.setDate(diaActual.getDate()+30); 
-    var day = vencimiento.getDate();
-    var month = vencimiento.getMonth() + 1;
-    var year = vencimiento.getFullYear();
-    if(parseInt(day)<10) day='0'+day;
-    if(parseInt(month)<10) month='0'+month;
-    vence = day + '/' + month + '/' + year ;
     const {cedula,nombres,id,motivo,actual,antecedentes,fisico,clinico,plan,terapeutico}= req.body;
+    /**aQUI DEBES CREAR LA FACTURA TEMP. */ 
+
+    db.collection('citas').doc(id).get()
+    .then((snapshot) => { 
+           facturar(snapshot.data());     
+    })
+    .catch((err) => {
+        console.log('Error getting documents', err);       
+    }); 
 
     const consulta={
         cedula,
@@ -63,16 +53,64 @@ router.post('/crearhc',checkAuthentication,(req,res)=>{
         clinico,
         plan,
         terapeutico,
-        fecha:fecha,
-        pinicio:fecha,
-        pfinal:fecha,
+        fecha:fechaActual(),
+        pinicio:fechaActual(),
+        pfinal:fechaActual(),
     }
-    console.log(consulta);
+
     let docRef = db.collection('hclinica').doc();    
     docRef.set(consulta);
     finalizarConsulta(id);
     res.redirect('/consultashclinicas');
 });
+
+function fechaActual() {
+    diaActual = new Date();  
+    var day = diaActual.getDate();
+    var month = diaActual.getMonth() + 1;
+    var year = diaActual.getFullYear();
+    if(parseInt(day)<10) day='0'+day;
+    if(parseInt(month)<10) month='0'+month;
+    fecha = day + '/' + month + '/' + year ;
+    return fecha;
+}
+function Vencimiento() {
+    vencimiento= new Date();
+    vencimiento.setDate(diaActual.getDate()+30); 
+    var day = vencimiento.getDate();
+    var month = vencimiento.getMonth() + 1;
+    var year = vencimiento.getFullYear();
+    if(parseInt(day)<10) day='0'+day;
+    if(parseInt(month)<10) month='0'+month;
+    vence = day + '/' + month + '/' + year ;
+    return vence;
+}
+
+function facturar(cita) {
+    var factura = {
+        razon: 'CARLOS PARRA BUSINESS MEDICAL CENTER SAS',
+        nit: '90098069-3',
+        habilitacion: '1300102937',
+        direccion: '',
+        telefonos: '6552095-3023513182',
+        email: 'gerencia@carlosparra.co',
+        prefijo: 'CP',
+        total:cita.item.valor,
+        vencimiento:'',
+        fecha:'',
+        estado:'pendiente',
+        pinicio:cita.fecha,
+        pfinal:cita.fecha,
+        consecutivo: '',
+        paciente: cita.paciente,
+        eps: cita.entidad,
+        item: cita.item
+      }
+
+      console.log(factura);
+      let docRef = db.collection('fac_orl').doc();    
+      docRef.set(factura);
+}
 
 router.get('/consultashclinicas',checkAuthentication,(req,res)=>{ 
     db.collection('citas').get()
@@ -84,8 +122,9 @@ router.get('/consultashclinicas',checkAuthentication,(req,res)=>{
                     valores.push({data:doc.data(),id:doc.id});
                 }               
             }             
-        });       
-        res.render('hclinicas/consultas',{valores});
+        });
+        var cadena =JSON.stringify(valores);
+        res.render('hclinicas/consultas',{cadena});
     })
     .catch((err) => {
         console.log('Error getting documents', err);
@@ -105,4 +144,31 @@ function finalizarConsulta(id) {
            console.log('error')
         });
 }
+
+router.get('/cons',(req,res)=>{ 
+    let contenido=[{msg:'error'}];
+    let fb= db.collection('citas');
+    let query= fb.where('estado','==','ensala').get()
+    .then((snapshot)=>{     
+        snapshot.forEach(element => { 
+               contenido.push(element.data());
+            });
+        }
+    );
+});
+
+async function citas() {
+    let contenido=[{msg:'error'}];
+    let fb= db.collection('citas')   
+    let query= await fb.where('estado','==','ensala').get()
+    .then((snapshot)=>{     
+        snapshot.forEach(element => {
+               contenido.push(element.data());
+            });
+        }
+    ); 
+    return contenido;
+}
+
+
 module.exports = router;

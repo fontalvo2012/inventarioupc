@@ -7,10 +7,16 @@ var item = [];
 var listitem = [];
 var total=0;
 
+// firebase.initializeApp({
+//   apiKey: "AIzaSyCyNQn6OPNMLe_2JyTfU7l09tM3spK23Ro",
+//   authDomain: "gpsview-15f80.firebaseapp.com",
+//   projectId: "gpsview-15f80",
+// });
+
 firebase.initializeApp({
-  apiKey: "AIzaSyCyNQn6OPNMLe_2JyTfU7l09tM3spK23Ro",
-  authDomain: "gpsview-15f80.firebaseapp.com",
-  projectId: "gpsview-15f80",
+  apiKey: "AIzaSyARpTGPRFv1JsdapWAYqrh7YNp7htY7OxU",
+  authDomain: "citas-orl.firebaseapp.com",
+  projectId: "citas-orl",
 });
 
 var db = firebase.firestore();
@@ -20,8 +26,7 @@ db.collection("citas").onSnapshot((querySnapshot) => {
   var cont=0;
     querySnapshot.forEach((doc) => { 
       if(doc.data().medico==$('#usermedico').val()){
-        if (doc.data().estado=='ensala'){          
-           console.log(doc.data());
+        if (doc.data().estado=='ensala'){ 
            contenido+=`          
            <input type="hidden" name="id" value="${doc.id}">
            <tr>

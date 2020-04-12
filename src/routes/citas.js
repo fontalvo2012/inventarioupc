@@ -27,8 +27,7 @@ router.get('/citas',(req,res)=>{
     .catch((err) => {
         console.log('Error getting documents', err);
         res.render('citas/index');
-    });
-  
+    });  
 });
 
 router.post('/addcitas',(req,res)=>{
@@ -37,7 +36,7 @@ router.post('/addcitas',(req,res)=>{
     let docRef = db.collection('citas').doc();
     docRef.set(JSON.parse(cita));
     res.send('realizado');
-})
+});
 
 router.post('/consultarcitas',(req,res)=>{
     const {fecha}=req.body;  
@@ -71,10 +70,8 @@ router.get('/vercitas',(req,res)=>{
             if(doc.data().fecha==fecha){
                 if(doc.data().estado !='atendido'){
                     valores.push({data:doc.data(),id:doc.id});  
-                }
-                
-            }              
-                     
+                }                
+            }
         });
         console.log(valores) 
         res.render('citas/consultas',{valores});
