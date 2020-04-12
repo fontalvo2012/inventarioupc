@@ -34,7 +34,7 @@ db.collection("citas").onSnapshot((querySnapshot) => {
            <td>${doc.data().paciente.cedula}</td>
            <td>${doc.data().nombres}</td>
            <td>${doc.data().nentidad}</td>
-           <td><a href="/hclinicas/${doc.id}" class="btn btn-warning btn-sm"> <i class='fas fa-user-edit' style='font-size:16px'></i></a></td> 
+           <td><a href="/hclinicas/${doc.id}/${doc.data().paciente.cedula}" class="btn btn-warning btn-sm"> <i class='fas fa-user-edit' style='font-size:16px'></i></a></td> 
            </tr>                 
            `;         
         } 

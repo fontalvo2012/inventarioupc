@@ -1,7 +1,26 @@
 const { Router } = require('express');
 const router = Router();
+var pdf = require('html-pdf');
+
+
+
+function crearPdf() {
+    var contenido = `
+    <h1>Esto es un test de html-pdf</h1>
+    <p>Estoy generando PDF a partir de este código HTML sencillo</p>
+    `;
+    pdf.create(contenido).toFile('./file/nombre.pdf', function(err, res) {
+        if (err){
+            console.log(err);
+        } else {
+            console.log(res);
+        }
+    });
+}
+
 var admin = require("firebase-admin");
 const db=admin.firestore();
+
 
 function checkAuthentication(req,res,next){
     if(req.isAuthenticated()){        
@@ -11,8 +30,15 @@ function checkAuthentication(req,res,next){
     }
   }
 
-router.get('/hclinicas/:id',checkAuthentication,(req,res)=>{ 
-    const {id} = req.params;
+router.get('/hclinicas/:id/:cc',checkAuthentication,(req,res)=>{ 
+    const {id,cc} = req.params;
+    var hc=[];
+    db.collection('hclinica').where('cedula','==',cc).get()
+    .then((snapshot) => {
+        snapshot.forEach(element => {
+            hc.push({data:element.data(),id:element.id});
+        }); 
+    });
    
     db.collection('citas').get()
     .then((snapshot) => {
@@ -23,7 +49,8 @@ router.get('/hclinicas/:id',checkAuthentication,(req,res)=>{
                 valores.push({data:doc.data(),id:doc.id});
             }
         });         
-        res.render('hclinicas/index',{valores});
+        res.render('hclinicas/index',{valores,hc});
+       
     })
     .catch((err) => {
         console.log('Error getting documents', err);
@@ -35,53 +62,93 @@ router.get('/hclinicas/:id',checkAuthentication,(req,res)=>{
 router.post('/crearhc',checkAuthentication,(req,res)=>{ 
     const {cedula,nombres,id,motivo,actual,antecedentes,fisico,clinico,plan,terapeutico}= req.body;
     /**aQUI DEBES CREAR LA FACTURA TEMP. */ 
-
+    var med=[];
+    var ccmedico=req.user.medico;
     db.collection('citas').doc(id).get()
     .then((snapshot) => { 
            facturar(snapshot.data());     
+    });
+    
+    db.collection('medicos').where('cedula','==',ccmedico).get()
+    .then((snapshot) => { 
+        snapshot.forEach(element => {
+            med=element.data();
+        });
+
+        db.collection('hclinica').get()
+        .then((snapshot) => {  
+            var num= snapshot.docs.length+1;      
+            const consulta={ 
+                codigo:'HC '+num,       
+                cedula,
+                nombres,
+                id,
+                motivo,
+                actual,
+                antecedentes,
+                fisico,
+                clinico,
+                plan,
+                terapeutico,
+                medico:med,
+                fecha:fechaActual(),
+                pinicio:fechaActual(),
+                pfinal:fechaActual(),
+            }
+        
+            let docRef = db.collection('hclinica').doc();    
+            docRef.set(consulta);
+            finalizarConsulta(id);
+            res.redirect('/consultashclinicas');  
+        });
+        
+    }); 
+});
+
+router.post('/colocarhc',checkAuthentication,(req,res)=>{
+    const {codigo}=req.body;
+    db.collection('hclinica').doc(codigo).get()
+    .then((snapshot) => { 
+          res.send(snapshot.data());
     })
     .catch((err) => {
         console.log('Error getting documents', err);       
     }); 
+})
 
-    
-    db.collection('hclinica').get()
-    .then((snapshot) => {  
-        var num= snapshot.docs.length+1;      
-        const consulta={ 
-            codigo:'HC'+num,       
-            cedula,
-            nombres,
-            id,
-            motivo,
-            actual,
-            antecedentes,
-            fisico,
-            clinico,
-            plan,
-            terapeutico,
-            fecha:fechaActual(),
-            pinicio:fechaActual(),
-            pfinal:fechaActual(),
-        }
-    
-        let docRef = db.collection('hclinica').doc();    
-        docRef.set(consulta);
-        finalizarConsulta(id);
-        res.redirect('/consultashclinicas');  
-    })
-    .catch((err) => {
-        console.log('Error getting documents', err);   
-        res.redirect('/consultashclinicas');     
-    }); 
-
+router.get('/imprimirhc/:codigo/:cita',checkAuthentication,(req,res)=>{
+    const {codigo,cita} = req.params;
+    var hc=[];
+    var ct=[];
+    var valores=[];    
+   
+    db.collection('hclinica').doc(codigo).get()
+    .then((snapshot) => {        
+        hc=snapshot.data(); 
+        db.collection('citas').doc(cita).get()
+        .then((snapshot) => { 
+             ct=snapshot.data();  
+             valores.push({cita:ct,historia:hc});
+             console.log(valores);
+             res.render('hclinicas/imprimir',{valores});       
+        });         
+    });     
   
-});
+   
+   
+   
+})
 
-function crearConsulta(cod) {
-
-    
-}
+router.get('/verhc',checkAuthentication,(req,res)=>{
+    db.collection('hclinica').get()
+    .then((snapshot) => {        
+        var valores=[];        
+        snapshot.forEach((doc) =>{  
+            valores.push({data:doc.data(),id:doc.id});
+        });
+        res.render('hclinicas/verhc',{valores});       
+    })
+})
 
 function fechaActual() {
     diaActual = new Date();  

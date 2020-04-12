@@ -1,0 +1,23 @@
+<table class="table table-striped m-4">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Identificacion</th>
+      <th scope="col">Nombres</th>
+      <th scope="col">Fecha</th>
+      <th scope="col">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+      {{#each valores}}
+    <tr>
+      <th scope="row">{{data.codigo}}</th>
+      <td>{{data.cedula}}</td>
+      <td>{{data.nombres}}</td>
+      <td>{{data.fecha}}</td>
+      <td><a href="/imprimirhc/{{id}}/{{data.id}}" class="btn btn-primary btn-sm"><i class="fas fa-eye" style="font-size: 20px;"></i></a></td>
+    </tr>
+    {{/each}}
+
+  </tbody>
+</table>

@@ -117,3 +117,43 @@ $("#g").click(function () {
     $('#f').css('background-color','');
     $('#g').css('background-color','#D2F1ED');
 });
+
+
+function colocarHc(hc){    
+    $.ajax({
+        url: '/colocarhc',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            codigo: hc
+        },           
+        success: (data) => {           
+          console.log(data);
+          $('#motivo').val(data.motivo);
+          $('#actual').val(data.actual);
+          $('#antecedentes').val(data.antecedentes);
+          $('#fisico').val(data.fisico);
+          $('#clinico').val(data.clinico);
+          $('#plan').val(data.plan);
+          $('#terapeutico').val(data.terapeutico);
+          
+        }
+    });  
+}
+
+function ImprimirHc() {
+
+  var ventana = window.open('', 'PRINT', 'height=400,width=600');
+  ventana.document.write('<html><head><title>' + document.title + '</title>');
+  ventana.document.write('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">'); //Aquí agregué la hoja de estilos
+  ventana.document.write('</head><body >');
+  ventana.document.write($('#imp').html());
+  ventana.document.write('</body></html>');
+  ventana.document.close();
+  ventana.focus();
+  ventana.onload = function() {
+    ventana.print();
+    ventana.close();
+  };
+  return true;
+}
