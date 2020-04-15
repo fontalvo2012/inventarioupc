@@ -8,103 +8,134 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-   <link rel="stylesheet" href="/css/style.css">
-   <script src='https://kit.fontawesome.com/a076d05399.js'></script>
-   
-   <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-app.js"></script>
-   <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-firestore.js"></script>
+  <link rel="stylesheet" href="/css/style.css">
+  <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+
+  <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-firestore.js"></script>
   <title>Citas Medicas</title>
+
+  <style>
+#fuera{
+  position:relative;
+ 
+}
+
+#dentro {
+  position: absolute; 
+  top: 0    ;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 20px;
+}
+</style>
 </head>
 
 <body>
   <input type="hidden" value="{{user.medico}}" id="usermedico">
   {{#if user}}
   <nav class="navbar navbar-expand-lg navbar-primary bg-light">
-    <a class="navbar-brand" href="#">Hc Orl del caribe S.A.S  </a>
+    <a class="navbar-brand" href="/"><b><i class='far fa-hospital' style='font-size:24px'></i> Hc Orl del caribe S.A.S</b></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
       aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav ml-auto ">       
+      <ul class="navbar-nav ml-auto ">
+
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
-            <i class='fas fa-layer-group' style='font-size:16px'></i> Archivos
+            <i class='fas fa-tasks' style='font-size:16px'></i> Parametros
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="/addpacientes"><i class='far fa-id-badge' style='font-size:16px'></i> Pacientes</a>
-            <a class="dropdown-item" href="#">...</a>
-           
+            <a class="dropdown-item" href="/addmedicos"><i class='fas fa-angle-double-right' style='font-size:12px'></i>
+              Medicos</a>
+            <a class="dropdown-item" href="/addpacientes"><i class='fas fa-angle-double-right'
+                style='font-size:12px'></i> Pacientes</a>
+            <a class="dropdown-item" href="/addentidades"><i class='fas fa-angle-double-right'
+                style='font-size:12px'></i> Entidad</a>
+            <a class="dropdown-item" href="/item"><i class='fas fa-angle-double-right' style='font-size:12px'></i>
+              Items</a>
+              <a class="dropdown-item" href="/tarifas"><i class='fas fa-angle-double-right' style='font-size:12px'></i>
+              Tarifas</a>
           </div>
         </li>
-         <li class="nav-item dropdown">
+        <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
-             <i class='fas fa-tasks' style='font-size:16px'></i> Parametros
+            <i class='fas fa-cubes' style='font-size:16px'></i> Procesos
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="/addmedicos" ><i class='fas fa-angle-double-right' style='font-size:12px'></i> Medicos</a>
-            <a class="dropdown-item" href="#"><i class='fas fa-angle-double-right' style='font-size:12px'></i> Especialides Medicas</a>
-            <a class="dropdown-item" href="/addentidades"><i class='fas fa-angle-double-right' style='font-size:12px'></i> Entidad</a>
-            <a class="dropdown-item" href="/item"><i class='fas fa-angle-double-right' style='font-size:12px'></i> Items</a>
+            
+            <a class="dropdown-item" href="/citas"><i class='fas fa-angle-double-right' style='font-size:12px'></i>
+              Apartar cita</a>
+            <a class="dropdown-item" href="/vercitas  "><i class='fas fa-angle-double-right' style='font-size:12px'></i>
+              Recepcionar</a>
+            <a class="dropdown-item" href="/consultashclinicas"><i class='fas fa-angle-double-right'
+                style='font-size:12px'></i> En Sala</a>
           </div>
-        </li>      
-         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-              <i class='fas fa-cubes' style='font-size:16px'></i> Procesos
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="/facturar"><i class='fas fa-angle-double-right' style='font-size:12px'></i> Facturacion</a>
-            <a class="dropdown-item" href="/rips"><i class='fas fa-angle-double-right' style='font-size:12px'></i> Crear Rips</a>
-            <a class="dropdown-item" href="/descargaRips"><i class='fas fa-angle-double-right' style='font-size:12px'></i> Descargar Rips</a>            
-            <a class="dropdown-item" href="/citas"><i class='fas fa-angle-double-right' style='font-size:12px'></i> Citas</a>            
-            <a class="dropdown-item" href="/vercitas  "><i class='fas fa-angle-double-right' style='font-size:12px'></i> Ver citas</a>            
-            <a class="dropdown-item" href="/consultashclinicas"><i class='fas fa-angle-double-right' style='font-size:12px'></i> Historias</a>
-          </div>
-        </li>  
-         <li class="nav-item dropdown">
+        </li>
+        <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
             <i class='fas fa-chart-pie' style='font-size:16px'></i> Consultas
           </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="/consultarFactura"><i class='fas fa-angle-double-right' style='font-size:12px'></i> Facturacion</a>
-            <a class="dropdown-item" href="/consultarpacientes"><i class='fas fa-angle-double-right' style='font-size:12px'></i> Pacientes</a>
-            <a class="dropdown-item" href="/vermedicos"><i class='fas fa-angle-double-right' style='font-size:12px'></i> Medicos</a>
-            <a class="dropdown-item" href="/verhc"><i class='fas fa-angle-double-right' style='font-size:12px'></i> H.Medicas</a>
-         
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">           
+            <a class="dropdown-item" href="/consultarpacientes"><i class='fas fa-angle-double-right'
+                style='font-size:12px'></i> Pacientes</a>
+            <a class="dropdown-item" href="/vermedicos"><i class='fas fa-angle-double-right' style='font-size:12px'></i>
+              Medicos</a>
+            <a class="dropdown-item" href="/verhc"><i class='fas fa-angle-double-right' style='font-size:12px'></i>
+              H.Clinica</a>
+
           </div>
-          </li>        
-               <li class="nav-item dropdown">
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <i class='fas fa-layer-group' style='font-size:16px'></i> Facturacion </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+             <a class="dropdown-item" href="/consultarFactura"><i class='fas fa-angle-double-right' style='font-size:12px'></i> Consultar</a>
+            <a class="dropdown-item" href="/facturar"><i class='fas fa-angle-double-right' style='font-size:12px'></i>
+              Facturacion</a>
+            <a class="dropdown-item" href="/rips"><i class='fas fa-angle-double-right' style='font-size:12px'></i> Crear
+              Rips</a>
+            <a class="dropdown-item" href="/descargaRips"><i class='fas fa-angle-double-right'
+                style='font-size:12px'></i> Descargar Rips</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
             <i class='fas fa-unlock-alt' style='font-size:16px'></i> Seguridad
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="/login"><i class='fas fa-angle-double-right' style='font-size:12px'></i> Usuarios</a>
-         
+            <a class="dropdown-item" href="/login"><i class='fas fa-angle-double-right' style='font-size:12px'></i>
+              Usuarios</a>
+
           </div>
-          </li>         
-           <li class="nav-item">
-          <a class="nav-link " href="/salir"  role="button"aria-haspopup="true" aria-expanded="false">
-             <i class='fas fa-power-off' style='font-size:16px'></i> Salir
-          </a>          
-          </li>           
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="/salir" role="button" aria-haspopup="true" aria-expanded="false">
+            <i class='fas fa-power-off' style='font-size:16px'></i> Salir
+          </a>
+        </li>
       </ul>
     </div>
   </nav>
-  <div id="alert" style="padding-left: 30%; padding-right: 30%;"></div>
+ <div class="fuera ml-5"><div class="dentro small"> <i class='fas fa-user-check' style='font-size:16px'></i> <b>{{user.nombre}}</b> </div></div>
   {{/if}}
-<div class="container" >
+   
+  <div class="container">
     {{#if login}}
     <div class="alert alert-danger" role="alert">
       <h4>{{login}}</h4>
     </div>
     {{/if}}
     {{{body}}}
-</div>
+  </div>
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
@@ -116,20 +147,21 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
     crossorigin="anonymous"></script>
-    <script src="/js/jquery.js"></script>
-     <script src="/js/localidades.js"></script>   
-     <script src="/js/cie10.js"></script>   
-    <script src="/js/miscrip.js"></script>
-    <script src="/js/medicos.js"></script>
-    <script src="/js/hclinicas.js"></script>
-    {{!-- datapicker --}}
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
-<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+  <script src="/js/jquery.js"></script>
+  <script src="/js/localidades.js"></script>
+  <script src="/js/cie10.js"></script>
+  <script src="/js/issplena.js"></script>
+  <script src="/js/miscrip.js"></script>
+  <script src="/js/medicos.js"></script>
+  <script src="/js/hclinicas.js"></script>
+  {{!-- datapicker --}}
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
 
-{{!-- /datapicker --}}
-   
-    
+  {{!-- /datapicker --}}
+
+
 </body>
 
 </html>

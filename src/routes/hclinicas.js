@@ -60,7 +60,24 @@ router.get('/hclinicas/:id/:cc',checkAuthentication,(req,res)=>{
 
 
 router.post('/crearhc',checkAuthentication,(req,res)=>{ 
-    const {cedula,nombres,id,motivo,actual,antecedentes,fisico,clinico,plan,terapeutico}= req.body;
+    const {cedula,nombres,id,motivo,actual,clinico,plan,terapeutico,impdiag,ordenes}= req.body;
+    var fisicoArray={
+        nariz:req.body.nariz,
+        boca:req.body.boca,
+        orofaringe: req.body.orofaringe,
+        laringoscopia:req.body.laringoscopia,
+        cuello:req.body.cuello,
+        oido:req.body.oido
+    };
+
+    var antecedentesArray={
+        medicos:req.body.medicos,
+        quirurgico:req.body.quirurgico,
+        toxico:req.body.toxico,
+        traumatico:req.body.traumatico,
+        familiares:req.body.familiares,
+        otros:req.body.otros
+    };
     /**aQUI DEBES CREAR LA FACTURA TEMP. */ 
     var med=[];
     var ccmedico=req.user.medico;
@@ -76,26 +93,39 @@ router.post('/crearhc',checkAuthentication,(req,res)=>{
         });
 
         db.collection('hclinica').get()
-        .then((snapshot) => {  
+        .then((snapshot) => { 
+            var cont=0; 
+            var t ='HC';
+            snapshot.forEach(element => {
+                if (element.data().cedula==cedula) {
+                    cont++;
+                }
+            });
+            if (cont > 0) {
+                t='CONTROL';
+            }
             var num= snapshot.docs.length+1;      
             const consulta={ 
-                codigo:'HC '+num,       
+                codigo: 'HC-'+num,       
                 cedula,
                 nombres,
                 id,
                 motivo,
                 actual,
-                antecedentes,
-                fisico,
+                antecedentes:antecedentesArray,
+                fisico:fisicoArray,
                 clinico,
                 plan,
+                impdiag,
+                ordenes,
                 terapeutico,
                 medico:med,
+                tipo:t,
                 fecha:fechaActual(),
                 pinicio:fechaActual(),
                 pfinal:fechaActual(),
             }
-        
+            // console.log(consulta);
             let docRef = db.collection('hclinica').doc();    
             docRef.set(consulta);
             finalizarConsulta(id);
@@ -132,12 +162,46 @@ router.get('/imprimirhc/:codigo/:cita',checkAuthentication,(req,res)=>{
              console.log(valores);
              res.render('hclinicas/imprimir',{valores});       
         });         
-    });     
-  
+    });
+});
+
+router.get('/receta/:codigo/:cita',checkAuthentication,(req,res)=>{
+    const {codigo,cita} = req.params;
+    var hc=[];
+    var ct=[];
+    var valores=[];    
    
+    db.collection('hclinica').doc(codigo).get()
+    .then((snapshot) => {        
+        hc=snapshot.data(); 
+        db.collection('citas').doc(cita).get()
+        .then((snapshot) => { 
+             ct=snapshot.data();  
+             valores.push({cita:ct,historia:hc});
+             console.log(valores);
+             res.render('hclinicas/receta',{valores});       
+        });         
+    });
+});
+
+router.get('/orden/:codigo/:cita',checkAuthentication,(req,res)=>{
+    const {codigo,cita} = req.params;
+    var hc=[];
+    var ct=[];
+    var valores=[];    
    
-   
-})
+    db.collection('hclinica').doc(codigo).get()
+    .then((snapshot) => {        
+        hc=snapshot.data(); 
+        db.collection('citas').doc(cita).get()
+        .then((snapshot) => { 
+             ct=snapshot.data();  
+             valores.push({cita:ct,historia:hc});
+             console.log(valores);
+             res.render('hclinicas/ordenes',{valores});       
+        });         
+    });
+});
 
 router.get('/verhc',checkAuthentication,(req,res)=>{
     db.collection('hclinica').get()
@@ -193,7 +257,6 @@ function facturar(cita) {
         item: cita.item
       }
 
-      console.log(factura);
       let docRef = db.collection('fac_orl').doc();    
       docRef.set(factura);
 }

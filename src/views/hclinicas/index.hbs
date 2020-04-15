@@ -1,5 +1,5 @@
 <form action="/crearhc" method="POST">
-    <div class="row mt-3" style="margin-left: 5%;">
+    <div class="row mt-3 small" style="margin-left: 0%;">
         <div class="col-sm-12">
             {{#each valores}}
             <div class="row mt-3 mb-3">
@@ -24,6 +24,9 @@
                     <a class="nav-link" id="b" href="#"><b>Enfermedad Actual</b></a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" id="h" href="#"><b>Imp diagnostica</b></a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" id="c" href="#"><b>Antecedentes</b></a>
                 </li>
                 <li class="nav-item">
@@ -36,7 +39,10 @@
                     <a class="nav-link" id="f" href="#"><b>Plan</b></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="g" href="#"><b>Plan Terapeutico</b></a>
+                    <a class="nav-link" id="g" href="#"><b>Receta</b></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="i" href="#"><b>Ordenes</b></a>
                 </li>
             </ul>
             <div class="padre">
@@ -49,24 +55,93 @@
                         placeholder="Enfermedad Actual" required></textarea>
                 </div>
                 <div class="form-group hijo" style="visibility: hidden;">
-                    <textarea name="antecedentes" id="antecedentes" class="form-control" cols="30" rows="5"
-                        placeholder="Antecedentes" required></textarea>
+                    <div class=" m-3" id="antecedentes">
+                        <div class="row">
+                            <div class="col-sm-12"><span class="small"><b>Medicos</b></span> <textarea name="medicos"
+                                    id="medicos" class="form-control form-control-sm" cols="30" rows="2"
+                                    placeholder="Medicos"></textarea></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12"><span class="small"><b>Quirurgico</b></span> <textarea
+                                    name="quirurgico" id="quirurgico" class="form-control form-control-sm" cols="30"
+                                    rows="2" placeholder="Quirurgico"></textarea></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12"><span class="small"><b>Farmacologico/Toxico</b></span> <textarea
+                                    name="toxico" id="toxico" class="form-control form-control-sm" cols="30" rows="2"
+                                    placeholder="Toxico"></textarea></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12"><span class="small"><b>Traumatico</b></span> <textarea
+                                    name="traumatico" id="traumatico" class="form-control form-control-sm" cols="30"
+                                    rows="2" placeholder="Traumatico"></textarea></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12"><span class="small"><b>Familiares</b></span> <textarea
+                                    name="familiares" id="familiares" class="form-control form-control-sm" cols="30"
+                                    rows="2" placeholder="Familiares"></textarea></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12"><span class="small"><b>Otros</b></span> <textarea name="otros"
+                                    id="otros" class="form-control form-control-sm" cols="30" rows="2"
+                                    placeholder="Otros"></textarea></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group hijo" style="visibility: hidden;">
-                    <textarea name="fisico" id="fisico" class="form-control" cols="30" rows="5"
-                        placeholder="Examen Fisico" required></textarea>
+
+                    <div id="fisico">
+                        <div class="row" >
+                            <div class="col-sm-12"><span class="small"><b>Nariz</b></span> <textarea name="nariz"
+                                    id="nariz" class="form-control form-control-sm" cols="30" rows="2"
+                                    placeholder="Nariz"></textarea></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12"><span class="small"><b>Boca</b></span> <textarea name="boca"
+                                    id="boca" class="form-control form-control-sm" cols="30" rows="2"
+                                    placeholder="Boca"></textarea></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12"><span class="small"><b>Orofaringe</b></span> <textarea
+                                    name="orofaringe" id="orofaringe" class="form-control form-control-sm" cols="30"
+                                    rows="2" placeholder="Orofaringe"></textarea></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12"><span class="small"><b>laringoscopia Indirecta</b></span> <textarea
+                                    name="laringoscopia" id="laringoscopia" class="form-control form-control-sm"
+                                    cols="30" rows="2" placeholder="laringoscopia Indirecta"></textarea></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12"><span class="small"><b>Cuello</b></span> <textarea name="cuello"
+                                    id="cuello" class="form-control form-control-sm" cols="30" rows="2"
+                                    placeholder="Cuello"></textarea></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12"><span class="small"><b>Oido</b></span> <textarea name="oido"
+                                    id="oido" class="form-control form-control-sm" cols="30" rows="2"
+                                    placeholder="Oido"></textarea></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group hijo" style="visibility: hidden;">
                     <textarea name="clinico" id="clinico" class="form-control" cols="30" rows="5"
                         placeholder="Paraclinicos" required></textarea>
                 </div>
                 <div class="form-group hijo" style="visibility: hidden;">
-                    <textarea name="plan" id="plan" class="form-control" cols="30" rows="5" placeholder="Plan"
+                    <textarea name="plan" id="plan" class="form-control" cols="30" rows="5" placeholder="plan"
                         required></textarea>
                 </div>
                 <div class="form-group hijo" style="visibility: hidden;">
                     <textarea name="terapeutico" id="terapeutico" class="form-control" cols="30" rows="5"
-                        placeholder="Plan Terapeutico" required></textarea>
+                        placeholder="Receta" required></textarea>
+                </div>
+                <div class="form-group hijo" style="visibility: hidden;">
+                    <textarea name="impdiag" id="impdiag" class="form-control" cols="30" rows="5"
+                        placeholder="Impresion diagnostico" required></textarea>
+                </div>
+                <div class="form-group hijo" style="visibility: hidden;">
+                    <textarea name="ordenes" id="ordenes" class="form-control" cols="30" rows="5" placeholder="Ordenes"
+                        required></textarea>
                 </div>
             </div>
 
@@ -98,19 +173,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{#each hc}}                     
+                        {{#each hc}}
                         <tr>
                             <th>{{data.codigo}}</th>
                             <td>{{data.fecha}}</td>
                             <td>{{id}}</td>
-                            <td><a href="#" class="btn btn-primary bn-sm" onclick="colocarHc('{{id}}')" data-dismiss="modal">ver</a></td>
+                            <td><a href="#" class="btn btn-primary bn-sm" onclick="colocarHc('{{id}}')"
+                                    data-dismiss="modal">ver</a></td>
                         </tr>
                         {{/each}}
                     </tbody>
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">CERRAR</button>               
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">CERRAR</button>
             </div>
         </div>
     </div>

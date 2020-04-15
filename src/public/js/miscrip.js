@@ -101,7 +101,7 @@ function selectItems() {
       <select name="item" id="item" onchange="consultarItem();" class="form-control form-control-sm">
       <option value="">Seleccionar Item</option>`;
       data.forEach(element => {
-        cadena += ` <option value="${element.id}">${element.nombre}</option>`;
+        cadena += ` <option value="${element.id}">${element.cups}::${element.nombre}</option>`;
       });
       cadena += `</select>`;
       $('.items').html(cadena);

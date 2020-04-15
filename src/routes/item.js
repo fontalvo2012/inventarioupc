@@ -43,10 +43,11 @@ router.post('/ajaxitems', (req, res) => {
 
 router.post('/itemcups', (req, res) => {
     const { entidad } = req.body;
-    db.collection('items').where("entidad", "==", entidad).get()
+    db.collection('items').orderBy('nombre','asc').get()
         .then((snapshot) => {
             var valores = [];
             snapshot.forEach((doc) => {
+               if (doc.data().entidad==entidad) {
                 valores.push({
                     id: doc.id,
                     cups: doc.data().cups,
@@ -68,6 +69,7 @@ router.post('/itemcups', (req, res) => {
                     autorizacion:doc.data().autorizacion,
                     tipo:doc.data().tipo
                 });
+               }
             });
             res.send(valores);
         })
@@ -146,6 +148,48 @@ router.post('/actualizarmedico', (req, res) => {
         .catch(function (error) {
             res.redirect('Error en Actualizar');
         });
+});
+
+router.post('/tarifas',(req,res)=>{
+    const {item} =req.body;
+    let docRef = db.collection('items').doc();    
+    docRef.set(JSON.parse(item));
+    res.send('tarifa creada');
+});
+
+router.get('/tarifas',(req,res)=>{
+    db.collection('entidades').get()
+    .then((snapshot) => {
+        var valores=[];
+        snapshot.forEach((doc) =>{              
+           valores.push(doc.data());                       
+        });      
+        res.render('item/tarifas',{valores});
+    })
+   
+});
+
+router.post('/consultartarifas',(req,res)=>{
+    const {entidad} = req.body;
+    db.collection('items').orderBy('nombre','asc').get()
+    .then((snapshot) => {
+        var valores=[];
+        snapshot.forEach((doc) =>{              
+           if (doc.data().entidad==entidad) {
+            valores.push({data:doc.data(),id:doc.id}); 
+           }                      
+        });      
+        res.send(valores);
+    })
+   
+});
+
+router.post('/borraritem/:id',(req,res)=>{
+    const {id}= req.body;   
+    db.collection("items").doc(id).delete().then(function(){
+        console.log("Document successfully deleted!");
+        res.send('eliminado');
+    });
 });
 
 

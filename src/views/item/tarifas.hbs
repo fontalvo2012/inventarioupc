@@ -1,0 +1,37 @@
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-sm-3">
+            <span class="small"><b>Entidad</b></span>
+            <select name="entidad" id="entidad" class="form-control form-control-sm" onchange="consultarTarifa()">
+                <option value="">Seleccione</option>
+                {{#each valores}}
+                    <option value="{{nit}}">{{rsocial}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="col-sm-3">
+            <span><b>% incremento</b></span>
+            <input type="number" value="0" class="form-control form-control-sm" name="porcentaje" id="porcentaje">
+        </div>
+        <div class="col-sm-3 mt-4">
+            <button class="btn btn-primary btn-sm" onclick="recorrerIss()"><i class='fas fa-table' style='font-size:16px'></i> Crear</button>
+        </div>
+    </div>
+</div>
+<div class="container mt-4 small">
+
+    <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">CUPS</th>
+      <th scope="col">NOMBRE</th>
+      <th scope="col">VALOR</th>
+      <th scope="col">MODIFICAR</th>
+      <th scope="col">ACCION</th>
+    </tr>
+  </thead>
+  <tbody id="vertarifas">
+   
+  </tbody>
+</table>
+</div>

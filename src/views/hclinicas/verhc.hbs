@@ -15,7 +15,11 @@
       <td>{{data.cedula}}</td>
       <td>{{data.nombres}}</td>
       <td>{{data.fecha}}</td>
-      <td><a href="/imprimirhc/{{id}}/{{data.id}}" class="btn btn-primary btn-sm"><i class="fas fa-eye" style="font-size: 20px;"></i></a></td>
+      <td><a href="/imprimirhc/{{id}}/{{data.id}}" class="btn btn-primary btn-sm"><i class="fas fa-file-medical" style="font-size: 20px;"></i></a>
+      <a href="/receta/{{id}}/{{data.id}}" class="btn btn-warning btn-sm"><i class="fas fa-capsules" style="font-size: 20px;"></i></a>
+      <a href="/orden/{{id}}/{{data.id}}" class="btn btn-success btn-sm"><i class="	fas fa-user-md" style="font-size: 20px;"></i></a>
+      </td>
+     
     </tr>
     {{/each}}
 

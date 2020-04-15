@@ -128,10 +128,10 @@ router.post('/addpacientes',checkAuthentication,(req,res)=>{
     let docRef = db.collection('pacientes').doc();
     let setAda = docRef.set({
         cedula: cedula,
-        nombre: nombre,
-        snombre:snombre,
-        apellido:apellido,
-        sapellido:sapellido,
+        nombre: nombre.toUpperCase(),
+        snombre:snombre.toUpperCase(),
+        apellido:apellido.toUpperCase(),
+        sapellido:sapellido.toUpperCase(),
         email: email,
         direccion:direccion,
         telefono:telefono,

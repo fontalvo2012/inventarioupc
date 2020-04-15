@@ -6,6 +6,8 @@ $("#a").click(function () {
    $('#clinico').css('visibility','hidden');
    $('#plan').css('visibility','hidden');
    $('#terapeutico').css('visibility','hidden');
+   $('#impdiag').css('visibility','hidden');
+   $('#ordenes').css('visibility','hidden');
    
    $('#a').css('background-color','#D2F1ED');
    $('#b').css('background-color','');
@@ -14,6 +16,8 @@ $("#a").click(function () {
    $('#e').css('background-color','');
    $('#f').css('background-color','');
    $('#g').css('background-color','');
+   $('#h').css('background-color','');
+   $('#i').css('background-color','');
 });
 $("#b").click(function () {
    $('#motivo').css('visibility','hidden');
@@ -23,6 +27,8 @@ $("#b").click(function () {
    $('#clinico').css('visibility','hidden');
    $('#plan').css('visibility','hidden');
    $('#terapeutico').css('visibility','hidden');
+   $('#impdiag').css('visibility','hidden');
+   $('#ordenes').css('visibility','hidden');
 
    $('#a').css('background-color','');
    $('#b').css('background-color','#D2F1ED');
@@ -31,6 +37,8 @@ $("#b").click(function () {
    $('#e').css('background-color','');
    $('#f').css('background-color','');
    $('#g').css('background-color','');
+   $('#h').css('background-color','');
+   $('#i').css('background-color','');
 });
 $("#c").click(function () {
     $('#motivo').css('visibility','hidden');
@@ -40,6 +48,8 @@ $("#c").click(function () {
     $('#clinico').css('visibility','hidden');
     $('#plan').css('visibility','hidden');
     $('#terapeutico').css('visibility','hidden');
+   $('#ordenes').css('visibility','hidden');
+   $('#impdiag').css('visibility','hidden');
 
     $('#a').css('background-color','');
     $('#b').css('background-color','');
@@ -48,6 +58,8 @@ $("#c").click(function () {
     $('#e').css('background-color','');
     $('#f').css('background-color','');
     $('#g').css('background-color','');
+    $('#h').css('background-color','');
+    $('#i').css('background-color','');
 });
 $("#d").click(function () {
     $('#motivo').css('visibility','hidden');
@@ -57,6 +69,8 @@ $("#d").click(function () {
     $('#clinico').css('visibility','hidden');
     $('#plan').css('visibility','hidden');
     $('#terapeutico').css('visibility','hidden');
+   $('#ordenes').css('visibility','hidden');
+   $('#impdiag').css('visibility','hidden');
 
     $('#a').css('background-color','');
     $('#b').css('background-color','');
@@ -65,6 +79,8 @@ $("#d").click(function () {
     $('#e').css('background-color','');
     $('#f').css('background-color','');
     $('#g').css('background-color','');
+    $('#h').css('background-color','');
+    $('#i').css('background-color','');
 });
 $("#e").click(function () {
     $('#motivo').css('visibility','hidden');
@@ -74,6 +90,8 @@ $("#e").click(function () {
     $('#clinico').css('visibility','visible');
     $('#plan').css('visibility','hidden');
     $('#terapeutico').css('visibility','hidden');
+   $('#ordenes').css('visibility','hidden');
+   $('#impdiag').css('visibility','hidden');
 
     $('#a').css('background-color','');
     $('#b').css('background-color','');
@@ -82,6 +100,8 @@ $("#e").click(function () {
     $('#e').css('background-color','#D2F1ED');
     $('#f').css('background-color','');
     $('#g').css('background-color','');
+    $('#h').css('background-color','');
+    $('#i').css('background-color','');
 });
 $("#f").click(function () {
     $('#motivo').css('visibility','hidden');
@@ -91,6 +111,8 @@ $("#f").click(function () {
     $('#clinico').css('visibility','hidden');
     $('#plan').css('visibility','visible');
     $('#terapeutico').css('visibility','hidden');
+   $('#ordenes').css('visibility','hidden');
+   $('#impdiag').css('visibility','hidden');
 
     $('#a').css('background-color','');
     $('#b').css('background-color','');
@@ -99,6 +121,8 @@ $("#f").click(function () {
     $('#e').css('background-color','');
     $('#f').css('background-color','#D2F1ED');
     $('#g').css('background-color','');
+    $('#h').css('background-color','');
+    $('#i').css('background-color','');
 });
 $("#g").click(function () {
     $('#motivo').css('visibility','hidden');
@@ -108,6 +132,8 @@ $("#g").click(function () {
     $('#clinico').css('visibility','hidden');
     $('#plan').css('visibility','hidden');
     $('#terapeutico').css('visibility','visible');
+   $('#ordenes').css('visibility','hidden');
+   $('#impdiag').css('visibility','hidden');
 
     $('#a').css('background-color','');
     $('#b').css('background-color','');
@@ -115,9 +141,54 @@ $("#g").click(function () {
     $('#d').css('background-color','');
     $('#e').css('background-color','');
     $('#f').css('background-color','');
+    $('#h').css('background-color','');
     $('#g').css('background-color','#D2F1ED');
+    $('#i').css('background-color','');
 });
 
+$("#h").click(function () {
+    $('#motivo').css('visibility','hidden');
+    $('#actual').css('visibility','hidden');
+    $('#antecedentes').css('visibility','hidden');
+    $('#fisico').css('visibility','hidden');
+    $('#clinico').css('visibility','hidden');
+    $('#plan').css('visibility','hidden');
+    $('#terapeutico').css('visibility','hidden');
+   $('#ordenes').css('visibility','hidden');
+   $('#impdiag').css('visibility','visible');
+
+    $('#a').css('background-color','');
+    $('#b').css('background-color','');
+    $('#c').css('background-color','');
+    $('#d').css('background-color','');
+    $('#e').css('background-color','');
+    $('#f').css('background-color','');
+    $('#g').css('background-color','');
+    $('#h').css('background-color','#D2F1ED');
+    $('#i').css('background-color','');
+});
+
+$("#i").click(function () {
+    $('#motivo').css('visibility','hidden');
+    $('#actual').css('visibility','hidden');
+    $('#antecedentes').css('visibility','hidden');
+    $('#fisico').css('visibility','hidden');
+    $('#clinico').css('visibility','hidden');
+    $('#plan').css('visibility','hidden');
+    $('#terapeutico').css('visibility','hidden');
+   $('#ordenes').css('visibility','visible');
+   $('#impdiag').css('visibility','hidden');
+
+    $('#a').css('background-color','');
+    $('#b').css('background-color','');
+    $('#c').css('background-color','');
+    $('#d').css('background-color','');
+    $('#e').css('background-color','');
+    $('#f').css('background-color','');
+    $('#g').css('background-color','');
+    $('#h').css('background-color','');
+    $('#i').css('background-color','#D2F1ED');
+});
 
 function colocarHc(hc){    
     $.ajax({
@@ -130,12 +201,12 @@ function colocarHc(hc){
         success: (data) => {           
           console.log(data);
           $('#motivo').val(data.motivo);
-          $('#actual').val(data.actual);
-          $('#antecedentes').val(data.antecedentes);
-          $('#fisico').val(data.fisico);
+          $('#actual').val(data.actual);         
           $('#clinico').val(data.clinico);
           $('#plan').val(data.plan);
           $('#terapeutico').val(data.terapeutico);
+          $('#ordenes').val(data.ordenes);
+          $('#impdiag').val(data.impdiag);
           
         }
     });  

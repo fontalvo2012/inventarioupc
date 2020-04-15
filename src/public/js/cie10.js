@@ -436,7 +436,7 @@ function MostrarCie() {
     var cadena=`<select name="diag" id="diag" onchange=""  class="form-control form-control-sm" required>
     <option value="">::Seleccione::</option> `;
     oJSON.forEach(element => {
-        cadena+=`<option value="${element.codigo}">${element.codigo}</option>`;
+        cadena+=`<option value="${element.codigo}">${element.descripcion}</option>`;
     });
     cadena+=`</select>`;
     $('#cie').html(cadena);

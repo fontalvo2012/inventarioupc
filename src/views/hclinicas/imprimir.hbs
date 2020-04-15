@@ -9,7 +9,7 @@
   top: 0    ;
   left: 0;
   right: 0;
-  margin: 0 auto;
+  margin: 0;
   width: 20px;
 }
 </style>
@@ -44,29 +44,55 @@
     </div> 
 
    </div>
-   <div class="div border mt-2 p-5">
+   <div class="div border mt-2 p-3">
        <div class="row mb-3">
-           <div class="col.sm-12">
+           <div class="col-sm-12">
                <b>MOTIVO DE CONSULTA: </b> {{historia.motivo}}
            </div>
        </div>
         <div class="row  mb-3">
-           <div class="col.sm-12">
+           <div class="col-sm-12">
                <b>ENFEREMDAD ACTUAL: </b> {{historia.actual}}
            </div>
        </div>
-        <div class="row mb-3">
-           <div class="col.sm-12">
-               <b>EXAMEN FISICO: </b> {{historia.fisico}}
-           </div>
-       </div>
        <div class="row mb-3">
-           <div class="col.sm-12">
-               <b>ANTECEDENTES: </b> {{historia.antecedentes}}
+           <div class="col-sm-12">
+               <b>ANTECEDENTES: </b>
+               <div class="row">
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Medicos: </b></span>{{historia.antecedentes.medicos}}</div>
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Quirurgicos: </b></span>{{historia.antecedentes.quirurgico}}</div>
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Toxico: </b></span>{{historia.antecedentes.toxico}}</div>
+               </div>
+                <div class="row">
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Traumaticos: </b></span>{{historia.antecedentes.traumatico}}</div>
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Familiares: </b></span>{{historia.antecedentes.familiares}}</div>
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Otros: </b></span>{{historia.antecedentes.otros}}</div>
+               </div>
+                
            </div>
        </div>
         <div class="row mb-3">
-           <div class="col.sm-12">
+           <div class="col-sm-12">
+               <b>EXAMEN FISICO: </b>
+                <div class="row">
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Nariz: </b></span>{{historia.fisico.nariz}}</div>
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Boca: </b></span>{{historia.fisico.boca}}</div>
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Orofaringe: </b></span>{{historia.fisico.orofaringe}}</div>
+               </div>
+                <div class="row">
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Laringoscopia: </b></span>{{historia.fisico.laringoscopia}}</div>
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Oidos: </b></span>{{historia.fisico.oido}}</div>
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Cuello: </b></span>{{historia.fisico.cuello}}</div>
+               </div>
+           </div>
+       </div>
+        <div class="row mb-3">
+           <div class="col-sm-12">
+               <b>DIAGNOSTICO: </b> {{historia.impdiag}}
+           </div>
+       </div>
+        <div class="row mb-3">
+           <div class="col-sm-12">
                <b>PLAN: </b> {{historia.plan}}
            </div>
        </div>
@@ -74,7 +100,7 @@
    <div class="border mt-2 p-4">
 
        <div class="row">
-           <div class="col-sm-4 padre" style="padding-top: 120px;">
+           <div class="col-sm-4 padre" >
                <img src="/img/firmas/1047384229.png" class="m-0 p-0 hijo" width="180">                             
                <hr class="m-0 p-0">
                <b class="mt-0 mr-4">{{historia.medico.nombres}}</b><br>             
