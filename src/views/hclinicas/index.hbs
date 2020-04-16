@@ -24,7 +24,7 @@
                     <a class="nav-link" id="b" href="#"><b>Enfermedad Actual</b></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="h" href="#"><b>Imp diagnostica</b></a>
+                    <a class="nav-link" id="h" href="#" onclick="MostrarCie();"><b>Imp diagnostica</b></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="c" href="#"><b>Antecedentes</b></a>
@@ -136,8 +136,28 @@
                         placeholder="Receta" required></textarea>
                 </div>
                 <div class="form-group hijo" style="visibility: hidden;">
-                    <textarea name="impdiag" id="impdiag" class="form-control" cols="30" rows="5"
-                        placeholder="Impresion diagnostico" required></textarea>
+                  <div id="impdiag">
+                       
+                        <div class="form-group mt-2" > 
+                            <span class="small"><b>DIAGNOSTICO</b></span>
+                            <div id="cie"></div>                      
+                         </div>
+                         <div class="row mb-2">
+                              <div class="col-sm-1">
+                                  <span class="small"><b>Codigo</b></span>
+                                  <input type="text" name="ndg" id="ndg" class="form-control form-control-sm" readonly>
+                             </div>
+                             <div class="col-sm-11">
+                                 <span class="small"><b>Nombre</b></span>
+                                  <input type="text" name="dg" id="dg" class="form-control form-control-sm" readonly>
+                             </div>
+                            
+                         </div>
+                    <div class="form-group">
+                         <textarea name="impdiag" class="form-control" cols="30" rows="5"
+                        placeholder="Descripcion diagnostico"></textarea>
+                    </div>   
+                  </div>                
                 </div>
                 <div class="form-group hijo" style="visibility: hidden;">
                     <textarea name="ordenes" id="ordenes" class="form-control" cols="30" rows="5" placeholder="Ordenes"
@@ -168,7 +188,7 @@
                         <tr>
                             <th scope="col">Codigo</th>
                             <th scope="col">fecha</th>
-                            <th scope="col">cita</th>
+                            <th scope="col">Tipo</th>
                             <th scope="col">Accion</th>
                         </tr>
                     </thead>
@@ -177,7 +197,7 @@
                         <tr>
                             <th>{{data.codigo}}</th>
                             <td>{{data.fecha}}</td>
-                            <td>{{id}}</td>
+                            <td>{{data.tipo}}</td>
                             <td><a href="#" class="btn btn-primary bn-sm" onclick="colocarHc('{{id}}')"
                                     data-dismiss="modal">ver</a></td>
                         </tr>

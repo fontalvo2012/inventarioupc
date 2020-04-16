@@ -39,12 +39,14 @@ router.post('/addcitas',(req,res)=>{
 });
 
 router.post('/consultarcitas',(req,res)=>{
-    const {fecha}=req.body;  
+    const {fecha,medico}=req.body;  
     db.collection('citas').where('fecha','==',fecha).get()
     .then((snapshot) => {
         var valores=[];
-        snapshot.forEach((doc) => {            
-            valores.push(doc.data());            
+        snapshot.forEach((doc) => {
+            if(doc.data().medico==medico){
+                valores.push(doc.data());
+            }                    
         });       
         res.send(valores)
     })
@@ -135,12 +137,11 @@ router.post('/vercitaspaciente',(req,res)=>{
 
 router.post('/ensala/:id',(req,res)=>{
     const {id}=req.params; 
-    const {copago,autorizacion,diag}=req.body;   
+    const {copago,autorizacion}=req.body;   
     var washingtonRef = db.collection("citas").doc(id);
     const cita={
         copago:copago,
-        autorizacion:autorizacion,
-        diagnostico:diag,
+        autorizacion:autorizacion,        
         estado:'ensala'
     }  
     return washingtonRef.update(cita)

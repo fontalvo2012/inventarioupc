@@ -38,29 +38,27 @@ router.get('/hclinicas/:id/:cc',checkAuthentication,(req,res)=>{
         snapshot.forEach(element => {
             hc.push({data:element.data(),id:element.id});
         }); 
+        db.collection('citas').get()
+        .then((snapshot) => {
+            console.log(snapshot.docs.length)
+            var valores=[];        
+            snapshot.forEach((doc) =>{            
+                if(doc.id==id){
+                    valores.push({data:doc.data(),id:doc.id});
+                }
+            });         
+            res.render('hclinicas/index',{valores,hc});
+           
+        });
     });
    
-    db.collection('citas').get()
-    .then((snapshot) => {
-        console.log(snapshot.docs.length)
-        var valores=[];        
-        snapshot.forEach((doc) =>{            
-            if(doc.id==id){
-                valores.push({data:doc.data(),id:doc.id});
-            }
-        });         
-        res.render('hclinicas/index',{valores,hc});
-       
-    })
-    .catch((err) => {
-        console.log('Error getting documents', err);
-        res.render('hclinicas/index');
-    });   
+
+  
 }) 
 
 
 router.post('/crearhc',checkAuthentication,(req,res)=>{ 
-    const {cedula,nombres,id,motivo,actual,clinico,plan,terapeutico,impdiag,ordenes}= req.body;
+    const {cedula,nombres,id,motivo,actual,clinico,plan,terapeutico,impdiag,ordenes,ndg,dg}= req.body;
     var fisicoArray={
         nariz:req.body.nariz,
         boca:req.body.boca,
@@ -78,12 +76,22 @@ router.post('/crearhc',checkAuthentication,(req,res)=>{
         familiares:req.body.familiares,
         otros:req.body.otros
     };
-    /**aQUI DEBES CREAR LA FACTURA TEMP. */ 
+
+    var impDiagnostico={
+        impdiag:impdiag,
+        diag:ndg,
+        nombre:dg
+    }
+    
     var med=[];
     var ccmedico=req.user.medico;
+    var cups='';
+    var nombrecups='';
     db.collection('citas').doc(id).get()
     .then((snapshot) => { 
-           facturar(snapshot.data());     
+           facturar(snapshot.data());
+           cups=snapshot.data().item.cups;     
+           nombrecups=snapshot.data().item.nombre;     
     });
     
     db.collection('medicos').where('cedula','==',ccmedico).get()
@@ -102,7 +110,7 @@ router.post('/crearhc',checkAuthentication,(req,res)=>{
                 }
             });
             if (cont > 0) {
-                t='CONTROL';
+                t='';
             }
             var num= snapshot.docs.length+1;      
             const consulta={ 
@@ -110,13 +118,15 @@ router.post('/crearhc',checkAuthentication,(req,res)=>{
                 cedula,
                 nombres,
                 id,
+                cups,
+                nombrecups,
                 motivo,
                 actual,
                 antecedentes:antecedentesArray,
                 fisico:fisicoArray,
                 clinico,
                 plan,
-                impdiag,
+                impdiag:impDiagnostico,
                 ordenes,
                 terapeutico,
                 medico:med,
@@ -129,7 +139,7 @@ router.post('/crearhc',checkAuthentication,(req,res)=>{
             let docRef = db.collection('hclinica').doc();    
             docRef.set(consulta);
             finalizarConsulta(id);
-            res.redirect('/consultashclinicas');  
+            res.redirect(`/verhc/${cedula}`);  
         });
         
     }); 
@@ -203,8 +213,9 @@ router.get('/orden/:codigo/:cita',checkAuthentication,(req,res)=>{
     });
 });
 
-router.get('/verhc',checkAuthentication,(req,res)=>{
-    db.collection('hclinica').get()
+router.get('/verhc/:cedula',checkAuthentication,(req,res)=>{
+    const {cedula} = req.params;
+    db.collection('hclinica').where('cedula','==',cedula).get()
     .then((snapshot) => {        
         var valores=[];        
         snapshot.forEach((doc) =>{  
@@ -296,7 +307,7 @@ function finalizarConsulta(id) {
 
 router.get('/cons',(req,res)=>{ 
     let contenido=[{msg:'error'}];
-    let fb= db.collection('citas');
+    let fb= db.collection('citas');ver
     let query= fb.where('estado','==','ensala').get()
     .then((snapshot)=>{     
         snapshot.forEach(element => { 

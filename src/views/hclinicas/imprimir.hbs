@@ -13,41 +13,45 @@
   width: 20px;
 }
 </style>
+{{#each valores}}
 <div class="row m-4">
     <div class="col-sm-10"></div>
     <div class="col-sm-2">
         <a href="#" class="btn btn-primary btn-sm" onclick="ImprimirHc()"><i class="fas fa-print" style="font-size: 20px;"></i></a>
-        <a href="/verhc" class="btn btn-warning btn-sm"><i class="fas fa-reply" style="font-size: 20px;"></i></a>
+        <a href="/verhc/{{historia.cedula}}" class="btn btn-warning btn-sm"><i class="fas fa-reply" style="font-size: 20px;"></i></a>
     </div>
 </div>
-{{#each valores}}
+
 <div class="container m-4 p-3 border" id="imp">
    <div class="row mb-3">
        <div class="col-sm-4"><img src="/img/logoOrl.png"  width="200"></div>
-       <div class="col-sm-8 pt-5 pl-5"><h1><b> Historia clinica</b></h1></div>
+       <div class="col-sm-8 pt-5 pl-5"><h1><b> {{#if historia.tipo}}Historia clinica{{else}}Evolucion{{/if}}</b></h1></div>
    </div> 
    <div class="border p-4">
         <div class="row">
-        <div class="col-sm-4"><b>Nombre:</b> {{cita.paciente.nombre}} {{cita.paciente.snombre}} {{cita.paciente.apellido}} {{cita.paciente.sapellido}}</div>
-        <div class="col-sm-4"><b>Edad: </b> {{cita.paciente.edad}}</div>
-        <div class="col-sm-4"><b>Nro HC: </b> {{historia.codigo}}</div>
+        <div class="col-sm-3"><b>Nombre:</b> {{cita.paciente.nombre}} {{cita.paciente.snombre}} {{cita.paciente.apellido}} {{cita.paciente.sapellido}}</div>
+        <div class="col-sm-3"><b>Cedula: </b> {{cita.paciente.cedula}}</div>
+        <div class="col-sm-3"><b>Edad: </b> {{cita.paciente.edad}}</div>
+        <div class="col-sm-3"><b>Nro HC: </b><b style="color: blue; font-size: 20px;">{{historia.codigo}}</b></div>
     </div>
      <div class="row">
-        <div class="col-sm-4"><b>Estado Civil:</b> {{cita.paciente.ecivil}}</div>
-        <div class="col-sm-4"><b>Ciudad:</b> Cartagena</div>
+        <div class="col-sm-3"><b>Estado Civil:</b> {{cita.paciente.ecivil}}</div>
+        <div class="col-sm-3"><b>Ciudad:</b> Cartagena</div>
         <div class="col-sm-4"><b>Sexo:</b> {{cita.paciente.sexo}}</div>
     </div>
      <div class="row">
-        <div class="col-sm-4"><b>Fecha HC</b> {{historia.fecha}}</div>
-        <div class="col-sm-4"><b>Entidad:</b> {{cita.entidad.rsocial}}</div>
-        <div class="col-sm-4"><b>Nacimiento:</b>  {{cita.paciente.nacimiento}}</div>
+        <div class="col-sm-3"><b>Fecha HC</b> {{historia.fecha}}</div>
+        <div class="col-sm-3"><b>Entidad:</b> {{cita.entidad.rsocial}}</div>
+        <div class="col-sm-3"><b>Nacimiento:</b>  {{cita.paciente.nacimiento}}</div>
     </div> 
 
    </div>
    <div class="div border mt-2 p-3">
        <div class="row mb-3">
            <div class="col-sm-12">
-               <b>MOTIVO DE CONSULTA: </b> {{historia.motivo}}
+               <b>MOTIVO DE CONSULTA: </b> 
+               <p class="ml-4"><i class='fas fa-caret-right' style='font-size:16px'></i> {{historia.cups}}::{{historia.nombrecups}}</p>
+                {{historia.motivo}}
            </div>
        </div>
         <div class="row  mb-3">
@@ -55,6 +59,7 @@
                <b>ENFEREMDAD ACTUAL: </b> {{historia.actual}}
            </div>
        </div>
+       {{#if historia.tipo}}
        <div class="row mb-3">
            <div class="col-sm-12">
                <b>ANTECEDENTES: </b>
@@ -86,9 +91,12 @@
                </div>
            </div>
        </div>
+       {{/if}}
         <div class="row mb-3">
            <div class="col-sm-12">
-               <b>DIAGNOSTICO: </b> {{historia.impdiag}}
+               <b>DIAGNOSTICO: </b>
+               <p class="ml-4"><i class='fas fa-caret-right' style='font-size:16px'></i> {{historia.impdiag.diag}}::{{historia.impdiag.nombre}}</p>
+                {{historia.impdiag.impdiag}}
            </div>
        </div>
         <div class="row mb-3">

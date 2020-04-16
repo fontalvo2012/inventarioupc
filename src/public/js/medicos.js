@@ -208,8 +208,7 @@ function blurMedicoCedula() {
 }
 
 function agenda(dia) {
-    var cc = $('#medico').val();  
-    
+    var cc = $('#medico').val();
     $.ajax({
         url: '/agendaMedicos',
         type: 'POST',
@@ -236,8 +235,7 @@ function agenda(dia) {
                     contenido+=` 
                         <tr>
                         <td><b class='small ml-3 mr-3'> ${comvertirHora(parseInt(hi) + h)}</b></td>
-                        <td><b class="small ml-3 mr-3" id="${comvertirHora(parseInt(hi)+h).replace(':','')}" ><a href="#" onclick="crearCitas('${comvertirHora(parseInt(hi) + h)}')"><i class='far fa-address-book' style='font-size:16px'> Agendar</b></a></td>
-                        
+                        <td><b class="small ml-3 mr-3" id="${comvertirHora(parseInt(hi)+h).replace(':','')}" ><a href="#" onclick="crearCitas('${comvertirHora(parseInt(hi) + h)}')"><i class='far fa-address-book' style='font-size:16px'> Agendar</b></a></td>                        
                         </tr>`
                     h += parseInt(element.duracion);
                 }
@@ -246,7 +244,7 @@ function agenda(dia) {
             });
             contenido += '</div>';
             $('#contenido').html(contenido);  
-            citasUsadas();
+            citasUsadas(cc);
             }
     });
 }
@@ -353,7 +351,7 @@ function crearCitas(hora) {
                 cita: c
             },
             success: (data) => {           
-                citasUsadas();
+                citasUsadas($('#medico').val());
                 $('#cc').val('');
                 $('#nombres').val('');
                 $('#entidad').val('');
@@ -362,13 +360,14 @@ function crearCitas(hora) {
     }
 
 }
-function citasUsadas(){    
+function citasUsadas(medico){    
     $.ajax({
         url: '/consultarcitas',
         type: 'POST',
         datatype: 'json',
         data: {
-            fecha: $('#fecha').val()
+            fecha: $('#fecha').val(),
+            medico:medico
         },           
         success: (data) => {           
            data.forEach(element => {              

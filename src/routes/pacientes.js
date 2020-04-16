@@ -124,10 +124,11 @@ function validarcedula(c1,c2) {
 
 
 router.post('/addpacientes',checkAuthentication,(req,res)=>{
-    const { td,cedula,nombre,snombre,apellido,sapellido,sexo,nacimiento,edad,unidad,ecivil,cdM,cddep,zresidencial,email,direccion,telefono} = req.body;
+    const { td,cedula,nombre,snombre,apellido,sapellido,sexo,nacimiento,edad,unidad,ecivil,cdM,cddep,zresidencial,email,direccion,telefono,ciudad} = req.body;
     let docRef = db.collection('pacientes').doc();
     let setAda = docRef.set({
         cedula: cedula,
+        ciudad:ciudad,
         nombre: nombre.toUpperCase(),
         snombre:snombre.toUpperCase(),
         apellido:apellido.toUpperCase(),

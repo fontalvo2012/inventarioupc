@@ -12,6 +12,10 @@ function MostrarLocalidad() {
     
 }
 
+function NombreCiudad() {
+    $('#ciudad').val($('select[name="municipio"] option:selected').text());    
+  }
+
 function selectDepartamento() {
     var mun=$('#municipio').val();
     var obj = JSON.parse(localidades);
@@ -20,6 +24,7 @@ function selectDepartamento() {
             $('#departamento').val(element.departamento);
             $('#cddep').val(element.coddepartamento);
             $('#cdm').val(element.codmunicipio);
+            NombreCiudad();
         }
     });
     
