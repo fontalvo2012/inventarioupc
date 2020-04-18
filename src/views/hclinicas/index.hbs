@@ -22,10 +22,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="b" href="#"><b>Enfermedad Actual</b></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="h" href="#" onclick="MostrarCie();"><b>Imp diagnostica</b></a>
-                </li>
+                </li>               
                 <li class="nav-item">
                     <a class="nav-link" id="c" href="#"><b>Antecedentes</b></a>
                 </li>
@@ -36,10 +33,14 @@
                     <a class="nav-link" id="e" href="#"><b>Paraclinicos</b></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="f" href="#"><b>Plan</b></a>
+                    <a class="nav-link" id="h" href="#" onclick="MostrarCie();"><b>Imp diagnostica</b></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="g" href="#"><b>Receta</b></a>
+                    <a class="nav-link" id="f" href="#"><b>Plan</b></a>
+                </li>
+                 
+                <li class="nav-item">
+                    <a class="nav-link" id="g" href="#" onclick="completMedicamentos()"><b>Receta</b></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="i" href="#"><b>Ordenes</b></a>
@@ -121,6 +122,11 @@
                                     id="oido" class="form-control form-control-sm" cols="30" rows="2"
                                     placeholder="Oido"></textarea></div>
                         </div>
+                        <div class="row">
+                            <div class="col-sm-12"><span class="small"><b>Otros</b></span> <textarea name="otrosfisico"
+                                    id="otrosfisico" class="form-control form-control-sm" cols="30" rows="2"
+                                    placeholder="Otros"></textarea></div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group hijo" style="visibility: hidden;">
@@ -132,36 +138,53 @@
                         required></textarea>
                 </div>
                 <div class="form-group hijo" style="visibility: hidden;">
-                    <textarea name="terapeutico" id="terapeutico" class="form-control" cols="30" rows="5"
+                    <div id="terapeutico">
+                        <div class="row mb-2">
+                        <div class="col-sm-2">
+                            <span><b>Cantidad</b></span>
+                            <input type="number" class=" form-control form-control-sm" id="cant" value="1" name="cant" placeholder="Cantidad">
+                        </div>
+                        <div class="col-sm-8">
+                            <span><b>Medicamento</b></span>
+                            <input type="text" class="form-control form-control-sm med" id="medicamento" name="medicamento" placeholder="Medicamentos">
+                        </div>
+                        <div class="col-sm-1 mt-3 ml-0 mr-0">
+                            <a href="#" class="btn btn-success btn-sm btn-block" onclick="AgregarMed()"><b><i class='fas fa-plus' style='font-size:16px'></i></b></a>
+                        </div>
+                    </div>                    
+                    <textarea name="terapeutico" id="receta" class="form-control" cols="30" rows="10"
                         placeholder="Receta" required></textarea>
+                    </div>
+                    
                 </div>
                 <div class="form-group hijo" style="visibility: hidden;">
                   <div id="impdiag">
-                       
-                        <div class="form-group mt-2" > 
-                            <span class="small"><b>DIAGNOSTICO</b></span>
-                            <div id="cie"></div>                      
-                         </div>
                          <div class="row mb-2">
-                              <div class="col-sm-1">
-                                  <span class="small"><b>Codigo</b></span>
-                                  <input type="text" name="ndg" id="ndg" class="form-control form-control-sm" readonly>
+                             <div class="col-sm-12">
+                                 <span class="small"><b>Diagnostico Pricipal</b></span>
+                                 <input type="text" class="form-control form-control-sm tags" name="dg" id="dg" placeholder="Diagnostico Principal">
                              </div>
-                             <div class="col-sm-11">
-                                 <span class="small"><b>Nombre</b></span>
-                                  <input type="text" name="dg" id="dg" class="form-control form-control-sm" readonly>
-                             </div>
-                            
-                         </div>
+                         </div>                                             
                     <div class="form-group">
                          <textarea name="impdiag" class="form-control" cols="30" rows="5"
-                        placeholder="Descripcion diagnostico"></textarea>
+                        placeholder="Otros diagnostico"></textarea>
                     </div>   
                   </div>                
                 </div>
                 <div class="form-group hijo" style="visibility: hidden;">
-                    <textarea name="ordenes" id="ordenes" class="form-control" cols="30" rows="5" placeholder="Ordenes"
+                   <div id="ordenes">
+                        <div class="row mb-2">
+                        <div class="col-sm-10">
+                             <span class="small"><b>Consultas/Procedimientos</b></span>
+                            <input type="text" id="ccups" name="ccups" class="completarcups form-control form-control-sm" placeholder="Examen/Consulta" >                            
+                        </div>
+                        <div class="col-sm-2">
+                            <a href="#" class="btn btn-success btn-sm mt-3" onclick="addcups()"><b>+</b></a>
+                        </div>
+                    </div>
+                    <textarea name="ordenes" id="ord"  class="form-control" cols="30" rows="5" placeholder="Ordenes"
                         required></textarea>
+                   </div>
                 </div>
             </div>
 

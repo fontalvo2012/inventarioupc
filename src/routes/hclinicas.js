@@ -58,14 +58,15 @@ router.get('/hclinicas/:id/:cc',checkAuthentication,(req,res)=>{
 
 
 router.post('/crearhc',checkAuthentication,(req,res)=>{ 
-    const {cedula,nombres,id,motivo,actual,clinico,plan,terapeutico,impdiag,ordenes,ndg,dg}= req.body;
+    const {cedula,nombres,id,motivo,actual,clinico,plan,terapeutico,impdiag,ordenes,dg}= req.body;
     var fisicoArray={
         nariz:req.body.nariz,
         boca:req.body.boca,
         orofaringe: req.body.orofaringe,
         laringoscopia:req.body.laringoscopia,
         cuello:req.body.cuello,
-        oido:req.body.oido
+        oido:req.body.oido,
+        otrosfisico:req.body.otrosfisico
     };
 
     var antecedentesArray={
@@ -79,8 +80,8 @@ router.post('/crearhc',checkAuthentication,(req,res)=>{
 
     var impDiagnostico={
         impdiag:impdiag,
-        diag:ndg,
-        nombre:dg
+        diag:dg.substr(0,4),
+        nombre:dg.substr(6,(dg.length)-6)//probar
     }
     
     var med=[];
@@ -119,6 +120,7 @@ router.post('/crearhc',checkAuthentication,(req,res)=>{
                 nombres,
                 id,
                 cups,
+                diagnostico:dg.substr(0,4),
                 nombrecups,
                 motivo,
                 actual,

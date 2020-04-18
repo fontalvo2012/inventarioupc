@@ -10,13 +10,6 @@ const content = `
 <p>Generando un PDF con un HTML sencillo</p>
 `;
 
-// pdf.create(content).toFile('./html-pdf.pdf', function(err, res) {
-//     if (err){
-//         console.log(err);
-//     } else {
-//         console.log(res);
-//     }
-// });
 
 
 router.get('/facturar',(req,res)=>{    

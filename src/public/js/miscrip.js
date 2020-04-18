@@ -171,6 +171,7 @@ function consultarItem() {
   });
 }
 
+
 function additem() {
   var aut = $('#autorizacion').val();
   var copa = $('#copa').val();

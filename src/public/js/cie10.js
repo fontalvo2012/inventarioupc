@@ -1,4 +1,4 @@
-var otorrino=`[
+var otorrino = `[
     {
       "codigo": "H60",
       "descripcion": "OTITIS EXTERNA"
@@ -1644,7 +1644,7 @@ var otorrino=`[
       "descripcion": "TRASTORNOS RESPIRATORIOS EN OTRAS ENFERMEDADES CLASIFICADAS EN OTRA PARTE"
     }
   ]`;
-var odontologia=` [
+var odontologia = ` [
     {
         "codigo": "K000",
         "descripcion": "ANODONCIA"
@@ -2075,24 +2075,42 @@ var odontologia=` [
     }
 ]
 `;
+
+
 function ordenarAsc(p_array_json, p_key) {
-    p_array_json.sort(function (a, b) {
-       return a[p_key] > b[p_key];
-    });
- }
+  p_array_json.sort(function (a, b) {
+    return a[p_key] > b[p_key];
+  });
+}
 function MostrarCie() {
-    var obj = JSON.parse(otorrino);
-    var oJSON = sortJSON(obj, 'descripcion', 'asc');    
-    var cadena=`<select name="diag" id="diag" onchange="NombreDiag()"  class="form-control form-control-sm" required>
+  var obj = JSON.parse(otorrino);
+  var oJSON = sortJSON(obj, 'descripcion', 'asc');
+  var cadena = `<select name="diag" id="diag" onchange="NombreDiag()"  class="form-control form-control-sm" required>
     <option value="">::Seleccione::</option> `;
-    oJSON.forEach(element => {
-        cadena+=`<option value="${element.codigo}">${element.descripcion}</option>`;
-    });
-    cadena+=`</select>`;
-    $('#cie').html(cadena);    
+  oJSON.forEach(element => {
+    cadena += `<option value="${element.codigo}">${element.descripcion}</option>`;
+  });
+  cadena += `</select>`;
+  $('#cie').html(cadena);
 }
 
 function NombreDiag() {
   $('#dg').val($('select[name="diag"] option:selected').text());
   $('#ndg').val($('#diag').val());
 }
+
+
+function combertir(ob) {
+  var obj = JSON.parse(ob);
+  array=[];
+  obj.forEach(element => {
+    array.push(`${element.codigo}::${element.descripcion}`);    
+  }); 
+  return array;
+}
+
+$(function () { 
+  $(".tags").autocomplete({
+    source:combertir(otorrino)
+  });
+});

@@ -3,6 +3,43 @@ const router = Router();
 var admin = require("firebase-admin");
 const db = admin.firestore();
 
+router.post('/ajaxitems2', (req, res) => {
+    const { id,entidad } = req.body;
+    db.collection('items').get()
+        .then((snapshot) => {
+            var valores = [];
+            snapshot.forEach((doc) => {
+                if (doc.data().cups == id && doc.data().entidad==entidad) {
+                    valores.push({
+                        id: doc.id,
+                        cups: doc.data().cups,
+                        valor: doc.data().valor,
+                        nombre: doc.data().nombre,
+                        entidad: doc.data().entidad,
+                        f_consulta:doc.data().f_consulta,
+                        c_externa: doc.data().c_externa,
+                        c_diagnostico:doc.data().c_diagnostico,
+                        c_diagnostico2: doc.data().c_diagnostico2,
+                        c_diagnostico3: doc.data().c_diagnostico3,
+                        t_diagnostico: doc.data().t_diagnostico,
+                        copago: doc.data().copago,
+                        ambito: doc.data().ambito,
+                        f_procedimiento: doc.data().f_procedimiento,
+                        atiende: doc.data().atiende,
+                        complicacion:doc.data().complicacion,
+                        a_quirurgico:doc.data().a_quirurgico,
+                        autorizacion:doc.data().autorizacion,
+                        tipo:doc.data().tipo
+                    });
+                }
+            });
+            res.send(valores);
+        })
+        .catch((err) => {
+            console.log('Error getting documents', err);
+            res.send({ 'valor': 'error' });
+        });
+});
 router.post('/ajaxitems', (req, res) => {
     const { id } = req.body;
     db.collection('items').get()

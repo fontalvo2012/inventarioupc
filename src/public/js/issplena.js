@@ -612,6 +612,48 @@ plena=`
 ]
 `;
 
+
+function combertirIss(ob) {
+    var obj = JSON.parse(ob);
+    array=[];
+    obj.forEach(element => {
+      array.push(`${element.cups}::${element.nombre}`);    
+    }); 
+    return array;
+  }
+  
+  $(function () { 
+    $(".completarcups").autocomplete({
+      source:combertirIss(plena)
+    });
+  });
+
+  function addcups() {      
+      var dato=$('#ord').html();
+      dato+=$('#ccups').val()+'\n\n';
+      $('#ord').html(dato);
+      $('#ccups').val('');
+  }
+
+  function consultarItem2() {
+    var id = $('#item').val(); 
+    var entidad=$('#entidad').val();
+    
+    $.ajax({
+      url: '/ajaxitems2',
+      type: 'POST',
+      datatype: 'json',
+      data: {
+        id: id.substr(0,6),
+        entidad:entidad
+      },
+      success: (data) => {
+        console.log(data[0]);
+        item = data[0];
+      }
+    });
+  }
+
 function recorrerIss() {
     var porcentaje =$('#porcentaje').val();
     var entidad = $('#entidad').val();
@@ -680,4 +722,34 @@ function borrarItem(id) {
             consultarTarifa();      
         }
       });
+}
+
+
+function completMedicamentos() {
+    $.ajax({
+    url: '/ajaxMedicamentos',
+    type: 'POST',
+    datatype: 'json',   
+    success: (data) => {
+        console.log(data);
+        var array=[];
+        data.forEach(element => {
+            array.push(element.medicamento);
+        });
+
+        $(".med").autocomplete({
+            source:combertirIss(array)
+          });
+    }
+  });
+}
+function AgregarMed() {
+    var contenido= $('#receta').val();
+    var fila=$('#cant').val()+' '+$('#medicamento').val()+'\n\t Prescripcion: '; 
+    if (contenido!='') {
+        fila='\n'+fila;
+    }      
+    $('#receta').val(contenido+fila.toUpperCase());
+    $('#cant').val('1');
+    $('#medicamento').val('')
 }

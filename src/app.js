@@ -48,6 +48,7 @@ app.use(require('./routes/miempresa'));
 app.use(require('./routes/facturacion'));
 app.use(require('./routes/login'));
 app.use(require('./routes/hclinicas'));
+app.use(require('./routes/medicamentos'));
 
 //static file
 app.use(express.static(path.join(__dirname,'public')));
