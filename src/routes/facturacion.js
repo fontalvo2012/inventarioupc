@@ -149,6 +149,96 @@ router.get('/prefactura',checkAuthentication,(req,res)=>{
    
 });
 
+router.get('/facturas',checkAuthentication,(req,res)=>{
+    var entidades=[];
+    db.collection("entidades").get()
+    .then((snapshot) => {       
+        snapshot.forEach((doc) => {
+            entidades.push(doc.data());         
+        });  
+        db.collection("facturas").get()
+        .then((snapshot) => {
+            var prefacturas=[];
+            snapshot.forEach((doc) => {
+                prefacturas.push({data:doc.data(),id:doc.id});                                
+            }); 
+                
+            res.render('facturacion/facturas',{prefacturas,entidades});
+        })      
+    }) 
+   
+});
+
+
+router.post('/facturas',checkAuthentication,(req,res)=>{
+    const { entidad, ini, fin } = req.body;
+    var entidades = [];
+    db.collection("entidades").get()
+        .then((snapshot) => {
+            snapshot.forEach((doc) => {
+                entidades.push(doc.data());
+            });
+            db.collection("facturas").where('eps.nit', '==', entidad).get()
+                .then((snapshot) => {
+                    var prefacturas = [];
+                    snapshot.forEach((doc) => {
+                        if (Betwen3(ini, fin, doc.data().pinicio)) {
+                            prefacturas.push({data:doc.data(),id:doc.id});
+                        }
+                    });
+                    console.log(prefacturas);
+                    res.render('facturacion/facturas', { prefacturas,entidades });
+                })
+        })
+
+});
+
+router.get('/imprimirfac/:id',checkAuthentication,(req,res)=>{    
+    const {id}=req.params;
+    var factura=[];
+    var empresa=[];
+    var dato=[];
+    db.collection('empresa').get()
+    .then((snapshot)=>{
+        snapshot.forEach(element => {
+            empresa.push(element.data());
+        });
+        
+        db.collection('facturas').doc(id).get()
+        .then((snapshot)=>{
+            factura.push(snapshot.data());
+            
+            dato.push({factura:factura[0],empresa:empresa[0]});
+            console.log(dato);
+            res.render('facturacion/imprimir',{dato})
+        })
+    })
+   
+})
+
+router.get('/imprimirprefac/:id',checkAuthentication,(req,res)=>{    
+    const {id}=req.params;
+    var factura=[];
+    var empresa=[];
+    var dato=[];
+    db.collection('empresa').get()
+    .then((snapshot)=>{
+        snapshot.forEach(element => {
+            empresa.push(element.data());
+        });
+        
+        db.collection('fac_orl').doc(id).get()
+        .then((snapshot)=>{
+            factura.push(snapshot.data());
+            
+            dato.push({factura:factura[0],empresa:empresa[0]});
+            console.log(dato);
+            res.render('facturacion/impprefactura',{dato})
+        })
+    })
+   
+})
+
 router.get('/fac_evento/:id',checkAuthentication,(req,res)=>{
     const {id}=req.params;
     var factura=[];
@@ -180,14 +270,9 @@ router.get('/fac_evento/:id',checkAuthentication,(req,res)=>{
                 })
                  
                })
-         });
-         
-         
-        
-    });  
-  
-   
-})
+         });  
+    }); 
+});
 
 
 router.post('/prefactura',checkAuthentication,(req,res)=>{
@@ -204,7 +289,7 @@ router.post('/prefactura',checkAuthentication,(req,res)=>{
                     snapshot.forEach((doc) => {
                         if (Betwen3(ini, fin, doc.data().pinicio)) {
                             if (doc.data().estado != 'facturado') {
-                                prefacturas.push({data:doc.data(),id:id});
+                                prefacturas.push({data:doc.data(),id:doc.id});
                             }
                         }
                     });
