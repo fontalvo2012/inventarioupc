@@ -88,63 +88,74 @@ router.post('/crearhc',checkAuthentication,(req,res)=>{
     var ccmedico=req.user.medico;
     var cups='';
     var nombrecups='';
+
     db.collection('citas').doc(id).get()
     .then((snapshot) => { 
-           facturar(snapshot.data());
+            var cita=snapshot.data();
+            var diagnos=dg.substr(0,4);  
+            var empresa=[];
            cups=snapshot.data().item.cups;     
-           nombrecups=snapshot.data().item.nombre;     
+           nombrecups=snapshot.data().item.nombre;
+
+        db.collection('empresa').get()
+            .then((snapshot) => {
+                snapshot.forEach(element => {
+                    empresa.push(element.data());
+                });
+                facturar(cita,diagnos,empresa[0]);
+                db.collection('medicos').where('cedula','==',ccmedico).get()
+                .then((snapshot) => { 
+                    snapshot.forEach(element => {
+                        med=element.data();
+                    });
+            
+                    db.collection('hclinica').get()
+                    .then((snapshot) => { 
+                        var cont=0; 
+                        var t ='HC';
+                        snapshot.forEach(element => {
+                            if (element.data().cedula==cedula) {
+                                cont++;
+                            }
+                        });
+                        if (cont > 0) {
+                            t='';
+                        }
+                        var num= snapshot.docs.length+1;      
+                        const consulta={ 
+                            codigo: 'HC-'+num,       
+                            cedula,
+                            nombres,
+                            id,
+                            cups,
+                            diagnostico:dg.substr(0,4),
+                            nombrecups,
+                            motivo,
+                            actual,
+                            antecedentes:antecedentesArray,
+                            fisico:fisicoArray,
+                            clinico,
+                            plan,
+                            impdiag:impDiagnostico,
+                            ordenes,
+                            terapeutico,
+                            medico:med,
+                            tipo:t,
+                            fecha:fechaActual(),
+                            pinicio:fechaActual(),
+                            pfinal:fechaActual(),
+                        }            
+                        let docRef = db.collection('hclinica').doc();    
+                        docRef.set(consulta);
+                        finalizarConsulta(id);
+                        res.redirect(`/verhc/${cedula}`);  
+                    });
+                    
+                }); 
+            });   
     });
     
-    db.collection('medicos').where('cedula','==',ccmedico).get()
-    .then((snapshot) => { 
-        snapshot.forEach(element => {
-            med=element.data();
-        });
-
-        db.collection('hclinica').get()
-        .then((snapshot) => { 
-            var cont=0; 
-            var t ='HC';
-            snapshot.forEach(element => {
-                if (element.data().cedula==cedula) {
-                    cont++;
-                }
-            });
-            if (cont > 0) {
-                t='';
-            }
-            var num= snapshot.docs.length+1;      
-            const consulta={ 
-                codigo: 'HC-'+num,       
-                cedula,
-                nombres,
-                id,
-                cups,
-                diagnostico:dg.substr(0,4),
-                nombrecups,
-                motivo,
-                actual,
-                antecedentes:antecedentesArray,
-                fisico:fisicoArray,
-                clinico,
-                plan,
-                impdiag:impDiagnostico,
-                ordenes,
-                terapeutico,
-                medico:med,
-                tipo:t,
-                fecha:fechaActual(),
-                pinicio:fechaActual(),
-                pfinal:fechaActual(),
-            }
-            // console.log(consulta);
-            let docRef = db.collection('hclinica').doc();    
-            docRef.set(consulta);
-            finalizarConsulta(id);
-            res.redirect(`/verhc/${cedula}`);  
-        });
-        
-    }); 
+ 
 });
 
 router.post('/colocarhc',checkAuthentication,(req,res)=>{
@@ -237,41 +248,34 @@ function fechaActual() {
     fecha = day + '/' + month + '/' + year ;
     return fecha;
 }
-function Vencimiento() {
-    vencimiento= new Date();
-    vencimiento.setDate(diaActual.getDate()+30); 
-    var day = vencimiento.getDate();
-    var month = vencimiento.getMonth() + 1;
-    var year = vencimiento.getFullYear();
-    if(parseInt(day)<10) day='0'+day;
-    if(parseInt(month)<10) month='0'+month;
-    vence = day + '/' + month + '/' + year ;
-    return vence;
-}
 
-function facturar(cita) {
-    var factura = {
-        razon: 'CARLOS PARRA BUSINESS MEDICAL CENTER SAS',
-        nit: '90098069-3',
-        habilitacion: '1300102937',
-        direccion: '',
-        telefonos: '6552095-3023513182',
-        email: 'gerencia@carlosparra.co',
-        prefijo: 'CP',
-        total:cita.item.valor,
-        vencimiento:'',
-        fecha:'',
-        estado:'pendiente',
-        pinicio:cita.fecha,
-        pfinal:cita.fecha,
-        consecutivo: '',
-        paciente: cita.paciente,
-        eps: cita.entidad,
-        item: cita.item
-      }
 
-      let docRef = db.collection('fac_orl').doc();    
-      docRef.set(factura);
+
+function facturar(cita,diag,empresa) {     
+         var factura = {
+            razon: empresa.rsocial,
+            nit: empresa.nit,
+            habilitacion: empresa.habilitacion,
+            direccion: empresa.direccion,
+            diag,
+            telefonos: empresa.telefono,
+            email: empresa.email,
+            prefijo: empresa.prefijo,
+            total:cita.item.valor,
+            vencimiento:'',
+            fecha:'',
+            estado:'pendiente',
+            pinicio:cita.fecha,
+            pfinal:cita.fecha,
+            consecutivo: '',
+            paciente: cita.paciente,
+            eps: cita.entidad,
+            item: cita.item
+          }
+          let docRef = db.collection('fac_orl').doc();    
+          docRef.set(factura);
+      
+   
 }
 
 router.get('/consultashclinicas',checkAuthentication,(req,res)=>{ 

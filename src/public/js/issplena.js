@@ -697,16 +697,36 @@ function consultarTarifa(){
             <th scope="row">${element.data.cups}</th>
             <td>${element.data.nombre}</td>
             <td>$ ${number_format(element.data.valor, 2)}</td>
-            <td><input type='number' id='d${element.data.cd}' class='form-control form-control-sm p-0' placeholder=" $ Dato"></td>
+            <td><input type='number' id='d${element.id}' class='form-control form-control-sm p-0' placeholder=" $ Dato"></td>
             <td>
-            <a href="#" class="btn btn-warning btn-sm" ><i class='fas fa-sync-alt' style='font-size:12px'></i></a>
-            <a href="#" class="btn btn-danger btn-sm" onclick="borrarItem(${element.id})" ><i class='far fa-trash-alt' style='font-size:12px'></i></a>
+            <a href="#" class="btn btn-warning btn-sm" onclick="ActualizarItem('${element.id}')" ><i class='fas fa-sync' style='font-size:12px'></i></a>
             </td>
         </tr>`;
         });
         $('#vertarifas').html(cadena);      
     }
     });
+}
+
+function ActualizarItem(id) {
+    var valor=$(`#d${id}`).val();   
+   if (valor != '') {
+     $.ajax({
+        url: '/actualizaritem',
+        type: 'POST',
+        datatype: 'json',
+        data:{
+            id:id,
+            valor:valor
+        },
+        success: (data) => {
+            console.log(data);
+            consultarTarifa();      
+        }
+      });
+   }else{
+       alert('Debe colocar un valor en el campo');
+   }
 }
 
 function borrarItem(id) {

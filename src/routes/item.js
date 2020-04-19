@@ -229,5 +229,20 @@ router.post('/borraritem/:id',(req,res)=>{
     });
 });
 
+router.post('/actualizaritem',(req,res)=>{
+    const { id,valor } = req.body;
+    var washingtonRef = db.collection("items").doc(id);
+    return washingtonRef.update({       
+        valor: valor
+    })
+    .then(function () {
+        res.send('Actualizado Correctamente');
+    })
+    .catch(function (error) {
+        res.redirect('Error en Actualizar');
+    });
+
+});
+
 
 module.exports = router;
