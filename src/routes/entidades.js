@@ -78,6 +78,8 @@ router.post('/addentidades',checkAuthentication,(req,res)=>{
         telefono:telefono,
         regimen:regimen,
         beneficio:'',
+        tipofac:'',
+        capita:0,
         poliza:'',
         copago:'0',
         comision:'0',

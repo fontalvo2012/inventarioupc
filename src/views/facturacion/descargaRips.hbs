@@ -9,24 +9,22 @@
               <div class="row">
                 <table class="table">
                     <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Rips</th>
-                            <th scope="col">contenido</th>
-                            <th scope="col">Periodo Inicial</th>
-                            <th scope="col">Periodo perido final</th>
+                        <tr>                          
+                            <th scope="col">Rips</th>                      
                             <th scope="col">Accion</th>
                         </tr>
                     </thead>
                     <tbody> 
                          {{#each valores}}
                         <tr>
-                            <th scope="row">{{consecutivo}}</th>
-                            <td>{{rip}}{{nombre}}</td>                            
-                            <td>#{{cantidad}}</td>                            
-                            <td><b>{{perdido_init}}</b></td>                            
-                            <td><b>{{perdido_fin}}</b></td>                            
-                            <td><a href="/descarga/{{rip}}{{nombre}}" class="btn btn-success btn-sm">Descargar</a></td>
+                            <th scope="row">Rips: {{consecutivo}}</th>                                                  
+                            <td>
+                                <a href="/descarga/{{consecutivo}}/AC" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> Descargar AC</a>
+                                <a href="/descarga/{{consecutivo}}/AF" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> Descargar AF</a>
+                                <a href="/descarga/{{consecutivo}}/CT" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> Descargar CT</a>
+                                <a href="/descarga/{{consecutivo}}/US" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> Descargar US</a>
+                                <a href="/descarga/{{consecutivo}}/AP" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> Descargar AP</a>
+                            </td>
                         </tr>
                          {{/each}}
                     </tbody>

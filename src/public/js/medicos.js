@@ -350,8 +350,9 @@ function crearCitas(hora) {
             data: {
                 cita: c
             },
-            success: (data) => {           
+            success: (data) => {                         
                 citasUsadas($('#medico').val());
+                location.href = "/citas";  
                 $('#cc').val('');
                 $('#nombres').val('');
                 $('#entidad').val('');

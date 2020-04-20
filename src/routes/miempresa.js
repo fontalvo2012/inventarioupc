@@ -31,7 +31,12 @@ router.get('/rips', (req, res) => {
             });
             const c = conseRit(valores[0].consecutivo);
             valores[0].nombre = c + ".txt"
-            res.render('facturacion/rips', { valores });
+            var datos=[{
+                consecutivo:valores[0].consecutivo,
+                nombre:conseRit(valores[0].consecutivo)
+            }];
+            console.log(datos);
+            res.render('facturacion/rips', { datos });
         })
         .catch((err) => {
             console.log('Error getting documents', err);
@@ -40,12 +45,86 @@ router.get('/rips', (req, res) => {
 
 });
 
+// router.post('/rips', async(req, res) => {
+//     const { nombre, consecutivo, finicio, ffinal } = req.body;
+//     const c = parseInt(consecutivo) + 1;
+//     await CrearAF('0001', c, finicio, ffinal);
+  
+//     res.redirect('/descargaRips');
+// });
+
 router.post('/rips', async(req, res) => {
     const { nombre, consecutivo, finicio, ffinal } = req.body;
     const c = parseInt(consecutivo) + 1;
-    await CrearAF(nombre, c, finicio, ffinal);
-  
-    res.redirect('/descargaRips');
+    var f = new Date();
+    fechaA = f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear();
+    var valores = [];
+    db.collection('facturas').get()
+        .then((snapshot) => {
+            
+            var usuarios=[];
+            var cantAF = 0;
+            var cantAC = 0;
+            var cantAP = 0;
+            var cantUs = 0;
+            snapshot.forEach((doc) => {   
+                if (Betwen(finicio, ffinal, doc.data().fecha)) {
+                    cantAF++;                  
+                    usuarios.push(doc.data().paciente);
+                    valores.push(doc.data());
+                    fs.appendFile(`file/AF${nombre}.txt`, `${doc.data().habilitacion},${doc.data().razon},NI,${doc.data().nit},CP${doc.data().consecutivo},${doc.data().fecha},${doc.data().pinicio},${doc.data().pfinal},${doc.data().eps.cdeps},${doc.data().eps.rsocial},${doc.data().eps.contrato},${doc.data().eps.beneficio},${doc.data().eps.poliza},${doc.data().eps.copago},${doc.data().eps.comision},${doc.data().eps.descuento},${doc.data().total}\n`, (error) => {
+                        if (error) {
+                            throw error;
+                        }
+                    });
+                    if (doc.data().item.tipo=='p') {
+                        cantAP++;
+                    fs.appendFile(`file/AP${nombre}.txt`, `${doc.data().prefijo}${doc.data().consecutivo},${doc.data().habilitacion},${doc.data().paciente.td},${doc.data().paciente.cedula},${doc.data().pinicio},${doc.data().item.autorizacion},${doc.data().item.cups},${doc.data().item.ambito},${doc.data().item.f_procedimiento},${doc.data().item.atiende},${doc.data().item.c_diagnostico},${doc.data().item.c_diagnostico2},${doc.data().item.complicacion},1,${doc.data().item.valor}\n`, (error) => {
+                        if (error) {
+                            throw error;
+                        }
+                    }); 
+                    }
+                    if (doc.data().item.tipo=='c') {
+                        cantAC++;
+                        fs.appendFile(`file/AC${nombre}.txt`,`${doc.data().prefijo}${doc.data().consecutivo},${doc.data().habilitacion},${doc.data().paciente.td},${doc.data().paciente.cedula},${doc.data().pinicio},${doc.data().item.autorizacion},${doc.data().item.cups},${doc.data().item.f_consulta},${doc.data().item.c_externa},${doc.data().item.c_diagnostico},${doc.data().item.c_diagnostico2},${doc.data().item.c_diagnostico2},${doc.data().item.c_diagnostico3},1,${doc.data().item.valor},${doc.data().item.copago},${parseInt(doc.data().item.copago) + parseInt(doc.data().item.valor)}\n`, (error) => {
+                            if (error) {
+                                throw error;
+                            }
+                        });     
+                    }
+                              
+                    
+                 
+                } else {
+                    console.log('No se encuentra dentro del periodo');
+                }
+            });
+            var US = removeDuplicates(valores);                   
+            US.forEach(element => {
+                cantUs++;
+                fs.appendFile(`file/US${nombre}.txt`, `${element.paciente.td},${element.paciente.cedula},${element.eps.cdeps},${element.eps.regimen},${element.paciente.apellido},${element.paciente.sapellido},${element.paciente.nombre},${element.paciente.snombre},${element.paciente.edad},${element.paciente.unidad},${element.paciente.sexo},${element.paciente.cddep},${element.paciente.cdM},${element.paciente.zresidencial}\n`, (error) => {
+                    if (error) {
+                        throw error;
+                    } else {
+
+                    }
+                });
+            });
+
+            res.redirect('/descargaRips');
+            fs.appendFile(`file/CT${nombre}.txt`, `${valores[0].habilitacion},${fechaA},AF${nombre},${cantAF}\n`, (error) => {});
+            fs.appendFile(`file/CT${nombre}.txt`, `${valores[0].habilitacion},${fechaA},AP${nombre},${cantAP}\n`, (error) => {});
+            fs.appendFile(`file/CT${nombre}.txt`, `${valores[0].habilitacion},${fechaA},AC${nombre},${cantAC}\n`, (error) => {});
+            fs.appendFile(`file/CT${nombre}.txt`, `${valores[0].habilitacion},${fechaA},US${nombre},${cantUs}\n`, (error) => {});
+
+            let docRef = db.collection('rips').doc();
+            let setAda = docRef.set({consecutivo:c})
+                .then(function () {
+                    console.log('Ingresado')
+                })
+        })
+   
 });
 
 router.get('/ct/:consecutivo/:nombre',(req,res)=>{
@@ -77,9 +156,11 @@ router.get('/descargaRips', (req, res) => {
 
 });
 
-router.get('/descarga/:nombre', (req, res) => {
-    const { nombre } = req.params;
-    res.download(`file/${nombre}`);
+router.get('/descarga/:consec/:nombre', (req, res) => {
+    const { nombre,consec } = req.params;
+    var file=nombre+conseRit(consec-1)+'.txt';
+    console.log(file)    
+    res.download(`file/${file}`);
 });
 
 function CrearCT(nombre, consecutivo) {
@@ -125,26 +206,28 @@ function CrearAF(nombre, consecutivo, f1, f2) {
                             throw error;
                         }
                     });
+                    fs.appendFile(`file/AP${nombre}`, `CP${doc.data().consecutivo},${doc.data().habilitacion},${doc.data().paciente.td},${doc.data().paciente.cedula},${doc.data().pinicio},${doc.data().items[0].autorizacion},${doc.data().items[0].cups},${doc.data().items[0].ambito},${doc.data().items[0].f_procedimiento},${doc.data().items[0].atiende},${doc.data().items[0].c_diagnostico},${doc.data().items[0].c_diagnostico2},${doc.data().items[0].complicacion},1,${doc.data().items[0].valor}\n`, (error) => {
+                        if (error) {
+                            throw error;
+                        }
+                    });    
                 } else {
                     console.log('No se encuentra dentro del periodo');
                 }
             });
 
-            if (valores[0]) {
-                console.log('Creado AF')
-                var rips = { consecutivo: consecutivo, perdido_init: f1, perdido_fin: f2, cantidad: cant, nombre: nombre, rip: 'AF', fecha: fechaA, habilitacion: valores[0].habilitacion };
-                IngresarRips(rips);
-                CrearAC(nombre, consecutivo, f1, f2);
-            } else {
-                var rips = { consecutivo: parseInt(consecutivo), perdido_init: f1, perdido_fin: f2, cantidad: 0, nombre: 'ror.txt', rip: 'er', fecha: fechaA };
-                IngresarRips(rips);
-            }
+            // if (valores[0]) {
+            //     console.log('Creado AF')
+            //     var rips = { consecutivo: consecutivo, perdido_init: f1, perdido_fin: f2, cantidad: cant, nombre: nombre, rip: 'AF', fecha: fechaA, habilitacion: valores[0].habilitacion };
+            //     IngresarRips(rips);
+            //     CrearAC(nombre, consecutivo, f1, f2);
+            // } else {
+            //     var rips = { consecutivo: parseInt(consecutivo), perdido_init: f1, perdido_fin: f2, cantidad: 0, nombre: 'ror.txt', rip: 'er', fecha: fechaA };
+            //     IngresarRips(rips);
+            // }
 
         })
-        .catch((err) => {
-            console.log('Error getting documents', err);
-
-        });
+     
 }
 
 router.get('/p', (req, res) => {
@@ -277,10 +360,7 @@ function CrearUs(nombre, consecutivo, f1, f2) {
             }
 
         })
-        .catch((err) => {
-            console.log('Error getting documents', err);
-
-        });
+      
 }
 
 
@@ -301,6 +381,19 @@ function removeDuplicates(arrayIn) {
     arrayIn.forEach(item => {
         try {
             if (JSON.stringify(arrayOut[arrayOut.length - 1].paciente.cedula) !== JSON.stringify(item.paciente.cedula)) {
+                arrayOut.push(item);
+            }
+        } catch (err) {
+            arrayOut.push(item);
+        }
+    })
+    return arrayOut;
+}
+function removeDuplicates2(arrayIn) {
+    var arrayOut = [];
+    arrayIn.forEach(item => {
+        try {
+            if (JSON.stringify(arrayOut[arrayOut.length - 1].cedula) !== JSON.stringify(item.cedula)) {
                 arrayOut.push(item);
             }
         } catch (err) {
