@@ -1,0 +1,30 @@
+<div class="row m-4">
+    <div class="col-sm-10"></div>
+    <div class="col-sm-2">
+        <a href="#" class="btn btn-primary btn-sm" onclick="ImprimirHc()"><i class="fas fa-print"
+                style="font-size: 20px;"></i></a>
+        <a href="/facturas" class="btn btn-warning btn-sm"><i class="fas fa-reply" style="font-size: 20px;"></i></a>
+    </div>
+</div>
+<div class="container m-5 " id='imp'>
+    {{#each dato}}
+    <h4>Anexo de factura .:: {{factura.prefijo}} {{factura.consecutivo}} ::.</h4>
+    <div class="row ml-3 mr-2">
+        <div class="col-sm-1 border"><b>CEDULA</b></div>
+        <div class="col-sm-2 border"><b>PACIENTE</b></div>
+        <div class="col-sm-1 border"><b>CUPS</b></div>
+        <div class="col-sm-7 border"><b>EXAMEN</b></div>
+        <div class="col-sm-1 border"><b>VALOR</b></div>    
+    </div>
+    {{/each}}
+    {{#each anexo}}
+    <div class="row small ml-3 mr-2">
+        <div class="col-sm-1 border">{{paciente.cedula}}</div>
+        <div class="col-sm-2 border">{{paciente.nombre}} {{paciente.snombre}} {{paciente.apellido}} {{paciente.sapellido}}</div>
+        <div class="col-sm-1 border">{{item.cups}}</div>
+        <div class="col-sm-7 border">{{item.nombre}}</div>
+        <div class="col-sm-1 border">{{item.valor}}</div>
+    </div>
+{{/each}}
+</div>
+

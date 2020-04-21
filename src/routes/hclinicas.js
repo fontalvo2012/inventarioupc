@@ -268,6 +268,7 @@ function facturar(cita,diag,empresa) {
             pinicio:cita.fecha,
             pfinal:cita.fecha,
             consecutivo: '',
+            anexo:[],
             paciente: cita.paciente,
             eps: cita.entidad,
             item: cita.item

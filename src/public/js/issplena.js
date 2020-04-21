@@ -745,6 +745,47 @@ function borrarItem(id) {
 }
 
 
+function all_usuario() {
+    var ini=$('#ini').val();
+    var fin=$('#fin').val();
+    var eps=$('#entidad').val();
+    $.ajax({
+    url: '/allusuario',
+    type: 'POST',
+    datatype: 'json',
+    data:{
+        ini:ini,
+        fin:fin,
+        eps,eps
+    },
+    success: (data) => {
+        console.log(data); 
+        $('#alert').html(` <div class="alert alert-success" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> ${data} </div>`);    
+    }
+  });
+}
+
+function capita() {
+    var ini=$('#ini').val();
+    var fin=$('#fin').val();
+    var eps=$('#entidad').val();
+    $.ajax({
+    url: '/capita',
+    type: 'POST',
+    datatype: 'json',
+    data:{
+        ini:ini,
+        fin:fin,
+        eps,eps
+    },
+    success: (data) => {
+        console.log(data); 
+        $('#alert').html(` <div class="alert alert-success" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> ${data} </div>`);    
+    }
+  });
+}
+
+
 function completMedicamentos() {
     $.ajax({
     url: '/ajaxMedicamentos',

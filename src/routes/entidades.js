@@ -65,7 +65,7 @@ router.get('/addentidades',checkAuthentication,(req,res)=>{
 });
 
 router.post('/addentidades',checkAuthentication,(req,res)=>{
-    const {nit,rsocial,email,direccion,telefono,regimen,tipoid,cdeps,contrato} = req.body;
+    const {nit,rsocial,email,direccion,telefono,regimen,tipoid,cdeps,contrato,vcap,tfac} = req.body;
     let docRef = db.collection('entidades').doc();
     let setAda = docRef.set({
         tipoid:tipoid,
@@ -78,8 +78,8 @@ router.post('/addentidades',checkAuthentication,(req,res)=>{
         telefono:telefono,
         regimen:regimen,
         beneficio:'',
-        tipofac:'',
-        capita:0,
+        tipofac:tfac,
+        capita:vcap,
         poliza:'',
         copago:'0',
         comision:'0',
@@ -88,7 +88,6 @@ router.post('/addentidades',checkAuthentication,(req,res)=>{
     });
     res.redirect('/addentidades');
 });
-
 router.get('/delentidad/:id',checkAuthentication,(req,res)=>{
     const {id}= req.params;
    

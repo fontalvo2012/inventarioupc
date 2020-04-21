@@ -1,38 +1,45 @@
 {{#each datos}}
-<div class="card m-5" style="width: 55%;">
+<div class="card m-5" style="width: 70%;">
     <div class="card-header">
         <h4 class="card-title">Creacion de Rips</h4>
     </div>
     <div class="card-body">
         <form action="/rips" method="POST">
-        <input type="hidden" value="{{nombre}}" name="nombre" id="nombre">
-        <input type="hidden" value="{{consecutivo}}" name="consecutivo" id="consecutivo">
+            <input type="hidden" value="{{nombre}}" name="nombre" id="nombre">
+            <input type="hidden" value="{{consecutivo}}" name="consecutivo" id="consecutivo">
+{{/each}}
             <div class="row">
-                <div class="col-sm-4">
+                <div class="col-sm-3">
+                     <span class="small"><b>Inicio</b></span>
+                    <select name="entidad" id="entidad" class="form-control form-control-sm">
+                        <option value="">.::Seleccionar::.</option>
+                        {{#each entidad}}
+                        <option value="{{nit}}">{{rsocial}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div class="col-sm-3">
                     <div class="form-group">
                         <span class="small"><b>Inicio</b></span>
-                        <input type="date" class="form-control form-control-sm" id="finicio"
-                            name="finicio">
+                        <input type="date" class="form-control form-control-sm" id="finicio" name="finicio">
                     </div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <div class="form-group">
                         <span class="small"><b>Final</b></span>
-                        <input type="date" class="form-control form-control-sm"  id="ffinal"
-                            name="ffinal">
+                        <input type="date" class="form-control form-control-sm" id="ffinal" name="ffinal">
                     </div>
                 </div>
-                  <div class="col-sm-3 pl-0 mr-0">
-                      <span class="small"><b>..</b></span>
-                    <div class="form-group mr-0">                        
-                         <button class="btn btn-success btn-sm btn-block">Generar</button>
+                <div class="col-sm-3 pl-0 mr-0">
+                    <span class="small"><b>..</b></span>
+                    <div class="form-group mr-0">
+                        <button class="btn btn-success btn-sm btn-block">Generar</button>
                     </div>
-                </div>              
-             
+                </div>
+
             </div>
-          
-            
+
+
         </form>
     </div>
 </div>
-{{/each}}
