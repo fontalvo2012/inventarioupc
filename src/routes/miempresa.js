@@ -108,9 +108,7 @@ router.post('/rips', async(req, res) => {
 
                     }
                 });
-            });
-
-            
+            });            
             fs.appendFile(`file/CT${nombre}.txt`, `${valores[0].habilitacion},${fechaA},AF${nombre},${cantAF}\n`, (error) => {});
             fs.appendFile(`file/CT${nombre}.txt`, `${valores[0].habilitacion},${fechaA},AP${nombre},${cantAP}\n`, (error) => {});
             fs.appendFile(`file/CT${nombre}.txt`, `${valores[0].habilitacion},${fechaA},AC${nombre},${cantAC}\n`, (error) => {});
@@ -126,6 +124,96 @@ router.post('/rips', async(req, res) => {
         })
    
 });
+// RIPS EVENTOS
+router.post('/ripseventos', async(req, res) => {
+    const { nombre, consecutivo, finicio, ffinal,entidad } = req.body;
+    const c = parseInt(consecutivo) + 1;
+    var f = new Date();
+    var factura='';
+    fechaA = f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear();
+    var valores = [];
+    var anexo=[];
+    var x=0;
+    db.collection('facturas').get()
+        .then((snapshot) => {            
+            var usuarios=[];
+            var cantAF = 0;
+            var cantAC = 0;
+            var cantAP = 0;
+            var cantUs = 0;
+            snapshot.forEach((doc) => {  
+                // console.log(doc.data());
+                if (doc.data().eps.nit == entidad) {
+                    if (Betwen(finicio, ffinal, doc.data().fecha)) {
+                        anexo=doc.data().anexo;
+                        cantAF++; 
+                        factura = doc.data().consecutivo; 
+                        valores.push(doc.data());
+                       
+                        fs.appendFile(`file/AF${nombre}.txt`, `${doc.data().habilitacion},${doc.data().razon},NI,${doc.data().nit},CP${doc.data().consecutivo},${doc.data().fecha},${doc.data().pinicio},${doc.data().pfinal},${doc.data().eps.cdeps},${doc.data().eps.rsocial},${doc.data().eps.contrato},${doc.data().eps.beneficio},${doc.data().eps.poliza},${doc.data().eps.copago},${doc.data().eps.comision},${doc.data().eps.descuento},${doc.data().total}\n`, (error) => {
+                            if (error) {
+                                throw error;
+                            }
+                        });
+                    } else {
+                        console.log('No se encuentra dentro del periodo');
+                    }
+                } 
+               
+            });
+           
+            anexo.forEach(element => {
+                if (element.item.tipo=='p') {
+                    cantAP++;
+                   fs.appendFile(`file/AP${nombre}.txt`, `${valores[0].prefijo}${valores[0].consecutivo},${valores[0].habilitacion},${element.paciente.td},${element.paciente.cedula},${valores[0].pinicio},${element.item.autorizacion},${element.item.cups},${element.item.ambito},${element.item.f_procedimiento},${element.item.atiende},${element.item.c_diagnostico},${element.item.c_diagnostico2},${element.item.complicacion},1,${element.item.valor}\n`, (error) => {
+                    if (error) {
+                        throw error;
+                    }
+                }); 
+                }
+                if (element.item.tipo=='c') {
+                    cantAC++;
+                    fs.appendFile(`file/AC${nombre}.txt`,`${valores[0].prefijo}${valores[0].consecutivo},${valores[0].habilitacion},${element.paciente.td},${element.paciente.cedula},${valores[0].pinicio},${element.item.autorizacion},${element.item.cups},${element.item.ambito},${element.item.f_procedimiento},${element.item.atiende},${element.item.c_diagnostico},${element.item.c_diagnostico2},${element.item.complicacion},1,${element.item.valor}\n`, (error) => {
+                        if (error) {
+                            throw error;
+                        }
+                    });     
+                }  
+            });
+            
+           if (valores[0]) {
+               anexo.forEach(element => {
+                   usuarios.push(element.paciente);
+               });
+            //    console.log(usuarios);
+            var US = unicopaciente(usuarios);                   
+            US.forEach(element => {
+                cantUs++;
+                fs.appendFile(`file/US${nombre}.txt`, `${element.td},${element.cedula},${valores[0].eps.cdeps},${valores[0].eps.regimen},${element.apellido},${element.sapellido},${element.nombre},${element.snombre},${element.edad},${element.unidad},${element.sexo},${element.cddep},${element.cdM},${element.zresidencial}\n`, (error) => {
+                    if (error) {
+                        throw error;
+                    } else {
+
+                    }
+                });
+            });            
+            fs.appendFile(`file/CT${nombre}.txt`, `${valores[0].habilitacion},${fechaA},AF${nombre},${cantAF}\n`, (error) => {});
+            fs.appendFile(`file/CT${nombre}.txt`, `${valores[0].habilitacion},${fechaA},AP${nombre},${cantAP}\n`, (error) => {});
+            fs.appendFile(`file/CT${nombre}.txt`, `${valores[0].habilitacion},${fechaA},AC${nombre},${cantAC}\n`, (error) => {});
+            fs.appendFile(`file/CT${nombre}.txt`, `${valores[0].habilitacion},${fechaA},US${nombre},${cantUs}\n`, (error) => {});
+
+            let docRef = db.collection('rips').doc();
+            docRef.set({consecutivo:c,entidad:entidad})
+                .then(function () {
+                    console.log('Ingresado')
+                })
+           }
+           res.send(valores);
+        })
+   
+});
+
+// RIPS EVENTOS FIN
 
 router.get('/ct/:consecutivo/:nombre',(req,res)=>{
     const {consecutivo,nombre}=req.params;
@@ -133,15 +221,10 @@ router.get('/ct/:consecutivo/:nombre',(req,res)=>{
      res.redirect('/rips');
 });
 
-router.get('/initrips', (req, res) => {
-    var rips = { consecutivo: 0, perdido_init: '2020-01-01', perdido_fin: '2020-01-30', cantidad: 0, nombre: 'none', rip: 'In' };
-    IngresarRips(rips);
-    res.render('index');
-});
 
-router.get('/descargaRips', (req, res) => {
-    db.collection("rips")
-        .orderBy("consecutivo", "desc").limit(8).get()
+router.get('/descargaRips', (req, res) => {  
+
+    db.collection("entidades").get()
         .then((snapshot) => {
             var valores = [];
             snapshot.forEach((doc) => {
@@ -149,10 +232,23 @@ router.get('/descargaRips', (req, res) => {
             });
             res.render('facturacion/descargaRips', { valores });
         })
-        .catch((err) => {
-            console.log('Error getting documents', err);
-            res.render('facturacion/descargaRips');
-        });
+
+});
+
+router.post('/descargaRips', (req, res) => { 
+    const{entidad}=req.body;
+    db.collection("rips")
+        .orderBy("consecutivo", "desc").limit(8).get()
+        .then((snapshot) => {
+            var valores = [];
+            snapshot.forEach((doc) => {
+                if(doc.data().entidad==entidad){
+                    valores.push(doc.data());
+                }
+               
+            });
+            res.send(valores);
+        })
 
 });
 
@@ -163,205 +259,7 @@ router.get('/descarga/:consec/:nombre', (req, res) => {
     res.download(`file/${file}`);
 });
 
-function CrearCT(nombre, consecutivo) {
-    var f = new Date();
-    fechaA = f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear();
-    db.collection('rips').where('consecutivo', '==', parseInt(consecutivo)).get()
-        .then((snapshot) => {
-            var valores = [];
-            var cant = 0;
-            snapshot.forEach((doc) => {
-                cant++;
-                console.log('se encuentra dentro del periodo');
-                valores.push(doc.data());
-                fs.appendFile(`file/CT${nombre}`, `${doc.data().habilitacion},${fechaA},${doc.data().rip}${doc.data().nombre.substr(0,6)},${doc.data().cantidad}\n`, (error) => {
-                    if (error) {
-                        throw error;
-                    }
-                });
 
-            });
-            var rips = { consecutivo: consecutivo, perdido_init: '', perdido_fin: '', cantidad: 4, nombre: nombre, rip: 'CT', fecha: '', habilitacion:''};
-            IngresarRips(rips);
-        })
-        .catch((err) => {
-            console.log('Error getting documents', err);
-
-        });
-}
-function CrearAF(nombre, consecutivo, f1, f2) {
-    var f = new Date();
-    fechaA = f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear();
-    db.collection('facturas').get()
-        .then((snapshot) => {
-            var valores = [];
-            var cant = 0;
-            snapshot.forEach((doc) => {   
-                if (Betwen(f1, f2, doc.data().fecha)) {
-                    cant++;
-                    console.log('se encuentra dentro del periodo');
-                    valores.push(doc.data());
-                    fs.appendFile(`file/AF${nombre}`, `${doc.data().habilitacion},${doc.data().razon},NI,${doc.data().nit},CP${doc.data().consecutivo},${doc.data().fecha},${doc.data().pinicio},${doc.data().pfinal},${doc.data().eps.cdeps},${doc.data().eps.rsocial},${doc.data().eps.contrato},${doc.data().eps.beneficio},${doc.data().eps.poliza},${doc.data().eps.copago},${doc.data().eps.comision},${doc.data().eps.descuento},${doc.data().total}\n`, (error) => {
-                        if (error) {
-                            throw error;
-                        }
-                    });
-                    fs.appendFile(`file/AP${nombre}`, `CP${doc.data().consecutivo},${doc.data().habilitacion},${doc.data().paciente.td},${doc.data().paciente.cedula},${doc.data().pinicio},${doc.data().items[0].autorizacion},${doc.data().items[0].cups},${doc.data().items[0].ambito},${doc.data().items[0].f_procedimiento},${doc.data().items[0].atiende},${doc.data().items[0].c_diagnostico},${doc.data().items[0].c_diagnostico2},${doc.data().items[0].complicacion},1,${doc.data().items[0].valor}\n`, (error) => {
-                        if (error) {
-                            throw error;
-                        }
-                    });    
-                } else {
-                    console.log('No se encuentra dentro del periodo');
-                }
-            });        
-
-        })
-     
-}
-
-
-function CrearAP(nombre, consecutivo, f1, f2) {
-    var f = new Date();
-    fechaA = f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear();
-    db.collection('facturas').get()
-        .then((snapshot) => {
-            var valores = [];
-            var cant = 0;
-            var c = "";
-            snapshot.forEach((doc) => {                
-                if (Betwen(f1, f2, doc.data().fecha)) {
-                    console.log('se encuentra dentro del periodo');
-                    valores.push(doc.data());
-                    if(doc.data().items[0].tipo =='p'){
-                        cant++;
-                        fs.appendFile(`file/AP${nombre}`, `CP${doc.data().consecutivo},${doc.data().habilitacion},${doc.data().paciente.td},${doc.data().paciente.cedula},${doc.data().pinicio},${doc.data().items[0].autorizacion},${doc.data().items[0].cups},${doc.data().items[0].ambito},${doc.data().items[0].f_procedimiento},${doc.data().items[0].atiende},${doc.data().items[0].c_diagnostico},${doc.data().items[0].c_diagnostico2},${doc.data().items[0].complicacion},1,${doc.data().items[0].valor}\n`, (error) => {
-                            if (error) {
-                                throw error;
-                            }
-                        });    
-                    }else{
-                        console.log(doc.data());
-                    }
-                    
-                } else {
-                    console.log('No se encuentra dentro del periodo');
-                }
-            });
-
-            if (valores[0]) {
-                console.log('Creado AP')
-                var rips = { consecutivo: consecutivo, perdido_init: f1, perdido_fin: f2, cantidad: cant, nombre: nombre, rip: 'AP', fecha: fechaA, habilitacion: valores[0].habilitacion };
-                IngresarRips(rips);
-                CrearUs(nombre, consecutivo, f1, f2);
-            } else {
-                var rips = { consecutivo: parseInt(consecutivo), perdido_init: f1, perdido_fin: f2, cantidad: 0, nombre: 'ror.txt', rip: 'er', fecha: fechaA };
-                IngresarRips(rips);
-            }
-
-        })
-        .catch((err) => {
-            console.log('Error getting documents', err);
-
-        });
-}
-function CrearAC(nombre, consecutivo, f1, f2) {
-    var f = new Date();
-    fechaA = f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear();
-    db.collection('facturas').get()
-        .then((snapshot) => {
-            var valores = [];
-            var cant = 0;
-            var c = "";
-            snapshot.forEach((doc) => {               
-                if (Betwen(f1, f2, doc.data().fecha)) {
-                    console.log('se encuentra dentro del periodo');
-                    valores.push(doc.data());
-                    if(doc.data().items[0].tipo =='c'){
-                        cant++;
-                        fs.appendFile(`file/AC${nombre}`,`CP${doc.data().consecutivo},${doc.data().habilitacion},${doc.data().paciente.td},${doc.data().paciente.cedula},${doc.data().pinicio},${doc.data().items[0].autorizacion},${doc.data().items[0].cups},${doc.data().items[0].f_consulta},${doc.data().items[0].c_externa},${doc.data().items[0].c_diagnostico},${doc.data().items[0].c_diagnostico2},${doc.data().items[0].c_diagnostico2},${doc.data().items[0].c_diagnostico3},1,${doc.data().items[0].valor},${doc.data().items[0].copago},${parseInt(doc.data().items[0].copago) + parseInt(doc.data().items[0].valor)}\n`, (error) => {
-                            if (error) {
-                                throw error;
-                            }
-                        });
-                    }else{
-                        console.log(doc.data())
-                    }
-                } else {
-                    console.log('No se encuentra dentro del periodo');
-                }
-            });
-
-            if (valores[0]) {
-                console.log('Creado AC')
-                var rips = { consecutivo: consecutivo, perdido_init: f1, perdido_fin: f2, cantidad: cant, nombre: nombre, rip: 'AC', fecha: fechaA, habilitacion: valores[0].habilitacion };
-                IngresarRips(rips);
-                CrearAP(nombre, consecutivo, f1, f2);
-
-            } else {
-                var rips = { consecutivo: parseInt(consecutivo), perdido_init: f1, perdido_fin: f2, cantidad: 0, nombre: 'ror.txt', rip: 'er', fecha: fechaA };
-                IngresarRips(rips);
-            }
-
-        })
-        .catch((err) => {
-            console.log('Error getting documents', err);
-
-        });
-}
-
-function CrearUs(nombre, consecutivo, f1, f2) {
-    var f = new Date();
-    fechaA = f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear();
-    db.collection('facturas').get()
-        .then((snapshot) => {
-            var valores = [];
-            var cant = 0;
-            snapshot.forEach((doc) => {
-                if (Betwen(f1, f2, doc.data().fecha)) {
-                    console.log('Se encuentra en el rango');
-                    valores.push(doc.data());
-                } else {
-                    console.log('No se encuentra dentro del periodo');
-                }
-
-            });
-            if (valores[0]) {
-                var US = removeDuplicates(valores);
-                US.forEach(element => {
-                    cant++;
-                    fs.appendFile(`file/US${nombre}`, `${element.paciente.td},${element.paciente.cedula},${element.eps.cdeps},${element.eps.regimen},${element.paciente.apellido},${element.paciente.sapellido},${element.paciente.nombre},${element.paciente.snombre},${element.paciente.edad},${element.paciente.unidad},${element.paciente.sexo},${element.paciente.cddep},${element.paciente.cdM},${element.paciente.zresidencial}\n`, (error) => {
-                        if (error) {
-                            throw error;
-                        } else {
-
-                        }
-                    });
-                });
-
-                var rips = { consecutivo: consecutivo, perdido_init: f1, perdido_fin: f2, cantidad: cant, nombre: nombre, rip: 'US', fecha: fechaA, habilitacion: US[0].habilitacion };
-                IngresarRips(rips);
-                CrearCT(nombre, consecutivo);
-
-            }
-
-        })
-      
-}
-
-
-
-function IngresarRips(rip) {
-    let docRef = db.collection('rips').doc();
-    let setAda = docRef.set(rip)
-        .then(function () {
-            console.log('Ingresado')
-        })
-        .catch(function (error) {
-            console.log('error');
-        });
-
-}
 function removeDuplicates(arrayIn) {
     var arrayOut = [];
     arrayIn.forEach(item => {
@@ -375,7 +273,8 @@ function removeDuplicates(arrayIn) {
     })
     return arrayOut;
 }
-function removeDuplicates2(arrayIn) {
+
+function unicopaciente(arrayIn) {
     var arrayOut = [];
     arrayIn.forEach(item => {
         try {
@@ -388,7 +287,6 @@ function removeDuplicates2(arrayIn) {
     })
     return arrayOut;
 }
-
 function formatDate(fecha) {
     var dia = fecha.substr(0, 2);
     var mes = fecha.substr(3, 2);

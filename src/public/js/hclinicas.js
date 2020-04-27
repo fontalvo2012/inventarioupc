@@ -198,16 +198,22 @@ function colocarHc(hc){
         data: {
             codigo: hc
         },           
-        success: (data) => {           
+        success: (data) => {
           console.log(data);
           $('#motivo').val(data.motivo);
-          $('#actual').val(data.actual);         
+          $('#actual').val(data.actual);
           $('#clinico').val(data.clinico);
           $('#plan').val(data.plan);
-          $('#terapeutico').val(data.terapeutico);
-          $('#ordenes').val(data.ordenes);
-          $('#impdiag').val(data.impdiag);
-          
+          $('#receta').val(data.terapeutico);
+          $('#ord').val(data.ordenes);
+          $('#nariz').val(data.fisico.nariz);
+          $('#boca').val(data.fisico.boca);
+          $('#orofaringe').val(data.fisico.orofaringe);
+          $('#cuello').val(data.fisico.cuello);
+          $('#laringoscopia').val(data.fisico.laringoscopia);
+          $('#oido').val(data.fisico.oido);
+          $('#otrosfisico').val(data.fisico.otrosfisico);
+
         }
     });  
 }

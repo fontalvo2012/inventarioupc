@@ -30,7 +30,7 @@ db.collection("citas").onSnapshot((querySnapshot) => {
            contenido+=`          
            <input type="hidden" name="id" value="${doc.id}">
            <tr>
-           <td>${doc.data().fecha}</td>
+           <td>${doc.data().fecha} ${doc.data().hora}</td>
            <td>${doc.data().paciente.cedula}</td>
            <td>${doc.data().nombres}</td>
            <td>${doc.data().nentidad}</td>

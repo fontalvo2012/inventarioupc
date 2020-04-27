@@ -220,7 +220,7 @@
                         <tr>
                             <th>{{data.codigo}}</th>
                             <td>{{data.fecha}}</td>
-                            <td>{{data.tipo}}</td>
+                            <td>{{#if data.tipo}}HC{{else}}CONTROL{{/if}}</td>
                             <td><a href="#" class="btn btn-primary bn-sm" onclick="colocarHc('{{id}}')"
                                     data-dismiss="modal">ver</a></td>
                         </tr>

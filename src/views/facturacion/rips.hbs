@@ -1,5 +1,6 @@
 {{#each datos}}
 <div class="card m-5" style="width: 70%;">
+    <div id="alert"></div>
     <div class="card-header">
         <h4 class="card-title">Creacion de Rips</h4>
     </div>
@@ -11,7 +12,7 @@
             <div class="row">
                 <div class="col-sm-3">
                      <span class="small"><b>Inicio</b></span>
-                    <select name="entidad" id="entidad" class="form-control form-control-sm">
+                    <select name="entidad" id="entidad" onclick="tipoFacturarips();" class="form-control form-control-sm">
                         <option value="">.::Seleccionar::.</option>
                         {{#each entidad}}
                         <option value="{{nit}}">{{rsocial}}</option>
@@ -32,9 +33,8 @@
                 </div>
                 <div class="col-sm-3 pl-0 mr-0">
                     <span class="small"><b>..</b></span>
-                    <div class="form-group mr-0">
-                        <button class="btn btn-success btn-sm btn-block">Generar</button>
-                    </div>
+                    <div id="ripboton"></div>
+                  
                 </div>
 
             </div>

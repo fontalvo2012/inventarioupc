@@ -128,7 +128,7 @@ router.post('/getfac', checkAuthentication, (req, res) => {
 });
 
 router.get('/prefactura', checkAuthentication, (req, res) => {
-    var entidades = [];
+    var entidades = [];   
     db.collection("entidades").get()
         .then((snapshot) => {
             snapshot.forEach((doc) => {
@@ -139,7 +139,7 @@ router.get('/prefactura', checkAuthentication, (req, res) => {
                     var prefacturas = [];
                     snapshot.forEach((doc) => {
                         if (doc.data().estado != 'facturado') {
-                            prefacturas.push({ data: doc.data(), id: doc.id });
+                            prefacturas.push({ data: doc.data(), id: doc.id });                            
                         }
                     });
 
@@ -149,7 +149,19 @@ router.get('/prefactura', checkAuthentication, (req, res) => {
 
 });
 
-
+router.post('/tipofactura',checkAuthentication,(req,res)=>{
+    const {entidad}=req.body;
+    var entidades = [];
+    db.collection("entidades").get()
+    .then((snapshot) => {
+        snapshot.forEach((doc) => {
+            if(doc.data().nit==entidad){
+                entidades.push(doc.data());
+            }            
+        });
+        res.send(entidades[0].tipofac);
+    })
+})
 
 router.get('/facturas', checkAuthentication, (req, res) => {
     var entidades = [];
@@ -303,6 +315,7 @@ router.get('/fac_evento/:id', checkAuthentication, (req, res) => {
 
 router.post('/allusuario', checkAuthentication, (req, res) => {
     const { ini, fin, eps } = req.body;
+    var respuesta='0';
     db.collection('facturas').orderBy('consecutivo', 'desc').limit(1).get()
     .then((snapshot) => {
         snapshot.forEach(element => {
@@ -315,7 +328,7 @@ router.post('/allusuario', checkAuthentication, (req, res) => {
                 var facturas=[];
                 var x=0;
                 var id=doc.id;
-                var respuesta='';
+                
                 if (Betwen3(ini, fin, doc.data().pinicio)) {  
                     if (doc.data().estado == 'pendiente') {
                         c++;
@@ -337,17 +350,17 @@ router.post('/allusuario', checkAuthentication, (req, res) => {
                                 })
                                 .then(function () {
                                     console.log('Actualizados');
-                                    respuesta='Datos Ingresados Correctamente';
+                                    respuesta='1';
                                 })
 
                             })
                         x++;
                     }else{
-                        respuesta='Datos Ingresados Correctamente';
+                       
                     }
                 }
             });            
-            res.send('Datos ingresados.');
+            res.send(respuesta);
         })
     });
 
@@ -357,6 +370,8 @@ router.post('/allusuario', checkAuthentication, (req, res) => {
 router.post('/capita', checkAuthentication, (req, res) => {
     const { ini, fin, eps } = req.body;
     var c=0;
+    var respuesta='0';
+    var copagos=0;
     db.collection('facturas').orderBy('consecutivo', 'desc').limit(1).get()
     .then((snapshot) => {
         snapshot.forEach(element => {
@@ -369,21 +384,21 @@ router.post('/capita', checkAuthentication, (req, res) => {
             var anexo=[];          
             snapshot.forEach((doc) => {                  
                 var x=0;
-                var id=doc.id;
-               
+                var id=doc.id;             
                 if (Betwen3(ini, fin, doc.data().pinicio)) {  
-                    if (doc.data().estado == 'pendiente') {
-                        anexo.push({item:doc.data().item,paciente:doc.data().paciente});
+                    if (doc.data().estado == 'pendiente') {                       
+                        anexo.push({item:doc.data().item,paciente:doc.data().paciente,periodo:doc.data().pinicio});
                         facturas.push(doc.data());
+                        copagos+=parseInt(facturas[x].copago);
                         facturas[x].consecutivo = c+1;
                         facturas[x].estado = 'facturado';
                         facturas[x].vencimiento = Vencimiento(30);
                         facturas[x].fecha = fechaActual();
                         facturas[x].item.c_diagnostico = facturas[x].diag;
                         facturas[x].total=facturas[x].eps.capita;
-
                         var washingtonRef = db.collection("fac_orl").doc(id);
                         return washingtonRef.update({
+                            consecutivo:c+1,
                             estado: 'facturado',
                             vencimiento: Vencimiento(30),
                             fecha: fechaActual()
@@ -402,8 +417,9 @@ router.post('/capita', checkAuthentication, (req, res) => {
             });
             if(facturas[0].eps.tipofac=='evento'){
                 facturas[0].item.nombre="FACTURACION POR CAPITA"
+                facturas[0].copago=copagos;
                 facturas[0].item.valor=tcapita;
-                facturas[0].total=tcapita; 
+                facturas[0].total=parseInt(tcapita)-copagos; 
 
             }  
             if(facturas[0].eps.tipofac=='capita'){
@@ -411,13 +427,17 @@ router.post('/capita', checkAuthentication, (req, res) => {
                 facturas[0].item.nombre="FACTURACION POR CAPITA"
                 facturas[0].item.valor=facturas[0].eps.capita;
             }
-                       
+            
             let docRef = db.collection('facturas').doc();
             docRef.set(facturas[0])
             .then(function () {
-                res.send(facturas[0]);
+                res.send('1');
+              
             })
-        })
+        }).catch(function (error) {   
+            console.log(error);   
+            res.send('0');
+        });  
     });
 
 });

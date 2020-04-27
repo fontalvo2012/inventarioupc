@@ -86,7 +86,7 @@ plena=`
     {
         "cd": "167",
         "cups": "954313",
-        "nombre": "PRUEBAS DE RECLUTAMIENTO    (266)",
+        "nombre": "PRUEBAS DE RECLUTAMIENTO(266)",
         "valor": "6565",
         "a_quirurgico": "1",
         "ambito": "1",
@@ -629,9 +629,9 @@ function combertirIss(ob) {
   });
 
   function addcups() {      
-      var dato=$('#ord').html();
-      dato+=$('#ccups').val()+'\n\n';
-      $('#ord').html(dato);
+      var dato=$('#ord').val();
+      dato+=$('#ccups').val()+'#';
+      $('#ord').val(dato);
       $('#ccups').val('');
   }
 
@@ -749,40 +749,57 @@ function all_usuario() {
     var ini=$('#ini').val();
     var fin=$('#fin').val();
     var eps=$('#entidad').val();
+   if (ini != "" && fin != "") {
     $.ajax({
-    url: '/allusuario',
-    type: 'POST',
-    datatype: 'json',
-    data:{
-        ini:ini,
-        fin:fin,
-        eps,eps
-    },
-    success: (data) => {
-        console.log(data); 
-        $('#alert').html(` <div class="alert alert-success" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> ${data} </div>`);    
-    }
-  });
+        url: '/allusuario',
+        type: 'POST',
+        datatype: 'json',
+        data:{
+            ini:ini,
+            fin:fin,
+            eps,eps
+        },
+        success: (data) => {
+            console.log(data); 
+            if (data=='0') {
+                $('#alert').html(` <div class="alert alert-warning" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> NO SE ENCONTRARON REGISTROS EN ESTE RANGO FECHA ${ini}=>${fin} </div>`);    
+            } else {
+                $('#alert').html(` <div class="alert alert-success" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> SE INGRESARON SASTISFACTORIAMENTE LAS FACTURAS DEL RANGO DE FECHA ${ini}=>${fin} </div>`);    
+            }
+            
+        }
+      });
+   }else{
+       alert('Debe ingresar los datos');
+   }
 }
 
 function capita() {
-    var ini=$('#ini').val();
-    var fin=$('#fin').val();
-    var eps=$('#entidad').val();
-    $.ajax({
-    url: '/capita',
-    type: 'POST',
-    datatype: 'json',
-    data:{
-        ini:ini,
-        fin:fin,
-        eps,eps
-    },
-    success: (data) => {
-        console.log(data); 
-        $('#alert').html(` <div class="alert alert-success" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> ${data} </div>`);    
+    var ini = $('#ini').val();
+    var fin = $('#fin').val();
+    var eps = $('#entidad').val();
+    if (ini != "" && fin != "") {
+        $.ajax({
+            url: '/capita',
+            type: 'POST',
+            datatype: 'json',
+            data: {
+                ini: ini,
+                fin: fin,
+                eps, eps
+            },
+            success: (data) => {
+                console.log(data);
+                if (data == '0') {
+                    $('#alert').html(`<div class="alert alert-warning" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> NO SE ENCONTRARON REGISTROS EN ESTE RANGO FECHA ${ini}=>${fin} </div>`);
+                } else {
+                    $('#alert').html(`<div class="alert alert-success" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> SE INGRESARON SASTISFACTORIAMENTE LAS FACTURAS DEL RANGO DE FECHA ${ini}=>${fin} </div>`);
+                }
+            }
+        });
+    } else {
+        alert('Debe ingresar los datos')
     }
-  });
 }
 
 
@@ -806,11 +823,103 @@ function completMedicamentos() {
 }
 function AgregarMed() {
     var contenido= $('#receta').val();
-    var fila=$('#cant').val()+' '+$('#medicamento').val()+'\n\t Prescripcion: '; 
+    var fila=$('#cant').val()+' '+$('#medicamento').val()+'# Prescripcion: '; 
     if (contenido!='') {
-        fila='\n'+fila;
+        fila='#'+fila;
     }      
     $('#receta').val(contenido+fila.toUpperCase());
     $('#cant').val('1');
     $('#medicamento').val('')
+}
+function tipoFactura() {
+           $.ajax({
+            url: '/tipofactura',
+            type: 'POST',
+            datatype: 'json',
+            data:{
+                entidad:$('#entidad').val()
+            },
+            success: (data) => {    
+                console.log(data);
+                if (data == '') {
+                    $("#factBotton").html(`<a  href="#" class="btn btn-warning btn-sm" id="all" onclick="all_usuario()">usuarios</a>`);
+                }else{
+                    $("#factBotton").html(`<a  href="#" class="btn btn-warning btn-sm" id="cap" onclick="capita()">Capita</a>`);
+                }        
+            }
+          });   
+}
+
+function tipoFacturarips() {
+    $.ajax({
+     url: '/tipofactura',
+     type: 'POST',
+     datatype: 'json',
+     data:{
+         entidad:$('#entidad').val()
+     },
+     success: (data) => {    
+         console.log(data);
+         if (data == '') {
+             $("#ripboton").html(`<button class="btn btn-warning btn-sm" id="all" onclick="all_usuario()">Crear</button>`);
+         }else{
+             $("#ripboton").html(`<a  href="#" class="btn btn-primary btn-sm" id="cap" onclick="ripsEventos()">Crear</a>`);
+         }        
+     }
+   });   
+}
+function ripsEventos() {
+   if ($('#ffinal').val()!='' && $('#finicio').val()!='') {
+    $.ajax({
+        url: '/ripseventos',
+        type: 'POST',
+        datatype: 'json',
+        data:{
+           nombre:$('#nombre').val(),
+           consecutivo:$('#consecutivo').val(),
+           finicio:$('#finicio').val(),
+           ffinal:$('#ffinal').val(),
+           entidad:$('#entidad').val(),
+        },
+        success: (data) => {    
+            console.log(data); 
+            $('#alert').html(` <div class="alert alert-success" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> RIPS CREADOS</div>`);             
+        }
+      });   
+   }else{
+    $('#alert').html(` <div class="alert alert-danger" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i>VERIFIQUE LA FECHA</div>`);             
+   }
+}
+
+
+function verRips() {
+    $.ajax({
+     url: '/descargaRips',
+     type: 'POST',
+     datatype: 'json',
+     data:{
+         entidad:$('#entidad').val()
+     },
+     success: (data) => {    
+         console.log(data);
+         var cadena='';
+        data.forEach(element => {
+            cadena+=`
+            <tr>
+            <th scope="row">Rips: ${element.consecutivo}</th>                                                  
+            <td>
+                <a href="/descarga/${element.consecutivo}/AC" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> Descargar AC</a>
+                <a href="/descarga/${element.consecutivo}/AF" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> Descargar AF</a>
+                <a href="/descarga/${element.consecutivo}/CT" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> Descargar CT</a>
+                <a href="/descarga/${element.consecutivo}/US" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> Descargar US</a>
+                <a href="/descarga/${element.consecutivo}/AP" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> Descargar AP</a>
+            </td>
+        </tr>
+            `;
+        });
+
+         $('#rips').html(cadena);
+         
+     }
+   });   
 }

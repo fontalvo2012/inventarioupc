@@ -1,35 +1,42 @@
-<div class="container m-4">
+<div class="container m-1">
+    <div id="alert"></div>
     <h5><b>.::Prefacturacion::.</b></h5>
     <form action="" method="post">
-            <div class="row">
-        <div class="col-sm-3">
-            <span class="small"><b>Entidades</b></span>
-            <select name="entidad" id="entidad" class="form-control form-control-sm">
-                <option value="">.::Seleccionar::.</option>
-                {{#each entidades}}
+        <div class="row">
+            <div class="col-sm-3">
+                <span class="small"><b>Entidades</b></span>
+                <select name="entidad" id="entidad" onchange="tipoFactura()" class="form-control form-control-sm">
+                    <option value="">.::Seleccionar::.</option>
+                    {{#each entidades}}
                     <option value="{{nit}}">{{rsocial}}</option>
-                {{/each}}
-            </select>
-        </div>
-        <div class="col-sm-2">
-            <span class="small"><b>Inicial</b></span>
-            <input type="date" id="ini" name="ini" class="form-control form-control-sm">
-        </div>
-          <div class="col-sm-2">
-            <span class="small"><b>Final</b></span>
-            <input type="date" id="fin" name="fin" class="form-control form-control-sm">
-        </div>
-        <div class="col-sm-2 mt-4">
-            <button class="btn btn-success btn-sm">Buscar</button>
-            <a  href="#" class="btn btn-warning btn-sm" onclick="all_usuario()">Fac.usuarios</a>
-            <a  href="#" class="btn btn-warning btn-sm" onclick="capita()">Fac.Capita</a>
-        </div>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <span class="small"><b>Inicial</b></span>
+                <input type="date" id="ini" name="ini" class="form-control form-control-sm">
+            </div>
+            <div class="col-sm-2">
+                <span class="small"><b>Final</b></span>
+                <input type="date" id="fin" name="fin" class="form-control form-control-sm">
+            </div>
+            <div class="col-sm-5 mt-4">
+                <div class="row">
+                    <div class="col-sm-3"><button class="btn btn-success btn-sm"><i class='fas fa-search' style='font-size:12px'></i> Buscar</button></div>
+                    <div class="col-sm-3"> <div id="factBotton"></div>   </div>
+                </div>
+                
+                
+            
+            
+            
+            </div>
     </div>
     </form>
     <div class="row mt-3">
-        <div class="col-sm-12">
-            <table class="table">
-  <thead>
+    <div class="col-sm-12">
+    <table class="table small">
+    <thead>
     <tr>
       <th scope="col">#</th>
       <th scope="col">Periodo</th>
@@ -51,7 +58,7 @@
       <td>{{data.item.nombre}}</td>
       <td>$ {{data.item.valor}}</td>
       <td>         
-          <a href="/fac_evento/{{id}}" class="btn btn-primary btn-sm"><i class="fas fa-money-check-alt" style="font-size: 20px;"></i></a>
+          {{!-- <a href="/fac_evento/{{id}}" class="btn btn-primary btn-sm"><i class="fas fa-money-check-alt" style="font-size: 20px;"></i></a> --}}
           <a href="/imprimirprefac/{{id}}" class="btn btn-primary btn-sm"><i class="fas fa-print" style="font-size: 16px;"></i></a>
       </td>
 

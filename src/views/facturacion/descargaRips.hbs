@@ -5,28 +5,27 @@
           </h4>
       </div>
           <div class="card-body">
-             
+            <div class="row m-2">
+                <div class="col-sm-5">
+                     <select name="entidad" id="entidad" onchange="verRips()" class="form-control form-control-sm">
+                        <option value="">.::Seleccionar::.</option>
+                        {{#each valores}}
+                        <option value="{{nit}}">{{rsocial}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
               <div class="row">
+                  
                 <table class="table">
                     <thead>
                         <tr>                          
-                            <th scope="col">Rips</th>                      
+                            <th scope="col">Rips</th>                                                
                             <th scope="col">Accion</th>
                         </tr>
                     </thead>
-                    <tbody> 
-                         {{#each valores}}
-                        <tr>
-                            <th scope="row">Rips: {{consecutivo}}</th>                                                  
-                            <td>
-                                <a href="/descarga/{{consecutivo}}/AC" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> Descargar AC</a>
-                                <a href="/descarga/{{consecutivo}}/AF" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> Descargar AF</a>
-                                <a href="/descarga/{{consecutivo}}/CT" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> Descargar CT</a>
-                                <a href="/descarga/{{consecutivo}}/US" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> Descargar US</a>
-                                <a href="/descarga/{{consecutivo}}/AP" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> Descargar AP</a>
-                            </td>
-                        </tr>
-                         {{/each}}
+                    <tbody id="rips"> 
+                        
                     </tbody>
                 </table>
             </div>

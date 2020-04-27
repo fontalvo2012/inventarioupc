@@ -33,10 +33,13 @@ function checkAuthentication(req,res,next){
 router.get('/hclinicas/:id/:cc',checkAuthentication,(req,res)=>{ 
     const {id,cc} = req.params;
     var hc=[];
-    db.collection('hclinica').where('cedula','==',cc).get()
+    db.collection('hclinica').orderBy('codigo','desc').get()
     .then((snapshot) => {
         snapshot.forEach(element => {
-            hc.push({data:element.data(),id:element.id});
+            if(element.data().cedula==cc){
+                hc.push({data:element.data(),id:element.id});
+            }
+           
         }); 
         db.collection('citas').get()
         .then((snapshot) => {
@@ -228,11 +231,14 @@ router.get('/orden/:codigo/:cita',checkAuthentication,(req,res)=>{
 
 router.get('/verhc/:cedula',checkAuthentication,(req,res)=>{
     const {cedula} = req.params;
-    db.collection('hclinica').where('cedula','==',cedula).get()
+    db.collection('hclinica').orderBy('codigo','desc').get()
     .then((snapshot) => {        
         var valores=[];        
-        snapshot.forEach((doc) =>{  
-            valores.push({data:doc.data(),id:doc.id});
+        snapshot.forEach((doc) =>{ 
+            if (doc.data().cedula==cedula) {
+                valores.push({data:doc.data(),id:doc.id});
+            } 
+           
         });
         res.render('hclinicas/verhc',{valores});       
     })
@@ -258,6 +264,7 @@ function facturar(cita,diag,empresa) {
             habilitacion: empresa.habilitacion,
             direccion: empresa.direccion,
             diag,
+            copago:cita.copago,
             telefonos: empresa.telefono,
             email: empresa.email,
             prefijo: empresa.prefijo,

@@ -30,7 +30,8 @@ router.post('/ajaxentidad',checkAuthentication,(req,res)=>{
                 copago:doc.data().copago,
                 contrato:doc.data().contrato,
                 descuento:doc.data().descuento,
-                poliza:doc.data().poliza
+                poliza:doc.data().poliza,
+                tipofac:doc.data().tipofac
             });
         });       
         res.send(valores);
