@@ -2099,7 +2099,6 @@ function NombreDiag() {
   $('#ndg').val($('#diag').val());
 }
 
-
 function combertir(ob) {
   var obj = JSON.parse(ob);
   array=[];

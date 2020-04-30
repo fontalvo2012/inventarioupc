@@ -204,7 +204,7 @@ function colocarHc(hc){
           $('#actual').val(data.actual);
           $('#clinico').val(data.clinico);
           $('#plan').val(data.plan);
-          $('#receta').val(data.terapeutico);
+        //   $('#receta').val(data.terapeutico);
           $('#ord').val(data.ordenes);
           $('#nariz').val(data.fisico.nariz);
           $('#boca').val(data.fisico.boca);
@@ -213,7 +213,20 @@ function colocarHc(hc){
           $('#laringoscopia').val(data.fisico.laringoscopia);
           $('#oido').val(data.fisico.oido);
           $('#otrosfisico').val(data.fisico.otrosfisico);
-
+        //   $('#recetaJson').val(JSON.stringify(data.receta));         
+          var cadena=`<table class="table"><tbody> `;
+          receta=data.receta;
+          receta.forEach(element => {
+              cadena+=`                                
+                  <tr>
+                      <th scope="row">${element.medicamento}</th>
+                      <td>${element.cantidad}</td>
+                      <td>${element.uso}</td>
+                  </tr>
+              `;
+          });
+          cadena+=`</tbody></table>`
+          $('#vreseta').html(cadena);
         }
     });  
 }

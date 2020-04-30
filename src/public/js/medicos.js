@@ -2,6 +2,7 @@ var orario = [];
 var medico = [];
 var citas=[];
 var estado=false;
+
 function agregarHorario() {
     var dia = $('#dia').val();
     var hi = $('#hi').val();
@@ -375,6 +376,45 @@ function citasUsadas(medico){
                $('#'+element.hora.replace(':','')).html('<b>Asignada</b>');
            });
           
+        }
+    });  
+}
+function borrarCita(id) {
+    $.ajax({
+        url: '/borrarcita',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            id:id          
+        },           
+        success: (data) => {
+            CitasApartadas();
+        }
+    });
+}
+function CitasApartadas(){ 
+    $.ajax({
+        url: '/apartadas',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            cedula: $('#cc').val()           
+        },           
+        success: (data) => {
+         var cadena=`<table class="table small">       
+         <tbody>`;
+            data.forEach(element => {
+                cadena+=` 
+                     <tr>
+                        <th scope="row">${element.data.fecha}</th>
+                        <td>${element.data.nmedico}</td>
+                        <td>${element.data.motivo}</td>
+                        <td><a href="#" onclick="borrarCita('${element.id}')" class="btn btn-primary btn-sm">del</a></td>                             
+                    </tr> `;
+            });
+       cadena+=` </tbody></table>`;
+         console.log(data);
+         $('#agendadas').html(cadena);
         }
     });  
 }

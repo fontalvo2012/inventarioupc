@@ -61,7 +61,8 @@ router.get('/hclinicas/:id/:cc',checkAuthentication,(req,res)=>{
 
 
 router.post('/crearhc',checkAuthentication,(req,res)=>{ 
-    const {cedula,nombres,id,motivo,actual,clinico,plan,terapeutico,impdiag,ordenes,dg}= req.body;
+    const {cedula,nombres,id,motivo,actual,clinico,plan,impdiag,ordenes,dg,recetaJson}= req.body;
+    console.log(req.body);
     var fisicoArray={
         nariz:req.body.nariz,
         boca:req.body.boca,
@@ -141,7 +142,7 @@ router.post('/crearhc',checkAuthentication,(req,res)=>{
                             plan,
                             impdiag:impDiagnostico,
                             ordenes,
-                            terapeutico,
+                            receta:JSON.parse(recetaJson),                            
                             medico:med,
                             tipo:t,
                             fecha:fechaActual(),

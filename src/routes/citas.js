@@ -30,6 +30,25 @@ router.get('/citas',(req,res)=>{
     });  
 });
 
+
+router.post('/apartadas',(req,res)=>{
+    const {cedula}=req.body;
+    db.collection('citas').where('paciente.cedula','==',cedula).get()
+    .then((snapshot) => {
+        var valores=[];
+        snapshot.forEach((doc) => {   
+            if (doc.data().estado=="") {
+                valores.push({data:doc.data(),id:doc.id});
+            }                    
+        });       
+        res.send(valores);
+    })
+    .catch((err) => {
+        console.log('Error getting documents', err);
+        res.send(valores);
+    });  
+});
+
 router.post('/addcitas',(req,res)=>{
     const {cita}=req.body;
     console.log(JSON.parse(cita));
@@ -158,10 +177,15 @@ router.get('/borrarcita/:id',(req,res)=>{
     db.collection("citas").doc(id).delete().then(function () {
         console.log("Document successfully deleted!");
         res.redirect('/vercitas');
-    }).catch(function (error) {
-        console.error("Error removing document: ", error);
-        res.redirect('/vercitas');
-    });   
+    })  
+});
+
+
+router.post('/borrarcita',(req,res)=>{
+    const {id}=req.body;   
+    db.collection("citas").doc(id).delete().then(function () {      
+        res.send('1');
+    })  
 });
 
 module.exports = router;
