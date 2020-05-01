@@ -22,30 +22,6 @@ router.get('/inicial', (req, res) => {
 });
 
 
-router.get('/rips', (req, res) => {
-    var entidad=[]
-    db.collection("entidades").get()
-    .then((snapshot)=>{
-        snapshot.forEach(element => {
-            entidad.push(element.data());
-        });
-        db.collection("rips")
-        .orderBy("consecutivo", "desc").limit(1).get()
-        .then((snapshot) => {
-            var valores = [];
-            snapshot.forEach((doc) => {
-                valores.push(doc.data());
-            });          
-            
-            var datos=[{
-                consecutivo:valores[0].consecutivo,
-                nombre:conseRit(valores[0].consecutivo)                
-            }];
-            console.log(datos);
-            res.render('facturacion/rips', { datos,entidad });
-        })
-    })
-});
 
 
 router.post('/rips', async(req, res) => {

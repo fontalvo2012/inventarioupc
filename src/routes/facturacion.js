@@ -4,7 +4,7 @@ const pdf = require('html-pdf');
 const router = Router();
 var admin = require("firebase-admin");
 const db = admin.firestore();
-
+const Entidad = require('../model/entidad');
 
 
 function checkAuthentication(req, res, next) {
@@ -15,6 +15,90 @@ function checkAuthentication(req, res, next) {
     }
 }
 
+
+//=> MONGO DB
+router.get('/prefactura', checkAuthentication, async(req, res) => {
+    var entidades = [];  
+    entidades = await Entidad.find().lean();
+    db.collection("fac_orl").get()
+    .then((snapshot) => {
+        var prefacturas = [];
+        snapshot.forEach((doc) => {
+            if (doc.data().estado != 'facturado') {
+                prefacturas.push({ data: doc.data(), id: doc.id });                            
+            }
+        });        
+        res.render('facturacion/prefactura', { prefacturas, entidades });
+    }) 
+
+});
+
+
+router.post('/tipofactura',checkAuthentication,async(req,res)=>{
+    const {entidad} = req.body;   
+    var entidades = [];
+    entidades = await Entidad.find({nit:entidad}).lean();
+    try {
+        res.send(entidades[0].tipofac);
+    } catch (error) {} 
+})
+
+router.get('/facturas', checkAuthentication, async(req, res) => {
+    var entidades = [];
+    entidades = await Entidad.find().lean();
+    db.collection("facturas").get()
+    .then((snapshot) => {
+        var prefacturas = [];
+        snapshot.forEach((doc) => {
+            prefacturas.push({ data: doc.data(), id: doc.id });
+        });
+        res.render('facturacion/facturas', { prefacturas, entidades });
+    })
+
+});
+
+
+router.post('/facturas', checkAuthentication, async(req, res) => {
+    const { entidad, ini, fin } = req.body;
+    var entidades = [];
+    entidades = await Entidad.find().lean();
+
+    db.collection("facturas").where('eps.nit', '==', entidad).get()
+    .then((snapshot) => {
+        var prefacturas = [];
+        snapshot.forEach((doc) => {
+            if (Betwen3(ini, fin, doc.data().pinicio)) {
+                prefacturas.push({ data: doc.data(), id: doc.id });
+            }
+        });
+        console.log(prefacturas);
+        res.render('facturacion/facturas', { prefacturas, entidades });
+    })
+
+});
+
+
+router.get('/rips', async(req, res) => {
+    var entidad=[]
+    entidad = await Entidad.find().lean();
+   
+       db.collection("rips")
+        .orderBy("consecutivo", "desc").limit(1).get()
+        .then((snapshot) => {
+            var valores = [];
+            snapshot.forEach((doc) => {
+                valores.push(doc.data());
+            });
+            var datos=[{
+                consecutivo:valores[0].consecutivo,
+                nombre:conseRit(valores[0].consecutivo)                
+            }];
+            console.log(datos);
+            res.render('facturacion/rips', { datos,entidad });
+        })
+});
+
+//MONGO <=
 
 router.get('/facturar', checkAuthentication, (req, res) => {
     db.collection('carlosparra').get()
@@ -53,8 +137,8 @@ router.post('/facturar', checkAuthentication, (req, res) => {
         .catch(function (error) {
             res.send('error');
         });
-
 });
+
 router.get('/consultarFactura', checkAuthentication, (req, res) => {
     db.collection("facturas").orderBy('consecutivo', 'desc').get()
         .then((snapshot) => {
@@ -127,91 +211,7 @@ router.post('/getfac', checkAuthentication, (req, res) => {
         });
 });
 
-router.get('/prefactura', checkAuthentication, (req, res) => {
-    var entidades = [];   
-    db.collection("entidades").get()
-        .then((snapshot) => {
-            snapshot.forEach((doc) => {
-                entidades.push(doc.data());
-            });
-            db.collection("fac_orl").get()
-                .then((snapshot) => {
-                    var prefacturas = [];
-                    snapshot.forEach((doc) => {
-                        if (doc.data().estado != 'facturado') {
-                            prefacturas.push({ data: doc.data(), id: doc.id });                            
-                        }
-                    });
 
-                    res.render('facturacion/prefactura', { prefacturas, entidades });
-                })
-        })
-
-});
-
-router.post('/tipofactura',checkAuthentication,(req,res)=>{
-    const {entidad} = req.body;
-    console.log(entidad);
-    var entidades = [];
-    db.collection("entidades").get()
-    .then((snapshot) => {
-        snapshot.forEach((doc) => {
-            if(doc.data().nit==entidad){
-                entidades.push(doc.data());
-            }            
-        });
-        try {
-            res.send(entidades[0].tipofac);
-        } catch (error) {
-            
-        }
-        
-    })
-})
-
-router.get('/facturas', checkAuthentication, (req, res) => {
-    var entidades = [];
-    db.collection("entidades").get()
-        .then((snapshot) => {
-            snapshot.forEach((doc) => {
-                entidades.push(doc.data());
-            });
-            db.collection("facturas").get()
-                .then((snapshot) => {
-                    var prefacturas = [];
-                    snapshot.forEach((doc) => {
-                        prefacturas.push({ data: doc.data(), id: doc.id });
-                    });
-
-                    res.render('facturacion/facturas', { prefacturas, entidades });
-                })
-        })
-
-});
-
-
-router.post('/facturas', checkAuthentication, (req, res) => {
-    const { entidad, ini, fin } = req.body;
-    var entidades = [];
-    db.collection("entidades").get()
-        .then((snapshot) => {
-            snapshot.forEach((doc) => {
-                entidades.push(doc.data());
-            });
-            db.collection("facturas").where('eps.nit', '==', entidad).get()
-                .then((snapshot) => {
-                    var prefacturas = [];
-                    snapshot.forEach((doc) => {
-                        if (Betwen3(ini, fin, doc.data().pinicio)) {
-                            prefacturas.push({ data: doc.data(), id: doc.id });
-                        }
-                    });
-                    console.log(prefacturas);
-                    res.render('facturacion/facturas', { prefacturas, entidades });
-                })
-        })
-
-});
 
 router.get('/imprimirfac/:id', checkAuthentication, (req, res) => {
     const { id } = req.params;
@@ -548,5 +548,22 @@ function fechaActual() {
     fecha = day + '/' + month + '/' + year;
     return fecha;
 }
+function conseRit(num) {
+    num = parseInt(num) + 1;
+    if (num < 10) {
+        return '00000' + num;
+    } else if (num > 10 && num < 100) {
+        return '0000' + num;
+    } else if (num > 100 && num < 1000) {
+        return '000' + num;
+    } else if (num > 1000 && num < 10000) {
+        return '00' + num;
+    } else if (num > 10000 && num < 100000) {
+        return '0' + num;
+    } else {
+        return num;
+    }
+}
+
 
 module.exports = router;
