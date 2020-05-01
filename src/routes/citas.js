@@ -156,12 +156,13 @@ router.post('/vercitaspaciente',(req,res)=>{
 
 router.post('/ensala/:id',(req,res)=>{
     const {id}=req.params; 
-    const {copago,autorizacion}=req.body;   
+    const {copago,autorizacion,valor}=req.body;   
     var washingtonRef = db.collection("citas").doc(id);
     const cita={
         copago:copago,
         autorizacion:autorizacion,        
-        estado:'ensala'
+        estado:'ensala',
+        valor:valor        
     }  
     return washingtonRef.update(cita)
         .then(function () {

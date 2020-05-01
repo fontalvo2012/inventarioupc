@@ -4577,6 +4577,27 @@ plena=`
         "f_procedimiento": "",
         "tipo": "c",
         "forma": "null"
+    },
+    {
+        "cd": "163",
+        "cups": "890302",
+        "nombre": "CONSULTA POR PRIMERA VEZ X OTORRINOLARINGOLOGIA",
+        "valor": "12510",
+        "a_quirurgico": "1",
+        "ambito": "1",
+        "atiende": "1",
+        "autorizacion": "",
+        "c_diagnostico": "",
+        "c_diagnostico2": "",
+        "c_diagnostico3": "",
+        "c_externa": "15",
+        "complicacion": "",
+        "copago": "0",
+        "entidad": "",
+        "f_consulta": "",
+        "f_procedimiento": "",
+        "tipo": "c",
+        "forma": "null"
     }
 ]
 `;
@@ -4644,6 +4665,87 @@ function recorrerIss() {
             }
           });
     });    
+}
+
+function actualizarTarifa(id) {
+    var valor=$('#'+id).val();
+    $.ajax({
+        url: '/Actualizartarifas',
+        type: 'POST',
+        datatype: 'json',
+        data:{
+            id:id,
+            valor:valor
+        },
+        success: (data) => {
+            console.log(data);
+            consultarifas();      
+        }
+      });
+}
+function consultarifas() {
+    $.ajax({
+        url: '/verTarifas',
+        type: 'POST',
+        datatype: 'json',
+        data:{
+            entidad:'111111-1'
+        },
+        success: (data) => {
+            var cadena='';  
+            data.forEach(element => {
+                cadena+=` 
+                <tr>
+                <th scope="row">${element.cups}</th>
+                <td>${element.nombre}</td>
+                <td colspan="2"><b>$ ${number_format(element.valor, 2)}</b></td>
+                <td><input type='number' id='${element._id}' class='form-control form-control-sm p-0' placeholder=" $ Dato"></td>
+                <td>
+                <a href="#" class="btn btn-warning btn-sm" onclick="actualizarTarifa('${element._id}')" ><i class='fas fa-sync' style='font-size:12px'></i></a>
+                </td>
+            </tr>`;
+            });
+            $('#vertarifas').html(cadena);  
+        }
+      });
+}
+
+function ingresarTarifas() {
+    const issplena=JSON.parse(plena);
+    var entidad='111111-1';
+    var porcentaje=10;    
+    issplena.forEach(item => {        
+    $.ajax({
+        url: '/addTarifa',
+        type: 'POST',
+        datatype: 'json',
+        data:{
+            cd:item.cd,
+            cups:item.cups,
+            nombre:item.nombre,
+            valor:parseInt(item.valor)*porcentaje/100,
+            a_quirurgico:item.a_quirurgico,
+            atiende:item.atiende,
+            autorizacion:item.autorizacion,
+            c_diagnostico:item.c_diagnostico,
+            c_diagnostico2:item.c_diagnostico2,
+            c_diagnostico3:item.c_diagnostico3,
+            c_externa:item.c_externa,
+            complicacion:item.complicacion,
+            copago:item.copago,
+            entidad:entidad,
+            f_consulta:item.f_consulta,
+            f_procedimiento:item.f_procedimiento,
+            tipo:item.tipo,
+            forma:item.forma
+        },
+        success: (data) => {
+            console.log(data) ;
+        }
+      });
+    });
+
+   
 }
 
 function consultarTarifa(){
@@ -4790,12 +4892,6 @@ function completMedicamentos() {
 var receta=[];
 function AgregarMed() {
     receta.push({medicamento:$('#medicamento').val(),cantidad:$('#cant').val(),uso:$('#uso').val()});
-    // var contenido= $('#receta').val();
-    // var fila=$('#medicamento').val()+' #'+$('#cant').val()+'\n Uso: '+$('#uso').val(); 
-    // if (contenido!='') {
-    //     fila='\n'+fila;
-    // }      
-    // $('#receta').val(contenido+fila.toUpperCase());
     $('#recetaJson').val(JSON.stringify(receta));
     var contador=0;
     var cadena=`<table class="table"><tbody> `;

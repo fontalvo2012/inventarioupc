@@ -337,6 +337,7 @@ function crearCitas(hora) {
         autorizacion:'',
         nmedico:nmedico,
         nitem:nitem,
+        valor:0,
         nentidad:nentidad
     };
     var c = JSON.stringify(cita);

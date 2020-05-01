@@ -9,6 +9,7 @@ const app = express();
 
 
 //setting
+require('./database');
 app.set('port',process.env.PORT || 4400);
 app.set('views',path.join(__dirname,'views'));
 app.set('file',path.join(__dirname,'file'));
