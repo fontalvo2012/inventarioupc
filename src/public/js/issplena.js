@@ -734,28 +734,7 @@ plena=`
         "f_procedimiento": "",
         "tipo": "p",
         "forma": "uvr"
-    },
-    {
-        "cd": "65",
-        "cups": "M03468",
-        "nombre": "ETMOIDECTOMÍA INTRANASAL",
-        "valor": "90",
-        "a_quirurgico": "1",
-        "ambito": "1",
-        "atiende": "1",
-        "autorizacion": "",
-        "c_diagnostico": "",
-        "c_diagnostico2": "",
-        "c_diagnostico3": "",
-        "c_externa": "15",
-        "complicacion": "",
-        "copago": "0",
-        "entidad": "",
-        "f_consulta": "",
-        "f_procedimiento": "",
-        "tipo": "p",
-        "forma": "uvr"
-    },
+    },  
     {
         "cd": "66",
         "cups": "313101",
@@ -3380,28 +3359,7 @@ plena=`
         "f_procedimiento": "",
         "tipo": "p",
         "forma": "uvr"
-    },
-    {
-        "cd": "55",
-        "cups": "226302",
-        "nombre": "ETMOIDECTOMÍA EXTERNA",
-        "valor": "60",
-        "a_quirurgico": "1",
-        "ambito": "1",
-        "atiende": "1",
-        "autorizacion": "",
-        "c_diagnostico": "",
-        "c_diagnostico2": "",
-        "c_diagnostico3": "",
-        "c_externa": "15",
-        "complicacion": "",
-        "copago": "0",
-        "entidad": "",
-        "f_consulta": "",
-        "f_procedimiento": "",
-        "tipo": "p",
-        "forma": "uvr"
-    },
+    },   
     {
         "cd": "56",
         "cups": "227101",
@@ -4629,7 +4587,7 @@ function combertirIss(ob) {
     var id = $('#item').val(); 
     var entidad=$('#entidad').val();    
     $.ajax({
-      url: '/ajaxitems2',
+      url: '/verItem',
       type: 'POST',
       datatype: 'json',
       data: {
@@ -4643,29 +4601,31 @@ function combertirIss(ob) {
     });
   }
 
-function recorrerIss() {
-    var porcentaje =$('#porcentaje').val();
-    var entidad = $('#entidad').val();
-    const issplena=JSON.parse(plena);
-    issplena.forEach(element => {       
-            element.entidad = entidad;
-            element.valor=parseInt(element.valor)+(parseInt(element.valor)*porcentaje/100);
-            console.log(element);       
-        var item=JSON.stringify(element);
+// function recorrerIss() {
+//     var porcentaje =$('#porcentaje').val();
+//     var entidad = $('#entidad').val();
+//     const issplena=JSON.parse(plena);
+//     issplena.forEach(element => {       
+//             element.entidad = entidad;
+//             element.valor=parseInt(element.valor)+(parseInt(element.valor)*porcentaje/100);
+//             console.log(element);       
+//         var item=JSON.stringify(element);
 
-        $.ajax({
-            url: '/tarifas',
-            type: 'POST',
-            datatype: 'json',
-            data:{
-                item:item
-            },
-            success: (data) => {
-                consultarTarifa();      
-            }
-          });
-    });    
-}
+//         $.ajax({
+//             url: '/tarifas',
+//             type: 'POST',
+//             datatype: 'json',
+//             data:{
+//                 item:item
+//             },
+//             success: (data) => {
+//                 consultarTarifa();      
+//             }
+//           });
+//     });    
+// }
+
+//MONGO
 
 function actualizarTarifa(id) {
     var valor=$('#'+id).val();
@@ -4683,13 +4643,15 @@ function actualizarTarifa(id) {
         }
       });
 }
+
 function consultarifas() {
+    var entidad = $('#entidad').val();
     $.ajax({
         url: '/verTarifas',
         type: 'POST',
         datatype: 'json',
         data:{
-            entidad:'111111-1'
+            entidad:entidad
         },
         success: (data) => {
             var cadena='';  
@@ -4712,8 +4674,8 @@ function consultarifas() {
 
 function ingresarTarifas() {
     const issplena=JSON.parse(plena);
-    var entidad='111111-1';
-    var porcentaje=10;    
+    var porcentaje =$('#porcentaje').val();
+    var entidad = $('#entidad').val();   
     issplena.forEach(item => {        
     $.ajax({
         url: '/addTarifa',
@@ -4723,7 +4685,7 @@ function ingresarTarifas() {
             cd:item.cd,
             cups:item.cups,
             nombre:item.nombre,
-            valor:parseInt(item.valor)*porcentaje/100,
+            valor:parseInt(item.valor)+(parseInt(item.valor)*(porcentaje/100)),
             a_quirurgico:item.a_quirurgico,
             atiende:item.atiende,
             autorizacion:item.autorizacion,
@@ -4747,70 +4709,71 @@ function ingresarTarifas() {
 
    
 }
+// MONGO <=
 
-function consultarTarifa(){
-    var entidad = $('#entidad').val();
-    $.ajax({
-    url: '/consultartarifas',
-    type: 'POST',
-    datatype: 'json',
-    data:{
-        entidad:entidad
-    },
-    success: (data) => {
-        var cadena='';  
-        data.forEach(element => {
-            cadena+=` 
-            <tr>
-            <th scope="row">${element.data.cups}</th>
-            <td>${element.data.nombre}</td>
-            <td>$ ${number_format(element.data.valor, 2)}</td>
-            <td><input type='number' id='d${element.id}' class='form-control form-control-sm p-0' placeholder=" $ Dato"></td>
-            <td>
-            <a href="#" class="btn btn-warning btn-sm" onclick="ActualizarItem('${element.id}')" ><i class='fas fa-sync' style='font-size:12px'></i></a>
-            </td>
-        </tr>`;
-        });
-        $('#vertarifas').html(cadena);      
-    }
-    });
-}
+// function consultarTarifa(){
+//     var entidad = $('#entidad').val();
+//     $.ajax({
+//     url: '/consultartarifas',
+//     type: 'POST',
+//     datatype: 'json',
+//     data:{
+//         entidad:entidad
+//     },
+//     success: (data) => {
+//         var cadena='';  
+//         data.forEach(element => {
+//             cadena+=` 
+//             <tr>
+//             <th scope="row">${element.data.cups}</th>
+//             <td>${element.data.nombre}</td>
+//             <td>$ ${number_format(element.data.valor, 2)}</td>
+//             <td><input type='number' id='d${element.id}' class='form-control form-control-sm p-0' placeholder=" $ Dato"></td>
+//             <td>
+//             <a href="#" class="btn btn-warning btn-sm" onclick="ActualizarItem('${element.id}')" ><i class='fas fa-sync' style='font-size:12px'></i></a>
+//             </td>
+//         </tr>`;
+//         });
+//         $('#vertarifas').html(cadena);      
+//     }
+//     });
+// }
 
-function ActualizarItem(id) {
-    var valor=$(`#d${id}`).val();   
-   if (valor != '') {
-     $.ajax({
-        url: '/actualizaritem',
-        type: 'POST',
-        datatype: 'json',
-        data:{
-            id:id,
-            valor:valor
-        },
-        success: (data) => {
-            console.log(data);
-            consultarTarifa();      
-        }
-      });
-   }else{
-       alert('Debe colocar un valor en el campo');
-   }
-}
+// function ActualizarItem(id) {
+//     var valor=$(`#d${id}`).val();   
+//    if (valor != '') {
+//      $.ajax({
+//         url: '/actualizaritem',
+//         type: 'POST',
+//         datatype: 'json',
+//         data:{
+//             id:id,
+//             valor:valor
+//         },
+//         success: (data) => {
+//             console.log(data);
+//             consultarTarifa();      
+//         }
+//       });
+//    }else{
+//        alert('Debe colocar un valor en el campo');
+//    }
+// }
 
-function borrarItem(id) {
-        $.ajax({
-        url: '/borraritem',
-        type: 'POST',
-        datatype: 'json',
-        data:{
-            id:id
-        },
-        success: (data) => {
-            console.log(data);
-            consultarTarifa();      
-        }
-      });
-}
+// function borrarItem(id) {
+//         $.ajax({
+//         url: '/borraritem',
+//         type: 'POST',
+//         datatype: 'json',
+//         data:{
+//             id:id
+//         },
+//         success: (data) => {
+//             console.log(data);
+//             consultarTarifa();      
+//         }
+//       });
+// }
 
 
 function all_usuario() {
@@ -4916,27 +4879,27 @@ function AgregarMed() {
     $('#uso').val('');
 }
 
-function QuitarMedicamento(id) {
-    receta.splice(id,1);
-    $('#recetaJson').val(JSON.stringify(receta));
-    var contador=0;
-    var cadena=`<table class="table"><tbody> `;
-    receta.forEach(element => {
-        contador++;
-        cadena+=`                                
-            <tr>
-                <th scope="row">${contador}</th>
-                <th scope="row">${element.medicamento}</th>
-                <td>${element.cantidad}</td>
-                <td>${element.uso}</td>
-                <td><a href="#" >Quitar</a></td>
-            </tr>
-        `;
-    });
-    cadena+=`</tbody></table>`
-    $('#vreseta').html(cadena);
+// function QuitarMedicamento(id) {
+//     receta.splice(id,1);
+//     $('#recetaJson').val(JSON.stringify(receta));
+//     var contador=0;
+//     var cadena=`<table class="table"><tbody> `;
+//     receta.forEach(element => {
+//         contador++;
+//         cadena+=`                                
+//             <tr>
+//                 <th scope="row">${contador}</th>
+//                 <th scope="row">${element.medicamento}</th>
+//                 <td>${element.cantidad}</td>
+//                 <td>${element.uso}</td>
+//                 <td><a href="#" >Quitar</a></td>
+//             </tr>
+//         `;
+//     });
+//     cadena+=`</tbody></table>`
+//     $('#vreseta').html(cadena);
 
-}
+// }
 function tipoFactura() {
            $.ajax({
             url: '/tipofactura',

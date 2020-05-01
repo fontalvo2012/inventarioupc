@@ -407,7 +407,7 @@ function CitasApartadas(){
             data.forEach(element => {
                 cadena+=` 
                      <tr>
-                        <th scope="row">${element.data.fecha}</th>
+                        <th scope="row">${element.data.fecha}${element.data.hora}</th>
                         <td>${element.data.nmedico}</td>
                         <td>${element.data.motivo}</td>
                         <td><a href="#" onclick="borrarCita('${element.id}')" class="btn btn-primary btn-sm">del</a></td>                             

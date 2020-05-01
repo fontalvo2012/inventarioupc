@@ -213,7 +213,7 @@ function colocarHc(hc){
           $('#laringoscopia').val(data.fisico.laringoscopia);
           $('#oido').val(data.fisico.oido);
           $('#otrosfisico').val(data.fisico.otrosfisico);
-        //   $('#recetaJson').val(JSON.stringify(data.receta));         
+          $('#recetaJson').val(JSON.stringify(data.receta));         
           var cadena=`<table class="table"><tbody> `;
           receta=data.receta;
           receta.forEach(element => {

@@ -1,10 +1,9 @@
-<button class="btn btn-success" onclick="ingresarTarifas()">guardar</button>
-<button class="btn btn-warning" onclick="consultarifas()">ver</button>
+
 <div class="container mt-4">
     <div class="row">
         <div class="col-sm-3">
             <span class="small"><b>Entidad</b></span>
-            <select name="entidad" id="entidad" class="form-control form-control-sm" onchange="consultarTarifa()">
+            <select name="entidad" id="entidad" class="form-control form-control-sm" onchange="consultarifas()">
                 <option value="">Seleccione</option>
                 {{#each valores}}
                     <option value="{{nit}}">{{rsocial}}</option>
@@ -16,7 +15,7 @@
             <input type="number" value="0" class="form-control form-control-sm" name="porcentaje" id="porcentaje">
         </div>
         <div class="col-sm-3 mt-4">
-            <button class="btn btn-primary btn-sm" onclick="recorrerIss()"><i class='fas fa-table' style='font-size:16px'></i> Crear</button>
+            <button class="btn btn-primary btn-sm" onclick="ingresarTarifas()"><i class='fas fa-table' style='font-size:16px'></i> Crear</button>
         </div>
     </div>
 </div>
