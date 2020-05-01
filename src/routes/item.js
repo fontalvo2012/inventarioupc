@@ -33,16 +33,5 @@ router.post('/Actualizartarifas',async(req,res)=>{
 // //MONGO DB <=
 
 
-router.get('/tarifas',(req,res)=>{
-    db.collection('entidades').get()
-    .then((snapshot) => {
-        var valores=[];
-        snapshot.forEach((doc) =>{              
-           valores.push(doc.data());                       
-        });      
-        res.render('item/tarifas',{valores});
-    })
-   
-});
 
 module.exports = router;

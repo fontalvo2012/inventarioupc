@@ -10,6 +10,35 @@ function checkAuthentication(req,res,next){
         res.redirect("/singIn");
     }
 }
+
+
+router.get('/tarifas',(req,res)=>{
+    db.collection('entidades').get()
+    .then((snapshot) => {
+        var valores=[];
+        snapshot.forEach((doc) =>{              
+           valores.push(doc.data());                       
+        });      
+        res.render('item/tarifas',{valores});
+    })
+   
+});
+
+
+router.get('/descargaRips', (req, res) => {  
+
+    db.collection("entidades").get()
+        .then((snapshot) => {
+            var valores = [];
+            snapshot.forEach((doc) => {
+                valores.push(doc.data());
+            });
+            res.render('facturacion/descargaRips', { valores });
+        })
+
+});
+
+
 router.post('/ajaxentidad',checkAuthentication,(req,res)=>{
     const {nit} = req.body;
     db.collection('entidades').where("nit", "==", nit ).get()

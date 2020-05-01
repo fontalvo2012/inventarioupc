@@ -150,7 +150,8 @@ router.get('/prefactura', checkAuthentication, (req, res) => {
 });
 
 router.post('/tipofactura',checkAuthentication,(req,res)=>{
-    const {entidad}=req.body;
+    const {entidad} = req.body;
+    console.log(entidad);
     var entidades = [];
     db.collection("entidades").get()
     .then((snapshot) => {
@@ -159,7 +160,12 @@ router.post('/tipofactura',checkAuthentication,(req,res)=>{
                 entidades.push(doc.data());
             }            
         });
-        res.send(entidades[0].tipofac);
+        try {
+            res.send(entidades[0].tipofac);
+        } catch (error) {
+            
+        }
+        
     })
 })
 

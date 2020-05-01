@@ -21,6 +21,7 @@ router.get('/inicial', (req, res) => {
     res.redirect('/');
 });
 
+
 router.get('/rips', (req, res) => {
     var entidad=[]
     db.collection("entidades").get()
@@ -44,10 +45,9 @@ router.get('/rips', (req, res) => {
             res.render('facturacion/rips', { datos,entidad });
         })
     })
- 
-        
-
 });
+
+
 router.post('/rips', async(req, res) => {
     const { nombre, consecutivo, finicio, ffinal,entidad } = req.body;
     const c = parseInt(consecutivo) + 1;
@@ -221,19 +221,6 @@ router.get('/ct/:consecutivo/:nombre',(req,res)=>{
      res.redirect('/rips');
 });
 
-
-router.get('/descargaRips', (req, res) => {  
-
-    db.collection("entidades").get()
-        .then((snapshot) => {
-            var valores = [];
-            snapshot.forEach((doc) => {
-                valores.push(doc.data());
-            });
-            res.render('facturacion/descargaRips', { valores });
-        })
-
-});
 
 router.post('/descargaRips', (req, res) => { 
     const{entidad}=req.body;
