@@ -461,28 +461,7 @@ plena=`
         "f_procedimiento": "",
         "tipo": "p",
         "forma": "uvr"
-    },
-    {
-        "cd": "52",
-        "cups": "223901",
-        "nombre": "ANTROTOMIA MAXILAR EXPLORATORIA VIA MEATO INFERIOR",
-        "valor": "60",
-        "a_quirurgico": "1",
-        "ambito": "1",
-        "atiende": "1",
-        "autorizacion": "",
-        "c_diagnostico": "",
-        "c_diagnostico2": "",
-        "c_diagnostico3": "",
-        "c_externa": "15",
-        "complicacion": "",
-        "copago": "0",
-        "entidad": "",
-        "f_consulta": "",
-        "f_procedimiento": "",
-        "tipo": "p",
-        "forma": "uvr"
-    },
+    },  
     {
         "cd": "53",
         "cups": "223902",
@@ -776,117 +755,12 @@ plena=`
         "f_procedimiento": "",
         "tipo": "p",
         "forma": "uvr"
-    },
-    {
-        "cd": "68",
-        "cups": "311100",
-        "nombre": "CRICOTIROTOMÍA SOD",
-        "valor": "55",
-        "a_quirurgico": "1",
-        "ambito": "1",
-        "atiende": "1",
-        "autorizacion": "",
-        "c_diagnostico": "",
-        "c_diagnostico2": "",
-        "c_diagnostico3": "",
-        "c_externa": "15",
-        "complicacion": "",
-        "copago": "0",
-        "entidad": "",
-        "f_consulta": "",
-        "f_procedimiento": "",
-        "tipo": "p",
-        "forma": "uvr"
-    },
-    {
-        "cd": "69",
-        "cups": "311200",
-        "nombre": "TRAQUEOTOMIA TEMPORALSOD",
-        "valor": "55",
-        "a_quirurgico": "1",
-        "ambito": "1",
-        "atiende": "1",
-        "autorizacion": "",
-        "c_diagnostico": "",
-        "c_diagnostico2": "",
-        "c_diagnostico3": "",
-        "c_externa": "15",
-        "complicacion": "",
-        "copago": "0",
-        "entidad": "",
-        "f_consulta": "",
-        "f_procedimiento": "",
-        "tipo": "p",
-        "forma": "uvr"
-    },
+    },    
     {
         "cd": "70",
         "cups": "311300",
         "nombre": "TRAQUEOSTOMIA SOD",
         "valor": "90",
-        "a_quirurgico": "1",
-        "ambito": "1",
-        "atiende": "1",
-        "autorizacion": "",
-        "c_diagnostico": "",
-        "c_diagnostico2": "",
-        "c_diagnostico3": "",
-        "c_externa": "15",
-        "complicacion": "",
-        "copago": "0",
-        "entidad": "",
-        "f_consulta": "",
-        "f_procedimiento": "",
-        "tipo": "p",
-        "forma": "uvr"
-    },
-    {
-        "cd": "71",
-        "cups": "317400",
-        "nombre": "REVISION  DE TRAQUEOSTOMIA SOD    (197)",
-        "valor": "75",
-        "a_quirurgico": "1",
-        "ambito": "1",
-        "atiende": "1",
-        "autorizacion": "",
-        "c_diagnostico": "",
-        "c_diagnostico2": "",
-        "c_diagnostico3": "",
-        "c_externa": "15",
-        "complicacion": "",
-        "copago": "0",
-        "entidad": "",
-        "f_consulta": "",
-        "f_procedimiento": "",
-        "tipo": "p",
-        "forma": "uvr"
-    },
-    {
-        "cd": "72",
-        "cups": "311400",
-        "nombre": "PUNCIÓN (ASPIRACIÓN) TRANSTRAQUEAL SOD",
-        "valor": "35",
-        "a_quirurgico": "1",
-        "ambito": "1",
-        "atiende": "1",
-        "autorizacion": "",
-        "c_diagnostico": "",
-        "c_diagnostico2": "",
-        "c_diagnostico3": "",
-        "c_externa": "15",
-        "complicacion": "",
-        "copago": "0",
-        "entidad": "",
-        "f_consulta": "",
-        "f_procedimiento": "",
-        "tipo": "p",
-        "forma": "uvr"
-    },
-    {
-        "cd": "73",
-        "cups": "300202",
-        "nombre": "RESECCIÓN ENDOSCOPICA DE LESIÓN EN LARINGE",
-        "valor": "120",
         "a_quirurgico": "1",
         "ambito": "1",
         "atiende": "1",
@@ -928,27 +802,6 @@ plena=`
         "cd": "57",
         "cups": "213104",
         "nombre": "RESECCIÓN DE TUMOR MALIGNO DE FOSA NASAL, VIA CRANEOFACIAL",
-        "valor": "180",
-        "a_quirurgico": "1",
-        "ambito": "1",
-        "atiende": "1",
-        "autorizacion": "",
-        "c_diagnostico": "",
-        "c_diagnostico2": "",
-        "c_diagnostico3": "",
-        "c_externa": "15",
-        "complicacion": "",
-        "copago": "0",
-        "entidad": "",
-        "f_consulta": "",
-        "f_procedimiento": "",
-        "tipo": "p",
-        "forma": "uvr"
-    },
-    {
-        "cd": "58",
-        "cups": "213105",
-        "nombre": "RESECCIÓN DE TUMOR MALIGNO DE FOSA NASAL, VIA TRANSORBITARIA",
         "valor": "180",
         "a_quirurgico": "1",
         "ambito": "1",
@@ -1198,27 +1051,6 @@ plena=`
         "forma": "uvr"
     },
     {
-        "cd": "70",
-        "cups": "311300",
-        "nombre": "TRAQUEOSTOMIA SOD",
-        "valor": "90",
-        "a_quirurgico": "1",
-        "ambito": "1",
-        "atiende": "1",
-        "autorizacion": "",
-        "c_diagnostico": "",
-        "c_diagnostico2": "",
-        "c_diagnostico3": "",
-        "c_externa": "15",
-        "complicacion": "",
-        "copago": "0",
-        "entidad": "",
-        "f_consulta": "",
-        "f_procedimiento": "",
-        "tipo": "p",
-        "forma": "uvr"
-    },
-    {
         "cd": "71",
         "cups": "317400",
         "nombre": "REVISION  DE TRAQUEOSTOMIA SOD    (197)",
@@ -1264,27 +1096,6 @@ plena=`
         "cd": "73",
         "cups": "300202",
         "nombre": "RESECCIÓN ENDOSCOPICA DE LESIÓN EN LARINGE",
-        "valor": "120",
-        "a_quirurgico": "1",
-        "ambito": "1",
-        "atiende": "1",
-        "autorizacion": "",
-        "c_diagnostico": "",
-        "c_diagnostico2": "",
-        "c_diagnostico3": "",
-        "c_externa": "15",
-        "complicacion": "",
-        "copago": "0",
-        "entidad": "",
-        "f_consulta": "",
-        "f_procedimiento": "",
-        "tipo": "p",
-        "forma": "uvr"
-    },
-    {
-        "cd": "74",
-        "cups": "300402",
-        "nombre": "RESECCIÓN ENDOSCOPICA DE ADHERENCIAS DE LARINGE",
         "valor": "120",
         "a_quirurgico": "1",
         "ambito": "1",
@@ -3256,72 +3067,9 @@ plena=`
         "forma": "uvr"
     },
     {
-        "cd": "50",
-        "cups": "222101",
-        "nombre": "ANTROSTOMIA MAXILAR INTRANASAL VIA MEATO INFERIOR",
-        "valor": "60",
-        "a_quirurgico": "1",
-        "ambito": "1",
-        "atiende": "1",
-        "autorizacion": "",
-        "c_diagnostico": "",
-        "c_diagnostico2": "",
-        "c_diagnostico3": "",
-        "c_externa": "15",
-        "complicacion": "",
-        "copago": "0",
-        "entidad": "",
-        "f_consulta": "",
-        "f_procedimiento": "",
-        "tipo": "p",
-        "forma": "uvr"
-    },
-    {
-        "cd": "51",
-        "cups": "223100",
-        "nombre": "ANTROTOMIA MAXILAR RADICAL SOD",
-        "valor": "75",
-        "a_quirurgico": "1",
-        "ambito": "1",
-        "atiende": "1",
-        "autorizacion": "",
-        "c_diagnostico": "",
-        "c_diagnostico2": "",
-        "c_diagnostico3": "",
-        "c_externa": "15",
-        "complicacion": "",
-        "copago": "0",
-        "entidad": "",
-        "f_consulta": "",
-        "f_procedimiento": "",
-        "tipo": "p",
-        "forma": "uvr"
-    },
-    {
         "cd": "52",
         "cups": "223901",
         "nombre": "ANTROTOMIA MAXILAR EXPLORATORIA VIA MEATO INFERIOR",
-        "valor": "60",
-        "a_quirurgico": "1",
-        "ambito": "1",
-        "atiende": "1",
-        "autorizacion": "",
-        "c_diagnostico": "",
-        "c_diagnostico2": "",
-        "c_diagnostico3": "",
-        "c_externa": "15",
-        "complicacion": "",
-        "copago": "0",
-        "entidad": "",
-        "f_consulta": "",
-        "f_procedimiento": "",
-        "tipo": "p",
-        "forma": "uvr"
-    },
-    {
-        "cd": "53",
-        "cups": "223902",
-        "nombre": "ANTROTOMIA MAXILAR EXPLORATORIA VIA FOSA CANINA CON RESECCION DEMUCOSA DEL ANTRO MAXILAR Y ANTROTOMIA INFERIOR  OPERACIÓN DE CALDWELL- LUC",
         "valor": "60",
         "a_quirurgico": "1",
         "ambito": "1",
@@ -3344,27 +3092,6 @@ plena=`
         "cups": "226100",
         "nombre": "ESCISIÓN DE LESIÓN DE SENO MAXILAR CON ABORDAJE CADWELL-LUC SOD",
         "valor": "60",
-        "a_quirurgico": "1",
-        "ambito": "1",
-        "atiende": "1",
-        "autorizacion": "",
-        "c_diagnostico": "",
-        "c_diagnostico2": "",
-        "c_diagnostico3": "",
-        "c_externa": "15",
-        "complicacion": "",
-        "copago": "0",
-        "entidad": "",
-        "f_consulta": "",
-        "f_procedimiento": "",
-        "tipo": "p",
-        "forma": "uvr"
-    },   
-    {
-        "cd": "56",
-        "cups": "227101",
-        "nombre": "CIERRE DE FISTULA OROANTRAL     (183)",
-        "valor": "70",
         "a_quirurgico": "1",
         "ambito": "1",
         "atiende": "1",
@@ -4601,29 +4328,6 @@ function combertirIss(ob) {
     });
   }
 
-// function recorrerIss() {
-//     var porcentaje =$('#porcentaje').val();
-//     var entidad = $('#entidad').val();
-//     const issplena=JSON.parse(plena);
-//     issplena.forEach(element => {       
-//             element.entidad = entidad;
-//             element.valor=parseInt(element.valor)+(parseInt(element.valor)*porcentaje/100);
-//             console.log(element);       
-//         var item=JSON.stringify(element);
-
-//         $.ajax({
-//             url: '/tarifas',
-//             type: 'POST',
-//             datatype: 'json',
-//             data:{
-//                 item:item
-//             },
-//             success: (data) => {
-//                 consultarTarifa();      
-//             }
-//           });
-//     });    
-// }
 
 //MONGO
 
@@ -4645,6 +4349,8 @@ function actualizarTarifa(id) {
 }
 
 function consultarifas() {
+    const issplena=JSON.parse(plena);
+    console.log('Numero de regitros: ',issplena.length)
     var entidad = $('#entidad').val();
     $.ajax({
         url: '/verTarifas',
@@ -4667,16 +4373,19 @@ function consultarifas() {
                 </td>
             </tr>`;
             });
-            $('#vertarifas').html(cadena);  
+            $('#vertarifas').html(cadena);
+            $('#progreso').html(``);  
         }
       });
 }
 
 function ingresarTarifas() {
+    
     const issplena=JSON.parse(plena);
     var porcentaje =$('#porcentaje').val();
     var entidad = $('#entidad').val();   
-    issplena.forEach(item => {        
+    issplena.forEach(item => {  
+          
     $.ajax({
         url: '/addTarifa',
         type: 'POST',
@@ -4702,78 +4411,19 @@ function ingresarTarifas() {
             forma:item.forma
         },
         success: (data) => {
-            console.log(data) ;
+            console.log(data.valor);
+            $('#progreso').html(`
+            <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="${(data.valor*100)/204}" aria-valuemin="0" aria-valuemax="100" style="width: ${(data.valor*100)/204}%"></div>
+            </div>`);
         }
       });
     });
-
+    consultarifas();
    
 }
 // MONGO <=
 
-// function consultarTarifa(){
-//     var entidad = $('#entidad').val();
-//     $.ajax({
-//     url: '/consultartarifas',
-//     type: 'POST',
-//     datatype: 'json',
-//     data:{
-//         entidad:entidad
-//     },
-//     success: (data) => {
-//         var cadena='';  
-//         data.forEach(element => {
-//             cadena+=` 
-//             <tr>
-//             <th scope="row">${element.data.cups}</th>
-//             <td>${element.data.nombre}</td>
-//             <td>$ ${number_format(element.data.valor, 2)}</td>
-//             <td><input type='number' id='d${element.id}' class='form-control form-control-sm p-0' placeholder=" $ Dato"></td>
-//             <td>
-//             <a href="#" class="btn btn-warning btn-sm" onclick="ActualizarItem('${element.id}')" ><i class='fas fa-sync' style='font-size:12px'></i></a>
-//             </td>
-//         </tr>`;
-//         });
-//         $('#vertarifas').html(cadena);      
-//     }
-//     });
-// }
-
-// function ActualizarItem(id) {
-//     var valor=$(`#d${id}`).val();   
-//    if (valor != '') {
-//      $.ajax({
-//         url: '/actualizaritem',
-//         type: 'POST',
-//         datatype: 'json',
-//         data:{
-//             id:id,
-//             valor:valor
-//         },
-//         success: (data) => {
-//             console.log(data);
-//             consultarTarifa();      
-//         }
-//       });
-//    }else{
-//        alert('Debe colocar un valor en el campo');
-//    }
-// }
-
-// function borrarItem(id) {
-//         $.ajax({
-//         url: '/borraritem',
-//         type: 'POST',
-//         datatype: 'json',
-//         data:{
-//             id:id
-//         },
-//         success: (data) => {
-//             console.log(data);
-//             consultarTarifa();      
-//         }
-//       });
-// }
 
 
 function all_usuario() {
@@ -4879,27 +4529,6 @@ function AgregarMed() {
     $('#uso').val('');
 }
 
-// function QuitarMedicamento(id) {
-//     receta.splice(id,1);
-//     $('#recetaJson').val(JSON.stringify(receta));
-//     var contador=0;
-//     var cadena=`<table class="table"><tbody> `;
-//     receta.forEach(element => {
-//         contador++;
-//         cadena+=`                                
-//             <tr>
-//                 <th scope="row">${contador}</th>
-//                 <th scope="row">${element.medicamento}</th>
-//                 <td>${element.cantidad}</td>
-//                 <td>${element.uso}</td>
-//                 <td><a href="#" >Quitar</a></td>
-//             </tr>
-//         `;
-//     });
-//     cadena+=`</tbody></table>`
-//     $('#vreseta').html(cadena);
-
-// }
 function tipoFactura() {
            $.ajax({
             url: '/tipofactura',

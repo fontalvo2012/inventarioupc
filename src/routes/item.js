@@ -9,7 +9,8 @@ router.post('/addTarifa',async(req,res)=>{
     const {cd,cups,nombre,valor,a_quirurgico,atiende,autorizacion,c_diagnostico,c_diagnostico2,c_diagnostico3,c_externa,complicacion,copago,entidad,f_consulta,f_procedimiento,tipo,forma}=req.body;
     const newTarifas= new Tarifas({cd,cups,nombre,valor,a_quirurgico,atiende,autorizacion,c_diagnostico,c_diagnostico2,c_diagnostico3,c_externa,complicacion,copago,entidad,f_consulta,f_procedimiento,tipo,forma});
     await newTarifas.save();
-    res.send('ingresado '+cups);
+    const num=(await Tarifas.find({entidad:entidad})).length;  
+    res.send({valor:num,cups:cups});
 });
 
 router.post('/verTarifas',async(req,res)=>{
