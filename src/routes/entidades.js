@@ -51,26 +51,7 @@ router.post('/selectEntidad',checkAuthentication,async(req,res)=>{
 
 // MONGO DB <=
 router.get('/addentidades',checkAuthentication,(req,res)=>{
-    db.collection('entidades').get()
-    .then((snapshot) => {
-        var valores=[];
-        snapshot.forEach((doc) => {            
-            valores.push({
-                id:doc.id,
-                nit:doc.data().nit,
-                rsocial:doc.data().rsocial,
-                telefono:doc.data().telefono,
-                email:doc.data().email,
-                direccion:doc.data().direccion,
-                regimen:doc.data().regimen
-            });
-        });       
-        res.render('entidades/index',{valores});
-    })
-    .catch((err) => {
-        console.log('Error getting documents', err);
-        res.render('entidades/index');
-    });
+    res.render('entidades/index');
 });
 
 module.exports = router;

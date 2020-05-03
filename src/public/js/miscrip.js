@@ -85,33 +85,6 @@ function selectEntidad() {
     }
   });
 }
-
-// function selectItems() {
-//   console.log('Select Entidad');
-//   var entidad = $('#entidad').val();
-//   $.ajax({
-//     url: '/itemcups',
-//     type: 'POST',
-//     datatype: 'json',
-//     data: {
-//       entidad: entidad
-//     },
-//     success: (data) => {
-//       var cadena = `
-//       <select name="item" id="item" onchange="consultarItem();" class="form-control form-control-sm">
-//       <option value="">Seleccionar Item</option>`;
-//       data.forEach(element => {
-//         cadena += ` <option value="${element.id}">${element.cups}::${element.nombre}</option>`;
-//       });
-//       cadena += `</select>`;
-//       $('.items').html(cadena);
-//     }
-//   });
-// }
-// --- SELECT ---
-
-
-//---PACIENTE---
 function consultarPaciente() {
   var cedula = $('#cc').val();
   $.ajax({
@@ -122,11 +95,12 @@ function consultarPaciente() {
       cedula: cedula
     },
     success: (data) => {
-      if (data[0]) {
-        paciente = data[0];
+      console.log(data);
+      if (data) {
+        paciente = data;
         console.log(paciente);
-        $('#nombres').val(data[0].nombre.toUpperCase() + " " + data[0].apellido.toUpperCase() + " " + data[0].sapellido.toUpperCase());
-        $('#edad').val(data[0].edad);
+        $('#nombres').val(data.nombre.toUpperCase() + " " + data.apellido.toUpperCase() + " " + data.sapellido.toUpperCase());
+        $('#edad').val(data.edad);
         selectEntidad();
       } else {
         if (confirm("El Paciente no Existe en la Base de datos desea crearlo ? ")) {
@@ -155,50 +129,6 @@ function consultarEntidad() {
     }
   });
 }
-// function consultarItem() {
-//   var id = $('#item').val();
-//   $.ajax({
-//     url: '/ajaxitems',
-//     type: 'POST',
-//     datatype: 'json',
-//     data: {
-//       id: id
-//     },
-//     success: (data) => {
-//       console.log(data[0]);
-//       item = data[0];
-//     }
-//   });
-// }
-
-
-// function additem() {
-//   var aut = $('#autorizacion').val();
-//   var copa = $('#copa').val();
-//   var diag = $('#diag').val();
-//   if ( $('item').val() != "") {
-//     total+=parseInt(item.valor);
-//     item.autorizacion=aut;
-//     item.copago=copa;
-//     item.c_diagnostico=diag;
-//     listitem.push(item);
-//     var cad = "";
-//     listitem.forEach(element => {
-//       cad += `   
-//         <tr>
-//         <th>${element.nombre}</th>
-//         <td>${element.cups}</td>
-//         <td>${element.autorizacion}</td>
-//         <td>$ ${number_format(element.copago, 2)}</td>
-//         <td># ${number_format(element.valor, 2)}</td>
-//         </tr>`;
-//     });
-//     $('#res').html(cad);
-//   } else {
-//     alert('Debe llenar los campos ');
-//   }
-
-// }
 
 function facturar() {
   diaActual = new Date();  
@@ -298,33 +228,6 @@ function verConsecutivo() {
 
 }
 
-function consularPaciente(){
-  var cc=$('#cc').val();
-  $.ajax({
-    url: '/ajax_consultarpacientes',
-    type: 'POST',
-    datatype: 'json',
-    data:{
-      cc:cc
-    },
-    success: (data) => {
-      var cadena="";
-      data.forEach(element => {
-        cadena+=`
-          <tr>
-            <td>${element.cedula}</td>
-            <td>${element.nombre} ${element.apellido} ${element.sapellido}</td>
-            <td>${element.telefono}</td>
-            <td>${element.direccion}</td>
-            <td> <a href="/delpaciente/${element.cedula}" class="btn btn-danger btn-sm">del</a></td>
-          </tr>
-        `;
-      });
-      $('#cuerpo').html(cadena);
-      console.log(cadena);
-    }
-  });
-}
 
 
 function getfac(id) {

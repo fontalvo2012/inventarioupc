@@ -8,8 +8,7 @@ const db = admin.firestore();
 
 const Users=require('../model/users');
 
-passport.serializeUser((user, done) => {
-    console.log(user);
+passport.serializeUser((user, done) => {   
     done(null, user.username);
 });
 
