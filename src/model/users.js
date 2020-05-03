@@ -6,6 +6,7 @@ const usersSchema= new Schema({
     password:{type:String,required:true},
     perfil:{type:String,required:true},
     nombre:{type:String,required:true},
+    medico:{type:String,required:true},
     firma:{type:String,required:true}       
 });
 

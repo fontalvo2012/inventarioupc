@@ -1,22 +1,7 @@
 const { Router } = require('express');
 const router = Router();
-var pdf = require('html-pdf');
 
 
-
-function crearPdf() {
-    var contenido = `
-    <h1>Esto es un test de html-pdf</h1>
-    <p>Estoy generando PDF a partir de este código HTML sencillo</p>
-    `;
-    pdf.create(contenido).toFile('./file/nombre.pdf', function(err, res) {
-        if (err){
-            console.log(err);
-        } else {
-            console.log(res);
-        }
-    });
-}
 
 var admin = require("firebase-admin");
 const db=admin.firestore();
@@ -53,12 +38,8 @@ router.get('/hclinicas/:id/:cc',checkAuthentication,(req,res)=>{
             res.render('hclinicas/index',{valores,hc});
            
         });
-    });
-   
-
-  
+    });  
 }) 
-
 
 router.post('/crearhc',checkAuthentication,(req,res)=>{ 
     const {cedula,nombres,id,motivo,actual,clinico,plan,impdiag,ordenes,dg,recetaJson}= req.body;
