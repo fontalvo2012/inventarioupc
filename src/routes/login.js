@@ -6,84 +6,60 @@ const passport = require('passport');
 const strategy = require('passport-local').Strategy;
 const db = admin.firestore();
 
+const Users=require('../model/users');
 
 passport.serializeUser((user, done) => {
+    console.log(user);
     done(null, user.username);
 });
 
 passport.deserializeUser(async (username, done) => {
-    db.collection('users').where('username', '==', username).get()
-        .then((snapshot) => {
-            var user = [];
-            snapshot.forEach((doc) => {
-                user.push(doc.data());
-            });
-            done(null, user[0]);
-        })
-        .catch((err) => {
-            console.log('Error getting documents', err);
-            done(null, { error: 'error' });
-        });
-
+    const user = await Users.findOne({username:username}).lean();
+    done(null, user); 
 });
 
 passport.use('local-singup', new strategy({
     usernameField: 'user',
     passwordField: 'password',
     passReqToCallback: true
-}, (req, user, password, done) => {
-    const userIn = {
-        username: user,
-        password: bcrypt.hashSync(password),
-        perfil: 0,
-        medico:''
-    };
-    db.collection('users').where('username', '==', userIn.username).get()
-        .then((snapshot) => {
-            var valores = [];
-            snapshot.forEach((doc) => {
-                valores.push(doc.data());
-            });
-            if (valores[0]) {
-                console.log(valores[0]);
-                return done(null, false, req.flash('login', 'No fue creado por que ya existe un usuario con ese nombre.'));
-            } else {
-                let docRef = db.collection('users').doc();
-                let setAda = docRef.set(userIn);
-                done(null, userIn);
-            }
-        })
-        .catch((err) => {
-            console.log('Error getting documents', err);
-        });
+}, async(req, user, password, done) => {
+    const newUser= new Users();
+    const us=await Users.findOne({username:user});
+
+    if(us){
+        done(null,false,req.flash('login', 'El Usuario ya ha sido registrado'));
+    }else{
+        const {nombre,firma}=req.body;
+        newUser.username=user;
+        newUser.password=bcrypt.hashSync(password);
+        newUser.perfil='admin';
+        newUser.nombre=nombre;
+        newUser.firma=firma+'.png';     
+        await newUser.save();
+        done(null, newUser);
+    }    
+
 }));
 
 passport.use('local-singin', new strategy({
     usernameField: 'user',
     passwordField: 'password',
     passReqToCallback: true
-}, (req, user, password, done) => {
-    db.collection('users').where('username', '==', user).get()
-        .then((snapshot) => {
-            var valores = [];
-            snapshot.forEach((doc) => {
-                valores.push(doc.data());
-            });
-            if (valores[0]) {
-                if (!bcrypt.compareSync(password, valores[0].password)) {
-                    return done(null, false, req.flash('login', 'La contraseña es incorrecta'));
-                }
-                done(null, valores[0]);
-            } else {
-                return done(null, false, req.flash('login', 'El Usuario No existe'));
-            }
-        })
-        .catch((err) => {
-            console.log('Error getting documents', err);
-        });
+}, async(req, user, password, done) => {
+    const usuario=await Users.findOne({username:user}).lean();   
+    if (usuario) {
+        if (!bcrypt.compareSync(password, usuario.password)) {
+            return done(null, false, req.flash('login', 'La contraseña es incorrecta'));
+        }
+        done(null, usuario);
+    } else {
+        return done(null, false, req.flash('login', 'El Usuario No existe'));
+    }
+
+    
 }));
 
-router.get('/login',checkAuthentication,(req, res,next) => {
+router.get('/login',(req, res,next) => {
     res.render('login/index');
 });
 

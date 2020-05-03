@@ -33,7 +33,7 @@
 </head>
 
 <body>
-  <input type="hidden" value="{{user.medico}}" id="usermedico">
+  <input type="hidden" value="{{user.nombre}}" id="usermedico">
   {{#if user}}
   <nav class="navbar navbar-expand-lg navbar-primary bg-light">
     <a class="navbar-brand" href="/"><b><i class='far fa-hospital' style='font-size:24px'></i>Orl del Caribe S.A.S (autenticacion)</b></a>
@@ -126,7 +126,7 @@
       </ul>
     </div>
   </nav>
- <div class="fuera ml-5"><div class="dentro small"> <i class='fas fa-user-check' style='font-size:16px'></i> <b>{{user.nombre}}</b> </div></div>
+ <div class="fuera ml-5"><div class="dentro small"> <b><h5><i class='fas fa-user-check' style='font-size:16px'></i> {{user.nombre}}</h5></b> </div></div>
   {{/if}}
    
   <div class="container">
