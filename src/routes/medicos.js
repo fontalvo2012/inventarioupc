@@ -10,6 +10,9 @@ function checkAuthentication(req,res,next){
         res.redirect("/singIn");
     }
   }
+
+
+  
 router.post('/ajaxmedico',(req,res)=>{
     const {id} = req.body;
     db.collection('medicos').where("cedula", "==", id ).get()
@@ -41,21 +44,8 @@ router.post('/agendaMedicos',(req,res)=>{
    
 });
 
-
 router.get('/addmedicos',checkAuthentication,(req,res)=>{
-    db.collection('medicos').get()
-    .then((snapshot) => {
-        var valores=[];
-        snapshot.forEach((doc) => {
-            console.log(doc.id, '=>', doc.data());
-            valores.push({id:doc.id,registro:doc.data().registro,cedula:doc.data().cedula,telefono:doc.data().telefono,email:doc.data().email,nombres:doc.data().nombres});
-        });       
-        res.render('medicos/index',{valores});
-    })
-    .catch((err) => {
-        console.log('Error getting documents', err);
-        res.render('medicos/index');
-    });
+    res.render('medicos/index');
 });
 
 router.post('/addmedicos',checkAuthentication,(req,res)=>{
@@ -69,6 +59,24 @@ router.post('/addmedicos',checkAuthentication,(req,res)=>{
         telefono:telefono
     });
     res.redirect('/addmedicos');
+});
+
+router.post('/actualizarmedico', (req, res) => {
+    const { nombres, email, registro, telefono, id } = req.body;
+    var washingtonRef = db.collection("medicos").doc(id);
+
+    return washingtonRef.update({
+        nombres: nombres,
+        email: email,
+        registro: registro,
+        telefono: telefono
+    })
+        .then(function () {
+            res.send('Actualizado Correctamente');
+        })
+        .catch(function (error) {
+            res.redirect('Error en Actualizar');
+        });
 });
 
 router.post('/ajaxaddmedicos',checkAuthentication,(req,res)=>{

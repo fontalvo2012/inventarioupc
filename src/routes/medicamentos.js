@@ -51,23 +51,7 @@ router.get('/delmedicamento/:id', (req, res) => {
     })
 });
 
-router.post('/actualizarmedico', (req, res) => {
-    const { nombres, email, registro, telefono, id } = req.body;
-    var washingtonRef = db.collection("medicos").doc(id);
 
-    return washingtonRef.update({
-        nombres: nombres,
-        email: email,
-        registro: registro,
-        telefono: telefono
-    })
-        .then(function () {
-            res.send('Actualizado Correctamente');
-        })
-        .catch(function (error) {
-            res.redirect('Error en Actualizar');
-        });
-});
 
 
 module.exports = router;
