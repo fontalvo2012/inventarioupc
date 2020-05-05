@@ -98,7 +98,7 @@ router.post('/crearhc',checkAuthentication,async(req,res)=>{
                         var pfinal=fechaActual();
                         var tipo ='HC';
                         if (await Hclincia.findOne({cedula:cedula})) {
-                            tipi='';
+                            tipo='';
                         }                        
 
                         const newhclinica= new Hclincia({codigo,cedula,nombres,id,cups,diagnostico,nombrecups,motivo,actual,antecedentes,fisico,clinico,plan,impDiagnostico,ordenes,receta,medico,tipo,fecha,pinicio,pfinal,cita});           

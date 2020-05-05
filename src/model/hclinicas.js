@@ -19,7 +19,7 @@ const hclinicaSchema= new Schema({
     ordenes:{type:String,required:true},
     receta:{type:Array,required:true},
     medico:{type:Array,required:true},
-    tipo:{type:String,required:true},
+    tipo:{type:String,required:false},
     fecha:{type:String,required:true},
     pinicio:{type:String,required:true},
     pfinal:{type:String,required:true},
