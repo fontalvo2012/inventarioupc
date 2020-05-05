@@ -1,10 +1,10 @@
 const { Router } = require('express');
 const router = Router();
-
-
-
 var admin = require("firebase-admin");
 const db=admin.firestore();
+
+const Empresa=require('../model/empresas');
+const Hclincia=require('../model/hclinicas');
 
 
 function checkAuthentication(req,res,next){
@@ -41,10 +41,9 @@ router.get('/hclinicas/:id/:cc',checkAuthentication,(req,res)=>{
     });  
 }) 
 
-router.post('/crearhc',checkAuthentication,(req,res)=>{ 
-    const {cedula,nombres,id,motivo,actual,clinico,plan,impdiag,ordenes,dg,recetaJson}= req.body;
-    console.log(req.body);
-    var fisicoArray={
+router.post('/crearhc',checkAuthentication,async(req,res)=>{ 
+    const {cedula,nombres,id,motivo,actual,clinico,plan,impdiag,ordenes,dg,recetaJson}= req.body;    
+    var fisico={
         nariz:req.body.nariz,
         boca:req.body.boca,
         orofaringe: req.body.orofaringe,
@@ -54,7 +53,7 @@ router.post('/crearhc',checkAuthentication,(req,res)=>{
         otrosfisico:req.body.otrosfisico
     };
 
-    var antecedentesArray={
+    var antecedentes={
         medicos:req.body.medicos,
         quirurgico:req.body.quirurgico,
         toxico:req.body.toxico,
@@ -62,82 +61,53 @@ router.post('/crearhc',checkAuthentication,(req,res)=>{
         familiares:req.body.familiares,
         otros:req.body.otros
     };
-
     var impDiagnostico={
         impdiag:impdiag,
         diag:dg.substr(0,4),
         nombre:dg.substr(6,(dg.length)-6)//probar
-    }
-    
-    var med=[];
+    }    
+
+    var medico=[];
+    var cita=[];
     var ccmedico=req.user.medico;
     var cups='';
     var nombrecups='';
+    const  empresa=Empresa.findOne().lean();//PENDIENTE
+    
 
     db.collection('citas').doc(id).get()
     .then((snapshot) => { 
-            var cita=snapshot.data();
-            var diagnos=dg.substr(0,4);  
-            var empresa=[];
-           cups=snapshot.data().item.cups;     
-           nombrecups=snapshot.data().item.nombre;
+            // var cita=snapshot.data();
+            // var diagnos=dg.substr(0,4);  
+            //facturar(cita,diagnos,empresa);
+            cita=snapshot.data();
+            cups=snapshot.data().item.cups;     
+            nombrecups=snapshot.data().item.nombre;
 
-        db.collection('empresa').get()
-            .then((snapshot) => {
-                snapshot.forEach(element => {
-                    empresa.push(element.data());
-                });
-                facturar(cita,diagnos,empresa[0]);
                 db.collection('medicos').where('cedula','==',ccmedico).get()
-                .then((snapshot) => { 
+                .then(async(snapshot) => { 
                     snapshot.forEach(element => {
-                        med=element.data();
+                        medico=element.data();
                     });
-            
-                    db.collection('hclinica').get()
-                    .then((snapshot) => { 
-                        var cont=0; 
-                        var t ='HC';
-                        snapshot.forEach(element => {
-                            if (element.data().cedula==cedula) {
-                                cont++;
-                            }
-                        });
-                        if (cont > 0) {
-                            t='';
-                        }
-                        var num= snapshot.docs.length+1;      
-                        const consulta={ 
-                            codigo: 'HC-'+num,       
-                            cedula,
-                            nombres,
-                            id,
-                            cups,
-                            diagnostico:dg.substr(0,4),
-                            nombrecups,
-                            motivo,
-                            actual,
-                            antecedentes:antecedentesArray,
-                            fisico:fisicoArray,
-                            clinico,
-                            plan,
-                            impdiag:impDiagnostico,
-                            ordenes,
-                            receta:JSON.parse(recetaJson),                            
-                            medico:med,
-                            tipo:t,
-                            fecha:fechaActual(),
-                            pinicio:fechaActual(),
-                            pfinal:fechaActual(),
-                        }            
-                        let docRef = db.collection('hclinica').doc();    
-                        docRef.set(consulta);
+
+                        var codigo='HC-'+(((await Hclincia.find()).length)+1);
+                        var diagnostico=dg.substr(0,4);
+                        var receta=JSON.parse(recetaJson);
+                        var fecha=fechaActual();
+                        var pinicio=fechaActual();
+                        var pfinal=fechaActual();
+                        var tipo ='HC';
+                        if (await Hclincia.findOne({cedula:cedula})) {
+                            tipo='';
+                        }                        
+
+                        const newhclinica= new Hclincia({codigo,cedula,nombres,id,cups,diagnostico,nombrecups,motivo,actual,antecedentes,fisico,clinico,plan,impDiagnostico,ordenes,receta,medico,tipo,fecha,pinicio,pfinal,cita});           
+                        await newhclinica.save();                      
                         finalizarConsulta(id);
-                        res.redirect(`/verhc/${cedula}`);  
-                    });
+                        res.redirect(`/verhc/${cedula}`);                  
                     
                 }); 
-            });   
+              
     });
     
  
@@ -154,76 +124,41 @@ router.post('/colocarhc',checkAuthentication,(req,res)=>{
     }); 
 })
 
-router.get('/imprimirhc/:codigo/:cita',checkAuthentication,(req,res)=>{
-    const {codigo,cita} = req.params;
-    var hc=[];
-    var ct=[];
-    var valores=[];    
-   
-    db.collection('hclinica').doc(codigo).get()
-    .then((snapshot) => {        
-        hc=snapshot.data(); 
-        db.collection('citas').doc(cita).get()
-        .then((snapshot) => { 
-             ct=snapshot.data();  
-             valores.push({cita:ct,historia:hc});
-             console.log(valores);
-             res.render('hclinicas/imprimir',{valores});       
-        });         
-    });
+router.get('/imprimirhc/:codigo',checkAuthentication,async(req,res)=>{
+    const {codigo} = req.params;    
+    const valores=await Hclincia.findOne({codigo:codigo}).lean();
+    console.log(valores);
+    const cita=valores.cita[0];
+    const fisico=valores.fisico[0];
+    const antecedentes=valores.antecedentes[0];
+    const impdiag = valores.impDiagnostico[0];
+    const medico = valores.medico[0];
+    res.render('hclinicas/imprimir',{valores,cita,fisico,impdiag,medico,antecedentes}); 
 });
 
-router.get('/receta/:codigo/:cita',checkAuthentication,(req,res)=>{
-    const {codigo,cita} = req.params;
-    var hc=[];
-    var ct=[];
-    var valores=[];    
-   
-    db.collection('hclinica').doc(codigo).get()
-    .then((snapshot) => {        
-        hc=snapshot.data(); 
-        db.collection('citas').doc(cita).get()
-        .then((snapshot) => { 
-             ct=snapshot.data();  
-             valores.push({cita:ct,historia:hc});
-             console.log(valores);
-             res.render('hclinicas/receta',{valores});       
-        });         
-    });
+router.get('/receta/:codigo',checkAuthentication,async(req,res)=>{
+    const {codigo} = req.params;  
+    const hc=await Hclincia.findOne({codigo:codigo}).lean();
+    const cita=hc.cita[0];
+    const receta=hc.receta;
+    const medico = hc.medico[0];
+    res.render('hclinicas/receta',{hc,receta,cita,medico}); 
 });
 
-router.get('/orden/:codigo/:cita',checkAuthentication,(req,res)=>{
-    const {codigo,cita} = req.params;
-    var hc=[];
-    var ct=[];
-    var valores=[];    
-   
-    db.collection('hclinica').doc(codigo).get()
-    .then((snapshot) => {        
-        hc=snapshot.data(); 
-        db.collection('citas').doc(cita).get()
-        .then((snapshot) => { 
-             ct=snapshot.data();  
-             valores.push({cita:ct,historia:hc});
-             console.log(valores);
-             res.render('hclinicas/ordenes',{valores});       
-        });         
-    });
+router.get('/orden/:codigo',checkAuthentication,async(req,res)=>{
+    const {codigo} = req.params;  
+    const hc=await Hclincia.findOne({codigo:codigo}).lean();
+    const cita=hc.cita[0];
+    const receta=hc.receta;
+    const medico = hc.medico[0];
+    res.render('hclinicas/ordenes',{hc,receta,cita,medico}); 
 });
 
-router.get('/verhc/:cedula',checkAuthentication,(req,res)=>{
+router.get('/verhc/:cedula',checkAuthentication,async(req,res)=>{
     const {cedula} = req.params;
-    db.collection('hclinica').orderBy('codigo','desc').get()
-    .then((snapshot) => {        
-        var valores=[];        
-        snapshot.forEach((doc) =>{ 
-            if (doc.data().cedula==cedula) {
-                valores.push({data:doc.data(),id:doc.id});
-            } 
-           
-        });
-        res.render('hclinicas/verhc',{valores});       
-    })
+    const valores=await Hclincia.find({cedula:cedula}).lean();
+    console.log(valores);
+    res.render('hclinicas/verhc',{valores});
 })
 
 function fechaActual() {
@@ -263,29 +198,11 @@ function facturar(cita,diag,empresa) {
             item: cita.item
           }
           let docRef = db.collection('fac_orl').doc();    
-          docRef.set(factura);
-      
-   
+          docRef.set(factura);  
 }
 
 router.get('/consultashclinicas',checkAuthentication,(req,res)=>{ 
-    db.collection('citas').get()
-    .then((snapshot) => {
-        var valores=[];
-        snapshot.forEach((doc) =>{              
-            if(doc.data().medico==req.user.medico){
-                if (doc.data().estado=='ensala') {
-                    valores.push({data:doc.data(),id:doc.id});
-                }               
-            }             
-        });
-        var cadena =JSON.stringify(valores);
-        res.render('hclinicas/consultas',{cadena});
-    })
-    .catch((err) => {
-        console.log('Error getting documents', err);
-        res.render('hclinicas/consultas');
-    });   
+    res.render('hclinicas/consultas');   
 })
 
 function finalizarConsulta(id) {
@@ -296,35 +213,10 @@ function finalizarConsulta(id) {
         .then(function () {
             console.log('actualizado')
         })
-        .catch(function (error) {           
-           console.log('error')
-        });
+       
 }
 
-router.get('/cons',(req,res)=>{ 
-    let contenido=[{msg:'error'}];
-    let fb= db.collection('citas');ver
-    let query= fb.where('estado','==','ensala').get()
-    .then((snapshot)=>{     
-        snapshot.forEach(element => { 
-               contenido.push(element.data());
-            });
-        }
-    );
-});
 
-async function citas() {
-    let contenido=[{msg:'error'}];
-    let fb= db.collection('citas')   
-    let query= await fb.where('estado','==','ensala').get()
-    .then((snapshot)=>{     
-        snapshot.forEach(element => {
-               contenido.push(element.data());
-            });
-        }
-    ); 
-    return contenido;
-}
 
 
 module.exports = router;

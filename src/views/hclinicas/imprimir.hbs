@@ -13,26 +13,26 @@
   width: 20px;
 }
 </style>
-{{#each valores}}
+
 <div class="row m-4">
     <div class="col-sm-10"></div>
     <div class="col-sm-2">
         <a href="#" class="btn btn-primary btn-sm" onclick="ImprimirHc()"><i class="fas fa-print" style="font-size: 20px;"></i></a>
-        <a href="/verhc/{{historia.cedula}}" class="btn btn-warning btn-sm"><i class="fas fa-reply" style="font-size: 20px;"></i></a>
+        <a href="/verhc/{{cita.paciente.cedula}}" class="btn btn-warning btn-sm"><i class="fas fa-reply" style="font-size: 20px;"></i></a>
     </div>
 </div>
 
 <div class="container m-4 p-3 border" id="imp">
    <div class="row mb-3">
        <div class="col-sm-4"><img src="/img/logoOrl.png"  width="200"></div>
-       <div class="col-sm-8 pt-5 pl-5"><h1><b> {{#if historia.tipo}}Historia clinica{{else}}Evolucion{{/if}}</b></h1></div>
+       <div class="col-sm-8 pt-5 pl-5"><h1><b> {{#if tipo}}Historia clinica{{else}}Evolucion{{/if}}</b></h1></div>
    </div> 
    <div class="border p-4">
         <div class="row">
-        <div class="col-sm-3"><b>Nombre:</b> {{cita.paciente.nombre}} {{cita.paciente.snombre}} {{cita.paciente.apellido}} {{cita.paciente.sapellido}}</div>
+        <div class="col-sm-3"><b>Nombre:</b> {{cita.paciente.snombre}} {{cita.paciente.apellido}} {{cita.paciente.sapellido}}</div>
         <div class="col-sm-3"><b>Cedula: </b> {{cita.paciente.cedula}}</div>
         <div class="col-sm-3"><b>Edad: </b> {{cita.paciente.edad}}</div>
-        <div class="col-sm-3"><b>Nro HC: </b><b style="color: blue; font-size: 20px;">{{historia.codigo}}</b></div>
+        <div class="col-sm-3"><b>Nro HC: </b><b style="color: blue; font-size: 20px;">{{valores.codigo}}</b></div>
     </div>
      <div class="row">
         <div class="col-sm-3"><b>Estado Civil:</b> {{cita.paciente.ecivil}}</div>
@@ -40,7 +40,7 @@
         <div class="col-sm-4"><b>Sexo:</b> {{cita.paciente.sexo}}</div>
     </div>
      <div class="row">
-        <div class="col-sm-3"><b>Fecha HC</b> {{historia.fecha}}</div>
+        <div class="col-sm-3"><b>Fecha HC</b> {{fecha}}</div>
         <div class="col-sm-3"><b>Entidad:</b> {{cita.entidad.rsocial}}</div>
         <div class="col-sm-3"><b>Nacimiento:</b>  {{cita.paciente.nacimiento}}</div>
     </div> 
@@ -50,28 +50,28 @@
        <div class="row mb-3">
            <div class="col-sm-12">
                <b>MOTIVO DE CONSULTA: </b> 
-               <p class="ml-4"><i class='fas fa-caret-right' style='font-size:16px'></i> {{historia.cups}}::{{historia.nombrecups}}</p>
-                {{historia.motivo}}
+               <p class="ml-4"><i class='fas fa-caret-right' style='font-size:16px'></i> {{cita.item.cups}}::{{cita.item.nombre}}</p>
+                {{valores.motivo}}
            </div>
        </div>
         <div class="row  mb-3">
            <div class="col-sm-12">
-               <b>ENFEREMDAD ACTUAL: </b> {{historia.actual}}
+               <b>ENFEREMDAD ACTUAL: </b> {{valores.actual}}
            </div>
        </div>
-       {{#if historia.tipo}}
+       {{#if tipo}}
        <div class="row mb-3">
            <div class="col-sm-12">
                <b>ANTECEDENTES: </b>
                <div class="row">
-                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Medicos: </b></span>{{historia.antecedentes.medicos}}</div>
-                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Quirurgicos: </b></span>{{historia.antecedentes.quirurgico}}</div>
-                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Toxico: </b></span>{{historia.antecedentes.toxico}}</div>
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Medicos: </b></span>{{antecedentes.medicos}}</div>
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Quirurgicos: </b></span>{{antecedentes.quirurgico}}</div>
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Toxico: </b></span>{{antecedentes.toxico}}</div>
                </div>
                 <div class="row">
-                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Traumaticos: </b></span>{{historia.antecedentes.traumatico}}</div>
-                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Familiares: </b></span>{{historia.antecedentes.familiares}}</div>
-                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Otros: </b></span>{{historia.antecedentes.otros}}</div>
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Traumaticos: </b></span>{{antecedentes.traumatico}}</div>
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Familiares: </b></span>{{antecedentes.familiares}}</div>
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Otros: </b></span>{{antecedentes.otros}}</div>
                </div>
                 
            </div>
@@ -81,14 +81,14 @@
            <div class="col-sm-12">
                <b>EXAMEN FISICO: </b>
                 <div class="row">
-                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Nariz: </b></span>{{historia.fisico.nariz}}</div>
-                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Boca: </b></span>{{historia.fisico.boca}}</div>
-                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Orofaringe: </b></span>{{historia.fisico.orofaringe}}</div>
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Nariz: </b></span>{{fisico.nariz}}</div>
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Boca: </b></span>{{fisico.boca}}</div>
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Orofaringe: </b></span>{{fisico.orofaringe}}</div>
                </div>
                 <div class="row">
-                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Laringoscopia Indirecta: </b></span>{{historia.fisico.laringoscopia}}</div>
-                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Oidos: </b></span>{{historia.fisico.oido}}</div>
-                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Cuello: </b></span>{{historia.fisico.cuello}}</div>
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Laringoscopia Indirecta: </b></span>{{fisico.laringoscopia}}</div>
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Oidos: </b></span>{{fisico.oido}}</div>
+                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Cuello: </b></span>{{fisico.cuello}}</div>
                </div>
            </div>
        </div>
@@ -96,13 +96,13 @@
         <div class="row mb-3">
            <div class="col-sm-12">
                <b>DIAGNOSTICO: </b>
-               <p class="ml-4"><i class='fas fa-caret-right' style='font-size:16px'></i> {{historia.impdiag.diag}}::{{historia.impdiag.nombre}}</p>
-                {{historia.impdiag.impdiag}}
+               <p class="ml-4"><i class='fas fa-caret-right' style='font-size:16px'></i> {{impdiag.diag}}::{{impdiag.nombre}}</p>
+                {{impdiag.impdiag}}
            </div>
        </div>
         <div class="row mb-3">
            <div class="col-sm-12">
-               <b>PLAN: </b> {{historia.plan}}
+               <b>PLAN: </b> {{valores.plan}}
            </div>
        </div>
    </div>
@@ -112,13 +112,10 @@
            <div class="col-sm-4 padre" >
                <img src="/img/firmas/1047384229.png" class="m-0 p-0 hijo" width="180">                             
                <hr class="m-0 p-0">
-               <b class="mt-0 mr-4">{{historia.medico.nombres}}</b><br>             
-               <b class="mt-0 mr-4">{{historia.medico.especialidad}}</b><br>            
-               <b class="mt-0 mr-4">RM:{{historia.medico.registro}}</b><br>            
+               <b class="mt-0 mr-4">{{medico.nombres}}</b><br>             
+               <b class="mt-0 mr-4">{{medico.especialidad}}</b><br>            
+               <b class="mt-0 mr-4">RM:{{medico.registro}}</b><br>            
            </div>
        </div>
    </div>
 </div>
-
-
-{{/each}}

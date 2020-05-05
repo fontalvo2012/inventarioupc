@@ -5,22 +5,20 @@ const db = admin.firestore();
 const fs = require('fs');
 
 const resultado = '';
+const Empresa=require('../model/empresas');
 
-router.get('/inicial', (req, res) => {
-    let docRef = db.collection('carlosparra').doc();
-    let setAda = docRef.set({
-        nit: '111',
-        rzocial: 'carlos parra',
-        habilitacion: '130000012',
-        direccion: '',
-        telfonos: '',
-        web: '',
-        email: '',
-        resolfac: ''
-    });
-    res.redirect('/');
+//MONGO DB=>
+router.get('/empresa',(req,res)=>{
+    res.render('empresa/index');
 });
 
+router.post('/empresa',async(req,res)=>{
+    const {nit,rsocial,direccion,habilitacion,resolucion,tresolucion,telefono,email}=req.body;
+    const newEmpresa=Empresa({nit,rsocial,direccion,habilitacion,resolucion,tresolucion,telefono,email});
+    await newEmpresa.save();
+    res.redirect('/empresa');
+});
+//MONGO DB <=
 
 
 
@@ -212,7 +210,6 @@ router.post('/descargaRips', (req, res) => {
             });
             res.send(valores);
         })
-
 });
 
 router.get('/descarga/:consec/:nombre', (req, res) => {
