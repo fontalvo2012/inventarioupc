@@ -4529,6 +4529,9 @@ function AgregarMed() {
     $('#uso').val('');
 }
 
+function QuitarMedicamento(id) {
+    console.log('hay que hacer esta funcion')
+}
 function tipoFactura() {
            $.ajax({
             url: '/tipofactura',

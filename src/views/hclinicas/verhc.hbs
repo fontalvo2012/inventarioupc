@@ -12,14 +12,14 @@
   <tbody>
       {{#each valores}}
     <tr>     
-      <th scope="row">{{data.codigo}}</th>
-      <tH>{{data.fecha}}</tH>
-      <td>{{data.cedula}}</td>
-      <td>{{data.nombres}}</td>    
-      <td>{{#if data.tipo}}H.CLINICA{{else}}CONTROL{{/if}}</td>
-      <td><a href="/imprimirhc/{{id}}/{{data.id}}" class="btn btn-primary btn-sm"><i class="fas fa-file-medical" style="font-size: 20px;"></i></a>
-      <a href="/receta/{{id}}/{{data.id}}" class="btn btn-warning btn-sm"><i class="fas fa-capsules" style="font-size: 20px;"></i></a>
-      <a href="/orden/{{id}}/{{data.id}}" class="btn btn-success btn-sm"><i class="	fas fa-user-md" style="font-size: 20px;"></i></a>
+      <th scope="row">{{codigo}}</th>
+      <tH>{{fecha}}</tH>
+      <td>{{cedula}}</td>
+      <td>{{nombres}}</td>    
+      <td>{{#if tipo}}H.CLINICA{{else}}CONTROL{{/if}}</td>
+      <td><a href="/imprimirhc/{{codigo}}" class="btn btn-primary btn-sm"><i class="fas fa-file-medical" style="font-size: 20px;"></i></a>
+      <a href="/receta/{{codigo}}" class="btn btn-warning btn-sm"><i class="fas fa-capsules" style="font-size: 20px;"></i></a>
+      <a href="/orden/{{codigo}}" class="btn btn-success btn-sm"><i class="	fas fa-user-md" style="font-size: 20px;"></i></a>
       </td>
      
     </tr>
