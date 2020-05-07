@@ -239,10 +239,10 @@
                     <tbody>
                         {{#each hc}}
                         <tr>
-                            <th>{{data.codigo}}</th>
-                            <td>{{data.fecha}}</td>
-                            <td>{{#if data.tipo}}HC{{else}}CONTROL{{/if}}</td>
-                            <td><a href="#" class="btn btn-primary bn-sm" onclick="colocarHc('{{id}}')"
+                            <th>{{codigo}}</th>
+                            <td>{{fecha}}</td>
+                            <td>{{#if tipo}}HC{{else}}CONTROL{{/if}}</td>
+                            <td><a href="#" class="btn btn-primary bn-sm" onclick="colocarHc('{{_id}}')"
                                     data-dismiss="modal">ver</a></td>
                         </tr>
                         {{/each}}
