@@ -21,7 +21,7 @@ router.post('/verTarifas',async(req,res)=>{
 
 router.post('/verItem',async(req,res)=>{
     const {id,entidad}=req.body;
-    const t= await Tarifas.find({entidad:entidad,cups:id})
+    const t= await Tarifas.findOne({entidad:entidad,cups:id})
     res.send(t);
 });
 

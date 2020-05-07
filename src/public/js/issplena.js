@@ -4311,8 +4311,18 @@ function combertirIss(ob) {
   }
 
   function consultarItem2() {
-    var id = $('#item').val(); 
-    var entidad=$('#entidad').val();    
+    var id = $('#item').val();     
+    var entidad=$('#entidad').val();
+    console.log('entidad: ',entidad);
+
+    if(entidad==""){
+        alert('DEBES SELECCIONAR UNA ENTIDAD');
+        $('#entidad').focus();
+        $('#m').css('display','none');
+    }else{
+        $('#m').css('display','block');
+    }
+
     $.ajax({
       url: '/verItem',
       type: 'POST',
@@ -4322,8 +4332,9 @@ function combertirIss(ob) {
         entidad:entidad
       },
       success: (data) => {
-        console.log(data[0]);
-        item = data[0];
+        console.log(data);
+        item = data;
+      
       }
     });
   }

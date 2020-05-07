@@ -15,17 +15,9 @@ function checkAuthentication(req,res,next){
     }
   }
 
-router.get('/hclinicas/:id/:cc',checkAuthentication,(req,res)=>{ 
-    const {id,cc} = req.params;
-    var hc=[];
-    db.collection('hclinica').orderBy('codigo','desc').get()
-    .then((snapshot) => {
-        snapshot.forEach(element => {
-            if(element.data().cedula==cc){
-                hc.push({data:element.data(),id:element.id});
-            }
-           
-        }); 
+router.get('/hclinicas/:id/:cc',checkAuthentication,async(req,res)=>{ 
+    const {id,cc} = req.params;   
+    const hc=await Hclincia.find({cedula:cc}).lean();
         db.collection('citas').get()
         .then((snapshot) => {
             console.log(snapshot.docs.length)
@@ -38,7 +30,7 @@ router.get('/hclinicas/:id/:cc',checkAuthentication,(req,res)=>{
             res.render('hclinicas/index',{valores,hc});
            
         });
-    });  
+      
 }) 
 
 router.post('/crearhc',checkAuthentication,async(req,res)=>{ 
@@ -113,16 +105,12 @@ router.post('/crearhc',checkAuthentication,async(req,res)=>{
  
 });
 
-router.post('/colocarhc',checkAuthentication,(req,res)=>{
+router.post('/colocarhc',checkAuthentication,async(req,res)=>{
     const {codigo}=req.body;
-    db.collection('hclinica').doc(codigo).get()
-    .then((snapshot) => { 
-          res.send(snapshot.data());
-    })
-    .catch((err) => {
-        console.log('Error getting documents', err);       
-    }); 
+    const hc=await Hclincia.findById(codigo);
+    res.send(hc)
 })
+
 
 router.get('/imprimirhc/:codigo',checkAuthentication,async(req,res)=>{
     const {codigo} = req.params;    
