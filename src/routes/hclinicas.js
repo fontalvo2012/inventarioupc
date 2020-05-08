@@ -5,6 +5,7 @@ const db=admin.firestore();
 
 const Empresa=require('../model/empresas');
 const Hclincia=require('../model/hclinicas');
+const Factura=require('../model/facturas');
 
 
 function checkAuthentication(req,res,next){
@@ -60,7 +61,7 @@ router.post('/crearhc',checkAuthentication,async(req,res)=>{
     }    
 
     var medico=[];
-    var cita=[];
+    // var cita=[];
     var ccmedico=req.user.medico;
     var cups='';
     var nombrecups='';
@@ -68,10 +69,7 @@ router.post('/crearhc',checkAuthentication,async(req,res)=>{
     
 
     db.collection('citas').doc(id).get()
-    .then((snapshot) => { 
-            // var cita=snapshot.data();
-            // var diagnos=dg.substr(0,4);  
-            //facturar(cita,diagnos,empresa);
+    .then((snapshot) => {            
             cita=snapshot.data();
             cups=snapshot.data().item.cups;     
             nombrecups=snapshot.data().item.nombre;
@@ -93,8 +91,13 @@ router.post('/crearhc',checkAuthentication,async(req,res)=>{
                             tipo='';
                         }                        
 
-                        const newhclinica= new Hclincia({codigo,cedula,nombres,id,cups,diagnostico,nombrecups,motivo,actual,antecedentes,fisico,clinico,plan,impDiagnostico,ordenes,receta,medico,tipo,fecha,pinicio,pfinal,cita});           
-                        await newhclinica.save();                      
+                        
+                        const newhclinica= new Hclincia({codigo,cedula,nombres,id,cups,diagnostico,nombrecups,motivo,actual,antecedentes,fisico,clinico,plan,impDiagnostico,ordenes,receta,medico,tipo,fecha,pinicio,pfinal,cita});                                            
+                        await newhclinica.save();    
+                        const hc=Hclincia.findOne({codigo:codigo});
+                        console.log(cita);
+                        const newFactura= new Factura({codigo:'PRE',hc:cita,anexo:[],estado:'PREFACTURA'});                                          
+                        await newFactura.save();
                         finalizarConsulta(id);
                         res.redirect(`/verhc/${cedula}`);                  
                     
@@ -144,8 +147,7 @@ router.get('/orden/:codigo',checkAuthentication,async(req,res)=>{
 
 router.get('/verhc/:cedula',checkAuthentication,async(req,res)=>{
     const {cedula} = req.params;
-    const valores=await Hclincia.find({cedula:cedula}).lean();
-    console.log(valores);
+    const valores=await Hclincia.find({cedula:cedula}).lean();    
     res.render('hclinicas/verhc',{valores});
 })
 

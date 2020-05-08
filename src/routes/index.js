@@ -10,7 +10,6 @@ admin.initializeApp({
   databaseURL: "https://citas-orl.firebaseio.com"
 });
 const db=admin.firestore();
-
 function checkAuthentication(req,res,next){
   if(req.isAuthenticated()){        
       next();

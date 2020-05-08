@@ -47,28 +47,15 @@ router.get('/consultarpacientes',checkAuthentication,async(req,res)=>{
 router.post('/ajax_consultarpacientes',checkAuthentication,async(req,res)=>{
     const {cc} = req.body;   
     const p=await Paciente.findOne({cedula:cc});
-    res.send(p);
-
-    // db.collection('pacientes').get()
-    // .then((snapshot) => {
-    //     var valores=[];
-    //     snapshot.forEach((doc) => {
-    //     if ( validarcedula(cc,doc.data().cedula)) {
-    //         valores.push(doc.data());
-    //     }           
-    //     });
-      
-    //     res.send(valores)
-    // })
-   
+    res.send(p);   
 });
 
 
-function validarcedula(c1,c2) {
-    if(c1.substr(0,c1.length)==c2.substr(0,c1.length)){
-        return true;
-    }
-    return false;
-}
+// function validarcedula(c1,c2) {
+//     if(c1.substr(0,c1.length)==c2.substr(0,c1.length)){
+//         return true;
+//     }
+//     return false;
+// }
 
 module.exports = router;
