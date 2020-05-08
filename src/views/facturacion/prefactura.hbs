@@ -1,7 +1,7 @@
 <div class="container m-1">
     <div id="alert"></div>
     <h5><b>.::Prefacturacion::.</b></h5>
-    <form action="" method="post">
+    <form action="/prefactura" method="post">
         <div class="row">
             <div class="col-sm-3">
                 <span class="small"><b>Entidades</b></span>
@@ -25,11 +25,6 @@
                     <div class="col-sm-3"><button class="btn btn-success btn-sm"><i class='fas fa-search' style='font-size:12px'></i> Buscar</button></div>
                     <div class="col-sm-3"> <div id="factBotton"></div>   </div>
                 </div>
-                
-                
-            
-            
-            
             </div>
     </div>
     </form>
@@ -52,11 +47,11 @@
       {{#each prefacturas}}
     <tr>
       <th scope="row">1</th>
-      <td>{{data.pinicio}}</td>
-      <td>{{data.paciente.nombre}} {{data.paciente.snombre}} {{data.paciente.apellido}} {{data.paciente.sapellido}}</td>
-      <td>{{data.eps.rsocial}}</td>
-      <td>{{data.item.nombre}}</td>
-      <td>$ {{data.item.valor}}</td>
+      <td>{{hc.fecha}}</td>
+      <td>{{hc.paciente.nombre}} {{hc.paciente.snombre}} {{hc.paciente.apellido}} {{hc.paciente.sapellido}}</td>
+      <td>{{hc.entidad.rsocial}}</td>
+      <td>{{hc.item.nombre}}</td>
+      <td>$ {{hc.item.valor}}</td>
       <td>         
           {{!-- <a href="/fac_evento/{{id}}" class="btn btn-primary btn-sm"><i class="fas fa-money-check-alt" style="font-size: 20px;"></i></a> --}}
           <a href="/imprimirprefac/{{id}}" class="btn btn-primary btn-sm"><i class="fas fa-print" style="font-size: 16px;"></i></a>

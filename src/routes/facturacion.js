@@ -5,7 +5,7 @@ const router = Router();
 var admin = require("firebase-admin");
 const db = admin.firestore();
 const Entidad = require('../model/entidad');
-
+const Factura = require('../model/facturas');
 
 function checkAuthentication(req, res, next) {
     if (req.isAuthenticated()) {
@@ -14,24 +14,28 @@ function checkAuthentication(req, res, next) {
         res.redirect("/singIn");
     }
 }
+router.get('/prefactura', checkAuthentication, async(req, res) => {    
+    const entidades = await Entidad.find().lean();
+    const prefacturas = await Factura.find({estado:'PREFACTURA'}).lean();    
+    res.render('facturacion/prefactura', { prefacturas, entidades });    
+});
 
-
-//=> MONGO DB
-router.get('/prefactura', checkAuthentication, async(req, res) => {
-    var entidades = [];  
-    entidades = await Entidad.find().lean();
-    db.collection("fac_orl").get()
-    .then((snapshot) => {
-        var prefacturas = [];
-        snapshot.forEach((doc) => {
-            if (doc.data().estado != 'facturado') {
-                prefacturas.push({ data: doc.data(), id: doc.id });                            
+router.post('/prefactura', checkAuthentication, async(req, res) => {
+    const { entidad, ini, fin } = req.body;
+    const entidades = await Entidad.find().lean();
+    const prefacturas = await Factura.find(
+        {
+        'hc.entidad.nit':entidad,                   
+        fecha:{
+            $gte:new Date(ini),
+            $lte:new Date(fin) 
             }
-        });        
-        res.render('facturacion/prefactura', { prefacturas, entidades });
-    }) 
+        }).lean();
+    console.log(prefacturas);
+    res.render('facturacion/prefactura', { prefacturas, entidades });       
 
 });
+//=> MONGO DB
 
 
 router.post('/tipofactura',checkAuthentication,async(req,res)=>{
@@ -41,7 +45,7 @@ router.post('/tipofactura',checkAuthentication,async(req,res)=>{
     try {
         res.send(entidades[0].tipofac);
     } catch (error) {} 
-})
+});
 
 router.get('/facturas', checkAuthentication, async(req, res) => {
     var entidades = [];
@@ -445,30 +449,6 @@ router.post('/capita', checkAuthentication, (req, res) => {
             res.send('0');
         });  
     });
-
-});
-router.post('/prefactura', checkAuthentication, (req, res) => {
-    const { entidad, ini, fin } = req.body;
-    var entidades = [];
-    db.collection("entidades").get()
-        .then((snapshot) => {
-            snapshot.forEach((doc) => {
-                entidades.push(doc.data());
-            });
-            db.collection("fac_orl").where('eps.nit', '==', entidad).get()
-                .then((snapshot) => {
-                    var prefacturas = [];
-                    snapshot.forEach((doc) => {
-                        if (Betwen3(ini, fin, doc.data().pinicio)) {
-                            if (doc.data().estado != 'facturado') {
-                                prefacturas.push({ data: doc.data(), id: doc.id });
-                            }
-                        }
-                    });
-                    console.log(prefacturas);
-                    res.render('facturacion/prefactura', { prefacturas, entidades });
-                })
-        })
 
 });
 

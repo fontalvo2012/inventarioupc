@@ -59,7 +59,7 @@ passport.use('local-singin', new strategy({
     
 }));
 
-router.get('/login',(req, res,next) => {
+router.get('/login',checkAuthentication,(req, res,next) => {
     res.render('login/index');
 });
 
