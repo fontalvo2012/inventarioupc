@@ -20,8 +20,7 @@ router.get('/hclinicas/:id/:cc',checkAuthentication,async(req,res)=>{
     const {id,cc} = req.params;   
     const hc=await Hclincia.find({cedula:cc}).lean();
         db.collection('citas').get()
-        .then((snapshot) => {
-            console.log(snapshot.docs.length)
+        .then((snapshot) => {          
             var valores=[];        
             snapshot.forEach((doc) =>{            
                 if(doc.id==id){
@@ -96,7 +95,7 @@ router.post('/crearhc',checkAuthentication,async(req,res)=>{
                         await newhclinica.save();    
                         const hc=Hclincia.findOne({codigo:codigo});
                         console.log(cita);
-                        const newFactura= new Factura({codigo:'PRE',hc:cita,anexo:[],estado:'PREFACTURA'});                                          
+                        const newFactura= new Factura({codigo:0,hc:cita,anexo:{},estado:'PREFACTURA'});                                          
                         await newFactura.save();
                         finalizarConsulta(id);
                         res.redirect(`/verhc/${cedula}`);                  

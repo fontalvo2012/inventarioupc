@@ -14,9 +14,14 @@ function checkAuthentication(req, res, next) {
         res.redirect("/singIn");
     }
 }
+
+
+//MONGO <=
 router.get('/prefactura', checkAuthentication, async(req, res) => {    
     const entidades = await Entidad.find().lean();
-    const prefacturas = await Factura.find({estado:'PREFACTURA'}).lean();    
+    const prefacturas = await Factura.find({estado:'PREFACTURA'}).lean();  
+    const max=await Factura.findOne({estado:'facturado'}).sort({codigo:'asc'}).limit(1);
+    console.log(max.codigo);  
     res.render('facturacion/prefactura', { prefacturas, entidades });    
 });
 
@@ -31,42 +36,64 @@ router.post('/prefactura', checkAuthentication, async(req, res) => {
             $lte:new Date(fin) 
             }
         }).lean();
-    console.log(prefacturas);
+   
     res.render('facturacion/prefactura', { prefacturas, entidades });       
 
 });
-//=> MONGO DB
 
 
 router.post('/tipofactura',checkAuthentication,async(req,res)=>{
     const {entidad} = req.body;   
     var entidades = [];
-    entidades = await Entidad.find({nit:entidad}).lean();
-    try {
-        res.send(entidades[0].tipofac);
-    } catch (error) {} 
+    entidades = await Entidad.findOne({nit:entidad});
+    res.send(entidades);
+    
+});
+
+
+router.post('/facturar', checkAuthentication, async(req, res) => {
+    const { entidad, ini, fin } = req.body;  
+    const max=await Factura.findOne({estado:'facturado'}).sort({codigo:'asc'}).limit(1);
+     
+    await Factura.updateMany(
+        {
+        'hc.entidad.nit':entidad,
+        estado:'PREFACTURA',                   
+        fecha:{
+            $gte:new Date(ini),
+            $lte:new Date(fin) 
+            }
+        },
+        {
+           codigo:max.codigo+1, 
+           estado:'facturado' 
+        }
+    ); 
+    res.send('facturado');     
+   
 });
 
 router.get('/facturas', checkAuthentication, async(req, res) => {
-    var entidades = [];
-    entidades = await Entidad.find().lean();
-    db.collection("facturas").get()
-    .then((snapshot) => {
-        var prefacturas = [];
-        snapshot.forEach((doc) => {
-            prefacturas.push({ data: doc.data(), id: doc.id });
-        });
-        res.render('facturacion/facturas', { prefacturas, entidades });
-    })
-
+    var facturas = [];
+    const entidades = await Entidad.find().lean();
+    codigos = await Factura.find().distinct('codigo',{estado:'facturado'});
+    for (let index = 0; index < codigos.length; index++) {
+       facturas.push( await Factura.findOne({codigo:codigos[index]}));        
+    }
+    console.log(facturas);
+    res.render('facturacion/facturas', {entidades});
 });
+
+
+//=> MONGO DB
+
+
 
 
 router.post('/facturas', checkAuthentication, async(req, res) => {
     const { entidad, ini, fin } = req.body;
     var entidades = [];
     entidades = await Entidad.find().lean();
-
     db.collection("facturas").where('eps.nit', '==', entidad).get()
     .then((snapshot) => {
         var prefacturas = [];
@@ -74,11 +101,9 @@ router.post('/facturas', checkAuthentication, async(req, res) => {
             if (Betwen3(ini, fin, doc.data().pinicio)) {
                 prefacturas.push({ data: doc.data(), id: doc.id });
             }
-        });
-        console.log(prefacturas);
+        });       
         res.render('facturacion/facturas', { prefacturas, entidades });
-    })
-
+    });
 });
 
 
@@ -102,82 +127,15 @@ router.get('/rips', async(req, res) => {
         })
 });
 
-//MONGO <=
 
-router.get('/facturar', checkAuthentication, (req, res) => {
-    db.collection('carlosparra').get()
-        .then((snapshot) => {
-            var valores = [];
-            snapshot.forEach((doc) => {
-                valores.push({
-                    id: doc.id,
-                    nit: doc.data().nit,
-                    web: doc.data().web,
-                    rzocial: doc.data().rzocial,
-                    web: doc.data().web,
-                    habilitacion: doc.data().habilitacion,
-                    email: doc.data().email,
-                    resolfac: doc.data().resolfac,
-                    direccion: doc.data().direccion,
-                    telefono: doc.data().telfonos
-                });
-            });
-            res.render('facturacion/index', { valores });
-        })
-        .catch((err) => {
-            console.log('Error getting documents', err);
-            valores.push({ mensaje: 'error' });
-            res.render('facturacion/index', { valores });
-        });
-});
 
-router.post('/facturar', checkAuthentication, (req, res) => {
-    const { fac } = req.body;
-    let docRef = db.collection('facturas').doc();
-    let setAda = docRef.set(JSON.parse(fac))
-        .then(function () {
-            res.send('ingresado');
-        })
-        .catch(function (error) {
-            res.send('error');
-        });
-});
 
-router.get('/consultarFactura', checkAuthentication, (req, res) => {
-    db.collection("facturas").orderBy('consecutivo', 'desc').get()
-        .then((snapshot) => {
-            var valores = [];
-            snapshot.forEach((doc) => {
-                valores.push(doc.data());
-            });
-            res.render('facturacion/consultar', { valores });
-        })
-        .catch((err) => {
-            console.log('Error getting documents', err);
-            res.render('facturacion/consultar');
-        });
+
+router.get('/consultarFactura', checkAuthentication, (req, res) => {  
 
 })
 
-router.post('/consultasFactura', checkAuthentication, (req, res) => {
-    const { ini, fin } = req.body;
-    console.log(req.body);
-    db.collection("facturas").get()
-        .then((snapshot) => {
-            var valores = [];
-            snapshot.forEach((doc) => {
-                if (Betwen2(ini, fin, doc.data().fecha)) {
-                    valores.push(doc.data());
-                }
 
-            });
-            res.send(valores);
-        })
-        .catch((err) => {
-            console.log('Error getting documents', err);
-            res.send({ 'valor': 'error' });
-        });
-})
 
 router.post('/consecutivo', checkAuthentication, (req, res) => {
     db.collection("facturas")

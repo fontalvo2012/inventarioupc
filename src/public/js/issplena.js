@@ -4513,6 +4513,28 @@ function completMedicamentos() {
     }
   });
 }
+
+
+function facturarEntidad() {
+    var ini = $('#ini').val();
+    var fin = $('#fin').val();
+    var entidad = $('#entidad').val();
+    $.ajax({
+    url: '/facturar',
+    type: 'POST',
+    datatype: 'json', 
+    data: {
+        ini: ini,
+        fin: fin,
+        entidad, eps
+    },  
+    success: (data) => {
+        console.log(data);     
+        
+    }
+  });
+}
+
 var receta=[];
 function AgregarMed() {
     receta.push({medicamento:$('#medicamento').val(),cantidad:$('#cant').val(),uso:$('#uso').val()});
@@ -4551,12 +4573,11 @@ function tipoFactura() {
             data:{
                 entidad:$('#entidad').val()
             },
-            success: (data) => {    
-                console.log(data);
-                if (data == '') {
-                    $("#factBotton").html(`<a  href="#" class="btn btn-warning btn-sm" id="all" onclick="all_usuario()">usuarios</a>`);
+            success: (data) => { 
+                if (data.tfac == '') {
+                    $("#factBotton").html(`<a  href="#" class="btn btn-warning btn-sm" id="all" >usuarios</a>`);
                 }else{
-                    $("#factBotton").html(`<a  href="#" class="btn btn-warning btn-sm" id="cap" onclick="capita()">Capita</a>`);
+                    $("#factBotton").html(`<a  href="#" class="btn btn-primary btn-sm" id="cap" onclick="facturarEntidad()">Facturar</a>`);
                 }        
             }
           });   
