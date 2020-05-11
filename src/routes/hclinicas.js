@@ -95,7 +95,7 @@ router.post('/crearhc',checkAuthentication,async(req,res)=>{
                         await newhclinica.save();    
                         const hc=Hclincia.findOne({codigo:codigo});
                         console.log(cita);
-                        const newFactura= new Factura({codigo:0,hc:cita,anexo:{},estado:'PREFACTURA'});                                          
+                        const newFactura= new Factura({codigo:0,hc:cita,anexo:{},estado:'PREFACTURA',descripcion:'FATURACION DE PACIENTES ATENDIDOS EN PROCEDIMIENTOS Y CONSULTAS'});                                          
                         await newFactura.save();
                         finalizarConsulta(id);
                         res.redirect(`/verhc/${cedula}`);                  
