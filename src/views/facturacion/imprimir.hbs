@@ -13,19 +13,22 @@
         width: 20px;
     }
 </style>
-{{#each dato}}
+
 <div class="row m-4">
     <div class="col-sm-10"></div>
     <div class="col-sm-2">
         <a href="#" class="btn btn-primary btn-sm" onclick="ImprimirHc()"><i class="fas fa-print"
                 style="font-size: 20px;"></i></a>
         <a href="/facturas" class="btn btn-warning btn-sm"><i class="fas fa-reply" style="font-size: 20px;"></i></a>
+           <a href="/anexo/{{f.codigo}}" class="btn btn-success btn-sm"><i class="fas fa-clipboard-list"
+                  style="font-size: 20px;"></i></a>
+              </a>
     </div>
 </div>
 
 <div class="container m-5 p-3 border" id="imp" style="width: 80%;">
     <div class="row">
-        <div class="col-sm-9">
+        <div class="col-sm-8">
             <div class="row">
                 <div class="col-sm-4 p-3">
 
@@ -39,28 +42,28 @@
                     <div class="card">
                         <div class="card-header"></div>
                         <div class="card-body">
-                            <b>{{empresa.rsocial}}</b> <br>
-                            <b>Nit:</b> {{factura.nit}} <br>
-                            <b>Direccion:</b> {{empresa.direccion}}<br>
-                            <b>Telefono:</b> {{empresa.telefono}}<br>
-                            <b>email:</b> {{empresa.email}}<br>
+                            <b>{{e.rsocial}}</b> <br>
+                            <b>Nit:</b> {{e.nit}} <br>
+                            <b>Direccion:</b> {{e.direccion}}<br>
+                            <b>Telefono:</b> {{e.telefono}}<br>
+                            <b>email:</b> {{e.email}}<br>
                         </div>
                     </div>
                 </div>
             </div>
 
         </div>
-        <div class="col-sm-3 mt-5 p-1">
+        <div class="col-sm-4 mt-5 p-1">
             <div class="card">
                 <div class="card-header"></div>
                 <div class="card-body p-0 pl-5">
-                    <h2 style="color: red;"><b>Nro.</b>{{factura.prefijo}}-{{factura.consecutivo}}</h2>
+                    <h5 style="color: red;"><b>Nro. OR-{{f.codigo}}</b></h5>
                 </div>
             </div>
             <div class="card mt-1">
                 <div class="card-header"><b class="card-title">Fecha</b></div>
                 <div class="card-body  p-0 pl-4" style="color: blue; font-size: 20px;">
-                    <b>::{{factura.fecha}}::</b>
+                    <b>::{{f.fecha}}::</b>
                 </div>
             </div>
 
@@ -76,14 +79,14 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm-6">
-                            <b>NOMBRE: </b> {{factura.eps.rsocial}}<br>
-                            <b>DIRECCION: </b>{{factura.eps.direccion}} <br>
-                            <b>TELEFONO: </b> {{factura.eps.telefono}}<br>
+                            <b>NOMBRE: </b> {{f.hc.entidad.rsocial}}<br>
+                            <b>DIRECCION: </b>{{f.hc.entidad.direccion}} <br>
+                            <b>TELEFONO: </b> {{f.hc.entidad.telefono}}<br>
                         </div>
                         <div class="col-sm-6">
-                            <b>NIT: </b> {{factura.eps.nit}}<br>
-                            <b>TC: </b>{{factura.eps.tfacturacion}} <br>
-                            <b>email: </b> {{factura.eps.email}}<br>
+                            <b>NIT: </b> {{f.hc.entidad.nit}}<br>
+                            <b>TC: </b>{{f.hc.entidad.tfacturacion}} <br>
+                            <b>email: </b> {{f.hc.entidad.email}}<br>
                         </div>
                     </div>
                 </div>
@@ -96,21 +99,21 @@
                 <div class="card-header"></div>
                 <div class="card-body small">
                     <div class="row">
-                        <div class="col-sm-2"><b>CUPS</b></div>
+                      
                         <div class="col-sm-8"><b>DESCRIPCION</b></div>               
                         <div class="col-sm-2"><b>VALOR</b></div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-2">{{factura.item.cups}}</div>
-                        <div class="col-sm-8">{{factura.item.nombre}}</div>                  
-                        <div class="col-sm-2">{{factura.item.valor}}</div>
+                        
+                        <div class="col-sm-8">AQUI VA LA DESCRIPCION LA FACTURACION</div>                  
+                        <div class="col-sm-2">$ {{total}}</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="row mt-2">
-        <div class="col-sm-8">
+        <div class="col-sm-6">
             <div class="card">
                 <div class="card-header"></div>
                 <div class="card-body">
@@ -118,12 +121,12 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-4 small">
+        <div class="col-sm-6 small">
             <div class="card">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm-5"><b>SUBTOTAL</b></div>
-                        <div class="col-sm-4">$ {{factura.item.valor}}</div>
+                        <div class="col-sm-4">$ {{total}}</div>
                     </div>
                     <div class="row">
                         <div class="col-sm-5"><b>% IVA</b></div>
@@ -131,7 +134,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-5"><b>TOTAL</b></div>
-                        <div class="col-sm-4">$ {{factura.item.valor}}</div>
+                        <div class="col-sm-4">$ <b>{{total}}</b></div>
                     </div>
                 </div>
             </div>
@@ -142,10 +145,9 @@
         <div class="col-sm-4 padre">
             <img src="/img/firmas/1047384229.png" class="m-0 p-0 hijo" width="180">
             _____________________________________________ <br>
-            <b>{{empresa.rlegal}}</b><br>
-            <b>{{empresa.cc}}</b>
+            <b>{{user.nombre}}</b><br>
+            <b>{{user.medico}}</b>
 
         </div>
     </div>
 </div>
-{{/each}}

@@ -4513,6 +4513,31 @@ function completMedicamentos() {
     }
   });
 }
+
+
+function facturarEntidad() {
+    var ini = $('#ini').val();
+    var fin = $('#fin').val();
+    var entidad = $('#entidad').val();
+    $.ajax({
+    url: '/facturar',
+    type: 'POST',
+    datatype: 'json', 
+    data: {
+        ini: ini,
+        fin: fin,
+        entidad, entidad
+    },  
+    success: (data) => {
+        console.log(data); 
+        if(data=='facturado'){
+            location.href = "/facturas";
+        }    
+        
+    }
+  });
+}
+
 var receta=[];
 function AgregarMed() {
     receta.push({medicamento:$('#medicamento').val(),cantidad:$('#cant').val(),uso:$('#uso').val()});
@@ -4541,7 +4566,25 @@ function AgregarMed() {
 }
 
 function QuitarMedicamento(id) {
-    console.log('hay que hacer esta funcion')
+    receta.splice(id,1);
+    $('#recetaJson').val(JSON.stringify(receta));
+    var contador=0;
+    var cadena=`<table class="table"><tbody> `;
+    receta.forEach(element => {
+        contador++;
+        cadena+=`                                
+            <tr>
+                <th scope="row">${contador}</th>
+                <th scope="row">${element.medicamento}</th>
+                <td>${element.cantidad}</td>
+                <td>${element.uso}</td>
+                <td><a href="#" >Quitar</a></td>
+            </tr>
+        `;
+    });
+    cadena+=`</tbody></table>`
+    $('#vreseta').html(cadena);
+
 }
 function tipoFactura() {
            $.ajax({
@@ -4551,13 +4594,8 @@ function tipoFactura() {
             data:{
                 entidad:$('#entidad').val()
             },
-            success: (data) => {    
-                console.log(data);
-                if (data == '') {
-                    $("#factBotton").html(`<a  href="#" class="btn btn-warning btn-sm" id="all" onclick="all_usuario()">usuarios</a>`);
-                }else{
-                    $("#factBotton").html(`<a  href="#" class="btn btn-warning btn-sm" id="cap" onclick="capita()">Capita</a>`);
-                }        
+            success: (data) => { 
+                $("#factBotton").html(`<a  href="#" class="btn btn-primary btn-sm" id="cap" onclick="facturarEntidad()">Facturar</a>`);     
             }
           });   
 }

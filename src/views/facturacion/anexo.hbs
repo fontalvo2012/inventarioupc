@@ -1,3 +1,21 @@
+
+<script>
+function number_format(amount, decimals) {
+    amount += ''; 
+    amount = parseFloat(amount.replace(/[^0-9\.]/g, ''));
+    decimals = decimals || 0; 
+    if (isNaN(amount) || amount === 0) 
+        return parseFloat(0).toFixed(decimals);
+    amount = '' + amount.toFixed(decimals);
+    var amount_parts = amount.split('.'),
+        regexp = /(\d+)(\d{3})/;
+    while (regexp.test(amount_parts[0]))
+        amount_parts[0] = amount_parts[0].replace(regexp, '$1' + ',' + '$2');
+    return amount_parts.join('.');
+  }
+
+</script>
+
 <div class="row m-4">
     <div class="col-sm-10"></div>
     <div class="col-sm-2">
@@ -6,25 +24,29 @@
         <a href="/facturas" class="btn btn-warning btn-sm"><i class="fas fa-reply" style="font-size: 20px;"></i></a>
     </div>
 </div>
-<div class="container m-5 " id='imp'>
-    {{#each dato}}
-    <h4>Anexo de factura .:: {{factura.prefijo}} {{factura.consecutivo}} ::.</h4>
-    <div class="row ml-3 mr-2">
-        <div class="col-sm-1 border"><b>CEDULA</b></div>
-        <div class="col-sm-2 border"><b>PACIENTE</b></div>
-        <div class="col-sm-1 border"><b>CUPS</b></div>
-        <div class="col-sm-7 border"><b>EXAMEN</b></div>
-        <div class="col-sm-1 border"><b>VALOR</b></div>    
-    </div>
-    {{/each}}
-    {{#each anexo}}
-    <div class="row small ml-3 mr-2">
-        <div class="col-sm-1 border">{{paciente.cedula}}</div>
-        <div class="col-sm-2 border">{{paciente.nombre}} {{paciente.snombre}} {{paciente.apellido}} {{paciente.sapellido}}</div>
-        <div class="col-sm-1 border">{{item.cups}}</div>
-        <div class="col-sm-7 border">{{item.nombre}}</div>
-        <div class="col-sm-1 border">{{item.valor}}</div>
+<div class="container m-1 " id='imp'>
+      <h4>Anexo de factura .:: {{i.codigo}} ::.</h4>
+    <div class="row small ml-3 mr-2" style="background-color: aqua;">        
+        <div class="col-sm-1 border"><b>Cedula</b></div>
+        <div class="col-sm-2 border"><b>Nombres</b></div>
+        <div class="col-sm-1 border"><b>Cups</b></div>
+        <div class="col-sm-5 border"><b>Examen/Consulta</b></div>
+        <div class="col-sm-2 border"><b>Valor</b></div>
+        <div class="col-sm-1 border"><b>Fecha</b></div>
+    </div>   
+    {{#each f}}    
+    <div class="row small ml-3 mr-2">        
+        <div class="col-sm-1 border">{{hc.paciente.cedula}}</div>
+        <div class="col-sm-2 border">{{hc.paciente.nombre}} {{hc.paciente.snombre}} {{hc.paciente.apellido}} {{hc.paciente.sapellido}}</div>
+        <div class="col-sm-1 border">{{hc.item.cups}}</div>
+        <div class="col-sm-5 border">{{hc.item.nombre}}</div>
+        <div class="col-sm-2 border">$ <script>document.write(number_format(parseInt('{{hc.valor}}'), 2))</script></div>
+        <div class="col-sm-1 border">{{hc.fecha}}</div>
     </div>
 {{/each}}
+    <div class="row">
+        <div class="col-sm-9"></div>
+        <div class="col-sm-2"><b>$ {{total}}</b></div>
+    </div>
 </div>
 
