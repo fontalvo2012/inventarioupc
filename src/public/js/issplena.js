@@ -4526,10 +4526,13 @@ function facturarEntidad() {
     data: {
         ini: ini,
         fin: fin,
-        entidad, eps
+        entidad, entidad
     },  
     success: (data) => {
-        console.log(data);     
+        console.log(data); 
+        if(data=='facturado'){
+            location.href = "/facturas";
+        }    
         
     }
   });
@@ -4574,11 +4577,7 @@ function tipoFactura() {
                 entidad:$('#entidad').val()
             },
             success: (data) => { 
-                if (data.tfac == '') {
-                    $("#factBotton").html(`<a  href="#" class="btn btn-warning btn-sm" id="all" >usuarios</a>`);
-                }else{
-                    $("#factBotton").html(`<a  href="#" class="btn btn-primary btn-sm" id="cap" onclick="facturarEntidad()">Facturar</a>`);
-                }        
+                $("#factBotton").html(`<a  href="#" class="btn btn-primary btn-sm" id="cap" onclick="facturarEntidad()">Facturar</a>`);     
             }
           });   
 }
