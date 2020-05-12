@@ -135,7 +135,8 @@ router.get('/facturas', checkAuthentication, async (req, res) => {
             }
             
         facturas = await Factura.findOne({ codigo: codigos[index] }).lean();
-        datos[index] = { id: facturas._id, cd: codigos[index], anexo: anexo, item: facturas.hc.item, entidad: facturas.hc.entidad, hc: facturas.hc,total:total };
+        
+        datos[index] = { id: facturas._id, cd: codigos[index], anexo: anexo, item: facturas.hc.item, entidad: facturas.hc.entidad, hc: facturas.hc,total:total,fecha:fechafac(facturas.fecha) };
     }   
     res.render('facturacion/facturas', { datos });
 });
@@ -240,7 +241,7 @@ function formatDate2(fecha) {
 
 }
 function fechafac(fecha) {
-    return fecha.getDate()+"/"+fecha.getMonth()+"/"+fecha.getFullYear();
+    return fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear();
 }
 
 function formatDate3(fecha) {

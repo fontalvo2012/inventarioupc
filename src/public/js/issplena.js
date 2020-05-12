@@ -4566,7 +4566,25 @@ function AgregarMed() {
 }
 
 function QuitarMedicamento(id) {
-    console.log('hay que hacer esta funcion')
+    receta.splice(id,1);
+    $('#recetaJson').val(JSON.stringify(receta));
+    var contador=0;
+    var cadena=`<table class="table"><tbody> `;
+    receta.forEach(element => {
+        contador++;
+        cadena+=`                                
+            <tr>
+                <th scope="row">${contador}</th>
+                <th scope="row">${element.medicamento}</th>
+                <td>${element.cantidad}</td>
+                <td>${element.uso}</td>
+                <td><a href="#" >Quitar</a></td>
+            </tr>
+        `;
+    });
+    cadena+=`</tbody></table>`
+    $('#vreseta').html(cadena);
+
 }
 function tipoFactura() {
            $.ajax({
