@@ -179,59 +179,6 @@ router.get('/imprimirfac/:cd', checkAuthentication, async (req, res) => {
 
 //=> MONGO DB
 
-router.get('/rips', async (req, res) => {
-    var entidad = []
-    entidad = await Entidad.find().lean();
-
-    db.collection("rips")
-        .orderBy("consecutivo", "desc").limit(1).get()
-        .then((snapshot) => {
-            var valores = [];
-            snapshot.forEach((doc) => {
-                valores.push(doc.data());
-            });
-            var datos = [{
-                consecutivo: valores[0].consecutivo,
-                nombre: conseRit(valores[0].consecutivo)
-            }];
-            console.log(datos);
-            res.render('facturacion/rips', { datos, entidad });
-        })
-});
-
-
-
-
-
-
-// router.get('/imprimirprefac/:id', checkAuthentication, (req, res) => {
-//     const { id } = req.params;
-//     var factura = [];
-//     var empresa = [];
-//     var dato = [];
-//     db.collection('empresa').get()
-//         .then((snapshot) => {
-//             snapshot.forEach(element => {
-//                 empresa.push(element.data());
-//             });
-
-//             db.collection('fac_orl').doc(id).get()
-//                 .then((snapshot) => {
-//                     factura.push(snapshot.data());
-
-//                     dato.push({ factura: factura[0], empresa: empresa[0] });
-//                     console.log(dato);
-//                     res.render('facturacion/impprefactura', { dato })
-//                 })
-//         })
-
-// })
-
-
-
-
-
-
 
 function formatDate2(fecha) {
     var dia = fecha.substr(0, 2);
