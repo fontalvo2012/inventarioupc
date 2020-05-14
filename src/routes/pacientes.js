@@ -51,11 +51,6 @@ router.post('/ajax_consultarpacientes',checkAuthentication,async(req,res)=>{
 });
 
 
-// function validarcedula(c1,c2) {
-//     if(c1.substr(0,c1.length)==c2.substr(0,c1.length)){
-//         return true;
-//     }
-//     return false;
-// }
+
 
 module.exports = router;

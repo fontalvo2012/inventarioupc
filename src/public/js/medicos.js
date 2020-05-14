@@ -171,27 +171,26 @@ function actualizarMedico() {
 }
 
 function blurMedicoCedula() {
-    var id = $('#cedula').val();
+    var cedula = $('#cedula').val();
     $.ajax({
         url: '/ajaxmedico',
         type: 'POST',
         datatype: 'json',
         data: {
-            id: id
+            cedula: cedula
         },
-        success: (data) => {
-           
+        success: (data) => {           
             if (data) {
-                $('#id').val(data.id)
-                $('#cedula').val(data.data.cedula);
-                $('#especialidad').val(data.data.especialidad);
-                $('#nombre').val(data.data.nombres);
-                $('#email').val(data.data.email);
-                $('#registro').val(data.data.registro);
-                $('#telefono').val(data.data.telefono);
+                $('#id').val(data._id)
+                $('#cedula').val(data.cedula);
+                $('#especialidad').val(data.especialidad);
+                $('#nombre').val(data.nombres);
+                $('#email').val(data.email);
+                $('#registro').val(data.registro);
+                $('#telefono').val(data.telefono);
                 $('#ingresar').css('visibility', 'hidden');
                 $('#actualizar').css('visibility', 'visible');
-                orario = data.data.agenda;
+                orario = data.agenda;
                 mostrarAgenda();
             } else {
                 $('#nombre').val("");
@@ -293,18 +292,18 @@ function fechas(dia) {
 }
 
 function diasmendicos() {
-    var id = $('#medico').val();
+    var cedula = $('#medico').val();
     var diasfinal=[];
     $.ajax({
         url: '/ajaxmedico',
         type: 'POST',
         datatype: 'json',
         data: {
-            id: id
+            cedula: cedula
         },
         success: (data) => {
             var c=0;
-            data.data.agenda.forEach(element => {                
+            data.agenda.forEach(element => {                
                 var d=element.dia;
                 diasfinal.push({dia:d});
                 c++;
