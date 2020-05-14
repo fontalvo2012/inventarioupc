@@ -43,6 +43,54 @@ router.post('/prefactura', checkAuthentication, async (req, res) => {
 
 });
 
+router.post('/prefacturaitem', checkAuthentication, async (req, res) => {
+    const { entidad, ini, fin,opcion } = req.body;
+    const op={opcion:'asc'}
+    const prefacturas = await Factura.find(
+        {
+            'hc.entidad.nit': entidad,
+            estado: 'PREFACTURA',
+            fecha: {
+                $gte: new Date(ini),
+                $lte: new Date(fin)
+            }
+        });
+        var cont;
+        var datos=[];
+        prefacturas.forEach(element => {
+            datos.push(
+                {
+                    id:element._id,
+                    nombres:element.hc.nombres,
+                    entidad:element.hc.entidad.rsocial,
+                    item:element.hc.item.nombre,
+                    autorizacion:element.hc.autorizacion,
+                    copago:parseInt(element.hc.copago),
+                    valor:parseInt(element.hc.valor),
+                    fecha:fechafac(element.fecha)
+                });
+        });
+
+        var oJSON = sortJSON(datos, opcion, 'asc');
+    console.log(oJSON);
+    res.send(oJSON);
+
+});
+
+function sortJSON(data, key, orden) {
+    return data.sort(function (a, b) {
+        var x = a[key],
+        y = b[key];
+
+        if (orden === 'asc') {
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        }
+
+        if (orden === 'desc') {
+            return ((x > y) ? -1 : ((x < y) ? 1 : 0));
+        }
+    });
+}
 
 router.post('/tipofactura', checkAuthentication, async (req, res) => {
     const { entidad } = req.body;
@@ -116,6 +164,7 @@ function fechaformat() {
 router.get('/facturas', checkAuthentication, async (req, res) => {
     var facturas = [];
     var datos = [];
+    const entidades = await Entidad.find().lean()
     codigos = await Factura.find().distinct('codigo', { estado: 'facturado' });
     for (let index = 0; index < codigos.length; index++) {
         var anexo = {};    
@@ -138,7 +187,46 @@ router.get('/facturas', checkAuthentication, async (req, res) => {
         
         datos[index] = { id: facturas._id, cd: codigos[index], anexo: anexo, item: facturas.hc.item, entidad: facturas.hc.entidad, hc: facturas.hc,total:total,fecha:fechafac(facturas.fecha) };
     }   
-    res.render('facturacion/facturas', { datos });
+    res.render('facturacion/facturas', { datos,entidades });
+});
+
+router.post('/facturas', checkAuthentication, async (req, res) => {
+    const {entidad,ini,fin}=req.body;
+    var facturas = [];
+    var datos = [];
+    const entidades = await Entidad.find().lean()
+    codigos = await Factura.find().distinct('codigo',
+    {
+        'hc.entidad.nit': entidad,
+        estado: 'facturado',
+        fecha: {
+            $gte: new Date(ini),
+            $lte: new Date(fin)
+        }
+    });
+    for (let index = 0; index < codigos.length; index++) {
+        var anexo = {};          
+        var cont = 0;
+        var total=0;
+
+        var fac = await Factura.find({ codigo: codigos[index] }).lean();
+        fac.forEach(element => {
+            cont++;
+            anexo[cont] = element;
+            var v=element.hc.valor
+            total += parseInt(v);
+        });
+        total=number_format(total,2);
+         
+            if(fac[0].hc.entidad.tfac=='capita'){
+                total=number_format(parseInt(fac[0].hc.entidad.vcap),2);
+            }
+            
+        facturas = await Factura.findOne({ codigo: codigos[index] }).lean();
+        
+        datos[index] = { id: facturas._id, cd: codigos[index], anexo: anexo, item: facturas.hc.item, entidad: facturas.hc.entidad, hc: facturas.hc,total:total,fecha:fechafac(facturas.fecha) };
+    }   
+    res.render('facturacion/facturas', { datos,entidades });
 });
 
 router.get('/anexo/:cd', checkAuthentication, async (req, res) => {
@@ -178,59 +266,6 @@ router.get('/imprimirfac/:cd', checkAuthentication, async (req, res) => {
 })
 
 //=> MONGO DB
-
-router.get('/rips', async (req, res) => {
-    var entidad = []
-    entidad = await Entidad.find().lean();
-
-    db.collection("rips")
-        .orderBy("consecutivo", "desc").limit(1).get()
-        .then((snapshot) => {
-            var valores = [];
-            snapshot.forEach((doc) => {
-                valores.push(doc.data());
-            });
-            var datos = [{
-                consecutivo: valores[0].consecutivo,
-                nombre: conseRit(valores[0].consecutivo)
-            }];
-            console.log(datos);
-            res.render('facturacion/rips', { datos, entidad });
-        })
-});
-
-
-
-
-
-
-// router.get('/imprimirprefac/:id', checkAuthentication, (req, res) => {
-//     const { id } = req.params;
-//     var factura = [];
-//     var empresa = [];
-//     var dato = [];
-//     db.collection('empresa').get()
-//         .then((snapshot) => {
-//             snapshot.forEach(element => {
-//                 empresa.push(element.data());
-//             });
-
-//             db.collection('fac_orl').doc(id).get()
-//                 .then((snapshot) => {
-//                     factura.push(snapshot.data());
-
-//                     dato.push({ factura: factura[0], empresa: empresa[0] });
-//                     console.log(dato);
-//                     res.render('facturacion/impprefactura', { dato })
-//                 })
-//         })
-
-// })
-
-
-
-
-
 
 
 function formatDate2(fecha) {

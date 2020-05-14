@@ -53,5 +53,4 @@ router.get('/delmedicamento/:id', (req, res) => {
 
 
 
-
 module.exports = router;

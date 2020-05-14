@@ -6,6 +6,10 @@ const fs = require('fs');
 
 const resultado = '';
 const Empresa=require('../model/empresas');
+const Entidad=require('../model/entidad');
+const Factura=require('../model/facturas');
+const Paciente=require('../model/pacientes');
+const Rip=require('../model/rips');
 
 //MONGO DB=>
 router.get('/empresa',(req,res)=>{
@@ -21,171 +25,110 @@ router.post('/empresa',async(req,res)=>{
 //MONGO DB <=
 
 
-
-router.post('/rips', async(req, res) => {
-    const { nombre, consecutivo, finicio, ffinal,entidad } = req.body;
-    const c = parseInt(consecutivo) + 1;
-    var f = new Date();
-    fechaA = f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear();
-    var valores = [];
-    db.collection('facturas').get()
-        .then((snapshot) => {            
-            var usuarios=[];
-            var cantAF = 0;
-            var cantAC = 0;
-            var cantAP = 0;
-            var cantUs = 0;
-            snapshot.forEach((doc) => {  
-                console.log(doc.data());
-                if (doc.data().eps.nit == entidad) {
-                    if (Betwen(finicio, ffinal, doc.data().fecha)) {
-                        cantAF++;                  
-                        usuarios.push(doc.data().paciente);
-                        valores.push(doc.data());
-                        fs.appendFile(`file/AF${nombre}.txt`, `${doc.data().habilitacion},${doc.data().razon},NI,${doc.data().nit},CP${doc.data().consecutivo},${doc.data().fecha},${doc.data().pinicio},${doc.data().pfinal},${doc.data().eps.cdeps},${doc.data().eps.rsocial},${doc.data().eps.contrato},${doc.data().eps.beneficio},${doc.data().eps.poliza},${doc.data().eps.copago},${doc.data().eps.comision},${doc.data().eps.descuento},${doc.data().total}\n`, (error) => {
-                            if (error) {
-                                throw error;
-                            }
-                        });
-                        if (doc.data().item.tipo=='p') {
-                            cantAP++;
-                        fs.appendFile(`file/AP${nombre}.txt`, `${doc.data().prefijo}${doc.data().consecutivo},${doc.data().habilitacion},${doc.data().paciente.td},${doc.data().paciente.cedula},${doc.data().pinicio},${doc.data().item.autorizacion},${doc.data().item.cups},${doc.data().item.ambito},${doc.data().item.f_procedimiento},${doc.data().item.atiende},${doc.data().item.c_diagnostico},${doc.data().item.c_diagnostico2},${doc.data().item.complicacion},1,${doc.data().item.valor}\n`, (error) => {
-                            if (error) {
-                                throw error;
-                            }
-                        }); 
-                        }
-                        if (doc.data().item.tipo=='c') {
-                            cantAC++;
-                            fs.appendFile(`file/AC${nombre}.txt`,`${doc.data().prefijo}${doc.data().consecutivo},${doc.data().habilitacion},${doc.data().paciente.td},${doc.data().paciente.cedula},${doc.data().pinicio},${doc.data().item.autorizacion},${doc.data().item.cups},${doc.data().item.f_consulta},${doc.data().item.c_externa},${doc.data().item.c_diagnostico},${doc.data().item.c_diagnostico2},${doc.data().item.c_diagnostico2},${doc.data().item.c_diagnostico3},1,${doc.data().item.valor},${doc.data().item.copago},${parseInt(doc.data().item.copago) + parseInt(doc.data().item.valor)}\n`, (error) => {
-                                if (error) {
-                                    throw error;
-                                }
-                            });     
-                        }                  
-                        
-                     
-                    } else {
-                        console.log('No se encuentra dentro del periodo');
-                    }
-                } 
-               
-            });
-           if (valores[0]) {
-            var US = removeDuplicates(valores);                   
-            US.forEach(element => {
-                cantUs++;
-                fs.appendFile(`file/US${nombre}.txt`, `${element.paciente.td},${element.paciente.cedula},${element.eps.cdeps},${element.eps.regimen},${element.paciente.apellido},${element.paciente.sapellido},${element.paciente.nombre},${element.paciente.snombre},${element.paciente.edad},${element.paciente.unidad},${element.paciente.sexo},${element.paciente.cddep},${element.paciente.cdM},${element.paciente.zresidencial}\n`, (error) => {
-                    if (error) {
-                        throw error;
-                    } else {
-
-                    }
-                });
-            });            
-            fs.appendFile(`file/CT${nombre}.txt`, `${valores[0].habilitacion},${fechaA},AF${nombre},${cantAF}\n`, (error) => {});
-            fs.appendFile(`file/CT${nombre}.txt`, `${valores[0].habilitacion},${fechaA},AP${nombre},${cantAP}\n`, (error) => {});
-            fs.appendFile(`file/CT${nombre}.txt`, `${valores[0].habilitacion},${fechaA},AC${nombre},${cantAC}\n`, (error) => {});
-            fs.appendFile(`file/CT${nombre}.txt`, `${valores[0].habilitacion},${fechaA},US${nombre},${cantUs}\n`, (error) => {});
-
-            let docRef = db.collection('rips').doc();
-            docRef.set({consecutivo:c,entidad:entidad})
-                .then(function () {
-                    console.log('Ingresado')
-                })
-           }
-           res.redirect('/descargaRips');
-        })
+router.post('/ripscrear',async(req,res)=>{
+    const {finicio, ffinal,entidad } = req.body;    
+    const empresa = await Empresa.findOne();    
+    var cantAF=0,cantAP=0,cantAC=0,cantUs=0;
+    const cs= await Rip.findOne().sort({consecutivo:'desc'});   
+    const nombre=conseRit(cs.consecutivo);
    
-});
-// RIPS EVENTOS
-router.post('/ripseventos', async(req, res) => {
-    const { nombre, consecutivo, finicio, ffinal,entidad } = req.body;
-    const c = parseInt(consecutivo) + 1;
-    var f = new Date();
-    var factura='';
-    fechaA = f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear();
-    var valores = [];
-    var anexo=[];
-    var x=0;
-    db.collection('facturas').get()
-        .then((snapshot) => {            
-            var usuarios=[];
-            var cantAF = 0;
-            var cantAC = 0;
-            var cantAP = 0;
-            var cantUs = 0;
-            snapshot.forEach((doc) => {  
-                // console.log(doc.data());
-                if (doc.data().eps.nit == entidad) {
-                    if (Betwen(finicio, ffinal, doc.data().fecha)) {
-                        anexo=doc.data().anexo;
-                        cantAF++; 
-                        factura = doc.data().consecutivo; 
-                        valores.push(doc.data());
-                       
-                        fs.appendFile(`file/AF${nombre}.txt`, `${doc.data().habilitacion},${doc.data().razon},NI,${doc.data().nit},CP${doc.data().consecutivo},${doc.data().fecha},${doc.data().pinicio},${doc.data().pfinal},${doc.data().eps.cdeps},${doc.data().eps.rsocial},${doc.data().eps.contrato},${doc.data().eps.beneficio},${doc.data().eps.poliza},${doc.data().eps.copago},${doc.data().eps.comision},${doc.data().eps.descuento},${doc.data().total}\n`, (error) => {
-                            if (error) {
-                                throw error;
-                            }
-                        });
-                    } else {
-                        console.log('No se encuentra dentro del periodo');
-                    }
-                } 
-               
-            });
-           
-            anexo.forEach(element => {
-                if (element.item.tipo=='p') {
-                    cantAP++;
-                   fs.appendFile(`file/AP${nombre}.txt`, `${valores[0].prefijo}${valores[0].consecutivo},${valores[0].habilitacion},${element.paciente.td},${element.paciente.cedula},${valores[0].pinicio},${element.item.autorizacion},${element.item.cups},${element.item.ambito},${element.item.f_procedimiento},${element.item.atiende},${element.item.c_diagnostico},${element.item.c_diagnostico2},${element.item.complicacion},1,${element.item.valor}\n`, (error) => {
-                    if (error) {
-                        throw error;
-                    }
-                }); 
+
+    const factura=await Factura.find(
+        {
+            'hc.entidad.nit': entidad,
+            estado: 'facturado',
+            fecha: {
+                $gte: new Date(finicio),
+                $lte: new Date(ffinal)
+            }
+        }
+    );
+    if (factura[0]) {
+        const rip= new Rip({consecutivo:cs.consecutivo+1,entidad:entidad,nombre:nombre});
+        await rip.save();
+        const cedulas = await Factura.find().distinct('hc.paciente.cedula',
+            {
+                'hc.entidad.nit': entidad,
+                estado: 'facturado',
+                fecha: {
+                    $gte: new Date(finicio),
+                    $lte: new Date(ffinal)
                 }
-                if (element.item.tipo=='c') {
-                    cantAC++;
-                    fs.appendFile(`file/AC${nombre}.txt`,`${valores[0].prefijo}${valores[0].consecutivo},${valores[0].habilitacion},${element.paciente.td},${element.paciente.cedula},${valores[0].pinicio},${element.item.autorizacion},${element.item.cups},${element.item.ambito},${element.item.f_procedimiento},${element.item.atiende},${element.item.c_diagnostico},${element.item.c_diagnostico2},${element.item.complicacion},1,${element.item.valor}\n`, (error) => {
-                        if (error) {
-                            throw error;
-                        }
-                    });     
-                }  
             });
-            
-           if (valores[0]) {
-               anexo.forEach(element => {
-                   usuarios.push(element.paciente);
-               });
-            //    console.log(usuarios);
-            var US = unicopaciente(usuarios);                   
-            US.forEach(element => {
-                cantUs++;
-                fs.appendFile(`file/US${nombre}.txt`, `${element.td},${element.cedula},${valores[0].eps.cdeps},${valores[0].eps.regimen},${element.apellido},${element.sapellido},${element.nombre},${element.snombre},${element.edad},${element.unidad},${element.sexo},${element.cddep},${element.cdM},${element.zresidencial}\n`, (error) => {
+
+        for (let index = 0; index < cedulas.length; index++) {
+            cantUs++;
+            var pacien = await Paciente.findOne({ cedula: cedulas[index] });
+            fs.appendFile(`file/US${nombre}.txt`, `${pacien.td},${pacien.cedula},${factura[0].hc.entidad.cdeps},${factura[0].hc.entidad.regimen},${pacien.apellido},${pacien.sapellido},${pacien.nombre},${pacien.snombre},${pacien.edad},${pacien.unidad},${pacien.sexo},${pacien.cddep},${pacien.cdM},${pacien.zresidencial}\n`, (error) => {
+                if (error) {
+                    throw error;
+                }
+            });
+        }
+        if (factura[0].hc.entidad.tfac == "evento") {
+            cantAF++;
+            fs.appendFile(`file/AF${nombre}.txt`, `${empresa.habilitacion},${empresa.rsocial},NI,${empresa.nit},OR${factura[0].codigo},${fechafac(factura[0].fecha)},${factura[0].hc.fecha},${factura[0].hc.fecha},${factura[0].hc.entidad.cdeps},${factura[0].hc.entidad.rsocial},${factura[0].hc.entidad.contrato},,,0,0,0,${factura[0].hc.valor}\n`, (error) => {
+                if (error) {
+                    throw error;
+                }
+            });
+        }
+        if (factura[0].hc.entidad.tfac == "capita") {
+            cantAF++;
+            fs.appendFile(`file/AF${nombre}.txt`, `${empresa.habilitacion},${empresa.rsocial},NI,${empresa.nit},OR${factura[0].codigo},${fechafac(factura[0].fecha)},${factura[0].hc.fecha},${factura[0].hc.fecha},${factura[0].hc.entidad.cdeps},${factura[0].hc.entidad.rsocial},${factura[0].hc.entidad.contrato},,,0,0,0,${factura[0].hc.entidad.vcap}\n`, (error) => {
+                if (error) {
+                    throw error;
+                }
+            });
+        }
+
+        factura.forEach(element => {
+
+            if (element.hc.entidad.tfac == "usuario") {
+                cantAF++;
+                fs.appendFile(`file/AF${nombre}.txt`, `${empresa.habilitacion},${empresa.rsocial},NI,${empresa.nit},OR${element.codigo},${fechafac(element.fecha)},${element.hc.fecha},${element.hc.fecha},${element.hc.entidad.cdeps},${element.hc.entidad.rsocial},${element.hc.entidad.contrato},,,${element.hc.copago},0,0,${element.hc.valor}\n`, (error) => {
                     if (error) {
                         throw error;
-                    } else {
-
                     }
                 });
-            });            
-            fs.appendFile(`file/CT${nombre}.txt`, `${valores[0].habilitacion},${fechaA},AF${nombre},${cantAF}\n`, (error) => {});
-            fs.appendFile(`file/CT${nombre}.txt`, `${valores[0].habilitacion},${fechaA},AP${nombre},${cantAP}\n`, (error) => {});
-            fs.appendFile(`file/CT${nombre}.txt`, `${valores[0].habilitacion},${fechaA},AC${nombre},${cantAC}\n`, (error) => {});
-            fs.appendFile(`file/CT${nombre}.txt`, `${valores[0].habilitacion},${fechaA},US${nombre},${cantUs}\n`, (error) => {});
+            }
 
-            let docRef = db.collection('rips').doc();
-            docRef.set({consecutivo:c,entidad:entidad})
-                .then(function () {
-                    console.log('Ingresado')
-                })
-           }
-           res.send(valores);
-        })
-   
-});
+            if (element.hc.item.tipo == 'c') {
+                cantAC++;
+                fs.appendFile(`file/AC${nombre}.txt`, `OR${element.codigo},${empresa.habilitacion},${element.hc.paciente.td},${element.hc.paciente.cedula},${element.hc.fecha},${element.hc.autorizacion},${element.hc.item.cups},10,15,${element.hc.diagnostico},,,,1,${element.hc.valor},${element.hc.copago},${parseInt(element.hc.valor) + parseInt(element.hc.copago)}\n`, (error) => {
+                    if (error) {
+                        throw error;
+                    }
+                });
+            }
+            if (element.hc.item.tipo == 'p') {
+                cantAP++
+                fs.appendFile(`file/AP${nombre}.txt`, `OR${element.codigo},${empresa.habilitacion},${element.hc.paciente.td},${element.hc.paciente.cedula},${element.hc.fecha},${element.hc.autorizacion},${element.hc.item.cups},10,15,${element.hc.diagnostico},,,,1,${element.hc.valor},${element.hc.copago},${parseInt(element.hc.valor) + parseInt(element.hc.copago)}\n`, (error) => {
+                    if (error) {
+                        throw error;
+                    }
+                });
+            }
+        });
+
+        fs.appendFile(`file/CT${nombre}.txt`, `${empresa.habilitacion},${fechafac(new Date())},AF${nombre},${cantAF}\n`, (error) => { });
+        fs.appendFile(`file/CT${nombre}.txt`, `${empresa.habilitacion},${fechafac(new Date())},AP${nombre},${cantAP}\n`, (error) => { });
+        fs.appendFile(`file/CT${nombre}.txt`, `${empresa.habilitacion},${fechafac(new Date())},AC${nombre},${cantAC}\n`, (error) => { });
+        fs.appendFile(`file/CT${nombre}.txt`, `${empresa.habilitacion},${fechafac(new Date())},US${nombre},${cantUs}\n`, (error) => { });
+
+
+    } else {
+        console.log('No existen facturas')
+    }
+    res.redirect('/rips');
+})
+
+function fechafac(fecha) {
+    return fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear();
+}
+
+// RIPS EVENTOS
+
 
 // RIPS EVENTOS FIN
 
@@ -196,64 +139,35 @@ router.get('/ct/:consecutivo/:nombre',(req,res)=>{
 });
 
 
-router.post('/descargaRips', (req, res) => { 
+router.post('/descargaRips', async(req, res) => { 
     const{entidad}=req.body;
-    db.collection("rips")
-        .orderBy("consecutivo", "desc").limit(8).get()
-        .then((snapshot) => {
-            var valores = [];
-            snapshot.forEach((doc) => {
-                if(doc.data().entidad==entidad){
-                    valores.push(doc.data());
-                }
-               
-            });
-            res.send(valores);
-        })
+    const valores = await Rip.find({entidad:entidad});
+    res.send(valores);
+
 });
 
-router.get('/descarga/:consec/:nombre', (req, res) => {
-    const { nombre,consec } = req.params;
-    var file=nombre+conseRit(consec-1)+'.txt';
-    console.log(file)    
-    res.download(`file/${file}`);
+router.get('/descarga/:nombre', (req, res) => {
+    const { nombre } = req.params;
+    fs.exists(`file/${nombre}`,function(exists){
+        if(exists){
+            res.download(`file/${nombre}`);
+        }else{
+            res.download(`file/none.txt`);
+        }
+    });
+    
 });
 
 
-function removeDuplicates(arrayIn) {
-    var arrayOut = [];
-    arrayIn.forEach(item => {
-        try {
-            if (JSON.stringify(arrayOut[arrayOut.length - 1].paciente.cedula) !== JSON.stringify(item.paciente.cedula)) {
-                arrayOut.push(item);
-            }
-        } catch (err) {
-            arrayOut.push(item);
-        }
-    })
-    return arrayOut;
-}
+router.get('/rips', async (req, res) => {
+    var entidad = []
+    entidad = await Entidad.find().lean();
+    res.render('facturacion/rips', {entidad});
+   
+});
 
-function unicopaciente(arrayIn) {
-    var arrayOut = [];
-    arrayIn.forEach(item => {
-        try {
-            if (JSON.stringify(arrayOut[arrayOut.length - 1].cedula) !== JSON.stringify(item.cedula)) {
-                arrayOut.push(item);
-            }
-        } catch (err) {
-            arrayOut.push(item);
-        }
-    })
-    return arrayOut;
-}
-function formatDate(fecha) {
-    var dia = fecha.substr(0, 2);
-    var mes = fecha.substr(3, 2);
-    var ano = fecha.substr(6, 4);
-    return ano + '-' + mes + '-' + dia;
 
-}
+
 
 
 function conseRit(num) {
@@ -274,21 +188,4 @@ function conseRit(num) {
 }
 
 
-function Betwen(f1, f2, fc) {
-    fc = formatDate(fc);
-    if (combertirfecha(fc) >= combertirfecha(f1)) {
-        if (combertirfecha(fc) <= combertirfecha(f2)) {
-            return true;
-        } else {
-            return false;
-        }
-    } else {
-        return false;
-    }
-}
-
-function combertirfecha(f) {
-    var fecha = new Date(f);
-    return Date.parse(fecha);
-}
 module.exports = router;

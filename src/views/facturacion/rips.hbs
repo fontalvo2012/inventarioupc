@@ -1,14 +1,10 @@
-{{#each datos}}
 <div class="card m-5" style="width: 70%;">
     <div id="alert"></div>
     <div class="card-header">
         <h4 class="card-title">Creacion de Rips</h4>
     </div>
     <div class="card-body">
-        <form action="/rips" method="POST">
-            <input type="hidden" value="{{nombre}}" name="nombre" id="nombre">
-            <input type="hidden" value="{{consecutivo}}" name="consecutivo" id="consecutivo">
-{{/each}}
+        <form action="/ripscrear" method="POST">
             <div class="row">
                 <div class="col-sm-3">
                      <span class="small"><b>Inicio</b></span>
@@ -33,9 +29,9 @@
                 </div>
                 <div class="col-sm-3 pl-0 mr-0">
                     <span class="small"><b>..</b></span>
-                    <div id="ripboton"></div>
-                  
+                    <div id="ripboton"></div>                  
                 </div>
+                <button class="btn btn-success btn-sm">Crear Rips</button>
 
             </div>
 

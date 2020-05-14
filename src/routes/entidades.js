@@ -54,4 +54,10 @@ router.get('/addentidades',checkAuthentication,(req,res)=>{
     res.render('entidades/index');
 });
 
+router.get('/verentidad',checkAuthentication,async(req,res)=>{
+    var entidades=[]
+    entidades= await Entidad.find().lean();
+    res.render('entidades/consultar',{entidades});
+});
+
 module.exports = router;

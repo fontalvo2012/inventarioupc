@@ -60,7 +60,6 @@ router.post('/crearhc',checkAuthentication,async(req,res)=>{
     }    
 
     var medico=[];
-    // var cita=[];
     var ccmedico=req.user.medico;
     var cups='';
     var nombrecups='';

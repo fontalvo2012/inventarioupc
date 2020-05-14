@@ -4656,13 +4656,13 @@ function verRips() {
         data.forEach(element => {
             cadena+=`
             <tr>
-            <th scope="row">Rips: ${element.consecutivo}</th>                                                  
+            <th scope="row">Rips: ${element.fecha}</th>                                                  
             <td>
-                <a href="/descarga/${element.consecutivo}/AC" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> Descargar AC</a>
-                <a href="/descarga/${element.consecutivo}/AF" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> Descargar AF</a>
-                <a href="/descarga/${element.consecutivo}/CT" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> Descargar CT</a>
-                <a href="/descarga/${element.consecutivo}/US" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> Descargar US</a>
-                <a href="/descarga/${element.consecutivo}/AP" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> Descargar AP</a>
+                <a href="/descarga/AC${element.nombre}.txt" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> AC ${element.nombre} </a>
+                <a href="/descarga/AF${element.nombre}.txt" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> AF ${element.nombre}</a>
+                <a href="/descarga/CT${element.nombre}.txt" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> CT ${element.nombre}</a>
+                <a href="/descarga/US${element.nombre}.txt" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> US ${element.nombre}</a>
+                <a href="/descarga/AP${element.nombre}.txt" class="btn btn-success btn-sm"><i class='fas fa-cloud-download-alt' style='font-size:24px'></i> AP ${element.nombre}</a>
             </td>
         </tr>
             `;
@@ -4673,3 +4673,42 @@ function verRips() {
      }
    });   
 }
+
+function consultarPrefactura(opcion) {  
+     $.ajax({
+         url: '/prefacturaitem',
+         type: 'POST',
+         datatype: 'json',
+         data:{
+            entidad:$('#entidad').val(),
+            ini:$('#ini').val(),
+            fin:$('#fin').val(),          
+            opcion:opcion
+         },
+         success: (data) => {    
+           
+             var cadena='';
+             data.forEach(element => {
+                 
+                 cadena+=` 
+                 <tr>
+                 <th scope="row">1</th>
+                 <td>${element.fecha}</td>
+                 <td>${element.nombres}</td>                 
+                 <td>${element.item}</td>
+                 <td>${element.autorizacion}</td>
+                 <td>${number_format(element.copago)}</td>
+                 <td>${number_format(element.valor)}</td>
+                 <td>
+                     <a href="#" class="btn btn-primary btn-sm"><i class="fas fa-print" style="font-size: 16px;"></i></a>
+                 </td>
+           
+               </tr>`
+                
+             });
+             $('#prefacturas').html(cadena);
+            
+         }
+       });   
+  
+ }
