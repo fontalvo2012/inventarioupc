@@ -4673,3 +4673,42 @@ function verRips() {
      }
    });   
 }
+
+function consultarPrefactura(opcion) {  
+     $.ajax({
+         url: '/prefacturaitem',
+         type: 'POST',
+         datatype: 'json',
+         data:{
+            entidad:$('#entidad').val(),
+            ini:$('#ini').val(),
+            fin:$('#fin').val(),          
+            opcion:opcion
+         },
+         success: (data) => {    
+           
+             var cadena='';
+             data.forEach(element => {
+                 
+                 cadena+=` 
+                 <tr>
+                 <th scope="row">1</th>
+                 <td>${element.fecha}</td>
+                 <td>${element.nombres}</td>                 
+                 <td>${element.item}</td>
+                 <td>${element.autorizacion}</td>
+                 <td>${number_format(element.copago)}</td>
+                 <td>${number_format(element.valor)}</td>
+                 <td>
+                     <a href="#" class="btn btn-primary btn-sm"><i class="fas fa-print" style="font-size: 16px;"></i></a>
+                 </td>
+           
+               </tr>`
+                
+             });
+             $('#prefacturas').html(cadena);
+            
+         }
+       });   
+  
+ }
