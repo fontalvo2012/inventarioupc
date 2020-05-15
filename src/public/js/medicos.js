@@ -171,27 +171,26 @@ function actualizarMedico() {
 }
 
 function blurMedicoCedula() {
-    var id = $('#cedula').val();
+    var cedula = $('#cedula').val();
     $.ajax({
         url: '/ajaxmedico',
         type: 'POST',
         datatype: 'json',
         data: {
-            id: id
+            cedula: cedula
         },
-        success: (data) => {
-           
+        success: (data) => {           
             if (data) {
-                $('#id').val(data.id)
-                $('#cedula').val(data.data.cedula);
-                $('#especialidad').val(data.data.especialidad);
-                $('#nombre').val(data.data.nombres);
-                $('#email').val(data.data.email);
-                $('#registro').val(data.data.registro);
-                $('#telefono').val(data.data.telefono);
+                $('#id').val(data._id)
+                $('#cedula').val(data.cedula);
+                $('#especialidad').val(data.especialidad);
+                $('#nombre').val(data.nombres);
+                $('#email').val(data.email);
+                $('#registro').val(data.registro);
+                $('#telefono').val(data.telefono);
                 $('#ingresar').css('visibility', 'hidden');
                 $('#actualizar').css('visibility', 'visible');
-                orario = data.data.agenda;
+                orario = data.agenda;
                 mostrarAgenda();
             } else {
                 $('#nombre').val("");
@@ -293,18 +292,18 @@ function fechas(dia) {
 }
 
 function diasmendicos() {
-    var id = $('#medico').val();
+    var cedula = $('#medico').val();
     var diasfinal=[];
     $.ajax({
         url: '/ajaxmedico',
         type: 'POST',
         datatype: 'json',
         data: {
-            id: id
+            cedula: cedula
         },
         success: (data) => {
             var c=0;
-            data.data.agenda.forEach(element => {                
+            data.agenda.forEach(element => {                
                 var d=element.dia;
                 diasfinal.push({dia:d});
                 c++;
@@ -345,21 +344,25 @@ function crearCitas(hora) {
         $('#alert').html(` <div class="alert alert-danger" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> Debe ingresar cedula</div>`);
     }else{
         $('#alert').html('');
-        $.ajax({
-            url: '/addcitas',
-            type: 'POST',
-            datatype: 'json',
-            data: {
-                cita: c
-            },
-            success: (data) => {                         
-                citasUsadas($('#medico').val());
-                location.href = "/citas";  
-                $('#cc').val('');
-                $('#nombres').val('');
-                $('#entidad').val('');
-            }
-        });
+        if( confirm("Desea crear la cita en la hora: "+hora)){
+            $.ajax({
+                url: '/addcitas',
+                type: 'POST',
+                datatype: 'json',
+                data: {
+                    cita: c
+                },
+                success: (data) => {                         
+                    citasUsadas($('#medico').val());
+                    location.href = "/citas";  
+                    $('#cc').val('');
+                    $('#nombres').val('');
+                    $('#entidad').val('');
+                }
+            });
+        }
+       
+       
     }
 
 }
@@ -407,7 +410,7 @@ function CitasApartadas(){
             data.forEach(element => {
                 cadena+=` 
                      <tr>
-                        <th scope="row">${element.data.fecha}${element.data.hora}</th>
+                        <th scope="row">${element.data.fecha} - ${element.data.hora}</th>
                         <td>${element.data.nmedico}</td>
                         <td>${element.data.motivo}</td>
                         <td><a href="#" onclick="borrarCita('${element.id}')" class="btn btn-primary btn-sm">del</a></td>                             
