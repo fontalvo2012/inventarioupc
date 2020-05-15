@@ -344,21 +344,25 @@ function crearCitas(hora) {
         $('#alert').html(` <div class="alert alert-danger" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> Debe ingresar cedula</div>`);
     }else{
         $('#alert').html('');
-        $.ajax({
-            url: '/addcitas',
-            type: 'POST',
-            datatype: 'json',
-            data: {
-                cita: c
-            },
-            success: (data) => {                         
-                citasUsadas($('#medico').val());
-                location.href = "/citas";  
-                $('#cc').val('');
-                $('#nombres').val('');
-                $('#entidad').val('');
-            }
-        });
+        if( confirm("Desea crear la cita en la hora: "+hora)){
+            $.ajax({
+                url: '/addcitas',
+                type: 'POST',
+                datatype: 'json',
+                data: {
+                    cita: c
+                },
+                success: (data) => {                         
+                    citasUsadas($('#medico').val());
+                    location.href = "/citas";  
+                    $('#cc').val('');
+                    $('#nombres').val('');
+                    $('#entidad').val('');
+                }
+            });
+        }
+       
+       
     }
 
 }
@@ -406,7 +410,7 @@ function CitasApartadas(){
             data.forEach(element => {
                 cadena+=` 
                      <tr>
-                        <th scope="row">${element.data.fecha}${element.data.hora}</th>
+                        <th scope="row">${element.data.fecha} - ${element.data.hora}</th>
                         <td>${element.data.nmedico}</td>
                         <td>${element.data.motivo}</td>
                         <td><a href="#" onclick="borrarCita('${element.id}')" class="btn btn-primary btn-sm">del</a></td>                             

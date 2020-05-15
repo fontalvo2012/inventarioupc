@@ -3,17 +3,8 @@ const router = Router();
 var admin = require("firebase-admin");
 const db=admin.firestore();
 const Medico=require('../model/medicos');
-router.get('/localidades',(req,res)=>{
-    const { cups,nombre,valor,entidad,id} = req.body;
-    let docRef = db.collection('items').doc();
-    let setAda = docRef.set({
-        cups: cups,
-        nombre: nombre,
-        valor: valor,
-        entidad:entidad        
-    });
-    res.redirect('/item');
-});
+
+
 
 router.get('/citas',async(req,res)=>{
     const valores=await Medico.find().lean();
@@ -87,10 +78,7 @@ router.get('/vercitas',(req,res)=>{
         console.log(valores) 
         res.render('citas/consultas',{valores});
     })
-    .catch((err) => {
-        console.log('Error getting documents', err);
-        res.render('citas/consultas');
-    });
+   
 });
 
 function formatDate(fecha) {
