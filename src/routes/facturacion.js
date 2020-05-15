@@ -60,7 +60,7 @@ router.post('/prefacturaitem', checkAuthentication, async (req, res) => {
         prefacturas.forEach(element => {
             datos.push(
                 {
-                    id:element._id,
+                    id:element._id,                    
                     nombres:element.hc.nombres,
                     entidad:element.hc.entidad.rsocial,
                     item:element.hc.item.nombre,

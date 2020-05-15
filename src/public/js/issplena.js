@@ -4692,9 +4692,10 @@ function consultarPrefactura(opcion) {
                  
                  cadena+=` 
                  <tr>
-                 <th scope="row">1</th>
+                 <th scope="row">#</th>
                  <td>${element.fecha}</td>
                  <td>${element.nombres}</td>                 
+                 <td>${element.entidad}</td>                 
                  <td>${element.item}</td>
                  <td>${element.autorizacion}</td>
                  <td>${number_format(element.copago)}</td>

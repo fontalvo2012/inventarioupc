@@ -36,6 +36,7 @@
       <th scope="col">#</th>
       <th scope="col">Periodo</th>
       <th scope="col" onclick="consultarPrefactura('nombres')">Paciente</th>   
+      <th scope="col">Entidad</th>   
       <th scope="col" onclick="consultarPrefactura('item')">Item</th>
       <th scope="col" onclick="consultarPrefactura('autorizacion')">Autorizacion</th>
       <th scope="col"  onclick="consultarPrefactura('copago')">copago</th>
@@ -49,7 +50,8 @@
     <tr>
       <th scope="row">1</th>
       <td>{{hc.fecha}}</td>
-      <td>{{hc.nombres}}</td>     
+      <td>{{hc.nombres}}</td>
+      <td>{{hc.entidad.rsocial}}</td>     
       <td>{{hc.item.nombre}}</td>
       <td>{{hc.autorizacion}}</td>
       <td>$ {{hc.copago}}</td>
