@@ -1,0 +1,55 @@
+<div class="row">
+    <div class="col-sm-3">
+        <form autocomplete="off" ref='uploadForm' id='uploadForm' action='/hcprocedimientos' method='POST'
+            encType="multipart/form-data">
+            <input type="hidden" id="imagen" name="imagen">
+            <div class="form-group">
+                <input type="text" id="codigo" name="codigo" class="form-control" placeholder="Codigo">
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row" id="galeria"></div>
+    <div class="row">
+        <div class="col-sm-6">
+            <video id="player" controls autoplay></video>
+            <button id="capture" class="btn btn-success btn-sm">Capturar</button>
+            <a href="#" onclick="guardar()" class="btn btn-warning btn-sm"> guardar</a>
+        </div>
+        <div class="col-sm-6">
+            <canvas id="snapshot" width=320 height=240></canvas>
+        </div>
+    </div>
+</div>
+
+<a href="#" onclick="verimagen()"> ver imagen</a>
+<script>
+    var player = document.getElementById('player');
+    var snapshotCanvas = document.getElementById('snapshot');
+    var captureButton = document.getElementById('capture');
+    var idForm = 'uploadForm'; //*
+    var imagen = document.getElementById('imagen');
+    var imagenes = [];
+
+    var handleSuccess = function (stream) {
+        player.srcObject = stream;
+    };
+
+    captureButton.addEventListener('click', function () {
+        var context = snapshot.getContext('2d');
+        context.drawImage(player, 0, 0, snapshotCanvas.width, snapshotCanvas.height);
+        var img = snapshotCanvas.toDataURL("image/png");
+        imagenes.push(img);        
+    });
+
+    function guardar(){
+        imagen.value = JSON.stringify(imagenes);
+        document.forms[idForm].submit();
+    }
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(handleSuccess);
+
+</script>

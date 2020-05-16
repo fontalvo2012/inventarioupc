@@ -4632,7 +4632,7 @@ function ripsEventos() {
            entidad:$('#entidad').val(),
         },
         success: (data) => {    
-            console.log(data); 
+            console.log(data);           
             $('#alert').html(` <div class="alert alert-success" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> RIPS CREADOS</div>`);             
         }
       });   
@@ -4713,3 +4713,23 @@ function consultarPrefactura(opcion) {
        });   
   
  }
+ function verimagen() {
+    $.ajax({
+        url: '/verimagen',
+        type: 'POST',
+        datatype: 'json',
+        data:{
+            codigo:$('#codigo').val()
+        },
+        success: (data) => {
+            console.log(data);
+            data.imagen.forEach(element => {
+                var image = new Image();
+                image.src = element;
+                document.getElementById('galeria').appendChild(image);
+
+            });
+
+        }
+    });
+}

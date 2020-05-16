@@ -5,6 +5,7 @@ const path = require('path');
 const passport = require('passport');
 const session = require('express-session');
 const flash = require('connect-flash');
+const fileUpload = require('express-fileupload');
 const app = express();
 
 
@@ -21,6 +22,8 @@ app.engine('.hbs',exphbs({
 
 app.set('view engine','.hbs');
 //middelware
+
+app.use(fileUpload());
 app.use(morgan('dev'));
 app.use(express.urlencoded({extended:false}));
 app.use(express.json());

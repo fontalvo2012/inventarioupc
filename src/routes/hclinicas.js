@@ -7,6 +7,7 @@ const Empresa = require('../model/empresas');
 const Hclincia = require('../model/hclinicas');
 const Factura = require('../model/facturas');
 const Medico = require('../model/medicos');
+const Procedimiento = require('../model/procedimientos');
 
 
 function checkAuthentication(req, res, next) {
@@ -186,6 +187,31 @@ router.get('/consultashclinicas', checkAuthentication, (req, res) => {
     res.render('hclinicas/consultas');
 })
 
+
+// FUNCION UPLOAD =>
+
+router.get('/hcprocedimientos',checkAuthentication,async(req,res)=>{
+    res.render('hclinicas/hcprocedimiento');
+})
+
+router.post('/hcprocedimientos',checkAuthentication,async(req,res)=>{
+    const {imagen,codigo} = req.body;
+    console.log(JSON.parse(imagen));
+    const proced= new Procedimiento({imagen:JSON.parse(imagen),codigo});
+    await proced.save();
+    res.render('hclinicas/hcprocedimiento');
+})
+router.get('/verprocedimientos',async(req,res)=>{
+    res.render('hclinicas/verprocedimientos');
+})
+
+router.post('/verimagen',async(req,res)=>{
+    const {codigo} =req.body;
+    const p= await Procedimiento.findOne({codigo:codigo});
+    res.send(p);
+})
+//FUNCION UPLOAD <=
+
 function finalizarConsulta(id) {
     var washingtonRef = db.collection("citas").doc(id);
     return washingtonRef.update({
@@ -196,7 +222,6 @@ function finalizarConsulta(id) {
         })
 
 }
-
 
 
 
