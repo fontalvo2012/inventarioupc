@@ -3,172 +3,102 @@ const router = Router();
 var admin = require("firebase-admin");
 const db=admin.firestore();
 const Medico=require('../model/medicos');
-router.get('/localidades',(req,res)=>{
-    const { cups,nombre,valor,entidad,id} = req.body;
-    let docRef = db.collection('items').doc();
-    let setAda = docRef.set({
-        cups: cups,
-        nombre: nombre,
-        valor: valor,
-        entidad:entidad        
-    });
-    res.redirect('/item');
-});
+const Cita=require('../model/citas');
+
+
 
 router.get('/citas',async(req,res)=>{
     const valores=await Medico.find().lean();
     res.render('citas/index',{valores});
 });
 
-
-router.post('/apartadas',(req,res)=>{
+router.post('/apartadas',async(req,res)=>{
     const {cedula}=req.body;
-    db.collection('citas').where('paciente.cedula','==',cedula).get()
-    .then((snapshot) => {
-        var valores=[];
-        snapshot.forEach((doc) => {   
-            if (doc.data().estado=="") {
-                valores.push({data:doc.data(),id:doc.id});
-            }                    
-        });       
-        res.send(valores);
-    })
-    .catch((err) => {
-        console.log('Error getting documents', err);
-        res.send(valores);
-    });  
+    const valores=await Cita.find({'paciente.cedula':cedula});
+    console.log(valores);
+    res.send(valores);
+    
 });
 
-router.post('/addcitas',(req,res)=>{
+router.post('/addcitas',async(req,res)=>{
     const {cita}=req.body;
-    console.log(JSON.parse(cita));
-    let docRef = db.collection('citas').doc();
-    docRef.set(JSON.parse(cita));
+    const newcita=new Cita(JSON.parse(cita));
+    await newcita.save();
     res.send('realizado');
 });
 
-router.post('/consultarcitas',(req,res)=>{
-    const {fecha,medico}=req.body;  
-    db.collection('citas').where('fecha','==',fecha).get()
-    .then((snapshot) => {
-        var valores=[];
-        snapshot.forEach((doc) => {
-            if(doc.data().medico==medico){
-                valores.push(doc.data());
-            }                    
-        });       
-        res.send(valores)
-    })
-    .catch((err) => {
-        console.log('Error getting documents', err);
-        res.send('{error:error}');
-    });
+router.post('/consultarcitas',async(req,res)=>{
+    const {fecha,medico}=req.body; 
+    const valores=await Cita.find({fecha:fecha,medico:medico});
+    res.send(valores); 
 });
 
-router.get('/vercitas',(req,res)=>{
-    diaActual = new Date();  
-    var day = diaActual.getDate();
-    var month = diaActual.getMonth() + 1;
-    var year = diaActual.getFullYear();
-    if(parseInt(day)<10) day='0'+day;
-    if(parseInt(month)<10) month='0'+month;
-    fecha = month + '/' + day + '/' + year ;
-
-    db.collection('citas').orderBy('id','asc').get()
-    .then((snapshot) => {
-        var valores=[];
-        snapshot.forEach((doc) => {
-            if(doc.data().fecha==fecha){
-                if(doc.data().estado !='atendido'){
-                    valores.push({data:doc.data(),id:doc.id});  
-                }                
-            }
-        });
-        console.log(valores) 
-        res.render('citas/consultas',{valores});
-    })
-    .catch((err) => {
-        console.log('Error getting documents', err);
-        res.render('citas/consultas');
-    });
+router.get('/vercitas',async(req,res)=>{   
+    const valores = await Cita.find({fecha:getfecha()}).lean();   
+    res.render('citas/consultas',{valores}); 
 });
 
-function formatDate(fecha) {
-    var ano = fecha.substr(0,4);
-    var mes = fecha.substr(5,2);
-    var dia = fecha.substr(8,2);
-    return mes+'/'+dia+'/'+ano;
-
+function getfecha() {
+    var diaActual = new Date();
+    var f ='';
+    var mes=diaActual.getMonth()+1;
+    var dia=diaActual.getDate();
+    if(diaActual.getMonth()<10){
+        mes='0'+mes
+    }
+    
+    if(diaActual.getDate()<10){
+        dia='0'+dia
+    }
+    return mes+'/'+dia+'/'+diaActual.getFullYear();    
 }
-router.post('/vercitasfiltro',(req,res)=>{
-   const {medico,fecha}=req.body;
-    console.log(formatDate(fecha));
-    db.collection('citas').orderBy('id','asc').get()
-    .then((snapshot) => {
-        var valores=[];
-        snapshot.forEach((doc) => {
-            console.log(doc.data().fecha)
-            if(doc.data().fecha == formatDate(fecha) && doc.data().medico==medico){
-                if(doc.data().estado !='atendido'){
-                    valores.push({data:doc.data(),id:doc.id});  
-                }  
-            }        
-        });
-        console.log(valores); 
-        res.render('citas/consultas',{valores});
-    })
-    .catch((err) => {
-        console.log('Error getting documents', err);
-        res.render('citas/consultas');
-    });
+function formatFecha(fecha) {
+    var diaActual = new Date(fecha);
+    var f ='';
+    var mes=diaActual.getMonth()+1;
+    var dia=diaActual.getDate()+1;
+    if(diaActual.getMonth()<10){
+        mes='0'+mes
+    }
+    
+    if(diaActual.getDate()<10){
+        dia='0'+dia
+    }
+    return mes+'/'+dia+'/'+diaActual.getFullYear();    
+}
+
+
+router.post('/vercitasfiltro',async(req,res)=>{
+   const {medico,fecha}=req.body;  
+   console.log(formatFecha(fecha));
+   const valores = await Cita.find({medico:medico,fecha:formatFecha(fecha)}).lean(); 
+   res.render('citas/consultas',{valores});   
 });
 
-router.post('/vercitaspaciente',(req,res)=>{
-    const {cc}=req.body;   
-     db.collection('citas').orderBy('id','asc').get()
-     .then((snapshot) => {
-         var valores=[];
-         snapshot.forEach((doc) => {            
-             if(doc.data().paciente.cedula == cc){
-                if(doc.data().estado!='atendido'){
-                    valores.push({data:doc.data(),id:doc.id});  
-                } 
-             }        
-         });
-         console.log(valores); 
-         res.render('citas/consultas',{valores});
-     })
-     .catch((err) => {
-         console.log('Error getting documents', err);
-         res.render('citas/consultas');
-     });
+router.post('/vercitaspaciente',async(req,res)=>{
+    const {cc}=req.body; 
+    const valores = await Cita.find({'paciente.cedula':cc}).lean(); 
+    res.render('citas/consultas',{valores});  
  });
 
-router.post('/ensala/:id',(req,res)=>{
+router.post('/ensala/:id',async(req,res)=>{
     const {id}=req.params; 
     const {copago,autorizacion,valor}=req.body;   
-    var washingtonRef = db.collection("citas").doc(id);
-    const cita={
+    await Cita.findOneAndUpdate({_id:id},
+        {
         copago:copago,
         autorizacion:autorizacion,        
         estado:'ensala',
         valor:valor        
-    }  
-    return washingtonRef.update(cita)
-        .then(function () {
-            res.redirect('/vercitas');
-        })
-        .catch(function (error) {           
-            res.redirect('/vercitas');
-        });
+    });
+    
+    res.redirect('/vercitas');
 });
 
-router.get('/borrarcita/:id',(req,res)=>{
+router.get('/borrarcita/:id',async(req,res)=>{
     const {id}= req.params;   
-    db.collection("citas").doc(id).delete().then(function () {
-        console.log("Document successfully deleted!");
-        res.redirect('/vercitas');
-    })  
+    await Cita.findOneAndDelete({_id:id});
+    res.redirect('/vercitas');
 });
 
 
