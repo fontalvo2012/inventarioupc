@@ -8,6 +8,7 @@ const Hclincia = require('../model/hclinicas');
 const Factura = require('../model/facturas');
 const Medico = require('../model/medicos');
 const Procedimiento = require('../model/procedimientos');
+const Cita = require('../model/citas');
 
 
 function checkAuthentication(req, res, next) {
@@ -21,19 +22,14 @@ function checkAuthentication(req, res, next) {
 router.get('/hclinicas/:id/:cc', checkAuthentication, async (req, res) => {
     const { id, cc } = req.params;
     const hc = await Hclincia.find({ cedula: cc }).lean();
-    db.collection('citas').get()
-        .then((snapshot) => {
-            var valores = [];
-            snapshot.forEach((doc) => {
-                if (doc.id == id) {
-                    valores.push({ data: doc.data(), id: doc.id });
-                }
-            });
-            res.render('hclinicas/index', { valores, hc });
+    const valores = await Cita.find({_id:id}).lean();
+    res.render('hclinicas/index', { valores, hc });
+});
 
-        });
-
-})
+router.get('/consultashclinicas', checkAuthentication, async(req, res) => {
+    const citas= await Cita.find({estado:'ensala'}).lean();
+    res.render('hclinicas/consultas',{citas});
+});
 
 router.post('/crearhc', checkAuthentication, async (req, res) => {
     const { cedula, nombres, id, motivo, actual, clinico, plan, impdiag, ordenes, dg, recetaJson } = req.body;
@@ -61,44 +57,30 @@ router.post('/crearhc', checkAuthentication, async (req, res) => {
         diag: dg.substr(0, 4),
         nombre: dg.substr(6, (dg.length) - 6)//probar
     }
-
-
-    var ccmedico = req.user.medico;
-    var cups = '';
-    var nombrecups = '';
-    const empresa = await Empresa.findOne().lean();//PENDIENTE
+    var ccmedico = req.user.medico; 
     const medico = await Medico.findOne({ cedula: ccmedico });
-
-    db.collection('citas').doc(id).get()
-        .then(async (snapshot) => {
-            cita = snapshot.data();
-            cups = snapshot.data().item.cups;
-            nombrecups = snapshot.data().item.nombre;
-            var codigo = 'HC-' + (((await Hclincia.find()).length) + 1);
-            var diagnostico = dg.substr(0, 4);
-            var receta = JSON.parse(recetaJson);
-            var fecha = fechaActual();
-            var pinicio = fechaActual();
-            var pfinal = fechaActual();
-            var tipo = 'HC';
-            if (await Hclincia.findOne({ cedula: cedula })) {
-                tipo = '';
-            }
-            const newhclinica = new Hclincia({ codigo, cedula, nombres, id, cups, diagnostico, nombrecups, motivo, actual, antecedentes, fisico, clinico, plan, impDiagnostico, ordenes, receta, medico, tipo, fecha, pinicio, pfinal, cita });
-            await newhclinica.save();
-            const hc = Hclincia.findOne({ codigo: codigo });
-            console.log(cita);
-            const newFactura = new Factura({ codigo: 0, hc: cita, anexo: {}, estado: 'PREFACTURA', descripcion: 'FATURACION DE PACIENTES ATENDIDOS EN PROCEDIMIENTOS Y CONSULTAS' });
-            await newFactura.save();
-            finalizarConsulta(id);
-            res.redirect(`/verhc/${cedula}`);
-
-        });
-
-
-
-
-});
+    const cita = await Cita.findOne({_id:id});
+    var cups=cita.item.cups;
+    var nombrecups = cita.item.nombre;
+    var codigo = 'HC-' + (((await Hclincia.find()).length) + 1);
+    var diagnostico = dg.substr(0, 4);
+    var receta = JSON.parse(recetaJson);
+    var fecha = fechaActual();
+    var pinicio = fechaActual();
+    var pfinal = fechaActual();
+    var tipo = 'HC';
+    if (await Hclincia.findOne({ cedula: cedula })) {
+        tipo = '';
+    }
+    const newhclinica = new Hclincia({ codigo, cedula, nombres, id, cups, diagnostico, nombrecups, motivo, actual, antecedentes, fisico, clinico, plan, impDiagnostico, ordenes, receta, medico, tipo, fecha, pinicio, pfinal, cita });
+    await newhclinica.save();
+    const hc = Hclincia.findOne({ codigo: codigo });
+    console.log(cita);
+    const newFactura = new Factura({ codigo: 0, hc: cita, anexo: {}, estado: 'PREFACTURA', descripcion: 'FATURACION DE PACIENTES ATENDIDOS EN PROCEDIMIENTOS Y CONSULTAS' });
+    await newFactura.save();
+    await Cita.findOneAndUpdate(id,{estado:'atendido'})
+    res.redirect(`/verhc/${cedula}`);
+  });
 
 router.post('/colocarhc', checkAuthentication, async (req, res) => {
     const { codigo } = req.body;
@@ -154,40 +136,6 @@ function fechaActual() {
     return fecha;
 }
 
-
-
-function facturar(cita, diag, empresa) {
-    var factura = {
-        razon: empresa.rsocial,
-        nit: empresa.nit,
-        habilitacion: empresa.habilitacion,
-        direccion: empresa.direccion,
-        diag,
-        copago: cita.copago,
-        telefonos: empresa.telefono,
-        email: empresa.email,
-        prefijo: empresa.prefijo,
-        total: cita.item.valor,
-        vencimiento: '',
-        fecha: '',
-        estado: 'pendiente',
-        pinicio: cita.fecha,
-        pfinal: cita.fecha,
-        consecutivo: '',
-        anexo: [],
-        paciente: cita.paciente,
-        eps: cita.entidad,
-        item: cita.item
-    }
-    let docRef = db.collection('fac_orl').doc();
-    docRef.set(factura);
-}
-
-router.get('/consultashclinicas', checkAuthentication, (req, res) => {
-    res.render('hclinicas/consultas');
-})
-
-
 // FUNCION UPLOAD =>
 
 router.get('/hcprocedimientos',checkAuthentication,async(req,res)=>{
@@ -211,18 +159,5 @@ router.post('/verimagen',async(req,res)=>{
     res.send(p);
 })
 //FUNCION UPLOAD <=
-
-function finalizarConsulta(id) {
-    var washingtonRef = db.collection("citas").doc(id);
-    return washingtonRef.update({
-        estado: 'atendido'
-    })
-        .then(function () {
-            console.log('actualizado')
-        })
-
-}
-
-
 
 module.exports = router;

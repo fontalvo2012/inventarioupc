@@ -5,8 +5,6 @@ const db=admin.firestore();
 const Medico=require('../model/medicos');
 const Cita=require('../model/citas');
 
-
-
 router.get('/citas',async(req,res)=>{
     const valores=await Medico.find().lean();
     res.render('citas/index',{valores});
@@ -14,10 +12,8 @@ router.get('/citas',async(req,res)=>{
 
 router.post('/apartadas',async(req,res)=>{
     const {cedula}=req.body;
-    const valores=await Cita.find({'paciente.cedula':cedula});
-    console.log(valores);
+    const valores=await Cita.find({'paciente.cedula':cedula,estado:''});   
     res.send(valores);
-    
 });
 
 router.post('/addcitas',async(req,res)=>{
@@ -59,14 +55,12 @@ function formatFecha(fecha) {
     var dia=diaActual.getDate()+1;
     if(diaActual.getMonth()<10){
         mes='0'+mes
-    }
-    
+    }    
     if(diaActual.getDate()<10){
         dia='0'+dia
     }
     return mes+'/'+dia+'/'+diaActual.getFullYear();    
 }
-
 
 router.post('/vercitasfiltro',async(req,res)=>{
    const {medico,fecha}=req.body;  
@@ -90,8 +84,7 @@ router.post('/ensala/:id',async(req,res)=>{
         autorizacion:autorizacion,        
         estado:'ensala',
         valor:valor        
-    });
-    
+    });    
     res.redirect('/vercitas');
 });
 
@@ -101,12 +94,10 @@ router.get('/borrarcita/:id',async(req,res)=>{
     res.redirect('/vercitas');
 });
 
-
-router.post('/borrarcita',(req,res)=>{
+router.post('/borrarcita',async(req,res)=>{
     const {id}=req.body;   
-    db.collection("citas").doc(id).delete().then(function () {      
-        res.send('1');
-    })  
+    await Cita.findOneAndDelete({_id:id});
+    res.send('1');
 });
 
 module.exports = router;

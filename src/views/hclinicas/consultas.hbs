@@ -14,7 +14,16 @@
     </tr>
   </thead>
   
-  <tbody id="citas">
+  <tbody >
+    {{#each citas}}
+    <tr>
+      <td>{{fecha}}</td>
+      <td>{{paciente.cedula}}</td>
+      <td>{{paciente.nombre}} {{paciente.apellido}} {{apellido.spellido}}</td>
+      <td>{{entidad.rsocial}}</td>
+      <td><a href="/hclinicas/{{_id}}/{{paciente.cedula}}" class="btn btn-warning btn-sm"> <i class='fas fa-user-edit' style='font-size:16px'></i></a></td>
+    </tr>
+    {{/each}}
   </tbody>
   
 </table>
