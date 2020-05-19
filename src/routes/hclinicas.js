@@ -27,7 +27,7 @@ router.get('/hclinicas/:id/:cc', checkAuthentication, async (req, res) => {
 });
 
 router.get('/consultashclinicas', checkAuthentication, async(req, res) => {
-    const citas= await Cita.find({estado:'ensala'}).lean();
+    const citas= await Cita.find({estado:'ensala','item.tipo':'c'}).lean();
     res.render('hclinicas/consultas',{citas});
 });
 

@@ -31,7 +31,7 @@ passport.use('local-singup', new strategy({
         const {nombre,firma}=req.body;
         newUser.username=user;
         newUser.password=bcrypt.hashSync(password);
-        newUser.perfil='admin';
+        newUser.perfil='medico';
         newUser.nombre=nombre;
         newUser.medico=firma;
         newUser.firma=firma+'.png';     
