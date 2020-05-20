@@ -28,10 +28,10 @@ passport.use('local-singup', new strategy({
     if(us){
         done(null,false,req.flash('login', 'El Usuario ya ha sido registrado'));
     }else{
-        const {nombre,firma}=req.body;
+        const {nombre,firma,perfil}=req.body;
         newUser.username=user;
         newUser.password=bcrypt.hashSync(password);
-        newUser.perfil='medico';
+        newUser.perfil=perfil;
         newUser.nombre=nombre;
         newUser.medico=firma;
         newUser.firma=firma+'.png';     
