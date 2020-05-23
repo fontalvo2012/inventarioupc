@@ -13,6 +13,9 @@ router.post('/addTarifa',async(req,res)=>{
     res.send({valor:num,cups:cups});
 });
 
+router.get('/addItem',async(req,res)=>{
+    res.render('item/index');
+});
 router.post('/verTarifas',async(req,res)=>{
     const {entidad}=req.body;
     const t= await Tarifas.find({entidad:entidad}).sort({nombre:'asc'});

@@ -2983,6 +2983,27 @@ plena=`
         "forma": "uvr"
     },
     {
+        "cd": "165",
+        "cups": "314204",
+        "nombre": "VIDEOSTROBOSCOPIA",
+        "valor": "0",
+        "a_quirurgico": "1",
+        "ambito": "1",
+        "atiende": "1",
+        "autorizacion": "",
+        "c_diagnostico": "",
+        "c_diagnostico2": "",
+        "c_diagnostico3": "",
+        "c_externa": "15",
+        "complicacion": "",
+        "copago": "0",
+        "entidad": "",
+        "f_consulta": "",
+        "f_procedimiento": "",
+        "tipo": "p",
+        "forma": "uvr"
+    },
+    {
         "cd": "164",
         "cups": "221401",
         "nombre": "NASOSINUSCOPIA",
