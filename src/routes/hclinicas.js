@@ -33,7 +33,8 @@ router.get('/consultashclinicas', checkAuthentication, async(req, res) => {
 });
 router.get('/procedimientoshclinicas', checkAuthentication, async(req, res) => {   
     const entidades= await Entidad.find().lean();
-    res.render('hclinicas/procedimientos',{entidades});
+    const medicos= await Medico.find().lean();
+    res.render('hclinicas/procedimientos',{entidades,medicos});
 });
 
 router.post('/crearhc', checkAuthentication, async (req, res) => {

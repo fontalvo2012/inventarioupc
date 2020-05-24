@@ -4308,7 +4308,9 @@ plena = `
 ]
 `;
 
-
+var sirujias=[];
+var mayor=0;
+var ind=0;
 function combertirIss(ob) {
     var obj = JSON.parse(ob);
     array = [];
@@ -4334,6 +4336,127 @@ function consultarTarifas() {
         }
     });
 }
+
+function costoCirujia(uvr) {
+    var valor=0;
+    if (uvr <= 20) { valor=12890;};
+    if (uvr >= 21 && uvr <=30) { valor=26790;};
+    if (uvr >= 31 && uvr <=40) { valor=44270;};
+    if (uvr >= 41 && uvr <=50) { valor=55605;};
+    if (uvr >= 51 && uvr <=60) { valor=81175;};
+    if (uvr >= 61 && uvr <=70) { valor=96520;};
+    if (uvr >= 71 && uvr <=80) { valor=114830;};
+    if (uvr >= 81 && uvr <=90) { valor=129655;};
+    if (uvr >= 91 && uvr <=100) { valor=144645;};
+    if (uvr >= 101 && uvr <=110) { valor=148545;};
+    if (uvr >= 111 && uvr <=130) { valor=153075};   
+    if (uvr >= 131 && uvr <=150) { valor=186410;};
+    if (uvr >= 151 && uvr <=170) { valor=204700;};
+    if (uvr >= 171 && uvr <=200) { valor=246970;};
+    if (uvr >= 201 && uvr <=230) { valor=279405;};
+    if (uvr >= 231 && uvr <=260) { valor=318255;};
+    if (uvr >= 261 && uvr <=290) { valor=356455;};
+    if (uvr >= 291 && uvr <=320) { valor=401015;};
+    if (uvr >= 321 && uvr <=350) { valor=445560;};
+    if (uvr >= 351 && uvr <=380) { valor=471015;};
+    if (uvr >= 381 && uvr <=410) { valor=503460;};
+    if (uvr >= 411 && uvr <=450) { valor=548020;};
+    return valor;
+}
+function costoMateriales(uvr) {
+    var valor=0;
+    if (uvr <= 20) { valor=31000;};
+    if (uvr >= 21 && uvr <=30) { valor=32005;};
+    if (uvr >= 31 && uvr <=40) { valor=33110;};
+    if (uvr >= 41 && uvr <=50) { valor=45305;};
+    if (uvr >= 51 && uvr <=60) { valor=57410;};
+    if (uvr >= 61 && uvr <=70) { valor=82315;};
+    if (uvr >= 71 && uvr <=80) { valor=88610;};
+    if (uvr >= 81 && uvr <=90) { valor=95015;};
+    if (uvr >= 91 && uvr <=100) { valor=109205;};
+    if (uvr >= 101 && uvr <=110) { valor=123310;};
+    if (uvr >= 111 && uvr <=130) { valor=131115};   
+    if (uvr >= 131 && uvr <=150) { valor=140120;};
+    if (uvr >= 151 && uvr <=170) { valor=152910;};
+    return valor;
+}
+function agregarirugia() {
+
+    var cc= $('#cc').val();
+    var entidad= $('#entidad').val();
+    var cups= $('#cups').val();
+    var uvr= $('#uvr').val();
+    var porc= $('#porc').val();
+    var Via= $('#Via').val();
+    var pr=0;
+    var cirujano=0;
+    var anestesiologo=0;
+    var ayudante=0;  
+
+    if(parseInt(uvr)>mayor){       
+        if(sirujias[0]){
+            if (sirujias[ind].Via==Via) {
+                sirujias[ind].pr=65;
+            }else{
+                sirujias[ind].pr=75;
+            }           
+        }         
+        mayor=parseInt(uvr);
+        pr= 100;
+        ind=sirujias.length;
+    }else{
+        if (sirujias[ind].Via==Via) {
+            pr=65;
+        }else{
+            pr=75;
+        }         
+    }
+    cirujano=(parseInt(uvr)*1270)*parseInt(porc)/100+(parseInt(uvr)*1270);
+    anestesiologo=(parseInt(uvr)*960)*parseInt(porc)/100+(parseInt(uvr)*960);
+    ayudante=(parseInt(uvr)*360)*parseInt(porc)/100+(parseInt(uvr)*360);
+    var total=(cirujano+anestesiologo+ayudante)*parseInt(pr)/100;
+
+    var p={
+        cups,
+        uvr,
+        cirujano,
+        anestesiologo,
+        ayudante,
+        quirofano:costoCirujia(uvr),
+        materiales:costoMateriales(uvr),
+        Via,
+        entidad,
+        cc,
+        pr,
+        total
+    }
+    sirujias.push(p);
+    $('#cups').val('');
+    $('#uvr').val('0');        
+    $('#porc').val('0');
+    verSirugias();
+}
+
+function verSirugias() {
+    var cadena='';
+    sirujias.forEach(element => {
+        cadena+=`             
+        <tr>
+            <td>${element.cups}</td>
+            <td>${element.uvr}</td>
+            <td>$${number_format(element.cirujano)}</td>
+            <td>$${number_format(element.anestesiologo)}</td>
+            <td>$${number_format(element.ayudante)}</td>
+            <td>$${number_format(element.quirofano)}</td>
+            <td>$${number_format(element.materiales)}</td>
+            <td>${element.pr}%</td>
+            <td>$${number_format(element.total)}</td>
+        </tr>`;
+    });
+    $('#contenido').html(cadena);
+}
+
+
 
 function consultarProcedimientos() {    
     var entidad = $('#entidad').val();

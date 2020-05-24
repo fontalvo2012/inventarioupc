@@ -1,28 +1,37 @@
 
 <div class="row">
-    <div class="col-sm-10">
+    <div class="col-sm-12">
         <div class="card">
             <div class="card-header">
                 Facturacion Quirurgica
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-sm-4">
-                        <span class="small"><b>Paciente</b></span>
+                    <div class="col-sm-3">
+                        <span class="small"><b>Documento.</b></span>
                         <input type="text" name="paciente" id="cc" onblur="consultarPaciente();" placeholder="Digite cedula"
                             class="form-control form-control-sm">
                     </div>
-                     <div class="col-sm-4">
-                        <span class="small"><b>Paciente</b></span>
+                     <div class="col-sm-3">
+                        <span class="small"><b>Paciente.</b></span>
                         <input type="text" name="nombres" id="nombres" placeholder="Nombres"
                             class="form-control form-control-sm" readonly>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <span class="small"><b>Entidad</b></span>
                         <select name="entidad" id="entidad" class="form-control form-control-sm" onchange="consultarProcedimientos()">
                             <option value="">Seleccione</option>
                             {{#each entidades}}
                             <option value="{{nit}}">{{rsocial}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <span class="small"><b>Medicos</b></span>
+                        <select name="entidad" id="entidad" class="form-control form-control-sm" onchange="consultarProcedimientos()">
+                            <option value="">Seleccione</option>
+                            {{#each medicos}}
+                            <option value="{{cedula}}">{{nombres}}</option>
                             {{/each}}
                         </select>
                     </div>
@@ -54,7 +63,7 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-sm-6">
-                        <button class="btn btn-success btn-sm">Agregar.</button>
+                        <button class="btn btn-success btn-sm" onclick="agregarirugia()">Agregar.</button>
                     </div>
                 </div>
             </div>
@@ -71,10 +80,13 @@
                             <th scope="col">Ayudante</th>
                             <th scope="col">Quirofano</th>
                             <th scope="col">Materiales</th>
+                            <th scope="col">Porcentaje</th>
+                            <th scope="col">Total</th>
+
                         </tr>
                     </thead>
-                    <tbody id="contenido">
-                       
+                    <tbody id="contenido" class="small">
+                  
                        
                     </tbody>
                 </table>
