@@ -21,11 +21,9 @@ router.post('/addentidades',checkAuthentication,async(req,res)=>{
     res.redirect('/addentidades');
 });
 
-router.get('/tarifas',async(req,res)=>{  
-    var entidad=[];   
-    entidad = await Entidad.find().sort({rsocial:'asc'}).lean();
-    console.log(entidad);  
-    res.render('item/tarifas',{ entidad });
+router.get('/tarifas',async(req,res)=>{       
+    const ent = await Entidad.find().sort({rsocial:'asc'}).lean();    
+    res.render('item/tarifas',{ ent });
 });
 
 router.get('/descargaRips',async(req, res) => {  

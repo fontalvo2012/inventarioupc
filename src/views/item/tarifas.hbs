@@ -1,39 +1,185 @@
-
 <div class="container mt-4">
     <div id="progreso"></div>
     <div class="row">
+        <div class="col-sm-2">
+            <span class="small"><b>Tipo</b></span>
+            <select name="tipo" id="tipo" class="form-control form-control-sm" onchange="consultarifas()">
+                <option value="c">consultas</option>
+                <option value="p">procedimientos</option>
+            </select>
+        </div>
         <div class="col-sm-3">
             <span class="small"><b>Entidad</b></span>
             <select name="entidad" id="entidad" class="form-control form-control-sm" onchange="consultarifas()">
                 <option value="">Seleccione</option>
-                {{#each entidad}}
-                    <option value="{{nit}}">{{rsocial}}</option>
+                {{#each ent}}
+                <option value="{{nit}}">{{rsocial}}</option>
                 {{/each}}
             </select>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-2" style="display: none;" id="porc">
             <span><b>% incremento</b></span>
             <input type="number" value="0" class="form-control form-control-sm" name="porcentaje" id="porcentaje">
         </div>
-        <div class="col-sm-3 mt-4">
-            <button class="btn btn-primary btn-sm" onclick="ingresarTarifas()"><i class='fas fa-table' style='font-size:16px'></i> Crear</button>
+        <div class="col-sm-3 mt-4" style="display: none;" id="btcrear">
+            <button class="btn btn-primary btn-sm" onclick="ingresarTarifas()"><i class='fas fa-table'
+                    style='font-size:16px'></i> Crear</button>
+        </div>
+        <div class="col-sm-5 mt-4" style="display: none;" id="vcups">
+            <div class="row">
+                <div class="col-sm-4">
+                    <input type="text" class="form-control form-control-sm" id="cups" placeholder="Cups">
+                </div>
+                <div class="col-sm-2">
+                    <button class="btn btn-warning btn-sm" onclick="consultarifas()">Buscar</button>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                        data-target="#staticBackdrop">+</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<div class="container mt-4 small">
+{{#each error}}
+<div class="alert alert-warning alert-dismissible fade show m-4" role="alert">
+    <strong>Mensaje:</strong> {{mensaje}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{{/each}}
 
-    <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">CUPS</th>
-      <th scope="col">NOMBRE</th>
-      <th scope="col" colspan="2">VALOR</th>
-      <th scope="col" >MODIFICAR</th>
-      <th scope="col">ACCION</th>
-    </tr>
-  </thead>
-  <tbody id="vertarifas">
-   
-  </tbody>
+<table class="table mt-4">
+    <thead>
+        <tr>
+            <th scope="col">CUPS</th>
+            <th scope="col">NOMBRE</th>
+            <th scope="col">INCREMENTO</th>
+            <th scope="col" colspan="2">VALOR</th>
+            <th scope="col">MODIFICAR</th>
+            <th scope="col">ACCION</th>
+        </tr>
+    </thead>
+    <tbody id="vertarifas">
+
+    </tbody>
 </table>
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">NUEVO ITEM</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/addItem" method="POST">
+                <input type="hidden" name="entidad_form" id="entidad_form">
+                <input type="hidden" name="copago" value="0" id="copago" >
+                <input type="hidden" name="complicacion" id="complicacion" value="null">
+                <input type="hidden" name="dprincipal" id="dprincipal" value="null" >
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-titel"> Items</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <span class="small"><b>Cups</b></span>
+                                        <input type="text" class="form-control form-control-sm" onblur="selectEntidad()"
+                                            id="cups" name="cups" placeholder="Cups" required>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="form-group">
+                                        <span class="small"><b>Nombres</b></span>
+                                        <input type="text" class="form-control form-control-sm" id="nombre"
+                                            name="nombre" placeholder="Nombre" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <span class="small"><b>Valor</b></span>
+                                        <input type="number" class="form-control form-control-sm" id="valor"
+                                            name="valor" placeholder="Registro Medicos" required>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="form-group">
+                                         <span class="small"><b>Tipo</b></span>
+                                        <select name="tipo" id="tipo" class="form-control form-control-sm">
+                                            <option value="c">Consulta</option>
+                                            <option value="p">Procedimiento</option>
+                                        </select>
+                                       
+                                       
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <span class="small"><b>Atencion </b> <b
+                                                style="color: blue;">*Procedimiento</b></span>
+                                        <select name="atiende" id="atiende" class="form-control form-control-sm">
+                                            <option value="1">Medico(a) Especialista</option>
+                                            <option value="2">Medico(a) General</option>
+                                            <option value="3">Enfermera (o)</option>
+                                            <option value="4">Auxiliar Enfermeria</option>
+                                            <option value="5">Otro</option>
+                                        </select>
+                                    </div>
+                                </div>
+                              
+                            
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <span class="small"><b>Acto quirúrgico </b> <b
+                                                style="color: blue;">*Procedimiento</b></span>
+                                        <select name="a_quirurgico" id="a_quirurgico"
+                                            class="form-control form-control-sm">
+                                            <option value="">Ninguno</option>
+                                            <option value="1">Único o unilateral</option>
+                                            <option value="2">Múltiple o bilateral,misma vía, diferente especialidad
+                                            </option>
+                                            <option value="3">Múltiple o bilateral,misma vía, igual especialidad
+                                            </option>
+                                            <option value="4">Múltiple o bilateral,diferente vía, diferente especialidad
+                                            </option>
+                                            <option value="5">Múltiple o bilateral,diferente vía, igual especialidad
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                            </div>
+
+
+                            <div class="form-group">
+                                <button id="ingresar" class="btn btn-primary btn-block">Ingresar</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
 </div>

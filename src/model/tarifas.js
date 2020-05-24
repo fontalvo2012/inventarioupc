@@ -19,7 +19,8 @@ const tarifasSchema= new Schema({
     f_consulta:{type:String,required:false},
     f_procedimiento:{type:String,required:false},
     tipo:{type:String,required:false},
-    forma:{type:String,required:false}
+    forma:{type:String,required:false},
+    porcentaje:{type:Number,required:false}
 });
 
 module.exports=mongoose.model('tarifas',tarifasSchema);

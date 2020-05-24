@@ -1,4 +1,4 @@
-plena=`
+plena = `
 [    
     {
         "cd": "30",
@@ -4311,180 +4311,277 @@ plena=`
 
 function combertirIss(ob) {
     var obj = JSON.parse(ob);
-    array=[];
+    array = [];
     obj.forEach(element => {
-      array.push(`${element.cups}::${element.nombre}`);    
-    }); 
-    return array;
-  }
-  
-  $(function () { 
-    $(".completarcups").autocomplete({
-      source:combertirIss(plena)
+        array.push(`${element.cups}::${element.nombre}`);
     });
-  });
+    return array;
+}
 
-  function addcups() {      
-      var dato=$('#ord').val();
-      dato+=$('#ccups').val()+'#';
-      $('#ord').val(dato);
-      $('#ccups').val('');
-  }
+function consultarTarifas() {
+    var entidad = $('#entidad').val();
+    $.ajax({
+        url: '/consultarTarifas',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            entidad: entidad
+        },
+        success: (data) => {          
+            $(".completarcups").autocomplete({
+                source: data
+            });          
+        }
+    });
+}
 
-  function consultarItem2() {
-    var id = $('#item').val();     
-    var entidad=$('#entidad').val();
-    console.log('entidad: ',entidad);
+function consultarProcedimientos() {    
+    var entidad = $('#entidad').val();
+    console.log(entidad);
+    $.ajax({
+        url: '/consultarProcedimientos',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            entidad: entidad
+        },
+        success: (data) => {   
+            console.log(data);
+            $("#cups").autocomplete({
+                source: data
+            });          
+        }
+    });
+}
 
-    if(entidad==""){
+function consultarItemProcedimientos() {    
+    var entidad = $('#entidad').val();
+    var cups=$('#cups').val().substr(0,6);
+    console.log(cups);
+    console.log(entidad);
+    $.ajax({
+        url: '/consultaritemProcedimientos',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            entidad: entidad,
+            cups:cups
+        },
+        success: (data) => {   
+            $('#uvr').val(data.valor);
+            $('#porc').val(data.porcentaje);
+                   
+        }
+    });
+}
+
+$(function () {
+    $(".completarcups").autocomplete({
+        source: combertirIss(plena)
+    });
+});
+
+function addcups() {
+    var dato = $('#ord').val();
+    dato += $('#ccups').val() + '#';
+    $('#ord').val(dato);
+    $('#ccups').val('');
+}
+
+function consultarItem2() {
+    var id = $('#item').val();
+    var entidad = $('#entidad').val();
+    console.log('entidad: ', entidad);
+
+    if (entidad == "") {
         alert('DEBES SELECCIONAR UNA ENTIDAD');
         $('#entidad').focus();
-        $('#m').css('display','none');
-    }else{
-        $('#m').css('display','block');
+        $('#m').css('display', 'none');
+    } else {
+        $('#m').css('display', 'block');
     }
 
     $.ajax({
-      url: '/verItem',
-      type: 'POST',
-      datatype: 'json',
-      data: {
-        id: id.substr(0,6),
-        entidad:entidad
-      },
-      success: (data) => {
-        console.log(data);
-        item = data;
-      
-      }
+        url: '/verItem',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            id: id.substr(0, 6),
+            entidad: entidad
+        },
+        success: (data) => {
+            console.log(data);
+            item = data;
+
+        }
     });
-  }
+}
 
 
 //MONGO
 
 function actualizarTarifa(id) {
-    var valor=$('#'+id).val();
+    var valor = $('#' + id).val();
     $.ajax({
         url: '/Actualizartarifas',
         type: 'POST',
         datatype: 'json',
-        data:{
-            id:id,
-            valor:valor
+        data: {
+            id: id,
+            valor: valor
         },
         success: (data) => {
             console.log(data);
-            consultarifas();      
+            consultarifas();
         }
-      });
+    });
 }
 
-function consultarifas() {
-    const issplena=JSON.parse(plena);
-    console.log('Numero de regitros: ',issplena.length)
+function consultarifas(){
+    const issplena = JSON.parse(plena);
+    console.log('Numero de regitros: ', issplena.length)
     var entidad = $('#entidad').val();
+    var tipo = $('#tipo').val();
+    var cup = $('#cups').val();
+    $('#entidad_form').val(entidad);
     $.ajax({
         url: '/verTarifas',
         type: 'POST',
         datatype: 'json',
-        data:{
-            entidad:entidad
+        data: {
+            entidad: entidad
         },
         success: (data) => {
-            var cadena='';  
+            console.log(data);
+            if(!data[0]){
+                $('#porc').css('display','block');
+                $('#btcrear').css('display','block');
+                $('#vcups').css('display','none');
+            }else{
+                $('#vcups').css('display','block');
+                $('#porc').css('display','none');
+                $('#btcrear').css('display','none');
+               
+            }
+            var cadena = '';
             data.forEach(element => {
-                cadena+=` 
-                <tr>
-                <th scope="row">${element.cups}</th>
-                <td>${element.nombre}</td>
-                <td colspan="2"><b>$ ${number_format(element.valor, 2)}</b></td>
-                <td><input type='number' id='${element._id}' class='form-control form-control-sm p-0' placeholder=" $ Dato"></td>
-                <td>
-                <a href="#" class="btn btn-warning btn-sm" onclick="actualizarTarifa('${element._id}')" ><i class='fas fa-sync' style='font-size:12px'></i></a>
-                </td>
-            </tr>`;
+                if(cup == ''){
+                    if (element.tipo == tipo) {
+                        cadena += ` 
+                        <tr>
+                            <th scope="row">${element.cups}</th>
+                            <td class="small">${element.nombre}</td>
+                            <td class="small">${element.porcentaje}%</td>
+                            <td colspan="2"><b> ${number_format(element.valor, 2)}</b></td>
+                            <td><input type='number' id='${element._id}' class='form-control form-control-sm p-0' placeholder=" $ Dato"></td>
+                            <td>
+                            <a href="#" class="btn btn-warning btn-sm" onclick="actualizarTarifa('${element._id}')" ><i class='fas fa-sync' style='font-size:12px'></i></a>
+                            </td>
+                        </tr>`;
+                        }
+                }else{
+                    if (element.cups == cup) {
+                        cadena += ` 
+                        <tr>
+                            <th scope="row">${element.cups}</th>
+                            <td class="small">${element.nombre}</td>
+                            <td class="small">${element.porcentaje}%</td>
+                            <td colspan="2"><b> ${number_format(element.valor, 2)}</b></td>
+                            <td><input type='number' id='${element._id}' class='form-control form-control-sm p-0' placeholder=" $ Dato"></td>
+                            <td>
+                            <a href="#" class="btn btn-warning btn-sm" onclick="actualizarTarifa('${element._id}')" ><i class='fas fa-sync' style='font-size:12px'></i></a>
+                            </td>
+                        </tr>`;
+                        }
+                }
+            
+
             });
             $('#vertarifas').html(cadena);
-            $('#progreso').html(``);  
+            $('#progreso').html(``);
         }
-      });
+    });
 }
 
 function ingresarTarifas() {
-    
-    const issplena=JSON.parse(plena);
-    var porcentaje =$('#porcentaje').val();
-    var entidad = $('#entidad').val();   
-    issplena.forEach(item => {  
-          
-    $.ajax({
-        url: '/addTarifa',
-        type: 'POST',
-        datatype: 'json',
-        data:{
-            cd:item.cd,
-            cups:item.cups,
-            nombre:item.nombre,
-            valor:parseInt(item.valor)+(parseInt(item.valor)*(porcentaje/100)),
-            a_quirurgico:item.a_quirurgico,
-            atiende:item.atiende,
-            autorizacion:item.autorizacion,
-            c_diagnostico:item.c_diagnostico,
-            c_diagnostico2:item.c_diagnostico2,
-            c_diagnostico3:item.c_diagnostico3,
-            c_externa:item.c_externa,
-            complicacion:item.complicacion,
-            copago:item.copago,
-            entidad:entidad,
-            f_consulta:item.f_consulta,
-            f_procedimiento:item.f_procedimiento,
-            tipo:item.tipo,
-            forma:item.forma
-        },
-        success: (data) => {
-            console.log(data.valor);
-            $('#progreso').html(`
-            <div class="progress">
-            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="${(data.valor*100)/204}" aria-valuemin="0" aria-valuemax="100" style="width: ${(data.valor*100)/204}%"></div>
-            </div>`);
+
+    const issplena = JSON.parse(plena);
+    var porcentaje = $('#porcentaje').val();
+    var valor=0;
+    var entidad = $('#entidad').val();
+    issplena.forEach(item => {
+        valor=parseInt(item.valor);
+        if (item.tipo=='c') {
+           valor= parseInt(item.valor) + (parseInt(item.valor) * (porcentaje / 100))
         }
-      });
+        $.ajax({
+            url: '/addTarifa',
+            type: 'POST',
+            datatype: 'json',
+            data: {
+                cd: item.cd,
+                cups: item.cups,
+                nombre: item.nombre,
+                valor: valor,
+                a_quirurgico: item.a_quirurgico,
+                atiende: item.atiende,
+                autorizacion: item.autorizacion,
+                c_diagnostico: item.c_diagnostico,
+                c_diagnostico2: item.c_diagnostico2,
+                c_diagnostico3: item.c_diagnostico3,
+                c_externa: item.c_externa,
+                complicacion: item.complicacion,
+                copago: item.copago,
+                entidad: entidad,
+                f_consulta: item.f_consulta,
+                f_procedimiento: item.f_procedimiento,
+                tipo: item.tipo,
+                forma: item.forma,
+                porcentaje:porcentaje
+            },
+            success: (data) => {
+                console.log(data.valor);
+                $('#progreso').html(`
+            <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="${(data.valor * 100) / 204}" aria-valuemin="0" aria-valuemax="100" style="width: ${(data.valor * 100) / 204}%"></div>
+            </div>`);
+            }
+        });
     });
     consultarifas();
-   
+
 }
 // MONGO <=
 
 
 
 function all_usuario() {
-    var ini=$('#ini').val();
-    var fin=$('#fin').val();
-    var eps=$('#entidad').val();
-   if (ini != "" && fin != "") {
-    $.ajax({
-        url: '/allusuario',
-        type: 'POST',
-        datatype: 'json',
-        data:{
-            ini:ini,
-            fin:fin,
-            eps,eps
-        },
-        success: (data) => {
-            console.log(data); 
-            if (data=='0') {
-                $('#alert').html(` <div class="alert alert-warning" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> NO SE ENCONTRARON REGISTROS EN ESTE RANGO FECHA ${ini}=>${fin} </div>`);    
-            } else {
-                $('#alert').html(` <div class="alert alert-success" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> SE INGRESARON SASTISFACTORIAMENTE LAS FACTURAS DEL RANGO DE FECHA ${ini}=>${fin} </div>`);    
+    var ini = $('#ini').val();
+    var fin = $('#fin').val();
+    var eps = $('#entidad').val();
+    if (ini != "" && fin != "") {
+        $.ajax({
+            url: '/allusuario',
+            type: 'POST',
+            datatype: 'json',
+            data: {
+                ini: ini,
+                fin: fin,
+                eps, eps
+            },
+            success: (data) => {
+                console.log(data);
+                if (data == '0') {
+                    $('#alert').html(` <div class="alert alert-warning" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> NO SE ENCONTRARON REGISTROS EN ESTE RANGO FECHA ${ini}=>${fin} </div>`);
+                } else {
+                    $('#alert').html(` <div class="alert alert-success" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> SE INGRESARON SASTISFACTORIAMENTE LAS FACTURAS DEL RANGO DE FECHA ${ini}=>${fin} </div>`);
+                }
+
             }
-            
-        }
-      });
-   }else{
-       alert('Debe ingresar los datos');
-   }
+        });
+    } else {
+        alert('Debe ingresar los datos');
+    }
 }
 
 function capita() {
@@ -4518,21 +4615,21 @@ function capita() {
 
 function completMedicamentos() {
     $.ajax({
-    url: '/ajaxMedicamentos',
-    type: 'POST',
-    datatype: 'json',   
-    success: (data) => {
-        console.log(data);
-        var array=[];
-        data.forEach(element => {
-            array.push(element.medicamento);
-        });
+        url: '/ajaxMedicamentos',
+        type: 'POST',
+        datatype: 'json',
+        success: (data) => {
+            console.log(data);
+            var array = [];
+            data.forEach(element => {
+                array.push(element.medicamento);
+            });
 
-        $(".med").autocomplete({
-            source:combertirIss(array)
-          });
-    }
-  });
+            $(".med").autocomplete({
+                source: combertirIss(array)
+            });
+        }
+    });
 }
 
 
@@ -4541,43 +4638,43 @@ function facturarEntidad() {
     var fin = $('#fin').val();
     var entidad = $('#entidad').val();
     $.ajax({
-    url: '/facturar',
-    type: 'POST',
-    datatype: 'json', 
-    data: {
-        ini: ini,
-        fin: fin,
-        entidad, entidad
-    },  
-    success: (data) => {
-        console.log(data); 
-        if(data=='facturado'){
-            location.href = "/facturas";
-        }    
-        
-    }
-  });
+        url: '/facturar',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            ini: ini,
+            fin: fin,
+            entidad, entidad
+        },
+        success: (data) => {
+            console.log(data);
+            if (data == 'facturado') {
+                location.href = "/facturas";
+            }
+
+        }
+    });
 }
 
-var receta=[];
+var receta = [];
 function AgregarMed() {
-    receta.push({medicamento:$('#medicamento').val(),cantidad:$('#cant').val(),uso:$('#uso').val()});
+    receta.push({ medicamento: $('#medicamento').val(), cantidad: $('#cant').val(), uso: $('#uso').val() });
     $('#recetaJson').val(JSON.stringify(receta));
-    var contador=0;
-    var cadena=`<table class="table"><tbody> `;
+    var contador = 0;
+    var cadena = `<table class="table"><tbody> `;
     receta.forEach(element => {
         contador++;
-        cadena+=`                                
+        cadena += `                                
             <tr>
                 <th scope="row">${contador}</th>
                 <th scope="row">${element.medicamento}</th>
                 <td>${element.cantidad}</td>
                 <td>${element.uso}</td>
-                <td><a href="#" onclick="QuitarMedicamento(${contador-1})" >Quitar</a></td>
+                <td><a href="#" onclick="QuitarMedicamento(${contador - 1})" >Quitar</a></td>
             </tr>
         `;
     });
-    cadena+=`</tbody></table>`
+    cadena += `</tbody></table>`
     $('#vreseta').html(cadena);
 
 
@@ -4587,13 +4684,13 @@ function AgregarMed() {
 }
 
 function QuitarMedicamento(id) {
-    receta.splice(id,1);
+    receta.splice(id, 1);
     $('#recetaJson').val(JSON.stringify(receta));
-    var contador=0;
-    var cadena=`<table class="table"><tbody> `;
+    var contador = 0;
+    var cadena = `<table class="table"><tbody> `;
     receta.forEach(element => {
         contador++;
-        cadena+=`                                
+        cadena += `                                
             <tr>
                 <th scope="row">${contador}</th>
                 <th scope="row">${element.medicamento}</th>
@@ -4603,79 +4700,79 @@ function QuitarMedicamento(id) {
             </tr>
         `;
     });
-    cadena+=`</tbody></table>`
+    cadena += `</tbody></table>`
     $('#vreseta').html(cadena);
 
 }
 function tipoFactura() {
-           $.ajax({
-            url: '/tipofactura',
-            type: 'POST',
-            datatype: 'json',
-            data:{
-                entidad:$('#entidad').val()
-            },
-            success: (data) => { 
-                $("#factBotton").html(`<a  href="#" class="btn btn-primary btn-sm" id="cap" onclick="facturarEntidad()">Facturar</a>`);     
-            }
-          });   
+    $.ajax({
+        url: '/tipofactura',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            entidad: $('#entidad').val()
+        },
+        success: (data) => {
+            $("#factBotton").html(`<a  href="#" class="btn btn-primary btn-sm" id="cap" onclick="facturarEntidad()">Facturar</a>`);
+        }
+    });
 }
 
 function tipoFacturarips() {
     $.ajax({
-     url: '/tipofactura',
-     type: 'POST',
-     datatype: 'json',
-     data:{
-         entidad:$('#entidad').val()
-     },
-     success: (data) => {    
-         console.log(data);
-         if (data == '') {
-             $("#ripboton").html(`<button class="btn btn-warning btn-sm" id="all" onclick="all_usuario()">Crear</button>`);
-         }else{
-             $("#ripboton").html(`<a  href="#" class="btn btn-primary btn-sm" id="cap" onclick="ripsEventos()">Crear</a>`);
-         }        
-     }
-   });   
-}
-function ripsEventos() {
-   if ($('#ffinal').val()!='' && $('#finicio').val()!='') {
-    $.ajax({
-        url: '/ripseventos',
+        url: '/tipofactura',
         type: 'POST',
         datatype: 'json',
-        data:{
-           nombre:$('#nombre').val(),
-           consecutivo:$('#consecutivo').val(),
-           finicio:$('#finicio').val(),
-           ffinal:$('#ffinal').val(),
-           entidad:$('#entidad').val(),
+        data: {
+            entidad: $('#entidad').val()
         },
-        success: (data) => {    
-            console.log(data);           
-            $('#alert').html(` <div class="alert alert-success" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> RIPS CREADOS</div>`);             
+        success: (data) => {
+            console.log(data);
+            if (data == '') {
+                $("#ripboton").html(`<button class="btn btn-warning btn-sm" id="all" onclick="all_usuario()">Crear</button>`);
+            } else {
+                $("#ripboton").html(`<a  href="#" class="btn btn-primary btn-sm" id="cap" onclick="ripsEventos()">Crear</a>`);
+            }
         }
-      });   
-   }else{
-    $('#alert').html(` <div class="alert alert-danger" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i>VERIFIQUE LA FECHA</div>`);             
-   }
+    });
+}
+function ripsEventos() {
+    if ($('#ffinal').val() != '' && $('#finicio').val() != '') {
+        $.ajax({
+            url: '/ripseventos',
+            type: 'POST',
+            datatype: 'json',
+            data: {
+                nombre: $('#nombre').val(),
+                consecutivo: $('#consecutivo').val(),
+                finicio: $('#finicio').val(),
+                ffinal: $('#ffinal').val(),
+                entidad: $('#entidad').val(),
+            },
+            success: (data) => {
+                console.log(data);
+                $('#alert').html(` <div class="alert alert-success" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> RIPS CREADOS</div>`);
+            }
+        });
+    } else {
+        $('#alert').html(` <div class="alert alert-danger" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i>VERIFIQUE LA FECHA</div>`);
+    }
 }
 
 
 function verRips() {
     $.ajax({
-     url: '/descargaRips',
-     type: 'POST',
-     datatype: 'json',
-     data:{
-         entidad:$('#entidad').val()
-     },
-     success: (data) => {    
-         console.log(data);
-         var cadena='';
-        data.forEach(element => {
-            cadena+=`
+        url: '/descargaRips',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            entidad: $('#entidad').val()
+        },
+        success: (data) => {
+            console.log(data);
+            var cadena = '';
+            data.forEach(element => {
+                cadena += `
             <tr>
             <th scope="row">Rips: ${element.fecha}</th>                                                  
             <td>
@@ -4687,31 +4784,31 @@ function verRips() {
             </td>
         </tr>
             `;
-        });
+            });
 
-         $('#rips').html(cadena);
-         
-     }
-   });   
+            $('#rips').html(cadena);
+
+        }
+    });
 }
 
-function consultarPrefactura(opcion) {  
-     $.ajax({
-         url: '/prefacturaitem',
-         type: 'POST',
-         datatype: 'json',
-         data:{
-            entidad:$('#entidad').val(),
-            ini:$('#ini').val(),
-            fin:$('#fin').val(),          
-            opcion:opcion
-         },
-         success: (data) => {    
-           
-             var cadena='';
-             data.forEach(element => {
-                 
-                 cadena+=` 
+function consultarPrefactura(opcion) {
+    $.ajax({
+        url: '/prefacturaitem',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            entidad: $('#entidad').val(),
+            ini: $('#ini').val(),
+            fin: $('#fin').val(),
+            opcion: opcion
+        },
+        success: (data) => {
+
+            var cadena = '';
+            data.forEach(element => {
+
+                cadena += ` 
                  <tr>
                  <th scope="row">#</th>
                  <td>${element.fecha}</td>
@@ -4726,21 +4823,21 @@ function consultarPrefactura(opcion) {
                  </td>
            
                </tr>`
-                
-             });
-             $('#prefacturas').html(cadena);
-            
-         }
-       });   
-  
- }
- function verimagen() {
+
+            });
+            $('#prefacturas').html(cadena);
+
+        }
+    });
+
+}
+function verimagen() {
     $.ajax({
         url: '/verimagen',
         type: 'POST',
         datatype: 'json',
-        data:{
-            codigo:$('#codigo').val()
+        data: {
+            codigo: $('#codigo').val()
         },
         success: (data) => {
             console.log(data);

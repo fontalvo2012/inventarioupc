@@ -9,6 +9,7 @@ const Factura = require('../model/facturas');
 const Medico = require('../model/medicos');
 const Procedimiento = require('../model/procedimientos');
 const Cita = require('../model/citas');
+const Entidad = require('../model/entidad');
 
 
 function checkAuthentication(req, res, next) {
@@ -29,6 +30,10 @@ router.get('/hclinicas/:id/:cc', checkAuthentication, async (req, res) => {
 router.get('/consultashclinicas', checkAuthentication, async(req, res) => {
     const citas= await Cita.find({estado:'ensala','item.tipo':'c'}).lean();
     res.render('hclinicas/consultas',{citas});
+});
+router.get('/procedimientoshclinicas', checkAuthentication, async(req, res) => {   
+    const entidades= await Entidad.find().lean();
+    res.render('hclinicas/procedimientos',{entidades});
 });
 
 router.post('/crearhc', checkAuthentication, async (req, res) => {

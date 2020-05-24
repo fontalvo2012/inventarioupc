@@ -74,7 +74,7 @@ function selectEntidad() {
     datatype: 'json',
     success: (data) => {
       var cadena = `
-      <select name="entidad" id="entidad" onchange="consultarEntidad();" class="form-control form-control-sm">
+      <select name="entidad" id="entidad" onchange="consultarEntidad();consultarTarifas();" class="form-control form-control-sm">
       <option value="">Seleccionar Entidad</option>
       `;
       data.forEach(element => {

@@ -7,6 +7,11 @@
                         value="{{paciente.cedula}}" class="form-control form-control-sm" readonly></div>
                 <div class="col-sm-3"><span class="small"><b>Nombres</b></span><input type="text" name="nombres"
                         value="{{nombres}}" class="form-control form-control-sm" readonly></div>
+                <div class="col-sm-3"><span class="small"><b>Entidad</b></span><input type="text" id="eps"
+                        value="{{entidad.rsocial}}" class="form-control form-control-sm" readonly>
+                         <input type="hidden" id="entidad" value="{{entidad.nit}}">
+                        </div>
+               
                 <div class="col-sm-2"><button class="btn btn-success btn-sm btn-block mt-4"><i class='fas fa-save'
                             style='font-size:16px'></i> Guardar</button></div>
                 <div class="col-sm-2"><a href="#" class="btn btn-warning btn-sm btn-block mt-4" data-toggle="modal"
@@ -43,7 +48,7 @@
                     <a class="nav-link" id="g" href="#" onclick=""><b>Receta</b></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="i" href="#"><b>Ordenes</b></a>
+                    <a class="nav-link" id="i" href="#" onclick="consultarTarifas()"><b>Ordenes</b></a>
                 </li>
             </ul>
             <div class="padre">
