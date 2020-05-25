@@ -4387,7 +4387,8 @@ function agregarirugia() {
     var cups= $('#cups').val();
     var uvr= $('#uvr').val();
     var porc= $('#porc').val();
-    var Via= $('#Via').val();
+    var Via= $('#via').val();
+    var medico= $('#medico').val();
     var pr=0;
     var cirujano=0;
     var anestesiologo=0;
@@ -4397,8 +4398,10 @@ function agregarirugia() {
         if(sirujias[0]){
             if (sirujias[ind].Via==Via) {
                 sirujias[ind].pr=65;
+                sirujias[ind].total= (sirujias[ind].cirujano+sirujias[ind].anestesiologo+sirujias[ind].ayudante+sirujias[ind].quirofano+sirujias[ind].materiales)*0.65;
             }else{
                 sirujias[ind].pr=75;
+                sirujias[ind].total= (sirujias[ind].cirujano+sirujias[ind].anestesiologo+sirujias[ind].ayudante+sirujias[ind].quirofano+sirujias[ind].materiales)*0.75;
             }           
         }         
         mayor=parseInt(uvr);
@@ -4414,7 +4417,7 @@ function agregarirugia() {
     cirujano=(parseInt(uvr)*1270)*parseInt(porc)/100+(parseInt(uvr)*1270);
     anestesiologo=(parseInt(uvr)*960)*parseInt(porc)/100+(parseInt(uvr)*960);
     ayudante=(parseInt(uvr)*360)*parseInt(porc)/100+(parseInt(uvr)*360);
-    var total=(cirujano+anestesiologo+ayudante)*parseInt(pr)/100;
+    var total=(cirujano+anestesiologo+ayudante+costoCirujia(uvr)+costoMateriales(uvr))*parseInt(pr)/100;
 
     var p={
         cups,
@@ -4428,7 +4431,8 @@ function agregarirugia() {
         entidad,
         cc,
         pr,
-        total
+        total,
+        medico
     }
     sirujias.push(p);
     $('#cups').val('');
