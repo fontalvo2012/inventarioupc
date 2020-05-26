@@ -4418,8 +4418,8 @@ function agregarirugia() {
     anestesiologo=(parseInt(uvr)*960)*parseInt(porc)/100+(parseInt(uvr)*960);
     ayudante=(parseInt(uvr)*360)*parseInt(porc)/100+(parseInt(uvr)*360);
     var total=(cirujano+anestesiologo+ayudante+costoCirujia(uvr)+costoMateriales(uvr))*parseInt(pr)/100;
-
-    var p={
+    
+    var p={       
         cups,
         uvr,
         cirujano,
@@ -4439,13 +4439,37 @@ function agregarirugia() {
     $('#uvr').val('0');        
     $('#porc').val('0');
     verSirugias();
+  
+}
+
+
+function quitarItem(id) {
+    sirujias.splice(id, 1);
+    var m=0;
+    var i=0;
+    for (let index = 0; index < sirujias.length; index++) {
+      if (sirujias[index].uvr>m) {
+          m=sirujias[index].uvr;
+          i=index;
+
+      }        
+    }    
+
+    ind=i;
+    mayor=sirujias[ind].uvr;
+    sirujias[ind].total= (sirujias[ind].cirujano+sirujias[ind].anestesiologo+sirujias[ind].ayudante+sirujias[ind].quirofano+sirujias[ind].materiales);
+    sirujias[ind].pr=100;
+    verSirugias();
 }
 
 function verSirugias() {
     var cadena='';
+    var cont=0;
+    $('#sir').val(JSON.stringify(sirujias));
     sirujias.forEach(element => {
         cadena+=`             
         <tr>
+            <td>${cont}</td>
             <td>${element.cups}</td>
             <td>${element.uvr}</td>
             <td>$${number_format(element.cirujano)}</td>
@@ -4455,7 +4479,9 @@ function verSirugias() {
             <td>$${number_format(element.materiales)}</td>
             <td>${element.pr}%</td>
             <td>$${number_format(element.total)}</td>
+            <td><a href="#" onclick="quitarItem(${cont})">quitar</a></td>
         </tr>`;
+        cont++;
     });
     $('#contenido').html(cadena);
 }

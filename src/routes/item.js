@@ -52,10 +52,8 @@ router.post('/consultaritemProcedimientos',checkAuthentication,async(req,res)=>{
 });
 
 router.post('/addItem',checkAuthentication,async(req,res)=>{    
-    const {cups,nombre,entidad_form,valor,copago,atiende,dprincipal,tipo,a_quirurgico,complicacion} = req.body;
+    const {cups,nombre,entidad_form,valor,copago,atiende,dprincipal,tipo,a_quirurgico,complicacion,forma} = req.body;
     const  ent = await Entidad.find().sort({rsocial:'asc'}).lean();
-    var forma='';
-
     if (tipo=='p') {
         forma='uvr'
     };
@@ -95,6 +93,7 @@ router.post('/addItem',checkAuthentication,async(req,res)=>{
 
     res.render('item/tarifas',{ent,error});
 });
+
 router.post('/verTarifas',async(req,res)=>{
     const {entidad}=req.body;
     const t= await Tarifas.find({entidad:entidad}).sort({nombre:'asc'});

@@ -7,6 +7,8 @@ const db = admin.firestore();
 const Entidad = require('../model/entidad');
 const Factura = require('../model/facturas');
 const Empresa = require('../model/empresas');
+const Tarifas = require('../model/tarifas');
+const Paciente = require('../model/pacientes');
 
 function checkAuthentication(req, res, next) {
     if (req.isAuthenticated()) {
@@ -188,6 +190,35 @@ router.get('/facturas', checkAuthentication, async (req, res) => {
         datos[index] = { id: facturas._id, cd: codigos[index], anexo: anexo, item: facturas.hc.item, entidad: facturas.hc.entidad, hc: facturas.hc,total:total,fecha:fechafac(facturas.fecha) };
     }   
     res.render('facturacion/facturas', { datos,entidades });
+});
+
+router.post('/facturarSiruigias',checkAuthentication,async(req,res)=>{
+    const {paciente,entidad,medico,autorizacion} = req.body;
+    const anexo=JSON.parse(req.body.sir);
+    var cups=anexo[0].cups.substr(0,6);
+    const item=await Tarifas.findOne({entidad:entidad,cups:cups});
+    const eps= await Entidad.findOne({nit:entidad});
+    const pac= await Paciente.findOne({cedula:paciente});
+    const max = await Factura.findOne({ estado: 'facturado' }).sort({ codigo: 'desc' }).limit(1);
+
+    const vencimiento=Vencimiento();
+    var v=0;
+    anexo.forEach(element => {
+        v=v+parseInt(element.total);
+    });
+    const sirugia={
+        item,
+        entidad:eps,
+        paciente:pac,
+        autorizacion,
+        fecha:fechaActual(),
+        medico,
+        total:v
+    }
+    console.log(parseInt(max.codigo)+1);
+    const fac=new Factura({vencimiento,codigo:parseInt(max.codigo)+1,hc:sirugia,copago:0,estado:'facturado',descripcion:'FACTURACION POR SIRUGIA'});
+    await fac.save();
+    res.redirect('/procedimientoshclinicas');
 });
 
 router.post('/facturas', checkAuthentication, async (req, res) => {
