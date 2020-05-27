@@ -4590,6 +4590,22 @@ function actualizarTarifa(id) {
     });
 }
 
+function borrarTarifa(id) {   
+    $.ajax({
+        url: '/borrartarifas',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            id: id
+        },
+        success: (data) => {
+            console.log(data);
+            consultarifas();
+        }
+    });
+}
+
+
 function consultarifas(){
     const issplena = JSON.parse(plena);
     console.log('Numero de regitros: ', issplena.length)
@@ -4625,11 +4641,12 @@ function consultarifas(){
                             <th scope="row">${element.cups}</th>
                             <td class="small">${element.nombre}</td>
                             <td class="small">${element.porcentaje}%</td>
-                            <td colspan="2"><b> ${number_format(element.valor, 2)}</b></td>
+                            <td ><b> ${number_format(element.valor, 2)}</b></td>
                             <td><input type='number' id='${element._id}' class='form-control form-control-sm p-0' placeholder=" $ Dato"></td>
                             <td>
-                            <a href="#" class="btn btn-warning btn-sm" onclick="actualizarTarifa('${element._id}')" ><i class='fas fa-sync' style='font-size:12px'></i></a>
+                            <a href="#" class="btn btn-warning btn-sm" onclick="actualizarTarifa('${element._id}')" ><i class='fas fa-sync' style='font-size:12px'></i></a>                            
                             </td>
+                            <td><a href="#" class="btn btn-danger btn-sm" onclick="borrarTarifa('${element._id}')" ><i class='far fa-trash-alt' style='font-size:12px'></i></a></td>
                         </tr>`;
                         }
                 }else{
@@ -4639,11 +4656,13 @@ function consultarifas(){
                             <th scope="row">${element.cups}</th>
                             <td class="small">${element.nombre}</td>
                             <td class="small">${element.porcentaje}%</td>
-                            <td colspan="2"><b> ${number_format(element.valor, 2)}</b></td>
+                            <td><b> ${number_format(element.valor, 2)}</b></td>
                             <td><input type='number' id='${element._id}' class='form-control form-control-sm p-0' placeholder=" $ Dato"></td>
                             <td>
                             <a href="#" class="btn btn-warning btn-sm" onclick="actualizarTarifa('${element._id}')" ><i class='fas fa-sync' style='font-size:12px'></i></a>
+                            
                             </td>
+                            <td><a href="#" class="btn btn-danger btn-sm" onclick="borrarTarifa('${element._id}')" ><i class='far fa-trash-alt' style='font-size:12px'></i></a></td>
                         </tr>`;
                         }
                 }

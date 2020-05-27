@@ -52,8 +52,10 @@ router.post('/consultaritemProcedimientos',checkAuthentication,async(req,res)=>{
 });
 
 router.post('/addItem',checkAuthentication,async(req,res)=>{    
-    const {cups,nombre,entidad_form,valor,copago,atiende,dprincipal,tipo,a_quirurgico,complicacion,forma} = req.body;
+    const {cups,nombre,entidad_form,valor,copago,atiende,dprincipal,tipo,a_quirurgico,complicacion,incremento} = req.body;
+    var {forma}=req.body;
     const  ent = await Entidad.find().sort({rsocial:'asc'}).lean();
+
     if (tipo=='p') {
         forma='uvr'
     };
@@ -76,7 +78,8 @@ router.post('/addItem',checkAuthentication,async(req,res)=>{
         f_consulta:'',
         f_procedimiento:'',
         tipo,
-        forma    
+        forma,
+        porcentaje:parseInt(incremento)
     }
     
     const i=await Tarifas.findOne({entidad:entidad_form,cups:cups});
@@ -109,6 +112,12 @@ router.post('/verItem',async(req,res)=>{
 router.post('/Actualizartarifas',async(req,res)=>{
     const {valor,id}=req.body;
     await Tarifas.findByIdAndUpdate(id,{valor:valor});
+    res.send('::Realizado::');
+});
+
+router.post('/borrartarifas',async(req,res)=>{
+    const {id}=req.body;
+    await Tarifas.remove({_id:id});
     res.send('::Realizado::');
 });
 

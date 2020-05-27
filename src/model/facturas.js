@@ -5,6 +5,7 @@ const facturaSchema= new Schema({
     codigo:{type:Number,required:true},    
     hc:{type:Object,required:true},
     anexo:{type:Object,required:false},
+    insumos:{type:Object,required:false},
     estado:{type:String,required:false},
     descripcion:{type:String,required:false},
     fecha:{type:Date,default:Date.now()},

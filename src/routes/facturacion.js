@@ -208,6 +208,7 @@ router.post('/facturarSiruigias',checkAuthentication,async(req,res)=>{
     });
     const sirugia={
         item,
+        anexo,
         entidad:eps,
         paciente:pac,
         autorizacion,
@@ -215,7 +216,7 @@ router.post('/facturarSiruigias',checkAuthentication,async(req,res)=>{
         medico,
         total:v
     }
-    console.log(parseInt(max.codigo)+1);
+ 
     const fac=new Factura({vencimiento,codigo:parseInt(max.codigo)+1,hc:sirugia,copago:0,estado:'facturado',descripcion:'FACTURACION POR SIRUGIA'});
     await fac.save();
     res.redirect('/procedimientoshclinicas');

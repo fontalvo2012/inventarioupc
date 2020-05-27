@@ -56,9 +56,9 @@
             <th scope="col">CUPS</th>
             <th scope="col">NOMBRE</th>
             <th scope="col">INCREMENTO</th>
-            <th scope="col" colspan="2">VALOR</th>
+            <th scope="col" >VALOR</th>
             <th scope="col">MODIFICAR</th>
-            <th scope="col">ACCION</th>
+            <th scope="col" colspan="2">ACCION</th>
         </tr>
     </thead>
     <tbody id="vertarifas">
@@ -111,10 +111,17 @@
                                     <div class="form-group">
                                         <span class="small"><b>Valor</b></span>
                                         <input type="number" class="form-control form-control-sm" id="valor"
-                                            name="valor" placeholder="Registro Medicos" required>
+                                            name="valor" placeholder="Valor" required>
                                     </div>
                                 </div>
-                                <div class="col-sm-8">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <span class="small"><b>incremento</b></span>
+                                        <input type="number" class="form-control form-control-sm" id="incremento"
+                                            name="incremento" placeholder="%Incremento" required>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
                                     <div class="form-group">
                                          <span class="small"><b>Tipo</b></span>
                                         <select name="tipo" id="tipo" class="form-control form-control-sm">
