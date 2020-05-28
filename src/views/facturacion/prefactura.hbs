@@ -22,8 +22,8 @@
             </div>
             <div class="col-sm-5 mt-4">
                 <div class="row">
-                    <div class="col-sm-3"><button class="btn btn-success btn-sm" onclick="consultarPrefactura('nombres')"><i class='fas fa-search' style='font-size:12px' ></i> Buscar</button></div>
-                    <div class="col-sm-3"> <div id="factBotton"></div>   </div>
+                    <div class="col-sm-3"><button class="btn btn-success btn-sm" onclick="consultarPrefactura('nombres')"><i class='fas fa-search' style='font-size:12px' ></i> Buscar</button></div>                  
+                    <div class="col-sm-3"> <button class="btn btn-warning btn-sm" onclick="facturarxid()">Facturar</button></div>
                 </div>
             </div>
     </div>
@@ -33,7 +33,7 @@
     <table class="table small">
     <thead>
     <tr>
-      <th scope="col">#</th>
+      <th scope="col" onclick="QuitarTOdo()">#</th>
       <th scope="col">Periodo</th>
       <th scope="col" onclick="consultarPrefactura('nombres')">Paciente</th>   
       <th scope="col">Entidad</th>   
@@ -46,23 +46,7 @@
     </tr>
   </thead>
   <tbody id="prefacturas">
-      {{#each prefacturas}}
-    <tr>
-      <th scope="row">1</th>
-      <td>{{hc.fecha}}</td>
-      <td>{{hc.nombres}}</td>
-      <td>{{hc.entidad.rsocial}}</td>     
-      <td>{{hc.item.nombre}}</td>
-      <td>{{hc.autorizacion}}</td>
-      <td>$ {{hc.copago}}</td>
-      <td>$ {{hc.valor}}</td>
-      <td>         
-        
-          <a href="/imprimirprefac/{{id}}" class="btn btn-primary btn-sm"><i class="fas fa-print" style="font-size: 16px;"></i></a>
-      </td>
-
-    </tr>
-        {{/each}}
+     
   </tbody>
 </table>
         </div>

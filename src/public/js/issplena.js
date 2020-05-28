@@ -4307,7 +4307,7 @@ plena = `
     }
 ]
 `;
-
+var ids=[];
 var sirujias=[];
 var mayor=0;
 var ind=0;
@@ -4965,6 +4965,7 @@ function verRips() {
 }
 
 function consultarPrefactura(opcion) {
+   
     $.ajax({
         url: '/prefacturaitem',
         type: 'POST',
@@ -4976,13 +4977,12 @@ function consultarPrefactura(opcion) {
             opcion: opcion
         },
         success: (data) => {
-
-            var cadena = '';
-            data.forEach(element => {
-
+            var cadena = '';           
+            data.forEach(element => {               
+               agregarId(element.id);
                 cadena += ` 
                  <tr>
-                 <th scope="row">#</th>
+                 <th scope="row"><input type="checkbox" id="${element.id}" value="${element.id}" onclick="SeleccionarFactura('${element.id}')"  class="form-control ck" style="width: 14px;"></th>
                  <td>${element.fecha}</td>
                  <td>${element.nombres}</td>                 
                  <td>${element.entidad}</td>                 
@@ -4991,14 +4991,13 @@ function consultarPrefactura(opcion) {
                  <td>${number_format(element.copago)}</td>
                  <td>${number_format(element.valor)}</td>
                  <td>
-                     <a href="#" class="btn btn-primary btn-sm"><i class="fas fa-print" style="font-size: 16px;"></i></a>
-                 </td>
-           
+                 <a href="/imprimirprefac/${element.id}" class="btn btn-primary btn-sm"><i class="fas fa-print" style="font-size: 16px;"></i></a>
+                 </td>           
                </tr>`
-
             });
+           
             $('#prefacturas').html(cadena);
-
+            SelecccionarTOdo();
         }
     });
 
@@ -5022,4 +5021,48 @@ function verimagen() {
 
         }
     });
+}
+
+function facturarxid() {
+    var i=JSON.stringify(ids);
+    $.ajax({
+        url: '/facturarporId',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            ids: i,
+            eps:$('#entidad').val()
+        },
+        success: (data) => {
+            if (data=='facturado') {
+                consultarPrefactura('nombre');
+            }
+        }
+    });
+}
+
+function SeleccionarFactura(id){   
+    if($('#'+id).is(':checked') ){
+        ids.push($('#'+id).val());       
+    }else{
+      
+        for (let index = 0; index < ids.length; index++) {
+            if(ids[index]==$('#'+id).val()){
+                ids.splice(index,1);
+            }            
+        }
+    }
+}
+
+function SelecccionarTOdo() {
+    $('.ck').attr('checked',true);    
+}
+
+function QuitarTOdo() {
+    $('.ck').attr('checked',true); 
+    ids=[];   
+}
+
+function agregarId(id) {
+    ids.push(id);
 }

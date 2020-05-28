@@ -59,17 +59,19 @@ router.post('/prefacturaitem', checkAuthentication, async (req, res) => {
         });
         var cont;
         var datos=[];
-        prefacturas.forEach(element => {
+        var ids=[];
+        prefacturas.forEach(element => {            
             datos.push(
                 {
-                    id:element._id,                    
+                    id:element._id,
+                    fecha:element.fecha,                    
                     nombres:element.hc.nombres,
                     entidad:element.hc.entidad.rsocial,
                     item:element.hc.item.nombre,
                     autorizacion:element.hc.autorizacion,
                     copago:parseInt(element.hc.copago),
                     valor:parseInt(element.hc.valor),
-                    fecha:fechafac(element.fecha)
+                   
                 });
         });
 
@@ -152,17 +154,43 @@ router.post('/facturar', checkAuthentication, async (req, res) => {
 
 });
 
-function fechaformat() {
-    let date = new Date()
-    let day = date.getDate()
-    let month = date.getMonth() + 1
-    let year = date.getFullYear()
-    if (month < 10) {
-         return (`${day}-0${month}-${year}`);
-    } else {
-        return (`${day}-${month}-${year}`);
+
+router.post('/facturarporId',checkAuthentication,async(req,res)=>{
+    const {ids,eps}=req.body
+    const i=JSON.parse(ids);
+    const max = await Factura.findOne({ estado: 'facturado' }).sort({ codigo: 'desc' }).limit(1);
+    const entidad= await Entidad.findOne({nit:eps}); 
+    if(entidad.tfac != 'usuario'){   
+        for (let index = 0; index < i.length; index++) {
+            await Factura.updateOne(
+                {_id:i[index]},
+                {
+                codigo: max.codigo + 1,
+                estado: 'facturado',
+                fecha:Date.now(),
+                vencimiento:Vencimiento(30) 
+             });            
+        }
+    }else{
+        var cont=max.codigo+1
+        for (let index = 0; index < i.length; index++) {
+            await Factura.updateOne(
+                {_id:i[index]},
+                {
+                codigo: cont,
+                estado: 'facturado',
+                fecha:Date.now(),
+                vencimiento:Vencimiento(30) 
+             }); 
+             cont++;           
+        }
     }
-}
+
+
+    res.send('facturado')
+});
+
+
 router.get('/facturas', checkAuthentication, async (req, res) => {
     var facturas = [];
     var datos = [];
