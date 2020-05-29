@@ -10,7 +10,7 @@
       <th scope="col">Cedula</th>
       <th scope="col">Paciente</th>
       <th scope="col">Eps</th>
-      <th scope="col">Accion</th>
+      <th scope="col" colspan="2">Accion</th>
     </tr>
   </thead>
   
@@ -22,6 +22,7 @@
       <td>{{paciente.nombre}} {{paciente.apellido}} {{apellido.spellido}}</td>
       <td>{{entidad.rsocial}}</td>
       <td><a href="/hclinicas/{{_id}}/{{paciente.cedula}}" class="btn btn-warning btn-sm"> <i class='fas fa-user-edit' style='font-size:16px'></i></a></td>
+      <td><a href="/cancelar/{{_id}}" class="btn btn-danger btn-sm"> <i class='fas fa-user-alt-slash' style='font-size:16px'></i></a></td>
     </tr>
     {{/each}}
   </tbody>

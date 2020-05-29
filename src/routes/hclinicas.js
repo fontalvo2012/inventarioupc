@@ -31,7 +31,14 @@ router.get('/consultashclinicas', checkAuthentication, async(req, res) => {
     const citas= await Cita.find({estado:'ensala','item.tipo':'c'}).lean();
     res.render('hclinicas/consultas',{citas});
 });
-
+router.get('/cancelar/:id', checkAuthentication, async(req, res) => {
+    const {id}=req.params;
+    await Cita.updateOne({_id:id},
+        {
+        estado:''      
+    }); 
+    res.redirect('/consultashclinicas');
+});
 router.get('/procedimientoshclinicas', checkAuthentication, async(req, res) => {   
     const entidades= await Entidad.find().lean();
     const medicos= await Medico.find().lean();

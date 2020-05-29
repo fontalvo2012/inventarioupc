@@ -4,6 +4,7 @@ var admin = require("firebase-admin");
 const db=admin.firestore();
 const Medico=require('../model/medicos');
 const Cita=require('../model/citas');
+const Factura= require('../model/facturas');
 
 router.get('/citas',async(req,res)=>{
     const valores=await Medico.find().lean();
@@ -30,7 +31,7 @@ router.post('/consultarcitas',async(req,res)=>{
 });
 
 router.get('/vercitas',async(req,res)=>{   
-    const valores = await Cita.find({fecha:getfecha()}).lean();   
+    const valores = await Cita.find({fecha:getfecha()}).lean(); 
     res.render('citas/consultas',{valores}); 
 });
 
@@ -77,14 +78,20 @@ router.post('/vercitaspaciente',async(req,res)=>{
 
 router.post('/ensala/:id',async(req,res)=>{
     const {id}=req.params; 
-    const {copago,autorizacion,valor}=req.body;   
-    await Cita.findOneAndUpdate({_id:id},
-        {
-        copago:copago,
-        autorizacion:autorizacion,        
-        estado:'ensala',
-        valor:valor        
-    });    
+    const {copago,autorizacion,valor,entidad}=req.body;    
+    const autoriz= await Factura.find({'hc.entidad.nit':entidad,'hc.autorizacion':autorizacion});  
+    if(autoriz[0]){
+        req.flash('login', 'El Numero autorizacion existe!');
+    } else{
+        await Cita.updateOne({_id:id},
+            {
+            copago:copago,
+            autorizacion:autorizacion,        
+            estado:'ensala',
+            valor:valor        
+        });      
+    }
+     
     res.redirect('/vercitas');
 });
 

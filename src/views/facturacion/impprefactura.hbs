@@ -20,44 +20,55 @@
         <a href="#" class="btn btn-primary btn-sm" onclick="ImprimirHc()"><i class="fas fa-print"
                 style="font-size: 20px;"></i></a>
         <a href="/prefactura" class="btn btn-warning btn-sm"><i class="fas fa-reply" style="font-size: 20px;"></i></a>
- 
+
     </div>
 </div>
-<div class="card m-2" >
+<div class="card m-2">
     <div class="card-body">
-        <form action="/editarpre/{{id}}" method="POST">
-    <div class="row">
+        <div class="card-header">
+            {{#each erro}}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Alerta!</strong> {{mensaje}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {{/each}}
+        </div>
+        <form action="/imprimirprefac/{{id}}" method="POST">
+            <div class="row">
 
-        <div class="col-sm-3">
-            <span class="small"><b>Entidad</b></span>
-            <select name="entidad" id="entidad" onchange="consultarTarifas();" class="form-control form-control-sm">
-                <option value="{{factura.hc.entidad.nit}}">{{factura.hc.entidad.rsocial}}</option>
-                {{#each entidad}}
-                <option value="{{nit}}">{{rsocial}}</option>
-                {{/each}}
-            </select>
-        </div>
-        <div class="col-sm-3">
-            <span class="small"><b>Examen/cups</b></span>
-            <input type="text" class="form-control form-control-sm completarcups" name="cups" placeholder="Cups"
-                value="{{factura.hc.item.cups}}">
-        </div>
-        <div class="col-sm-3">
-            <span class="small"><b>Autorizacion</b></span>
-            <input type="text" class="form-control form-control-sm" name="autorizacion"
-                value="{{factura.hc.autorizacion}}" placeholder="Autorizacion">
-        </div>
-        <div class="col-sm-3 pt-4">
-            <button class="btn btn-success btn-sm btn-block"><i class="fas fa-pen" style="font-size: 14px;"></i>
-                Modificar</button>
-        </div>
-    </div>
-    </form>
+                <div class="col-sm-3">
+                    <span class="small"><b>Entidad</b></span>
+                    <select name="entidad" id="entidad" onchange="consultarTarifas();"
+                        class="form-control form-control-sm">
+                        <option value="{{factura.hc.entidad.nit}}">{{factura.hc.entidad.rsocial}}</option>
+                        {{#each entidad}}
+                        <option value="{{nit}}">{{rsocial}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <span class="small"><b>Examen/cups</b></span>
+                    <input type="text" class="form-control form-control-sm completarcups" name="cups" placeholder="Cups"
+                        value="{{factura.hc.item.cups}}">
+                </div>
+                <div class="col-sm-3">
+                    <span class="small"><b>Autorizacion</b></span>
+                    <input type="text" class="form-control form-control-sm" name="autorizacion"
+                        value="{{factura.hc.autorizacion}}" placeholder="Autorizacion">
+                </div>
+                <div class="col-sm-3 pt-4">
+                    <button class="btn btn-success btn-sm btn-block"><i class="fas fa-pen" style="font-size: 14px;"></i>
+                        Modificar</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
 <div class="container  p-3 border" id="imp">
-    
+
     <div class="row">
         <div class="col-sm-12">
             <div class="row">
@@ -68,6 +79,7 @@
                 </div>
                 <div class="col-sm-8 p-2">
                     <h2 class="pl-5 pt-5 ml-5">.::PRE-FACTURA::.</h2>
+
                 </div>
             </div>
             <div class="row">
@@ -104,8 +116,8 @@
                 <div class="card-body small">
                     <div class="row">
                         <div class="col-sm-2"><b>CUPS</b></div>
-                        <div class="col-sm-2"><b>DESCRIPCION</b></div>
-                        <div class="col-sm-6"><b>AUTORIZACION</b></div>
+                        <div class="col-sm-2"><b>AUTORIZACION</b></div>
+                        <div class="col-sm-6"><b>NOMBRE</b></div>
                         <div class="col-sm-2"><b>VALOR</b></div>
                     </div>
                     <div class="row">
@@ -141,6 +153,3 @@
     </div>
 
 </div>
-
-
-
