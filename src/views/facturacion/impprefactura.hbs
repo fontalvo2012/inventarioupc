@@ -1,148 +1,146 @@
 <style>
-    #padre{
-  position:relative;
- 
-}
+    #padre {
+        position: relative;
 
-#hijo {
-  position: absolute; 
-  top: 0    ;
-  left: 0;
-  right: 0;
-  margin: 0;
-  width: 20px;
-}
+    }
+
+    #hijo {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        margin: 0;
+        width: 20px;
+    }
 </style>
-{{#each dato}}
+
 <div class="row m-4">
     <div class="col-sm-10"></div>
     <div class="col-sm-2">
-        <a href="#" class="btn btn-primary btn-sm" onclick="ImprimirHc()"><i class="fas fa-print" style="font-size: 20px;"></i></a>        
+        <a href="#" class="btn btn-primary btn-sm" onclick="ImprimirHc()"><i class="fas fa-print"
+                style="font-size: 20px;"></i></a>
         <a href="/prefactura" class="btn btn-warning btn-sm"><i class="fas fa-reply" style="font-size: 20px;"></i></a>
+ 
+    </div>
+</div>
+<div class="card m-2" >
+    <div class="card-body">
+        <form action="/editarpre/{{id}}" method="POST">
+    <div class="row">
+
+        <div class="col-sm-3">
+            <span class="small"><b>Entidad</b></span>
+            <select name="entidad" id="entidad" onchange="consultarTarifas();" class="form-control form-control-sm">
+                <option value="{{factura.hc.entidad.nit}}">{{factura.hc.entidad.rsocial}}</option>
+                {{#each entidad}}
+                <option value="{{nit}}">{{rsocial}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="col-sm-3">
+            <span class="small"><b>Examen/cups</b></span>
+            <input type="text" class="form-control form-control-sm completarcups" name="cups" placeholder="Cups"
+                value="{{factura.hc.item.cups}}">
+        </div>
+        <div class="col-sm-3">
+            <span class="small"><b>Autorizacion</b></span>
+            <input type="text" class="form-control form-control-sm" name="autorizacion"
+                value="{{factura.hc.autorizacion}}" placeholder="Autorizacion">
+        </div>
+        <div class="col-sm-3 pt-4">
+            <button class="btn btn-success btn-sm btn-block"><i class="fas fa-pen" style="font-size: 14px;"></i>
+                Modificar</button>
+        </div>
+    </div>
+    </form>
     </div>
 </div>
 
-<div class="container m-5 p-3 border" id="imp" style="width: 80%;">
+<div class="container  p-3 border" id="imp">
+    
     <div class="row">
-        <div class="col-sm-9">
+        <div class="col-sm-12">
             <div class="row">
                 <div class="col-sm-4 p-3">
-                  
-                       <div class="card-body">
-                            <img src="/img/logoOrl.png" alt="" width="180">
-                       </div>
-                 
+                    <div class="card-body">
+                        <img src="/img/logoOrl.png" alt="" width="180">
+                    </div>
                 </div>
                 <div class="col-sm-8 p-2">
-                    <h3 class="pl-5 ml-5">.::PRE-FACTURA::.</h3>
-                    <div class="card">
-                        <div class="card-header"></div>
-                        <div class="card-body">                           
-                            <b>{{empresa.rsocial}}</b> <br>
-                            <b>Nit:</b> {{factura.nit}} <br>
-                            <b>Direccion:</b> {{empresa.direccion}}<br>
-                            <b>Telefono:</b> {{empresa.telefono}}<br>
-                            <b>email:</b> {{empresa.email}}<br> 
-                        </div>
-                    </div>                 
+                    <h2 class="pl-5 pt-5 ml-5">.::PRE-FACTURA::.</h2>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                   <div class="card">
-                       <div class="card-header">                           
-                       </div>
-                       <div class="card-body">
-                          <div class="row">
-                              <div class="col-sm-6">
-                                    <b>NOMBRE: </b> {{factura.eps.rsocial}}<br>
-                                    <b>DIRECCION: </b>{{factura.eps.direccion}} <br>
-                                    <b>TELEFONO: </b> {{factura.eps.telefono}}<br> 
-                              </div>
-                              <div class="col-sm-6">
-                                    <b>NIT: </b> {{factura.eps.nit}}<br>
-                                    <b>TC: </b>{{factura.eps.tfacturacion}} <br>
-                                    <b>email: </b> {{factura.eps.email}}<br> 
-                              </div>
-                          </div> 
-                       </div>
-                   </div>
+                    <div class="card">
+                        <div class="card-header">
+                            ENTIDAD/EPS
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <b>NOMBRE: </b> {{factura.hc.entidad.rsocial}}<br>
+                                    <b>DIRECCION: </b>{{factura.hc.entidad.direccion}} <br>
+                                    <b>TELEFONO: </b> {{factura.hc.entidad.telefono}}<br>
+                                </div>
+                                <div class="col-sm-6">
+                                    <b>NIT: </b> {{factura.hc.entidad.nit}}<br>
+                                    <b>TC: </b>{{factura.hc.entidad.tfacturacion}} <br>
+                                    <b>email: </b> {{factura.hc.entidad.email}}<br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </div>
-        <div class="col-sm-3 p-1">
-           <div class="card">
-               <div class="card-header"></div>
-               <div class="card-body p-0 pl-5">
-                  <h2 style="color: red;"><b>Nro.</b>{{factura.prefijo}}-{{factura.consecutivo}}</h2>                  
+
+    </div>
+    <div class="row mt-2">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">EXAMEN/CONSULTA</div>
+                <div class="card-body small">
+                    <div class="row">
+                        <div class="col-sm-2"><b>CUPS</b></div>
+                        <div class="col-sm-2"><b>DESCRIPCION</b></div>
+                        <div class="col-sm-6"><b>AUTORIZACION</b></div>
+                        <div class="col-sm-2"><b>VALOR</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">{{factura.hc.item.cups}}</div>
+                        <div class="col-sm-2">{{factura.hc.autorizacion}}</div>
+                        <div class="col-sm-6">{{factura.hc.item.nombre}}</div>
+                        <div class="col-sm-2">$ {{factura.hc.item.valor}}</div>
+                    </div>
                 </div>
-           </div>               
-               <div class="card mt-1">
-               <div class="card-header"></div>
-               <div class="card-body  p-0 pl-4" style="color: blue; font-size: 20px;">
-                   <b>::{{factura.fecha}}::</b>
-               </div>
-           </div>
-               
-                
-              
+            </div>
         </div>
     </div>
     <div class="row mt-2">
         <div class="col-sm-12">
             <div class="card">
-                <div class="card-header"></div>
+                <div class="card-header">PACIENTE</div>
                 <div class="card-body small">
                     <div class="row">
-                        <div class="col-sm-2"><b>CUPS</b></div>
-                        <div class="col-sm-2"><b>DESCRIPCION</b></div>
-                        <div class="col-sm-2"><b>VALOR</b></div>
-                    </div>
-                      <div class="row">
-                        <div class="col-sm-2">{{factura.item.cups}}</div>
-                        <div class="col-sm-2">{{factura.item.nombre}}</div>                       
-                        <div class="col-sm-2">$ {{factura.item.valor}}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row mt-2">
-        <div class="col-sm-8">
-            <div class="card">
-                <div class="card-header"></div>
-                <div class="card-body">
+                        <div class="col-sm-2"><b>CEDULA</b></div>
+                        <div class="col-sm-8"><b>NOMBRE</b></div>
+                        <div class="col-sm-2"><b>TELEFONO</b></div>
 
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4 small">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-5"><b>SUBTOTAL</b></div>
-                        <div class="col-sm-5">$ {{factura.item.valor}}</div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-5"><b>% IVA</b></div>
-                        <div class="col-sm-5">$ 0</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-5"><b>TOTAL</b></div>
-                        <div class="col-sm-5">$ {{factura.item.valor}}</div>
+                        <div class="col-sm-2">{{factura.hc.paciente.cedula}}</div>
+                        <div class="col-sm-8">{{factura.hc.paciente.nombre}} {{factura.hc.paciente.snombre}}
+                            {{factura.hc.paciente.apellido}} {{factura.hc.paciente.sapellido}}</div>
+                        <div class="col-sm-2">{{factura.hc.paciente.telefono}}</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-   
-         <div class="row">
-           <div class="col-sm-4 padre" >
-                                          
-            _____________________________________________ <br>
-            <b>Firma</b>
-                      
-           </div>
-       </div>
+
 </div>
-{{/each}}
+
+
+

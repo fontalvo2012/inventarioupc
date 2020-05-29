@@ -4322,6 +4322,7 @@ function combertirIss(ob) {
 
 function consultarTarifas() {
     var entidad = $('#entidad').val();
+    console.log(entidad);
     $.ajax({
         url: '/consultarTarifas',
         type: 'POST',
@@ -4329,7 +4330,7 @@ function consultarTarifas() {
         data: {
             entidad: entidad
         },
-        success: (data) => {          
+        success: (data) => {               
             $(".completarcups").autocomplete({
                 source: data
             });          

@@ -31,6 +31,7 @@ router.get('/consultashclinicas', checkAuthentication, async(req, res) => {
     const citas= await Cita.find({estado:'ensala','item.tipo':'c'}).lean();
     res.render('hclinicas/consultas',{citas});
 });
+
 router.get('/procedimientoshclinicas', checkAuthentication, async(req, res) => {   
     const entidades= await Entidad.find().lean();
     const medicos= await Medico.find().lean();
@@ -80,11 +81,10 @@ router.post('/crearhc', checkAuthentication, async (req, res) => {
     }
     const newhclinica = new Hclincia({ codigo, cedula, nombres, id, cups, diagnostico, nombrecups, motivo, actual, antecedentes, fisico, clinico, plan, impDiagnostico, ordenes, receta, medico, tipo, fecha, pinicio, pfinal, cita });
     await newhclinica.save();
-    const hc = Hclincia.findOne({ codigo: codigo });
-    console.log(cita);
-    const newFactura = new Factura({ codigo: 0, hc: cita, anexo: {}, estado: 'PREFACTURA', descripcion: 'FATURACION DE PACIENTES ATENDIDOS EN PROCEDIMIENTOS Y CONSULTAS' });
+    const hc = Hclincia.findOne({ codigo: codigo });    
+    const newFactura = new Factura({ codigo: 0, hc: cita, anexo: {}, estado: 'PREFACTURA', descripcion: 'FATURACION DE PACIENTES ATENDIDOS EN PROCEDIMIENTOS Y CONSULTAS' });     
+    await Cita.findByIdAndUpdate(id,{estado:'atendido'});    
     await newFactura.save();
-    await Cita.findOneAndUpdate(id,{estado:'atendido'})
     res.redirect(`/verhc/${cedula}`);
   });
 

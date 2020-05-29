@@ -23,8 +23,6 @@ function checkAuthentication(req, res, next) {
 router.get('/prefactura', checkAuthentication, async (req, res) => {
     const entidades = await Entidad.find().lean();
     const prefacturas = await Factura.find({ estado: 'PREFACTURA' }).lean();
-    const max = await Factura.findOne({ estado: 'facturado' }).sort({ codigo: 'desc' }).limit(1);
-    console.log(max.codigo);
     res.render('facturacion/prefactura', { prefacturas, entidades });
 });
 
@@ -158,8 +156,15 @@ router.post('/facturar', checkAuthentication, async (req, res) => {
 router.post('/facturarporId',checkAuthentication,async(req,res)=>{
     const {ids,eps}=req.body
     const i=JSON.parse(ids);
-    const max = await Factura.findOne({ estado: 'facturado' }).sort({ codigo: 'desc' }).limit(1);
-    const entidad= await Entidad.findOne({nit:eps}); 
+    var max = await Factura.findOne({ estado: 'facturado' }).sort({ codigo: 'desc' }).limit(1);
+    const entidad= await Entidad.findOne({nit:eps});
+    var cont=0;
+    if (max) {
+        cont=max.codigo+1;       
+    }else{
+        max=1000;
+        cont=1000;
+    } 
     if(entidad.tfac != 'usuario'){   
         for (let index = 0; index < i.length; index++) {
             await Factura.updateOne(
@@ -172,7 +177,7 @@ router.post('/facturarporId',checkAuthentication,async(req,res)=>{
              });            
         }
     }else{
-        var cont=max.codigo+1
+        
         for (let index = 0; index < i.length; index++) {
             await Factura.updateOne(
                 {_id:i[index]},
@@ -194,17 +199,20 @@ router.post('/facturarporId',checkAuthentication,async(req,res)=>{
 router.get('/facturas', checkAuthentication, async (req, res) => {
     var facturas = [];
     var datos = [];
-    const entidades = await Entidad.find().lean()
-    codigos = await Factura.find().distinct('codigo', { estado: 'facturado' });
+    const entidades = await Entidad.find().lean();
+    const codigos = await Factura.find().distinct('codigo', { estado: 'facturado' });
+    
     for (let index = 0; index < codigos.length; index++) {
         var anexo = {};    
         var fac = await Factura.find({ codigo: codigos[index] }).lean();
         var cont = 0;
         var total=0;
+        var v=0;
+        console.log(fac);
         fac.forEach(element => {
             cont++;
             anexo[cont] = element;
-            var v=element.hc.valor
+            v=element.hc.valor
             total += parseInt(v);
         });
         total=number_format(total,2);
@@ -248,6 +256,27 @@ router.post('/facturarSiruigias',checkAuthentication,async(req,res)=>{
     const fac=new Factura({vencimiento,codigo:parseInt(max.codigo)+1,hc:sirugia,copago:0,estado:'facturado',descripcion:'FACTURACION POR SIRUGIA'});
     await fac.save();
     res.redirect('/procedimientoshclinicas');
+});
+
+router.get('/imprimirprefac/:id',checkAuthentication,async(req,res)=>{
+    const {id}=req.params;
+    const factura=await Factura.findOne({_id:id}).lean();
+    const entidad=await Entidad.find().lean();    
+    res.render('facturacion/impprefactura',{factura,entidad,id});
+});
+router.post('/editarpre/:id',checkAuthentication,async(req,res)=>{
+    const{entidad,cups,autorizacion}=req.body;
+    const{id}=req.params;
+    const eps= await Entidad.findOne({nit:entidad});
+    const tarifa= await Tarifas.findOne({entidad:entidad,cups:cups.substr(0,6)});
+    await Factura.updateOne({_id:id},
+        {
+            'hc.autorizacion':autorizacion,
+            'hc.entidad':eps,
+            'hc.item':tarifa
+        });
+
+    res.redirect('/imprimirprefac/'+id);
 });
 
 router.post('/facturas', checkAuthentication, async (req, res) => {

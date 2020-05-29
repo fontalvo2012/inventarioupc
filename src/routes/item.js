@@ -31,8 +31,7 @@ router.post('/consultarTarifas',checkAuthentication,async(req,res)=>{
     var array=[]
     tarifa.forEach(element => {
         array.push(`${element.cups}::${element.nombre}`);
-    });
-    console.log(tarifa);
+    });    
     res.send(array);
 });
 
