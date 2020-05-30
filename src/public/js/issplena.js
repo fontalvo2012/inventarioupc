@@ -4499,8 +4499,7 @@ function consultarProcedimientos() {
         data: {
             entidad: entidad
         },
-        success: (data) => {   
-            console.log(data);
+        success: (data) => {             
             $("#cups").autocomplete({
                 source: data
             });          

@@ -1,0 +1,48 @@
+<div class="row mx-auto">
+    <div class="col-sm-8">
+        <div class="card ">
+            <div class="card-header">
+                <b><i class='fas fa-syringe'></i> Creacion de Insumos</b>
+            </div>
+            <div class="card-body mx-auto">
+                <form action="/insumos" method="POST">
+                    <div class="row">
+                        <div class="col-sm-6"><span class="small"><b>Insumo:</b></span><input type="text"
+                                class="form-control form-control-sm" name="nombre" id="nombre"
+                                placeholder="Nombre del insumo" autocomplete="off">
+                        </div>
+                        <div class="col-sm-4"><span class="small"><b>Valor</b></span><input type="Number"
+                                class="form-control form-control-sm " name="valor" id="valor" value="0"></div>
+                        <div class="col-sm-2 mt-4"><button class="btn btn-success btn-sm">Guardar</button></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                          
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each insumos}}
+                        <tr>
+                            <th scope="row">{{codigo}}</th>
+                            <td>{{nombre}}</td>
+                           
+                        </tr>
+                         {{/each}}
+                    </tbody>
+                </table>
+               
+            </div>
+        </div>
+    </div>
+</div>

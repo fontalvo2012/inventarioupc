@@ -1,8 +1,6 @@
 const { Router } = require('express');
 const router = Router();
-var admin = require("firebase-admin");
-const db=admin.firestore();
-
+const Insumo=require('../model/insumos');
 function checkAuthentication(req,res,next){
     if(req.isAuthenticated()){        
         next();
@@ -10,47 +8,27 @@ function checkAuthentication(req,res,next){
         res.redirect("/singIn");
     }
   }
-router.get('/medicamentos',checkAuthentication,(req,res)=>{
-    db.collection('medicamentos').orderBy('medicamento','asc').get()
-    .then((snapshot) => {
-        var valores=[];
-        snapshot.forEach((doc) => {            
-            valores.push({data:doc.data(),id:doc.id});            
-        });       
-        console.log(valores);
-        res.render('medicamentos/index',{valores});
-    });    
+
+router.get('/insumos',checkAuthentication, async(req, res) => {
+   const insumos=await Insumo.find().lean(); 
+   res.render('medicamentos/insumos',{insumos});
 });
 
-router.post('/medicamentos',checkAuthentication,(req,res)=>{
-    const{ medicamento }= req.body;
-    var m = {
-        medicamento:medicamento.toUpperCase()
-    };
-    let docRef = db.collection('medicamentos').doc();
-    docRef.set(m);
-    res.redirect('/medicamentos');
-});
+router.post('/insumos',checkAuthentication, async(req, res) => {
+    const {nombre,valor}=req.body;
+    const num = await Insumo.find();    
+    const insumo= new Insumo({codigo:num.length,nombre,valor});
+    await insumo.save();    
+    res.redirect('/insumos');
+ });
 
-router.post('/ajaxMedicamentos',checkAuthentication,(req,res)=>{
-    db.collection('medicamentos').orderBy('medicamento','asc').get()
-    .then((snapshot) => {
-        var valores=[];
-        snapshot.forEach((doc) => {            
-            valores.push(doc.data());            
-        });              
-        res.send(valores);
-    });    
-});
-
-router.get('/delmedicamento/:id', (req, res) => {
-    const { id } = req.params;
-    db.collection("medicamentos").doc(id).delete().then(function () {
-        console.log("Document successfully deleted!");
-        res.redirect('/medicamentos');
-    })
-});
-
-
+ router.post('/completeInsumos',checkAuthentication,async(req,res)=>{
+     const i=await Insumo.find();
+     var insumo=[];
+     i.forEach(element => {
+         insumo.push(element.nombre);
+     });
+     res.send(insumo);
+ })
 
 module.exports = router;

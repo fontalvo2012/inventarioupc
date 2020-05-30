@@ -1,5 +1,6 @@
 <form action="/facturarSiruigias" method="post" >
 <input type="hidden" id="sir" name="sir">
+<input type="hidden" id="ins" name="ins">
 <div class="row">
     <div class="col-sm-12">
         <div class="card">
@@ -10,7 +11,7 @@
                 <div class="row">
                     <div class="col-sm-3">
                         <span class="small"><b>Documento.</b></span>
-                        <input type="text" name="paciente" id="cc" onblur="consultarPaciente();" placeholder="Digite cedula"
+                        <input type="text" name="paciente" id="cc" onblur="consultarPaciente();completarInsumos();" placeholder="Digite cedula"
                             class="form-control form-control-sm" required>
                     </div>
                     <div class="col-sm-3">
@@ -67,7 +68,7 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-sm-6">
-                        <a href="#" class="btn btn-success btn-sm" onclick="agregarirugia()"><i class='fas fa-plus' style='font-size:16px'></i></a>
+                        <a href="#" class="btn btn-success btn-sm" onclick="agregarirugia();"><i class='fas fa-plus' style='font-size:16px'></i></a>
                         <button class="btn btn-warning btn-sm">Facturar</button>
                     </div>
                 </div>
@@ -99,10 +100,10 @@
         </div>
         <div class="card mt-2">
           <div class="card-body">
-                <div class="row">
-                <div class="col-sm-4"><input type="text" class="form-control form-control-sm" id="materiales" placeholder="Materiales"></div>
-                <div class="col-sm-4"><input type="text" class="form-control form-control-sm" id="precio" placeholder="$ valor"></div>
-                <div class="col-sm-4"><button class="btn btn-success btn-sm">+</button></div>
+                <div class="row">                
+                <div class="col-sm-4"><span class="small"><b>Nombre del Insumo</b></span><input type="text" class="form-control form-control-sm" id="materiales" placeholder="materiales"></div>
+                <div class="col-sm-4"><span class="small"><b>Valor Del Insumo</b></span><input type="text" class="form-control form-control-sm" id="valorinsumo" placeholder="$ valor"></div>
+                <div class="col-sm-4 mt-4"><a href="#" class="btn btn-success btn-sm" onclick="agregarInsumo()"><i class='fas fa-plus' style='font-size:12px'></i></a></div>
             </div>
           </div>
         </div>
@@ -114,9 +115,10 @@
                             <th>#</th>
                             <th scope="col">Insumo</th>
                             <th scope="col">Valor</th>
+                            <th scope="col">Accion</th>
                         </tr>
                     </thead>
-                    <tbody id="insumo" class="small"></tbody>
+                    <tbody id="vinsumo" class="small"></tbody>
                 </table>
             </div>
         </div>

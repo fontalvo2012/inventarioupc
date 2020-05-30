@@ -58,6 +58,8 @@
                 style='font-size:12px'></i> Entidad</a> 
               <a class="dropdown-item" href="/tarifas"><i class='fas fa-angle-double-right' style='font-size:12px'></i>
               Tarifas</a>
+               <a class="dropdown-item" href="/insumos"><i class='fas fa-angle-double-right' style='font-size:12px'></i>
+              Insumos</a>
           </div>
         </li>
         <li class="nav-item dropdown">
@@ -144,7 +146,7 @@
   <div class="container">
     {{#if login}}
     <div class="alert alert-danger" role="alert">
-      <h4>{{login}}</h4>
+      <h4><i class='fas fa-exclamation-triangle'></i> {{login}}</h4>
     </div>
     {{/if}}
     {{{body}}}

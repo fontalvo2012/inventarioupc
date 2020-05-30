@@ -229,32 +229,41 @@ router.get('/facturas', checkAuthentication, async (req, res) => {
 });
 
 router.post('/facturarSiruigias', checkAuthentication, async (req, res) => {
-    const { paciente, entidad, medico, autorizacion } = req.body;
+    const { paciente, entidad, medico, autorizacion,ins } = req.body;
     const anexo = JSON.parse(req.body.sir);
-    var cups = anexo[0].cups.substr(0, 6);
-    const item = await Tarifas.findOne({ entidad: entidad, cups: cups });
     const eps = await Entidad.findOne({ nit: entidad });
     const pac = await Paciente.findOne({ cedula: paciente });
     const max = await Factura.findOne({ estado: 'facturado' }).sort({ codigo: 'desc' }).limit(1);
+    const autoriz= await Factura.findOne({'hc.entidad.nit':entidad,'hc.autorizacion':autorizacion});
 
-    const vencimiento = Vencimiento();
+    const vencimiento = Vencimiento(30);
     var v = 0;
+    var valor_insumo=0;
     anexo.forEach(element => {
         v = v + parseInt(element.total);
     });
-    const sirugia = {
-        item,
+    var insumo=JSON.parse(ins);
+    insumo.forEach(element => {
+        valor_insumo+=parseInt(element.precio);
+    });
+    const sirugia = {        
         anexo,
+        insumos:insumo,
         entidad: eps,
         paciente: pac,
         autorizacion,
         fecha: fechaActual(),
         medico,
-        total: v
+        total: v+(valor_insumo)*1.12,
+        tipo:'sirugia'
     }
-
-    const fac = new Factura({ vencimiento, codigo: parseInt(max.codigo) + 1, hc: sirugia, copago: 0, estado: 'facturado', descripcion: 'FACTURACION POR SIRUGIA' });
-    await fac.save();
+    if (autoriz) {
+        req.flash('login', 'El Nro de Autorizacion ya fue utilizado');
+    }else{
+        const fac = new Factura({ vencimiento, codigo: parseInt(max.codigo) + 1, hc: sirugia, copago: 0, estado: 'facturado', descripcion: 'FACTURACION POR SIRUGIA' });
+        await fac.save();
+    }
+    
     res.redirect('/procedimientoshclinicas');
 });
 

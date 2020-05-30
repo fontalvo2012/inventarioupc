@@ -4366,3 +4366,61 @@ function combertirMedicamento(ob) {
       source:combertirMedicamento(medicamentos)
     });
   });
+
+  var insumos=[];
+  function agregarInsumo() {
+      var materiales=$('#materiales').val();
+      var precio=$('#valorinsumo').val();
+      insumos.push({materiales,precio});      
+      mostrarInsumo();
+      $('#materiales').val('');
+      $('#valorinsumo').val('');
+
+    }
+
+    function mostrarInsumo() {
+        var cadena="";
+        var cont=0;
+        var total=0;
+        $('#ins').val(JSON.stringify(insumos));
+        insumos.forEach(element => {
+           
+            cadena+=`
+            <tr>
+            <th>${cont+1}</th>
+            <th scope="col">${element.materiales}</th>
+            <th scope="col">${number_format(element.precio)}</th>
+            <th scope="col"><a href="#" onclick="quitarInsumo(${cont})" >quitar</a></th>
+            </tr>`;
+            total+=parseInt(element.precio);
+            cont++;
+        });
+        cadena+=`
+        <tr>
+        <th></th>
+        <th scope="col">Total:</th>
+        <th scope="col">${number_format(total)}</th>
+        <th scope="col"></th>
+        </tr>
+        `;
+        $('#vinsumo').html(cadena);
+    }
+
+    function quitarInsumo(id) {
+        insumos.splice(id,1);
+        mostrarInsumo();
+    }
+
+  function completarInsumos() { 
+    $.ajax({
+        url: '/completeInsumos',
+        type: 'POST',
+        datatype: 'json',
+        success: (data) => {               
+            $("#materiales").autocomplete({
+                source: data
+            });          
+        }
+    });
+}
+
