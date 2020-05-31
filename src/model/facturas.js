@@ -8,6 +8,7 @@ const facturaSchema= new Schema({
     insumos:{type:Object,required:false},
     estado:{type:String,required:false},
     descripcion:{type:String,required:false},
+    rips:{type:String,required:false},
     fecha:{type:Date,default:Date.now()},
     vencimiento:{type:String,default:Date.now()}
 });

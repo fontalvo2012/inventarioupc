@@ -80,6 +80,7 @@ router.post('/ensala/:id',async(req,res)=>{
     const {id}=req.params; 
     const {copago,autorizacion,valor,entidad}=req.body;    
     const autoriz= await Factura.find({'hc.entidad.nit':entidad,'hc.autorizacion':autorizacion});  
+    
     if(autoriz[0]){
         req.flash('login', 'El Numero autorizacion existe!');
     } else{
@@ -89,9 +90,18 @@ router.post('/ensala/:id',async(req,res)=>{
             autorizacion:autorizacion,        
             estado:'ensala',
             valor:valor        
-        });      
+        }); 
+        const cita=await Cita.findOne({_id:id});
+        if (cita.item.tipo=='p') {
+            const newFactura = new Factura({ codigo: 0, hc: cita, estado: 'PREFACTURA', descripcion: 'FATURACION DE PROCEDIMIENTO' });     
+            await newFactura.save();
+        }     
     }
-     
+
+   
+  
+    
+
     res.redirect('/vercitas');
 });
 
