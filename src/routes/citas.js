@@ -66,8 +66,8 @@ function formatFecha(fecha) {
 router.post('/vercitasfiltro',async(req,res)=>{
    const {medico,fecha}=req.body;  
    console.log(formatFecha(fecha));
-   const valores = await Cita.find({medico:medico,fecha:formatFecha(fecha)}).lean(); 
-   res.render('citas/consultas',{valores});   
+   const citas = await Cita.find({medico:medico,fecha:formatFecha(fecha)}).lean(); 
+   res.send(citas);   
 });
 
 router.post('/vercitaspaciente',async(req,res)=>{

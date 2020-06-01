@@ -7,11 +7,6 @@ var item = [];
 var listitem = [];
 var total=0;
 
-// firebase.initializeApp({
-//   apiKey: "AIzaSyCyNQn6OPNMLe_2JyTfU7l09tM3spK23Ro",
-//   authDomain: "gpsview-15f80.firebaseapp.com",
-//   projectId: "gpsview-15f80",
-// });
 
 firebase.initializeApp({
   apiKey: "AIzaSyARpTGPRFv1JsdapWAYqrh7YNp7htY7OxU",
@@ -21,29 +16,7 @@ firebase.initializeApp({
 
 var db = firebase.firestore();
 
-// db.collection("citas").onSnapshot((querySnapshot) => {
-//   var contenido = '';
-//   var cont=0;
-//     querySnapshot.forEach((doc) => { 
-//       if(doc.data().medico==$('#usermedico').val()){
-//         if (doc.data().estado=='ensala'){ 
-//            contenido+=`          
-//            <input type="hidden" name="id" value="${doc.id}">
-//            <tr>
-//            <td>${doc.data().fecha} ${doc.data().hora}</td>
-//            <td>${doc.data().paciente.cedula}</td>
-//            <td>${doc.data().nombres}</td>
-//            <td>${doc.data().nentidad}</td>
-//            <td><a href="/hclinicas/${doc.id}/${doc.data().paciente.cedula}" class="btn btn-warning btn-sm"> <i class='fas fa-user-edit' style='font-size:16px'></i></a></td> 
-//            </tr>                 
-//            `;         
-//         } 
-//       }             
-//       cont++;
-//   });
-//   $('#citas').html(contenido);
- 
-// });
+
 
 function consultarmedico(id) {
   $.ajax({

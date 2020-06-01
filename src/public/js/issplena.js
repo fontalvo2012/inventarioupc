@@ -5066,3 +5066,94 @@ function QuitarTOdo() {
 function agregarId(id) {
     ids.push(id);
 }
+
+
+function consultarCItas() {
+
+   var fecha=$('#fecha').val();
+   var medico=$('#medico').val();
+    $.ajax({
+        url: '/vercitasfiltro',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            medico: medico,
+            fecha: fecha
+        },
+        success: (data) => {
+            console.log(data);
+            var cadena="";
+            var color="white";
+            var opcion=""
+            data.forEach(element => {
+                if (element.estado == 'ensala') {
+                    color="aqua";
+                    opcion=element.estado;
+                }else{
+                    color="white";
+                    opcion=`
+                    <div class="row">
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#m${element._id}"
+                    ><i class='fas fa-user-check' style='font-size:12px'></i></button>        
+                    </div>
+                    <div class="col-sm-6">
+                      <a href="/borrarcita/${element._id}" class="btn btn-danger btn-sm"><i class='fas fa-trash-alt' style='font-size:12px'></i></a>
+                    </div>
+                  </div>
+                 
+                  <div class="modal fade" id="m${element._id}" tabindex="-1" role="dialog" aria-labelledby="accionLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="accionLabel">${element.nombres}</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form action="/ensala/${element._id}" method="post">
+                          <input type="hidden" name="entidad" id="entidad" value="${element.entidad.nit}">
+                            <div class="form-group">
+                              <div class="row">
+                                <div class="col-sm-4"><span class="small"><b>Copago</b></span><input type="number" id="copago"
+                                    name="copago" value="0" class="form-control form-control-sm" placeholder="Copago" required></div>
+                                <div class="col-sm-4"><span class="small"><b>Autorizacion</b></span><input type="text" id="Autorizacion"
+                                    name="autorizacion" class="form-control form-control-sm" placeholder="Autorizacion"></div>
+                                 <div class="col-sm-4"><span class="small"><b>Valor</b></span><input type="text" id="valor"
+                                    name="valor" class="form-control form-control-sm" value="${element.item.valor}" placeholder="Valor" required></div>
+                              </div>
+                              <div class="row mt-3">
+                                <div class="col-sm-12"><button class="btn btn-primary btn-sm"><i class='far fa-save'
+                                      style='font-size:18px'></i> Guardar</button></div>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                    `;
+                }
+              
+                cadena+=`   
+                <tr style="background-color: ${color};">
+                <th scope="col">${element.fecha} ${element.hora}</th>
+                <th scope="col">${element.paciente.cedula}</th>
+                <th scope="col">${element.nombres}</th>
+                <th scope="col">${element.nmedico}</th>
+                <th scope="col">${element.nentidad}</th>
+                <th scope="col">${element.motivo}</th>
+                <th>${opcion}</th>
+              </tr>`;
+            }); 
+            $('#contenido_cita').html(cadena);
+        }
+    });
+
+}
