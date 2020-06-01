@@ -26,7 +26,8 @@ router.post('/addcitas',async(req,res)=>{
 
 router.post('/consultarcitas',async(req,res)=>{
     const {fecha,medico}=req.body; 
-    const valores=await Cita.find({fecha:fecha,medico:medico});
+    const valores = await Cita.find({fecha:fecha,medico:medico}).lean();
+    console.log(valores);
     res.send(valores); 
 });
 
@@ -66,7 +67,8 @@ function formatFecha(fecha) {
 router.post('/vercitasfiltro',async(req,res)=>{
    const {medico,fecha}=req.body;  
    console.log(formatFecha(fecha));
-   const citas = await Cita.find({medico:medico,fecha:formatFecha(fecha)}).lean(); 
+   const citas = await Cita.find({medico:medico,fecha:formatFecha(fecha)}); 
+   console.log(citas);
    res.send(citas);   
 });
 
