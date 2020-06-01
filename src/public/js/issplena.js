@@ -5069,9 +5069,9 @@ function agregarId(id) {
 
 
 function consultarCItas() {
-
    var fecha=$('#fecha').val();
    var medico=$('#medico').val();
+   console.log(fecha,medico);
     $.ajax({
         url: '/vercitasfiltro',
         type: 'POST',
