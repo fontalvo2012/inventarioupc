@@ -54,7 +54,7 @@ function formatFecha(fecha) {
     var diaActual = new Date(fecha);
     var f ='';
     var mes=diaActual.getMonth()+1;
-    var dia=diaActual.getDate()+1;
+    var dia=diaActual.getDate();
     if(diaActual.getMonth()<10){
         mes='0'+mes
     }    
