@@ -100,14 +100,15 @@ router.post('/ensala/:id',async(req,res)=>{
             await newFactura.save();
         }     
     }
-
-   
-  
-    
-
     res.redirect('/vercitas');
 });
 
+router.post('/conCitas',async(req,res)=>{
+    const {fecha,medico}=req.body;
+    console.log(fecha,medico);
+    const cita = await Cita.find({medico:medico,fecha:formatFecha(fecha)}); 
+    res.send(cita);
+})
 router.get('/borrarcita/:id',async(req,res)=>{
     const {id}= req.params;   
     await Cita.findOneAndDelete({_id:id});

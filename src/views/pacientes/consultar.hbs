@@ -1,14 +1,29 @@
-<div class="row mt-2">
+<div class="row m-2">
     <div class="col-sm-2 mr-0 pr-0">
         <div class="form-group">
+             <span class="small"><b>Cedula Paciente</b></span>
             <input type="text" name="cc" id="cc" placeholder="Cedula" class="form-control form-control-sm">
         </div>
     </div>
-    <div class="col-sm-2 ml-0 pl-0">
+    <div class="col-sm-2 ml-0 pl-0 mt-4">
         <button class="btn btn-primary btn-sm" onclick="consularPaciente()"><i class='fas fa-search' style='font-size:13px'></i></button>
     </div>
 
+    <div class="col-sm-2 ml-0 pl-0">
+        <span class="small"><b>Fecha Cita</b></span>
+        <input type="date" name="fecha" id="fecha" placeholder="Fecha de Cita" class="form-control form-control-sm">
+    </div>
 
+      <div class="col-sm-2 ml-0 pl-0">
+        <span class="small"><b>Medico</b></span>
+        <select name="medico" id="medico" class="form-control form-control-sm" onchange="conCitas()">
+            <option value="">Selecciones Medico</option>
+            {{#each medicos}}
+            <option value="{{cedula}}">{{nombres}}</option>
+            {{/each}}
+        </select>
+    </div>
+    
 </div>
 <div class="row">
     <div class="col-sm-12">

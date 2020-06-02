@@ -3,6 +3,7 @@ const router = Router();
 var admin = require("firebase-admin");
 const db=admin.firestore();
 const Paciente=require('../model/pacientes');
+const Medico=require('../model/medicos');
 
 function checkAuthentication(req,res,next){
     if(req.isAuthenticated()){        
@@ -38,7 +39,8 @@ router.post('/ajaxpaciente',checkAuthentication,async(req,res)=>{
 
 router.get('/consultarpacientes',checkAuthentication,async(req,res)=>{
     const valores=await Paciente.find().lean();
-    res.render('pacientes/consultar',{valores});
+    const medicos=await Medico.find().lean();
+    res.render('pacientes/consultar',{valores,medicos});
 });
 //MONGO DB <=
 

@@ -5139,8 +5139,7 @@ function consultarCItas() {
                     </div>
                   </div>
                     `;
-                }
-              
+                }              
                 cadena+=`   
                 <tr style="background-color: ${color};">
                 <th scope="col">${element.fecha} ${element.hora}</th>
@@ -5156,4 +5155,34 @@ function consultarCItas() {
         }
     });
 
+}
+
+function conCitas() {   
+    $.ajax({
+        url: '/conCitas',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            fecha:$('#fecha').val(),
+            medico:$('#medico').val()
+        },
+        success: (data) => {
+            console.log(data);
+            var cadena="";
+            data.forEach(element => {
+                cadena+=`     
+                <tr>
+                    <th scope="row" class="small">${element.paciente.cedula}</th>
+                    <td class="small">${element.nombres}</td>
+                    <td class="small">${element.telefono}</td>
+                    <td class="small">${element.motivo}</td>
+                    <td>
+                        <a href="/verhc/${element.paciente.cedula}" class="btn btn-primary btn-sm"><i class='fas fa-h-square' style='font-size:16px'></i></a>
+                        
+                    </td>
+                </tr>`;
+            });
+            $('#cuerpo').html(cadena);
+        }
+    });
 }
