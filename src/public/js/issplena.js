@@ -4964,8 +4964,7 @@ function verRips() {
     });
 }
 
-function consultarPrefactura(opcion) {
-   
+function consultarPrefactura(opcion) {   
     $.ajax({
         url: '/prefacturaitem',
         type: 'POST',
@@ -5000,7 +4999,50 @@ function consultarPrefactura(opcion) {
             SelecccionarTOdo();
         }
     });
+}
 
+function consultarfactura() {   
+    $.ajax({
+        url: '/facturaItem',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            entidad: $('#entidad').val(),
+            ini: $('#ini').val(),
+            fin: $('#fin').val()          
+        },
+        success: (data) => {
+            console.log(data);
+            var cadena = '';           
+            data.forEach(element => {               
+               agregarId(element._id);
+               var item='';
+               if(element.hc.tipo){
+                    item="SIRUGIA"
+               }else{
+                    item=element.hc.item.nombre
+               }
+                cadena += ` 
+                 <tr>
+                 <th scope="row"><input type="checkbox" id="${element._id}" value="${element._id}" onclick="SeleccionarFactura('${element._id}')"  class="form-control ck" style="width: 14px;"></th>
+                 <td>${element.codigo}</td>
+                 <td>${element.fecha}</td>
+                 <td>${element.hc.nombres}</td>                 
+                 <td>${element.hc.entidad.rsocial}</td>                 
+                 <td>${item}</td>
+                 <td>${element.hc.autorizacion}</td>
+                 <td>${number_format(element.hc.copago)}</td>
+                 <td>${number_format(element.hc.valor)}</td>
+                 <td>
+                 <a href="/imprimirfac/${element.codigo}" class="btn btn-primary btn-sm"><i class="fas fa-print" style="font-size: 16px;"></i></a>
+                 </td>           
+               </tr>`
+            });
+           
+            $('#fs').html(cadena);
+            SelecccionarTOdo();
+        }
+    });
 }
 function verimagen() {
     $.ajax({

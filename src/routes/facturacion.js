@@ -42,9 +42,77 @@ router.post('/prefactura', checkAuthentication, async (req, res) => {
     res.render('facturacion/prefactura', { prefacturas, entidades });
 
 });
+router.post('/facturaItem',checkAuthentication,async(req,res)=>{
+    const { entidad, ini, fin } = req.body;   
+    var datos = [];
+    const codigos = await Factura.find().distinct('codigo',
+        {
+        'hc.entidad.nit': entidad,
+        estado: 'facturado',
+        fecha: {
+            $gte: new Date(ini),
+            $lte: new Date(fin)
+        }
+    });
 
+    for (let index = 0; index < codigos.length; index++) {
+        var anexo = {};
+        var fac = await Factura.find({ codigo: codigos[index] }).lean();
+        var cont = 0;
+        var total = 0;
+        var v = 0;
+        console.log(fac);
+        fac.forEach(element => {
+            cont++;
+            anexo[cont] = element;
+            v = element.hc.valor
+            total += parseInt(v);
+        });
+        total = number_format(total, 2);
+
+        if (fac[0].hc.entidad.tfac == 'capita') {
+            total = number_format(parseInt(fac[0].hc.entidad.vcap), 2);
+        }
+
+        facturas = await Factura.findOne({ codigo: codigos[index] }).lean();
+        datos[index] = { _id: facturas._id, codigo: codigos[index], anexo: anexo, item: facturas.hc.item, entidad: facturas.hc.entidad, hc: facturas.hc, total: total, fecha: fechafac(facturas.fecha) };
+    }   
+    console.log(datos);
+    res.send(datos);
+
+});
+router.get('/facturas', checkAuthentication, async (req, res) => {
+    var facturas = [];
+    var datos = [];
+    const entidades = await Entidad.find().lean();
+    const codigos = await Factura.find().distinct('codigo', { estado: 'facturado' });
+    for (let index = 0; index < codigos.length; index++) {
+        var anexo = {};
+        var fac = await Factura.find({ codigo: codigos[index] }).lean();
+        var cont = 0;
+        var total = 0;
+        var v = 0;
+        console.log(fac);
+        fac.forEach(element => {
+            cont++;
+            anexo[cont] = element;
+            v = element.hc.valor
+            total += parseInt(v);
+        });
+        total = number_format(total, 2);
+
+        if (fac[0].hc.entidad.tfac == 'capita') {
+            total = number_format(parseInt(fac[0].hc.entidad.vcap), 2);
+        }
+
+        facturas = await Factura.findOne({ codigo: codigos[index] }).lean();
+
+        datos[index] = { id: facturas._id, cd: codigos[index], anexo: anexo, item: facturas.hc.item, entidad: facturas.hc.entidad, hc: facturas.hc, total: total, fecha: fechafac(facturas.fecha) };
+    }
+    res.render('facturacion/facturas', { datos, entidades });
+});
 router.post('/prefacturaitem', checkAuthentication, async (req, res) => {
-    const { entidad, ini, fin, opcion } = req.body;
+    const { entidad, ini, fin,opcion } = req.body;
     const op = { opcion: 'asc' }
     const prefacturas = await Factura.find(
         {
@@ -54,10 +122,8 @@ router.post('/prefacturaitem', checkAuthentication, async (req, res) => {
                 $gte: new Date(ini),
                 $lte: new Date(fin)
             }
-        });
-    var cont;
-    var datos = [];
-    var ids = [];
+        });   
+    var datos = [];    
     prefacturas.forEach(element => {
         datos.push(
             {
@@ -156,10 +222,12 @@ router.post('/facturar', checkAuthentication, async (req, res) => {
 router.post('/facturarporId', checkAuthentication, async (req, res) => {
     const { ids, eps } = req.body
     const i = JSON.parse(ids);
-    var max = await Factura.findOne({ estado: 'facturado' }).sort({ codigo: 'desc' }).limit(1);
+    var fa=await Factura.find({estado:'facturado'});
+    var max =0;
     const entidad = await Entidad.findOne({ nit: eps });
     var cont = 0;
-    if (max) {
+    if (fa[0]) {
+        max = await Factura.findOne({ estado: 'facturado' }).sort({ codigo: 'desc' }).limit(1);
         cont = max.codigo + 1;
     } else {
         max = 1000;
@@ -170,7 +238,7 @@ router.post('/facturarporId', checkAuthentication, async (req, res) => {
             await Factura.updateOne(
                 { _id: i[index] },
                 {
-                    codigo: max.codigo + 1,
+                    codigo: cont,
                     estado: 'facturado',
                     fecha: Date.now(),
                     vencimiento: Vencimiento(30)
@@ -196,37 +264,7 @@ router.post('/facturarporId', checkAuthentication, async (req, res) => {
 });
 
 
-router.get('/facturas', checkAuthentication, async (req, res) => {
-    var facturas = [];
-    var datos = [];
-    const entidades = await Entidad.find().lean();
-    const codigos = await Factura.find().distinct('codigo', { estado: 'facturado' });
 
-    for (let index = 0; index < codigos.length; index++) {
-        var anexo = {};
-        var fac = await Factura.find({ codigo: codigos[index] }).lean();
-        var cont = 0;
-        var total = 0;
-        var v = 0;
-        console.log(fac);
-        fac.forEach(element => {
-            cont++;
-            anexo[cont] = element;
-            v = element.hc.valor
-            total += parseInt(v);
-        });
-        total = number_format(total, 2);
-
-        if (fac[0].hc.entidad.tfac == 'capita') {
-            total = number_format(parseInt(fac[0].hc.entidad.vcap), 2);
-        }
-
-        facturas = await Factura.findOne({ codigo: codigos[index] }).lean();
-
-        datos[index] = { id: facturas._id, cd: codigos[index], anexo: anexo, item: facturas.hc.item, entidad: facturas.hc.entidad, hc: facturas.hc, total: total, fecha: fechafac(facturas.fecha) };
-    }
-    res.render('facturacion/facturas', { datos, entidades });
-});
 
 router.post('/facturarSiruigias', checkAuthentication, async (req, res) => {
     const { paciente, entidad, medico, autorizacion,ins } = req.body;
@@ -254,7 +292,7 @@ router.post('/facturarSiruigias', checkAuthentication, async (req, res) => {
         autorizacion,
         fecha: fechaActual(),
         medico,
-        total: v+(valor_insumo)*1.12,
+        valor: v+(valor_insumo)*1.12,
         tipo:'sirugia'
     }
     if (autoriz) {
@@ -356,48 +394,42 @@ router.get('/anexo/:cd', checkAuthentication, async (req, res) => {
 
 router.get('/imprimirfac/:cd', checkAuthentication, async (req, res) => {
     const { cd } = req.params;
-    const f = await Factura.findOne({ codigo: cd }).lean();
+    const f = await Factura.findOne({ codigo: cd }).lean();    
     const e = await Empresa.findOne().lean();
-    const fac = await Factura.find({ codigo: cd });
+    const fac = await Factura.find({ codigo: cd }).lean();
     var total = 0;
     var fecha = '';
     fac.forEach(element => {
         var v = element.hc.valor
         total += parseInt(v);
     });
+    if (f.hc.anexo) {
+        for (let index = 0; index < f.hc.anexo.length; index++) {
+            f.hc.anexo[index].total=number_format(f.hc.anexo[index].total);            
+        }
+    }
     f.fecha = fechafac(f.fecha);
+    f.hc.total=number_format(f.hc.total);
+    
     if (f.hc.entidad.tfac == 'evento') {
         total = number_format(total, 2);
     }
     if (f.hc.entidad.tfac == 'capita') {
         total = number_format(parseInt(fac[0].hc.entidad.vcap), 2);
     }
-
-    res.render('facturacion/imprimir', { f, e, total })
+    res.render('facturacion/imprimir', { f, e, total,fac })
 
 })
 
 //=> MONGO DB
 
 
-function formatDate2(fecha) {
-    var dia = fecha.substr(0, 2);
-    var mes = fecha.substr(3, 2);
-    var ano = fecha.substr(6, 4);
-    return ano + '-' + mes + '-' + dia;
 
-}
 function fechafac(fecha) {
     return fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear();
 }
 
-function formatDate3(fecha) {
-    var mes = fecha.substr(0, 2);
-    var dia = fecha.substr(3, 2);
-    var ano = fecha.substr(6, 4);
-    return ano + '-' + mes + '-' + dia;
 
-}
 
 function Vencimiento(cant) {
     var diaActual = new Date();

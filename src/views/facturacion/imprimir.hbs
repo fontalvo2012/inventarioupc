@@ -20,9 +20,9 @@
         <a href="#" class="btn btn-primary btn-sm" onclick="ImprimirHc()"><i class="fas fa-print"
                 style="font-size: 20px;"></i></a>
         <a href="/facturas" class="btn btn-warning btn-sm"><i class="fas fa-reply" style="font-size: 20px;"></i></a>
-           <a href="/anexo/{{f.codigo}}" class="btn btn-success btn-sm"><i class="fas fa-clipboard-list"
-                  style="font-size: 20px;"></i></a>
-              </a>
+        <a href="/anexo/{{f.codigo}}" class="btn btn-success btn-sm"><i class="fas fa-clipboard-list"
+                style="font-size: 20px;"></i></a>
+        </a>
     </div>
 </div>
 
@@ -98,16 +98,36 @@
             <div class="card">
                 <div class="card-header"></div>
                 <div class="card-body small">
+
+
+                    {{#if f.hc.anexo}}
                     <div class="row">
-                      
-                        <div class="col-sm-8"><b>DESCRIPCION</b></div>               
+                        <div class="col-sm-9"><b>ITEM</b></div>                    
+                        <div class="col-sm-3"><b>VALOR</b></div>
+                    </div>
+                    {{#each f.hc.anexo}}
+                    <div class="row">                       
+                        <div class="col-sm-9">{{cups}}</div>
+                        <div class="col-sm-3">$ {{total}}</div>
+                    </div>
+                    {{/each}}
+                    {{else}}
+                    <div class="row">
+                        <div class="col-sm-6"><b>ITEM</b></div>
+                        <div class="col-sm-2"><b>CEDULA</b></div>
+                        <div class="col-sm-2"><b>PACIENTE</b></div>
                         <div class="col-sm-2"><b>VALOR</b></div>
                     </div>
+                    {{#each fac}}
                     <div class="row">
-                        
-                        <div class="col-sm-8">AQUI VA LA DESCRIPCION LA FACTURACION</div>                  
-                        <div class="col-sm-2">$ {{total}}</div>
+                        <div class="col-sm-6">{{hc.item.cups}} {{hc.item.nombre}}</div>
+                        <div class="col-sm-2">{{hc.paciente.cedula}}</div>
+                        <div class="col-sm-2">{{hc.nombres}}</div>
+                        <div class="col-sm-2">$ {{hc.valor}}</div>
                     </div>
+                    {{/each}}
+                    {{/if}}
+
                 </div>
             </div>
         </div>
@@ -126,7 +146,11 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm-5"><b>SUBTOTAL</b></div>
+                        {{#if f.hc.anexo}}
+                        <div class="col-sm-4">$ {{f.hc.total}}</div>
+                        {{else}}
                         <div class="col-sm-4">$ {{total}}</div>
+                        {{/if}}
                     </div>
                     <div class="row">
                         <div class="col-sm-5"><b>% IVA</b></div>
@@ -134,7 +158,11 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-5"><b>TOTAL</b></div>
-                        <div class="col-sm-4">$ <b>{{total}}</b></div>
+                       {{#if f.hc.anexo}}
+                        <div class="col-sm-4">$ {{f.hc.total}}</div>
+                        {{else}}
+                        <div class="col-sm-4">$ {{total}}</div>
+                        {{/if}}
                     </div>
                 </div>
             </div>
