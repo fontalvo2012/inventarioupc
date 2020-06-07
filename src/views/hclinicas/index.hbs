@@ -1,4 +1,4 @@
-<form action="/crearhc" method="POST">
+<form action="/crearhc" method="POST" id="hcform">
     <div class="row mt-3 small" style="margin-left: 0%;">
         <div class="col-sm-12">
             {{#each valores}}
@@ -9,7 +9,7 @@
                         value="{{nombres}}" class="form-control form-control-sm" readonly></div>
                 <div class="col-sm-3"><span class="small"><b>Entidad</b></span><input type="text" id="eps"
                         value="{{entidad.rsocial}}" class="form-control form-control-sm" readonly>
-                         <input type="hidden" id="entidad" value="{{entidad.nit}}"></div>               
+                    <input type="hidden" id="entidad" value="{{entidad.nit}}"></div>
                 <div class="col-sm-2"><button class="btn btn-success btn-sm btn-block mt-4"><i class='fas fa-save'
                             style='font-size:16px'></i> Guardar</button></div>
                 <div class="col-sm-2"><a href="#" class="btn btn-warning btn-sm btn-block mt-4" data-toggle="modal"
@@ -43,12 +43,13 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" id="g" href="#" onclick=""><b>Receta</b></a>
+                    <a class="nav-link" id="g" href="#" onclick="completarMedicamentos()"><b>Receta</b></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="i" href="#" onclick="consultarTarifas()"><b>Ordenes</b></a>
                 </li>
             </ul>
+            <div id="msg"></div>           
             <div class="padre">
                 <div class="form-group hijo" style="visibility: visible;">
                     <textarea name="motivo" id="motivo" class="form-control" cols="30" rows="5"
@@ -95,15 +96,22 @@
                 <div class="form-group hijo" style="visibility: hidden;">
 
                     <div id="fisico">
+                        <div class="row m-3">
+                            <div class="col-sm-10"></div>
+                            <div class="col-sm-2">
+                                <a href="#" onclick="normalFisico()" class="btn btn-primary btn-sm btn-block">Paciente
+                                    Normal</a>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-sm-12"><span class="small"><b>Nariz</b></span> <textarea name="nariz"
                                     id="nariz" class="form-control form-control-sm" cols="30" rows="2"
                                     placeholder="Nariz"></textarea></div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-12"><span class="small"><b>Boca</b></span> <textarea name="boca"
+                            <div class="col-sm-12"><span class="small"><b>Cavidad oral</b></span> <textarea name="boca"
                                     id="boca" class="form-control form-control-sm" cols="30" rows="2"
-                                    placeholder="Boca"></textarea></div>
+                                    placeholder="Cavidad oral"></textarea></div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12"><span class="small"><b>Orofaringe</b></span> <textarea
@@ -121,9 +129,14 @@
                                     placeholder="Cuello"></textarea></div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-12"><span class="small"><b>Oido</b></span> <textarea name="oido"
-                                    id="oido" class="form-control form-control-sm" cols="30" rows="2"
-                                    placeholder="Oido"></textarea></div>
+                            <div class="col-sm-12"><span class="small"><b>Oido Derecho</b></span> <textarea
+                                    name="oidoderecho" id="oidoderecho" class="form-control form-control-sm" cols="30"
+                                    rows="2" placeholder="Oido Derecho"></textarea></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12"><span class="small"><b>Oido Izquierdo</b></span> <textarea
+                                    name="oidoIzquierdo" id="oidoIzquierdo" class="form-control form-control-sm"
+                                    cols="30" rows="2" placeholder="Oido Izquierdo"></textarea></div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12"><span class="small"><b>Otros</b></span> <textarea name="otrosfisico"
@@ -152,31 +165,32 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <span><b>Cantidad</b></span>
-                                        <input type="text" class=" form-control form-control-sm" id="cant" 
-                                            name="cant" placeholder="Cantidad">
+                                        <input type="text" class=" form-control form-control-sm" id="cant" name="cant"
+                                            placeholder="Cantidad">
                                     </div>
-                               
+
                                 </div>
-                                         <div class="row">
-                                        <div class="col-sm-12 mb-2">
-                                           <span><b>Uso</b></span>
-                                                <input type="text" class=" form-control form-control-sm" id="uso"  name="uso"
-                                                    placeholder="Uso">
-                                        </div>
+                                <div class="row">
+                                    <div class="col-sm-12 mb-2">
+                                        <span><b>Uso</b></span>
+                                        <input type="text" class=" form-control form-control-sm" id="uso" name="uso"
+                                            placeholder="Uso">
                                     </div>
+                                </div>
                             </div>
                             <div class="col-sm-3 mt-4">
-                                  <div class="col-sm-4 mt-3 ml-0 mr-0">
-                                  <a href="#" class="btn btn-success btn-sm btn-block" onclick="AgregarMed()"><b><i class='fas fa-plus' style='font-size:20px'></i></b></a>
-                                 </div>
+                                <div class="col-sm-4 mt-3 ml-0 mr-0">
+                                    <a href="#" class="btn btn-success btn-sm btn-block" onclick="AgregarMed()"><b><i
+                                                class='fas fa-plus' style='font-size:20px'></i></b></a>
+                                </div>
                             </div>
                         </div>
-                         <input type="hidden" id="recetaJson" name="recetaJson" > 
-                        <div class="card" id="vreseta"></div>                        
-                      
-                        </div>
-                        
-                       
+                        <input type="hidden" id="recetaJson" name="recetaJson">
+                        <div class="card" id="vreseta"></div>
+
+                    </div>
+
+
 
                 </div>
                 <div class="form-group hijo" style="visibility: hidden;">
@@ -188,8 +202,17 @@
                                     placeholder="Diagnostico Principal">
                             </div>
                         </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control form-control-sm tags" name="dg2" id="dg2"
+                                    placeholder="Diagnostico Diagnostico segundarios">
+                            </div>
+                            <div class="col-sm-4">
+                                <a href="#" class="btn btn-primary btn-sm" onclick="AgregarCie()">+</a>
+                            </div>
+                        </div>
                         <div class="form-group">
-                            <textarea name="impdiag" class="form-control" cols="30" rows="5"
+                            <textarea name="impdiag" id="impd" class="form-control" cols="30" rows="5"
                                 placeholder="Otros diagnostico"></textarea>
                         </div>
                     </div>

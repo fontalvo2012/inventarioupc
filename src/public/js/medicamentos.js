@@ -4351,6 +4351,27 @@ var medicamentos =`[
         }
     ]`;
 
+    function AgregamosMedicamentos() {
+        var cont=0
+        JSON.parse(medicamentos).forEach(element => {   
+            
+            $.ajax({
+                url: '/medicamentosAjax',
+                type: 'POST',
+                datatype: 'json',              
+                data: {
+                    codigo:cont++,
+                    nombre: element.PrincipioActivo,
+                    presentacion: element.presentacion,
+                    tipo: 'POS'
+                },
+                success: (data) => {
+                    console.log(data);
+                }
+            }); 
+
+        });
+    }
     
 function combertirMedicamento(ob) {
     var obj = JSON.parse(ob);
@@ -4361,11 +4382,11 @@ function combertirMedicamento(ob) {
     return array;
   }
   
-  $(function () { 
-    $(".medicamentos").autocomplete({
-      source:combertirMedicamento(medicamentos)
-    });
-  });
+//   $(function () { 
+//     $(".medicamentos").autocomplete({
+//       source:combertirMedicamento(medicamentos)
+//     });
+//   });
 
   var insumos=[];
   function agregarInsumo() {
@@ -4423,4 +4444,18 @@ function combertirMedicamento(ob) {
         }
     });
 }
+
+function completarMedicamentos() { 
+    $.ajax({
+        url: '/medicamentosArray',
+        type: 'POST',
+        datatype: 'json',
+        success: (data) => {               
+            $(".medicamentos").autocomplete({
+                source: data
+            });          
+        }
+    });
+}
+
 

@@ -248,3 +248,15 @@ function ImprimirHc() {
   };
   return true;
 }
+
+function normalFisico() {
+    $('#nariz').val('Pirámide nasal estable, dorso central. Mucosa nasal sana, septum funcional, cornetes eutróficos');
+    $('#boca').val('Mucosa oral húmeda, lengua móvil, sin lesiones. Piso de boca de aspecto normal');
+    $('#orofaringe').val('Paladar blando íntegro, móvil. Amígdalas sin lesiones');
+    $('#laringoscopia').val('Base de lengua sana, valléculas libres, epiglotis normal. Cuerdas vocales móviles, sin lesiones. Senos piriformes de aspecto normal');
+    $('#oidoderecho').val('Conducto auditivo permeable sin signos patológicos.  Membrana timpánica integra, como dé luz presente');
+    $('#oidoIzquierdo').val('Conducto auditivo permeable sin signos patológicos.  Membrana timpánica integra, como dé luz presente');
+    $('#cuello').val('No se palpan masas ni adenomegalias.');
+    $('#otrosfisico').val('sin otro diagnositico fisico diferente.');    
+}
+

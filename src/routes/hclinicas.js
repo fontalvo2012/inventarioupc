@@ -54,7 +54,8 @@ router.post('/crearhc', checkAuthentication, async (req, res) => {
         orofaringe: req.body.orofaringe,
         laringoscopia: req.body.laringoscopia,
         cuello: req.body.cuello,
-        oido: req.body.oido,
+        oidoderecho: req.body.oidoderecho,
+        oidoIzquierdo: req.body.oidoIzquierdo,
         otrosfisico: req.body.otrosfisico
     };
 

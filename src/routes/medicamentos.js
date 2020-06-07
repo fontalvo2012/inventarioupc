@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const router = Router();
 const Insumo=require('../model/insumos');
+const Medicamentos=require('../model/medicamentos');
 function checkAuthentication(req,res,next){
     if(req.isAuthenticated()){        
         next();
@@ -30,5 +31,33 @@ router.post('/insumos',checkAuthentication, async(req, res) => {
      });
      res.send(insumo);
  })
+ router.post('/medicamentos',checkAuthentication,async(req,res)=>{
+    const {nombre,presentacion,tipo}= req.body;
+    const codigo=await Medicamentos.find();
+    const medicamentos = new Medicamentos({codigo:codigo.length,nombre,presentacion,tipo});
+    await medicamentos.save();
+    res.redirect('/medicamentos');
+ })
+ router.post('/medicamentosAjax',checkAuthentication,async(req,res)=>{
+    const {nombre,presentacion,tipo,codigo}= req.body;   
+    const medicamentos = new Medicamentos({codigo,nombre,presentacion,tipo});
+    await medicamentos.save();
+    res.send('agreado:'+nombre);
+ })
+ router.get('/medicamentos',checkAuthentication,async(req,res)=>{
+     const medicamentos= await Medicamentos.find().lean();
+     res.render('medicamentos/medicamentos',{medicamentos});
+})
+
+
+router.post('/medicamentosArray',checkAuthentication,async(req,res)=>{
+    const medicamentos= await Medicamentos.find().lean();
+    const medicamentoAr=[];
+    medicamentos.forEach(element => {
+        medicamentoAr.push(element.nombre+" "+element.presentacion);
+    });
+    res.send(medicamentoAr);
+})
+
 
 module.exports = router;

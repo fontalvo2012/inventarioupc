@@ -5086,6 +5086,7 @@ function facturarxid() {
     });
 }
 
+
 function SeleccionarFactura(id){   
     if($('#'+id).is(':checked') ){
         ids.push($('#'+id).val());       
@@ -5230,4 +5231,11 @@ function conCitas() {
             $('#cuerpo').html(cadena);
         }
     });
+}
+
+function AgregarCie() {
+    var cadena=$('#impd').val();
+    cadena+="\n - "+$('#dg2').val();    
+    $('#impd').val(cadena);
+    $('#dg2').val("");
 }

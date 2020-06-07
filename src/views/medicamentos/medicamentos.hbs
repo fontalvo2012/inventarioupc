@@ -1,0 +1,28 @@
+
+<form action="/medicamentos" method="POST">
+<div class="row m-4">
+    <div class="col-sm-3"><span class="small">Medicamento</span><input type="text" class="form-control form-control-sm" id="nombre" name="nombre" placeholder="Descripcion Medicamentos" autocomplete="off"></div>
+    <div class="col-sm-3"><span class="small">Presentacion</span><input type="text" class="form-control form-control-sm" id="presentacion" name="presentacion" placeholder="Presentacion Medicamentos" autocomplete="off"></div>   
+    <div class="col-sm-3"><span class="small">Tipo</span>
+        <select name="tipo" id="tipo" class="form-control form-control-sm">
+            <option value="NO POS">NO POST</option>
+            <option value="POS">POST</option>
+        </select>
+    </div>   
+    <div class="col-sm-3 mt-4"><button class="btn btn-success btn-sm">Agregar</button></div>
+</div>
+</form>
+<div class="row small">
+    <div class="col-sm-1">#</div>
+    <div class="col-sm-8"><b>Medicamento</b></div>
+    <div class="col-sm-3"><b>Presentacion</b></div>
+</div>
+{{#each medicamentos}}    
+<div class="row small border">
+    <div class="col-sm-1">{{codigo}}</div>
+    <div class="col-sm-8">{{nombre}}</div>
+    <div class="col-sm-3">{{presentacion}}</div>
+</div>
+{{/each}}
+
+<a href="#" onclick="AgregamosMedicamentos()">Agregar Medicamentos</a>
