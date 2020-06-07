@@ -420,16 +420,9 @@ router.get('/imprimirfac/:cd', checkAuthentication, async (req, res) => {
     res.render('facturacion/imprimir', { f, e, total,fac })
 
 })
-
-//=> MONGO DB
-
-
-
 function fechafac(fecha) {
     return fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear();
 }
-
-
 
 function Vencimiento(cant) {
     var diaActual = new Date();

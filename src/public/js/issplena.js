@@ -5000,6 +5000,9 @@ function consultarPrefactura(opcion) {
         }
     });
 }
+function generarRip() {
+    console.log(ids);
+}
 
 function consultarfactura() {   
     $.ajax({
