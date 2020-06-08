@@ -28,7 +28,8 @@ router.get('/hclinicas/:id/:cc', checkAuthentication, async (req, res) => {
 });
 
 router.get('/consultashclinicas', checkAuthentication, async(req, res) => {
-    const citas= await Cita.find({estado:'ensala','item.tipo':'c'}).lean();
+    const citas= await Cita.find({estado:'ensala','item.tipo':'c',medico:req.user.medico}).lean();
+    console.log(req.user.medico)
     res.render('hclinicas/consultas',{citas});
 });
 router.get('/cancelar/:id', checkAuthentication, async(req, res) => {
@@ -78,8 +79,13 @@ router.post('/crearhc', checkAuthentication, async (req, res) => {
     var cups=cita.item.cups;
     var nombrecups = cita.item.nombre;
     var codigo = 'HC-' + (((await Hclincia.find()).length) + 1);
-    var diagnostico = dg.substr(0, 4);
-    var receta = JSON.parse(recetaJson);
+    var diagnostico = dg.substr(0, 4);    
+    var receta =[];
+    if(recetaJson==''){
+        receta=[];        
+    }else{
+        receta= JSON.parse(recetaJson);
+    }
     var fecha = fechaActual();
     var pinicio = fechaActual();
     var pfinal = fechaActual();

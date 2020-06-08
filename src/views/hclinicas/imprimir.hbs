@@ -58,6 +58,11 @@
                <b>ENFEREMDAD ACTUAL: </b> {{valores.actual}}
            </div>
        </div>
+           <div class="row  mb-3">
+           <div class="col-sm-12">
+               <b>PARACLINICOS: </b> {{valores.clinico}}
+           </div>
+       </div>
        {{#if valores.tipo}}
        <div class="row mb-3">
            <div class="col-sm-12">
@@ -80,14 +85,16 @@
            <div class="col-sm-12">
                <b>EXAMEN FISICO: </b>
                 <div class="row">
-                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Nariz: </b></span>{{fisico.nariz}}</div>
-                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Boca: </b></span>{{fisico.boca}}</div>
-                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Orofaringe: </b></span>{{fisico.orofaringe}}</div>
+                   <div class="col-sm-3" ALIGN="justify"><span class="small"><b>Nariz: </b></span>{{fisico.nariz}}</div>
+                   <div class="col-sm-3" ALIGN="justify"><span class="small"><b>Boca: </b></span>{{fisico.boca}}</div>
+                   <div class="col-sm-3" ALIGN="justify"><span class="small"><b>Orofaringe: </b></span>{{fisico.orofaringe}}</div>
+                    <div class="col-sm-3" ALIGN="justify"><span class="small"><b>Laringoscopia Indirecta: </b></span>{{fisico.laringoscopia}}</div>
                </div>
-                <div class="row">
-                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Laringoscopia Indirecta: </b></span>{{fisico.laringoscopia}}</div>
-                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Oidos Derecho: </b>{{fisico.oidoderecho}} <br><b>Oidos Izuierdo:</b>{{fisico.oidoIzquierdo}}</span></div>
-                   <div class="col-sm-4" ALIGN="justify"><span class="small"><b>Cuello: </b></span>{{fisico.cuello}}</div>
+                <div class="row">                  
+                   <div class="col-sm-3" ALIGN="justify"><span class="small"><b>Oidos Izuierdo:</b>{{fisico.oidoIzquierdo}}</span></div>
+                   <div class="col-sm-3" ALIGN="justify"><span class="small"><b>Oidos Derecho: </b>{{fisico.oidoderecho}}</span></div>
+                   <div class="col-sm-3" ALIGN="justify"><span class="small"><b>Cuello: </b></span>{{fisico.cuello}}</div>
+                   <div class="col-sm-3" ALIGN="justify"><span class="small"><b>Otros: </b></span>{{fisico.otrosfisico}}</div>
                </div>
            </div>
        </div>
@@ -109,7 +116,7 @@
 
        <div class="row">
            <div class="col-sm-4 padre" >
-               <img src="/img/firmas/1047384229.png" class="m-0 p-0 hijo" width="180">                             
+               <img src="/img/firmas/{{user.medico}}.png" class="m-0 p-0 hijo" width="180">                             
                <hr class="m-0 p-0">
                <b class="mt-0 mr-4">{{medico.nombres}}</b><br>             
                <b class="mt-0 mr-4">{{medico.especialidad}}</b><br>            
