@@ -33,6 +33,7 @@ router.post('/consultarcitas',async(req,res)=>{
 
 router.get('/vercitas',async(req,res)=>{   
     const valores = await Cita.find({fecha:getfecha()}).lean(); 
+    console.log(new Date());
     res.render('citas/consultas',{valores}); 
 });
 
@@ -52,6 +53,7 @@ function getfecha() {
 }
 function formatFecha(fecha) {
     var diaActual = new Date(fecha);
+    console.log(diaActual);
     var f ='';
     var mes=diaActual.getMonth()+1;
     var dia=diaActual.getDate();
@@ -84,8 +86,23 @@ router.post('/ensala/:id',async(req,res)=>{
     const {copago,autorizacion,valor,entidad}=req.body;    
     const autoriz= await Factura.find({'hc.entidad.nit':entidad,'hc.autorizacion':autorizacion});  
     
-    if(autoriz[0]){
-        req.flash('login', 'El Numero autorizacion existe!');
+    if(autoriz[0]){        
+        if(autoriz[0].hc.autorizacion==""){
+            await Cita.updateOne({_id:id},
+                {
+                copago:copago,
+                autorizacion:autorizacion,        
+                estado:'ensala',
+                valor:valor        
+            }); 
+            const cita=await Cita.findOne({_id:id});
+            if (cita.item.tipo=='p') {
+                const newFactura = new Factura({ codigo: 0, hc: cita, estado: 'PREFACTURA', descripcion: 'FATURACION DE PROCEDIMIENTO' });     
+                await newFactura.save();
+            }       
+        }else{
+            req.flash('login', 'El Numero autorizacion existe!');
+        }
     } else{
         await Cita.updateOne({_id:id},
             {
