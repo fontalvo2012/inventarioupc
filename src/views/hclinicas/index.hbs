@@ -5,12 +5,15 @@
             <div class="row mt-3 mb-3">
                 <div class="col-sm-2"><span class="small"><b>Cedula</b></span><input type="text" name="cedula"
                         value="{{paciente.cedula}}" class="form-control form-control-sm" readonly></div>
-                <div class="col-sm-3"><span class="small"><b>Nombres</b></span><input type="text" name="nombres"
-                        value="{{nombres}}" class="form-control form-control-sm" readonly></div>
-                <div class="col-sm-3"><span class="small"><b>Entidad</b></span><input type="text" id="eps"
-                        value="{{entidad.rsocial}}" class="form-control form-control-sm" readonly>
+                <div class="col-sm-2"><span class="small"><b>Nombres</b></span><input type="text" name="nombres"
+                        value="{{nombres}}" class="form-control form-control-sm small" readonly></div>
+                <div class="col-sm-2"><span class="small"><b>Entidad</b></span><input type="text" id="eps"
+                        value="{{entidad.rsocial}}" class="form-control form-control-sm small" readonly>
                     <input type="hidden" id="entidad" value="{{entidad.nit}}"></div>
-                <div class="col-sm-2"><button class="btn btn-success btn-sm btn-block mt-4" onclick="validarhc()"><i class='fas fa-save'
+                <div class="col-sm-2"><span class="small"><b>Edad</b></span><input type="text" id="eps"
+                        value="{{paciente.edad}}" class="form-control form-control-sm small" readonly>
+                    <input type="hidden" id="entidad" value="{{entidad.nit}}"></div>
+                <div class="col-sm-2"><button class="btn btn-success btn-sm btn-block mt-4" onclick="validarhc();"><i class='fas fa-save'
                             style='font-size:16px'></i> Guardar</button></div>
                 <div class="col-sm-2"><a href="#" class="btn btn-warning btn-sm btn-block mt-4" data-toggle="modal"
                         data-target="#bitacora"><i class='fas fa-notes-medical' style='font-size:16px'></i> Bitacora</a>

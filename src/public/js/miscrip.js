@@ -564,3 +564,7 @@ function NumeroALetras(num,centavos){
 }//NumeroALetras()
 
 //NUMERO  A LETRAS
+
+function guardadoAlert() {
+  alert('se guardo la cita');
+}

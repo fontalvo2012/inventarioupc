@@ -295,7 +295,14 @@ function validarhc() {
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div>`);     
+      </div>`)
+    }else{
+      alert('se guardo la cita');
     }
    
+}
+
+
+function guardadoAlert() {
+  alert('se guardo la cita');
 }
