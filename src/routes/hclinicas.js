@@ -180,4 +180,4 @@ router.post('/verimagen',async(req,res)=>{
 })
 //FUNCION UPLOAD <=
 
-module.exports = router;
+module.exports = router; 

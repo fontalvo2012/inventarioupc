@@ -2109,7 +2109,15 @@ function combertir(ob) {
 }
 
 $(function () { 
-  $(".tags").autocomplete({
-    source:combertir(otorrino)
+    $.ajax({
+      url: '/addCie10Complete',
+      type: 'POST',
+      datatype: 'json',
+      success: (data) => {               
+        $(".tags").autocomplete({
+          source:data 
+        });      
+      }
   });
+ 
 });

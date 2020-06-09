@@ -2,6 +2,7 @@ const { Router } = require('express');
 const router = Router();
 const Insumo=require('../model/insumos');
 const Medicamentos=require('../model/medicamentos');
+const Cie10=require('../model/cie10');
 function checkAuthentication(req,res,next){
     if(req.isAuthenticated()){        
         next();
@@ -49,6 +50,10 @@ router.post('/insumos',checkAuthentication, async(req, res) => {
      res.render('medicamentos/medicamentos',{medicamentos});
 })
 
+router.get('/parametros',checkAuthentication,async(req,res)=>{
+   
+    res.render('medicamentos/parametros');
+})
 
 router.post('/medicamentosArray',checkAuthentication,async(req,res)=>{
     const medicamentos= await Medicamentos.find().lean();
@@ -58,6 +63,24 @@ router.post('/medicamentosArray',checkAuthentication,async(req,res)=>{
     });
     res.send(medicamentoAr);
 })
+
+router.post('/addCie10',checkAuthentication,async(req,res)=>{
+   const {codigo,nombre,tipo,capitulo}=req.body;
+   const cie=new Cie10({codigo,nombre,tipo,capitulo});   
+   await cie.save();
+   res.send('creado: '+codigo);
+})
+
+router.post('/addCie10Complete',checkAuthentication,async(req,res)=>{
+    const cieArray=[];
+    const  cie10=await Cie10.find();
+    cie10.forEach(element => {
+        cieArray.push(element.codigo+' :: '+element.nombre);
+    });
+     res.send(cieArray);
+ })
+
+
 
 
 module.exports = router;

@@ -260,3 +260,42 @@ function normalFisico() {
     $('#otrosfisico').val('sin otro diagnositico fisico diferente.');    
 }
 
+function validarhc() {
+    if ($('#motivo').val()=="") {
+        $('#msg').html(`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Alerta: </strong>Debe llenar el campo de <b>Motivo de consulta</b>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>`);     
+    }else if ($('#actual').val()=="") {
+        $('#msg').html(`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Alerta: </strong>Debe llenar el campo de <b>Enferedad Actual</b>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>`);     
+    } else if ($('#clinico').val()=="") {
+        $('#msg').html(`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Alerta: </strong>Debe llenar el campo de <b>Paraclinicos</b>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>`);     
+    }else if ($('#plan').val()=="") {
+        $('#msg').html(`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Alerta: </strong>Debe llenar el campo de <b>Plan</b>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>`);     
+    }else if ($('#dg').val()=="") {
+        $('#msg').html(`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Alerta: </strong>Debe llenar el campo de <b>Debe colocar un diagnostico principal</b>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>`);     
+    }
+   
+}

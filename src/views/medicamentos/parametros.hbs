@@ -1,0 +1,39 @@
+
+<div class="card">
+    <div class="card-header">
+        INGRESOS DE CODIGOS CIE10
+    </div>
+    <div class="card-body">
+        <div id="progres"></div>
+        <input type="checkbox" id="c1" class="form-cotrol mr-2" onclick="cargarArrayCie(1)" value="1">Ciertas enfermedades infecciosas y parasitarias (A00-B99) <br>
+        <input type="checkbox" id="c2" class="form-cotrol mr-2" onclick="cargarArrayCie(2)" value="2">Tumores [neoplasias] (C00-D48) <br>
+        <input type="checkbox" id="c3" class="form-cotrol mr-2" onclick="cargarArrayCie(3)" value="3">Enfermedades de la sangre y de los organos hematopoyeticos, y ciertos trastornos que afectan el mecanismo de la inmunidad (D50-D89) <br>
+        <input type="checkbox" id="c4" class="form-cotrol mr-2" onclick="cargarArrayCie(4)" value="4">Enfermedades endocrinas, nutricionales y metabolicas (E00-E90)<br>
+        <input type="checkbox" id="c5" class="form-cotrol mr-2" onclick="cargarArrayCie(5)" value="5">Trastornos mentales y del comportamiento (F00-F99)<br>
+        <input type="checkbox" id="c6" class="form-cotrol mr-2" onclick="cargarArrayCie(6)" value="6">Enfermedades del sistema nervioso (G00-G99)<br>
+        <input type="checkbox" id="c7" class="form-cotrol mr-2" onclick="cargarArrayCie(7)" value="7">Enfermedades del ojo y sus anexos (H00-H59)<br>
+        <input type="checkbox" id="c8" class="form-cotrol mr-2" onclick="cargarArrayCie(8)" value="8">Enfermedades del oido y de la apofisis mastoides (H60-H95)<br>
+        <input type="checkbox" id="c9" class="form-cotrol mr-2" onclick="cargarArrayCie(9)" value="9">Enfermedades del sistema circulatorio (I00-I99)<br>
+        <input type="checkbox" id="c10" class="form-cotrol mr-2" onclick="cargarArrayCie(10)" value="10">Enfermedades del sistema respiratorio (J00-J99)<br>
+        <input type="checkbox" id="c11" class="form-cotrol mr-2" onclick="cargarArrayCie(11)" value="11">Enfermedades del sistema digestivo (K00-K93)<br>
+        <input type="checkbox" id="c12" class="form-cotrol mr-2" onclick="cargarArrayCie(12)" value="12">Enfermedades de la piel y del tejido subcutaneo (L00-L99)<br>
+        <input type="checkbox" id="c13" class="form-cotrol mr-2" onclick="cargarArrayCie(13)" value="13">Enfermedades del sistema osteomuscular y del tejido conjuntivo (M00-M99)<br>
+        <input type="checkbox" id="c14" class="form-cotrol mr-2" onclick="cargarArrayCie(14)" value="14">Enfermedades del sistema genitourinario (N00-N99)<br>
+        <input type="checkbox" id="c15" class="form-cotrol mr-2" onclick="cargarArrayCie(15)" value="15">Embarazo, parto y puerperio (O00-O99)<br>
+        <input type="checkbox" id="c16" class="form-cotrol mr-2" onclick="cargarArrayCie(16)" value="16">Ciertas afecciones originadas en el periodo perinatal (P00-P96<br>
+        <input type="checkbox" id="c17" class="form-cotrol mr-2" onclick="cargarArrayCie(17)" value="17">Malformaciones congenitas, deformidades y anomalias cromosomicas (Q00-Q99)<br>
+        <input type="checkbox" id="c18" class="form-cotrol mr-2" onclick="cargarArrayCie(18)" value="18">Sintomas, signos y hallazgos anormales clinicos y de laboratorio, no clasificados en otra parte (R00-R99)<br>
+        <input type="checkbox" id="c19" class="form-cotrol mr-2" onclick="cargarArrayCie(19)" value="19">Traumatismos, envenenamiento y algunas otras consecuencias de causas externas (S00-T98)<br>
+        <input type="checkbox" id="c20" class="form-cotrol mr-2" onclick="cargarArrayCie(20)" value="20">Causas externas de morbilidad y de mortalidad (V01-Y98)<br>
+        <input type="checkbox" id="c21" class="form-cotrol mr-2" onclick="cargarArrayCie(21)" value="21">Factores que influyen en el estado de salud y contacto con los servicios de salud (Z00-Z99)<br>
+        <input type="checkbox" id="c22" class="form-cotrol mr-2" onclick="cargarArrayCie(22)" value="22">Códigos para propósitos especiales (U00-U99)<br>
+    
+    </div>
+    <div class="card-footer">       
+    <div class="row">
+        <div class="col-sm-2"><button class="btn btn-primary" onclick="IngresarCie10()"> crear Cie10</button></div>
+    <div class="col-sm-3"><a href="#" class="btn btn-warning" onclick="AgregamosMedicamentos()">Agregar Medicamentos</a></div>
+    </div>
+    </div>
+</div>
+
