@@ -93,7 +93,11 @@ router.post('/crearhc', checkAuthentication, async (req, res) => {
     if (await Hclincia.findOne({ cedula: cedula })) {
         tipo = '';
     }
-    const newhclinica = new Hclincia({ codigo, cedula, nombres, id, cups, diagnostico, nombrecups, motivo, actual, antecedentes, fisico, clinico, plan, impDiagnostico, ordenes:JSON.parse(ordenes), receta, medico, tipo, fecha, pinicio, pfinal, cita });
+    var o=[];
+    if(ordenes!=""){
+        o=JSON.parse(ordenes);
+    }
+    const newhclinica = new Hclincia({ codigo, cedula, nombres, id, cups, diagnostico, nombrecups, motivo, actual, antecedentes, fisico, clinico, plan, impDiagnostico, ordenes:o, receta, medico, tipo, fecha, pinicio, pfinal, cita });
     await newhclinica.save();
     const hc = Hclincia.findOne({ codigo: codigo });    
     const newFactura = new Factura({ codigo: 0, hc: cita, anexo: {}, estado: 'PREFACTURA', descripcion: 'FATURACION DE PACIENTES ATENDIDOS EN PROCEDIMIENTOS Y CONSULTAS' });     
