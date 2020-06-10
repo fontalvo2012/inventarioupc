@@ -93,7 +93,7 @@ router.post('/crearhc', checkAuthentication, async (req, res) => {
     if (await Hclincia.findOne({ cedula: cedula })) {
         tipo = '';
     }
-    const newhclinica = new Hclincia({ codigo, cedula, nombres, id, cups, diagnostico, nombrecups, motivo, actual, antecedentes, fisico, clinico, plan, impDiagnostico, ordenes, receta, medico, tipo, fecha, pinicio, pfinal, cita });
+    const newhclinica = new Hclincia({ codigo, cedula, nombres, id, cups, diagnostico, nombrecups, motivo, actual, antecedentes, fisico, clinico, plan, impDiagnostico, ordenes:JSON.parse(ordenes), receta, medico, tipo, fecha, pinicio, pfinal, cita });
     await newhclinica.save();
     const hc = Hclincia.findOne({ codigo: codigo });    
     const newFactura = new Factura({ codigo: 0, hc: cita, anexo: {}, estado: 'PREFACTURA', descripcion: 'FATURACION DE PACIENTES ATENDIDOS EN PROCEDIMIENTOS Y CONSULTAS' });     
@@ -136,7 +136,8 @@ router.get('/orden/:codigo', checkAuthentication, async (req, res) => {
     const cita = hc.cita[0];
     const receta = hc.receta;
     const medico = hc.medico[0];
-    res.render('hclinicas/ordenes', { hc, receta, cita, medico });
+    const ordenes = hc.ordenes;
+    res.render('hclinicas/verOrdenes', { hc, ordenes,receta, cita, medico });
 });
 
 router.get('/verhc/:cedula', checkAuthentication, async (req, res) => {

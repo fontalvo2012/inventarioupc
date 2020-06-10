@@ -80,7 +80,16 @@ router.post('/addCie10Complete',checkAuthentication,async(req,res)=>{
      res.send(cieArray);
  })
 
-
+ router.post('/Cie10Ajax',checkAuthentication,async(req,res)=>{
+    const {codigo}=req.body;
+    const c =await Cie10.findOne({codigo:codigo});
+    if (c) {
+        res.send('si');
+    }else{
+        res.send('no');
+    }
+    
+ })
 
 
 module.exports = router;

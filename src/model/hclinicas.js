@@ -16,7 +16,7 @@ const hclinicaSchema= new Schema({
     clinico:{type:String,required:true},
     plan:{type:String,required:true},
     impDiagnostico:{type:Array,required:true},
-    ordenes:{type:String,required:false},
+    ordenes:{type:Array,required:false},
     receta:{type:Array,required:false},
     medico:{type:Array,required:true},
     tipo:{type:String,required:false},

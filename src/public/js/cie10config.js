@@ -75332,9 +75332,6 @@
           
     }
   
-
-
-
     function cargarArrayCie(cap){      
         if($('#c'+cap).is(':checked') ){
             arraycie10.push(cap);       
@@ -75347,3 +75344,22 @@
         }
         
     }
+
+  function validarCIe(){
+      var codigo=$('#dg').val();
+    $.ajax({
+        url: '/Cie10Ajax',
+        type: 'POST',
+        datatype: 'json',
+        data:{
+            codigo:codigo.substr(0,4)           
+        },
+        success: (data) => { 
+           if(data=='no'){
+            alert('EL Diagnostico no es un codigo valido!');   
+            
+           }             
+                
+        }
+    }); 
+  }

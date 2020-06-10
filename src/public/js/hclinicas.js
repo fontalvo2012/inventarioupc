@@ -296,8 +296,15 @@ function validarhc() {
           <span aria-hidden="true">&times;</span>
         </button>
       </div>`)
+    }else if ($('#ccups').val()!="") {
+      alert('Tiene un item en Orden  sin agregar');
+    }else if ($('#medicamento').val()!="") {
+      alert('Tiene un Medicamento en Receta sin agregar');
     }else{
-      alert('se guardo la cita');
+      if(confirm("Desea guardar la historia clinica ?")){
+          $('#hcform').submit();
+      }
+     
     }
    
 }
@@ -305,4 +312,65 @@ function validarhc() {
 
 function guardadoAlert() {
   alert('se guardo la cita');
+}
+
+function consultarPacienteporId(){
+
+  $.ajax({
+    url: '/ajax_consultarpacientes',
+    type: 'POST',
+    datatype: 'json',
+    data: {
+        cc:$('#cc').val()
+    },
+    success: (data) => {
+      var cadena=` <tr>
+        <th scope="row" class="small">${data.cedula}</th>
+        <td class="small">${data.nombre} ${data.snombre} ${data.apellido} ${data.sapellido}</td>
+        <td class="small">${data.telefono}</td>
+        <td class="small">${data.direccion}</td>
+        <td>
+            <a href="/verhc/${data.cedula}" class="btn btn-primary btn-sm"><i class='fas fa-h-square' style='font-size:16px'></i></a>
+            
+        </td>
+    </tr>`;
+     
+      $('#cuerpo').html(cadena)
+    }
+});
+}
+
+ordernesArray=[];
+function ordenes() {
+  if ($('#ccups').val() == "") {
+    alert('seleccione algun procedimiento')
+  } else {
+    ordernesArray.push({ orden: $('#ccups').val() });
+    $('#ccups').val('');
+    mostarOrdenes();
+  }
+
+}
+
+function mostarOrdenes() {
+  var cadena='';
+  $('#ord').val(JSON.stringify(ordernesArray));
+  for (let index = 0; index < ordernesArray.length; index++) {
+    cadena+=`
+    <div class="row"> 
+      <div class="col-sm-1">${index}</div>
+      <div class="col-sm-7">${ordernesArray[index].orden}</div>
+      <div class="col-sm-4"><a href="#" onclick="quitarOrdenes(${index})">quitar</a></div>
+    </div>`;    
+  }
+  $('#contenido_ordenes').html(cadena);
+}
+
+function quitarOrdenes(id) {
+  ordernesArray.splice(id,1);
+  mostarOrdenes();
+}
+
+function pr(valor){
+ $('#pr').html(valor);
 }

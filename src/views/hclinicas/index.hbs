@@ -13,8 +13,8 @@
                 <div class="col-sm-2"><span class="small"><b>Edad</b></span><input type="text" id="eps"
                         value="{{paciente.edad}}" class="form-control form-control-sm small" readonly>
                     <input type="hidden" id="entidad" value="{{entidad.nit}}"></div>
-                <div class="col-sm-2"><button class="btn btn-success btn-sm btn-block mt-4" onclick="validarhc();"><i class='fas fa-save'
-                            style='font-size:16px'></i> Guardar</button></div>
+                <div class="col-sm-2"><a href="#" class="btn btn-success btn-sm btn-block mt-4" onclick="validarhc();"><i class='fas fa-save'
+                            style='font-size:16px'></i> Guardar</a></div>
                 <div class="col-sm-2"><a href="#" class="btn btn-warning btn-sm btn-block mt-4" data-toggle="modal"
                         data-target="#bitacora"><i class='fas fa-notes-medical' style='font-size:16px'></i> Bitacora</a>
                 </div>
@@ -202,7 +202,7 @@
                             <div class="col-sm-12">
                                 <span class="small"><b>Diagnostico Pricipal</b></span>
                                 <input type="text" class="form-control form-control-sm tags" name="dg" id="dg"
-                                    placeholder="Diagnostico Principal" required>
+                                    placeholder="Diagnostico Principal" onblur="validarCIe()" required>
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -231,11 +231,11 @@
                                     class="completarcups form-control form-control-sm" placeholder="Examen/Consulta">
                             </div>
                             <div class="col-sm-2">
-                                <a href="#" class="btn btn-success btn-sm mt-3" onclick="addcups()"><b>+</b></a>
+                                <a href="#" class="btn btn-success btn-sm mt-3" onclick="ordenes()"><b>+</b></a>
                             </div>
                         </div>
-                        <textarea name="ordenes" id="ord" class="form-control" cols="30" rows="5" placeholder="Ordenes"
-                            ></textarea>
+                        <div id="contenido_ordenes"></div>
+                        <input type="hidden" name="ordenes" id="ord" class="form-control"  placeholder="Ordenes">
                     </div>
                 </div>
             </div>
@@ -248,7 +248,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="bitacoraLabel">HISTORIAL MEDICO</h5>
+                <h5 class="modal-title" id="bitacoraLabel">Historial medico</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -269,8 +269,8 @@
                             <th>{{codigo}}</th>
                             <td>{{fecha}}</td>
                             <td>{{#if tipo}}HC{{else}}CONTROL{{/if}}</td>
-                            <td><a href="#" class="btn btn-primary bn-sm" onclick="colocarHc('{{_id}}')"
-                                    data-dismiss="modal">ver</a></td>
+                            <td><a href="/imprimirhc/{{codigo}}" target="_blank" class="btn btn-primary bn-sm"
+                                   >ver</a></td>
                         </tr>
                         {{/each}}
                     </tbody>
