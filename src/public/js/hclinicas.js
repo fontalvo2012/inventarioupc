@@ -257,7 +257,7 @@ function normalFisico() {
     $('#oidoderecho').val('Conducto auditivo permeable sin signos patológicos.  Membrana timpánica integra, como dé luz presente');
     $('#oidoIzquierdo').val('Conducto auditivo permeable sin signos patológicos.  Membrana timpánica integra, como dé luz presente');
     $('#cuello').val('No se palpan masas ni adenomegalias.');
-    $('#otrosfisico').val('sin otro diagnositico fisico diferente.');    
+    $('#otrosfisico').val('sin otro hallazgo fisico.');    
 }
 
 function validarhc() {
