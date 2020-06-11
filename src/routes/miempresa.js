@@ -9,7 +9,13 @@ const Empresa=require('../model/empresas');
 const Entidad=require('../model/entidad');
 const Factura=require('../model/facturas');
 const Paciente=require('../model/pacientes');
+const Hclinicas=require('../model/hclinicas');
+const Citas=require('../model/citas');
 const Rip=require('../model/rips');
+const Medicos=require('../model/medicos');
+const Tarifas=require('../model/tarifas');
+const Users=require('../model/users');
+const Procedimientos=require('../model/procedimientos');
 
 //MONGO DB=>
 router.get('/empresa',(req,res)=>{
@@ -187,5 +193,42 @@ function conseRit(num) {
     }
 }
 
+
+router.get('/backup',async(req,res)=>{
+    res.render('empresa/backup');
+});
+
+router.get('/descargar_backup',(req,res)=>{
+    fs.exists(`file/backup.txt`,function(exists){
+        if(exists){
+            res.download(`file/backup.txt`);
+        }
+    });
+})
+
+router.post('/backup',async(req,res)=>{
+    fs.unlinkSync('file/backup.txt');
+    const hclincia=await Hclinicas.find();
+    fs.appendFile('file/backup.txt',`>>>>HCLINICAS ${new Date()}<<<<< \n ${hclincia}`, (error) => {if (error) { throw error;}});
+    const paciente=await Paciente.find();
+    fs.appendFile('file/backup.txt',`>>>>PACIENTES ${new Date()}<<<<< \n ${paciente}`, (error) => {if (error) { throw error;}});
+    const citas=await Citas.find();
+    fs.appendFile('file/backup.txt',`>>>>CITAS ${new Date()}<<<<< \n ${citas}`, (error) => {if (error) { throw error;}});
+    const entidades=await Entidad.find();
+    fs.appendFile('file/backup.txt',`>>>>ENTIDADES ${new Date()}<<<<< \n ${entidades}`, (error) => {if (error) { throw error;}});
+    const facturas=await Factura.find();
+    fs.appendFile('file/backup.txt',`>>>>FACTURAS ${new Date()}<<<<< \n ${facturas}`, (error) => {if (error) { throw error;}});
+    const medicos=await Medicos.find();
+    fs.appendFile('file/backup.txt',`>>>>MEDICOS ${new Date()}<<<<< \n ${medicos}`, (error) => {if (error) { throw error;}});
+    const procedimientos=await Procedimientos.find();
+    fs.appendFile('file/backup.txt',`>>>>PROCEDIMIENTOS ${new Date()}<<<<< \n ${procedimientos}`, (error) => {if (error) { throw error;}});
+    const tarifas=await Tarifas.find();
+    fs.appendFile('file/backup.txt',`>>>>TARIFAS ${new Date()}<<<<< \n ${tarifas}`, (error) => {if (error) { throw error;}});
+    const users=await Users.find();
+    fs.appendFile('file/backup.txt',`>>>>USUARIOS ${new Date()}<<<<< \n ${users}`, (error) => {if (error) { throw error;}});
+
+    req.flash('login','backup Creado');
+    res.redirect('/backup');
+});
 
 module.exports = router;
