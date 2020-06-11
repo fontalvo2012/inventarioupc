@@ -5135,7 +5135,8 @@ function consultarCItas() {
                 if (element.estado == 'ensala') {
                     color="aqua";
                     opcion=element.estado;
-                }else{
+                }
+                else if (element.estado == ''){
                     color="white";
                     opcion=`
                     <div class="row">
@@ -5185,6 +5186,9 @@ function consultarCItas() {
                     </div>
                   </div>
                     `;
+                }else{
+                    var color="grey";
+                    opcion=element.estado;
                 }              
                 cadena+=`   
                 <tr style="background-color: ${color};">
