@@ -32,10 +32,26 @@ router.post('/consultarcitas',async(req,res)=>{
 });
 
 router.get('/vercitas',async(req,res)=>{   
-    const valores = await Cita.find({fecha:getfecha()}).lean(); 
-    console.log(new Date());
-    res.render('citas/consultas',{valores}); 
+    const medicos=await Medico.find().lean();
+    const valores = await Cita.find({fecha:getfecha()}).lean();     
+    var f=fechaformat();
+    console.log(f);
+    res.render('citas/consultas',{valores,f,medicos}); 
 });
+function fechaformat() {
+    const fecha=new Date();
+    var ano=fecha.getFullYear();
+    var mes=fecha.getMonth()+1;
+    var dia=fecha.getDate();
+    if (dia<10) {
+        dia='0'+dia;
+    }
+    if(mes<10){
+        mes='0'+mes;
+    }
+
+    return ano+'-'+mes+'-'+dia;
+}
 
 function getfecha() {
     var diaActual = new Date();
@@ -68,8 +84,7 @@ function formatFecha(fecha) {
 
 router.post('/vercitasfiltro',async(req,res)=>{
    const {medico,fecha}=req.body;  
-   console.log(formatFecha(fecha),medico);
-   
+   console.log(formatFecha(fecha),medico);   
    const citas = await Cita.find({medico:medico,fecha:formatFecha(fecha)}); 
    console.log(citas);
    res.send(citas);   
@@ -77,8 +92,9 @@ router.post('/vercitasfiltro',async(req,res)=>{
 
 router.post('/vercitaspaciente',async(req,res)=>{
     const {cc}=req.body; 
-    const valores = await Cita.find({'paciente.cedula':cc}).lean(); 
-    res.render('citas/consultas',{valores});  
+    const valores = await Cita.find({'paciente.cedula':cc}).lean();
+    console.log(valores) ;
+    res.send(valores);  
  });
 
 router.post('/ensala/:id',async(req,res)=>{

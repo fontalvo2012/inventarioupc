@@ -429,7 +429,7 @@ function selectMedico() {
         type: 'POST',
         datatype: 'json',                  
         success: (data) => {           
-           var contenido=`<select name="medico" id="medico" class="form-control form-control-sm">
+           var contenido=`<select name="medico" id="medico" onclick="consultarCItas()" class="form-control form-control-sm">
            <option value="">Seleciones</option>
         `; 
            data.forEach(element => { 
