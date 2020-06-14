@@ -75331,7 +75331,92 @@
         }  
           
     }
-  
+
+
+
+    function MostrarCie10(cap) {
+        var cadena=``;
+        $('#s'+cap).css('visibility','visible');
+        setTimeout(() => {
+            $('#s'+cap).css('visibility','hidden');
+        }, 10000);
+        cie10.forEach(element => {
+            if(element.Capitulo==cap){                
+                $.ajax({
+                    url: '/Cie10Ajax',
+                    type: 'POST',
+                    datatype: 'json',
+                    data:{
+                        codigo:element.codigo              
+                    },
+                    success: (data) => { 
+                        console.log(data);
+                        if(data =='si'){
+                            cadena+=`            
+                            <input type="checkbox" id="${element.codigo}" class="form-cotrol mr-2" onclick="guardarCie10('${element.codigo}','${element.Nombre}','${element.Capitulo}','${element.Descripcion}')" value="${element}" checked>${element.codigo}::${element.Descripcion}<br>            
+                            `;
+                        }else{
+                            cadena+=`            
+                            <input type="checkbox" id="${element.codigo}" class="form-cotrol mr-2" onclick="guardarCie10('${element.codigo}','${element.Nombre}','${element.Capitulo}','${element.Descripcion}')" value="${element}">${element.codigo}::${element.Descripcion}<br>            
+                            `;
+                        }    
+                        $('#contenido'+cap).html(cadena);              
+                            
+                    }
+                });   
+            }  
+                      
+        }); 
+        
+        
+    }
+    
+    function guardarCie10(codigo,nombre,capitulo,descripcion) {       
+       if($('#'+codigo).is(':checked') ){
+            $.ajax({
+                url: '/addCie10',
+                type: 'POST',
+                datatype: 'json',
+                data:{
+                    codigo,
+                    capitulo,
+                    nombre,
+                    tipo:nombre
+                },
+                success: (data) => { 
+                    $('#toats').html(`
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Mensaje: </strong> ${data}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>                    
+                    `);
+                }
+            });
+        }else{  
+            $.ajax({
+                url: '/delCie10',
+                type: 'POST',
+                datatype: 'json',
+                data:{
+                    codigo
+                },
+                success: (data) => { 
+                    $('#toats').html(`
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Mensaje: </strong> ${data}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>                    
+                    `);
+                }
+            });          
+           
+        }
+    }
+
     function cargarArrayCie(cap){      
         if($('#c'+cap).is(':checked') ){
             arraycie10.push(cap);       

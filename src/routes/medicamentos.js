@@ -71,6 +71,12 @@ router.post('/addCie10',checkAuthentication,async(req,res)=>{
    res.send('creado: '+codigo);
 })
 
+router.post('/delCie10',checkAuthentication,async(req,res)=>{
+    const {codigo}=req.body;     
+    await Cie10.remove({codigo:codigo});
+    res.send('Eliminado: '+codigo);
+ })
+
 router.post('/addCie10Complete',checkAuthentication,async(req,res)=>{
     const cieArray=[];
     const  cie10=await Cie10.find();
@@ -90,6 +96,8 @@ router.post('/addCie10Complete',checkAuthentication,async(req,res)=>{
     }
     
  })
-
+ router.get('/firma',checkAuthentication,async(req,res)=>{   
+    res.render('hclinicas/firma')
+ })
 
 module.exports = router;
