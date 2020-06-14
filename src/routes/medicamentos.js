@@ -3,6 +3,40 @@ const router = Router();
 const Insumo=require('../model/insumos');
 const Medicamentos=require('../model/medicamentos');
 const Cie10=require('../model/cie10');
+var nodemailer = require('nodemailer');
+
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'programadoresudc@gmail.com',
+      pass: 'jina2015'
+    }
+  });
+  
+router.post('/mail',checkAuthentication,async(req,res)=>{
+    const {contenido}=req.body
+   
+    var mailOptions = {
+        from: 'programadoresudc@gmail.com',
+        to: 'fontalvo2012@hotmail.com',
+        subject: 'Historia Clinica',
+        html: `<b>Descargar HC aqui: </b><a href="http://localhost:4400/imprimirhc/${contenido}">HC</a><br>
+               <b>Descargar ORDENES aqui: </b><a href="http://localhost:4400/orden/${contenido}">ORDENES</a><br>
+               <b>Descargar RECETA aqui: </b><a href="http://localhost:4400/receta/${contenido}">RECETA</a><br>`
+      };
+      
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+      res.send('Enviado');
+})
+  
+
+  
 function checkAuthentication(req,res,next){
     if(req.isAuthenticated()){        
         next();

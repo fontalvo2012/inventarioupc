@@ -113,7 +113,7 @@ router.post('/colocarhc', checkAuthentication, async (req, res) => {
 })
 
 
-router.get('/imprimirhc/:codigo', checkAuthentication, async (req, res) => {
+router.get('/imprimirhc/:codigo',async (req, res) => {
     const { codigo } = req.params;
     const valores = await Hclincia.findOne({ codigo: codigo }).lean();
     console.log(valores);
@@ -125,7 +125,19 @@ router.get('/imprimirhc/:codigo', checkAuthentication, async (req, res) => {
     res.render('hclinicas/imprimir', { valores, cita, fisico, impdiag, medico, antecedentes });
 });
 
-router.get('/receta/:codigo', checkAuthentication, async (req, res) => {
+router.get('/imprimirhc2/:codigo',async (req, res) => {
+    const { codigo } = req.params;       
+    const valores = await Hclincia.findOne({ codigo: codigo }).lean();
+    console.log(valores);
+    const cita = valores.cita[0];
+    const fisico = valores.fisico[0];
+    const antecedentes = valores.antecedentes[0];
+    const impdiag = valores.impDiagnostico[0];
+    const medico = valores.medico[0];
+    res.render('hclinicas/imprimir', { valores, cita, fisico, impdiag, medico, antecedentes });
+});
+
+router.get('/receta/:codigo', async (req, res) => {
     const { codigo } = req.params;
     const hc = await Hclincia.findOne({ codigo: codigo }).lean();
     const cita = hc.cita[0];
@@ -134,7 +146,7 @@ router.get('/receta/:codigo', checkAuthentication, async (req, res) => {
     res.render('hclinicas/receta', { hc, receta, cita, medico });
 });
 
-router.get('/orden/:codigo', checkAuthentication, async (req, res) => {
+router.get('/orden/:codigo', async (req, res) => {
     const { codigo } = req.params;
     const hc = await Hclincia.findOne({ codigo: codigo }).lean();
     const cita = hc.cita[0];

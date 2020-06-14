@@ -21,7 +21,9 @@
     <div class="col-sm-10"></div>
     <div class="col-sm-2">
         <a href="#" class="btn btn-primary btn-sm" onclick="ImprimirHc()"><i class="fas fa-print" style="font-size: 20px;"></i></a>
+        {{#if user}}
         <a href="/verhc/{{cita.paciente.cedula}}" class="btn btn-warning btn-sm"><i class="fas fa-reply" style="font-size: 20px;"></i></a>
+        {{/if}}
     </div>
 </div>
 

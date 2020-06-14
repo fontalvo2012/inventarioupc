@@ -366,6 +366,8 @@ function mostarOrdenes() {
   $('#contenido_ordenes').html(cadena);
 }
 
+
+
 function quitarOrdenes(id) {
   ordernesArray.splice(id,1);
   mostarOrdenes();
@@ -373,4 +375,20 @@ function quitarOrdenes(id) {
 
 function pr(valor){
  $('#pr').html(valor);
+}
+
+
+function enviarEmail() {
+  var dat=$('#cdhc').val();
+  $.ajax({
+      url: '/mail',
+      type: 'POST',
+      datatype: 'json', 
+      data:{
+        contenido:dat
+      },                 
+      success: (data) => {           
+        console.log(data);        
+      }
+  }); 
 }

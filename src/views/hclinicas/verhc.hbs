@@ -11,6 +11,7 @@
   </thead>
   <tbody>
       {{#each valores}}
+      <input type="hidden" value="{{codigo}}" id="cdhc">
     <tr>     
       <th scope="row">{{codigo}}</th>
       <tH>{{fecha}}</tH>
@@ -20,6 +21,7 @@
       <td><a href="/imprimirhc/{{codigo}}" class="btn btn-primary btn-sm"><i class="fas fa-file-medical" style="font-size: 20px;"></i></a>
       <a href="/receta/{{codigo}}" class="btn btn-warning btn-sm"><i class="fas fa-capsules" style="font-size: 20px;"></i></a>
       <a href="/orden/{{codigo}}" class="btn btn-success btn-sm"><i class="	fas fa-user-md" style="font-size: 20px;"></i></a>
+      <a href="#" class="btn btn-primary btn-sm" onclick="enviarEmail()"><i class="far fa-envelope" style="font-size: 20px;"></i></a>
       </td>
      
     </tr>
