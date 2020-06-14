@@ -378,17 +378,36 @@ function pr(valor){
 }
 
 
-function enviarEmail() {
-  var dat=$('#cdhc').val();
+function enviarEmail() {  
   $.ajax({
       url: '/mail',
       type: 'POST',
       datatype: 'json', 
       data:{
-        contenido:dat
+        contenido:$('#idhc').val(),
+        mail: $('#mail').val()
       },                 
       success: (data) => {           
-        console.log(data);        
+        if(data=='0'){
+          $('#msges').html(`<div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>Mensaje: </strong> Hubo probmelas para enviar el correo
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>`);
+        } 
+         if(data=='1'){
+          $('#msges').html(`<div class="alert alert-success alert-dismissible fade show" role="alert">
+          <strong>Mensaje: </strong> Tu correo fue enviado sin problemas
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>`);
+        }  
       }
   }); 
+}
+
+function enviarID(id) {
+  $('#idhc').val(id);
 }

@@ -14,25 +14,27 @@ var transporter = nodemailer.createTransport({
   });
   
 router.post('/mail',checkAuthentication,async(req,res)=>{
-    const {contenido}=req.body
+    const {contenido,mail}=req.body
    
     var mailOptions = {
         from: 'programadoresudc@gmail.com',
-        to: 'fontalvo2012@hotmail.com',
+        to: mail,
         subject: 'Historia Clinica',
-        html: `<b>Descargar HC aqui: </b><a href="http://localhost:4400/imprimirhc/${contenido}">HC</a><br>
-               <b>Descargar ORDENES aqui: </b><a href="http://localhost:4400/orden/${contenido}">ORDENES</a><br>
-               <b>Descargar RECETA aqui: </b><a href="http://localhost:4400/receta/${contenido}">RECETA</a><br>`
+        html: `<b>Descargar HC aqui: </b><a href="http://159.89.144.24:4400/imprimirhc2/${contenido}">HC</a><br>
+               <b>Descargar ORDENES aqui: </b><a href="http://159.89.144.24:4400/orden2/${contenido}">ORDENES</a><br>
+               <b>Descargar RECETA aqui: </b><a href="http://159.89.144.24:4400/receta2/${contenido}">RECETA</a><br>`
       };
       
       transporter.sendMail(mailOptions, function(error, info){
         if (error) {
-          console.log(error);
+          console.log('error');
+          res.send('0');
         } else {
           console.log('Email sent: ' + info.response);
+          res.send('1');
         }
       });
-      res.send('Enviado');
+     
 })
   
 

@@ -10,6 +10,7 @@ const Medico = require('../model/medicos');
 const Procedimiento = require('../model/procedimientos');
 const Cita = require('../model/citas');
 const Entidad = require('../model/entidad');
+const Paciente = require('../model/pacientes');
 
 
 function checkAuthentication(req, res, next) {
@@ -127,7 +128,7 @@ router.get('/imprimirhc/:codigo',async (req, res) => {
 
 router.get('/imprimirhc2/:codigo',async (req, res) => {
     const { codigo } = req.params;       
-    const valores = await Hclincia.findOne({ codigo: codigo }).lean();
+    const valores = await Hclincia.findOne({ _id: codigo }).lean();
     console.log(valores);
     const cita = valores.cita[0];
     const fisico = valores.fisico[0];
@@ -137,6 +138,23 @@ router.get('/imprimirhc2/:codigo',async (req, res) => {
     res.render('hclinicas/imprimir', { valores, cita, fisico, impdiag, medico, antecedentes });
 });
 
+router.get('/receta2/:codigo', async (req, res) => {
+    const { codigo } = req.params;
+    const hc = await Hclincia.findOne({ _id: codigo }).lean();
+    const cita = hc.cita[0];
+    const receta = hc.receta;
+    const medico = hc.medico[0];
+    res.render('hclinicas/receta', { hc, receta, cita, medico });
+});
+router.get('/orden2/:codigo', async (req, res) => {
+    const { codigo } = req.params;
+    const hc = await Hclincia.findOne({ _id: codigo }).lean();
+    const cita = hc.cita[0];
+    const receta = hc.receta;
+    const medico = hc.medico[0];
+    const ordenes = hc.ordenes;
+    res.render('hclinicas/verOrdenes', { hc, ordenes,receta, cita, medico });
+});
 router.get('/receta/:codigo', async (req, res) => {
     const { codigo } = req.params;
     const hc = await Hclincia.findOne({ codigo: codigo }).lean();
@@ -159,7 +177,9 @@ router.get('/orden/:codigo', async (req, res) => {
 router.get('/verhc/:cedula', checkAuthentication, async (req, res) => {
     const { cedula } = req.params;
     const valores = await Hclincia.find({ cedula: cedula }).lean();
-    res.render('hclinicas/verhc', { valores });
+    const paciente = await Paciente.findOne({ cedula: cedula });
+    const email=paciente.email;
+    res.render('hclinicas/verhc', { valores,email });
 })
 
 function fechaActual() {

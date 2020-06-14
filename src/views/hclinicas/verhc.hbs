@@ -1,3 +1,4 @@
+<div id="msges"></div>
 <table class="table table-striped m-4">
   <thead>
     <tr>
@@ -11,7 +12,7 @@
   </thead>
   <tbody>
       {{#each valores}}
-      <input type="hidden" value="{{codigo}}" id="cdhc">
+     
     <tr>     
       <th scope="row">{{codigo}}</th>
       <tH>{{fecha}}</tH>
@@ -21,7 +22,8 @@
       <td><a href="/imprimirhc/{{codigo}}" class="btn btn-primary btn-sm"><i class="fas fa-file-medical" style="font-size: 20px;"></i></a>
       <a href="/receta/{{codigo}}" class="btn btn-warning btn-sm"><i class="fas fa-capsules" style="font-size: 20px;"></i></a>
       <a href="/orden/{{codigo}}" class="btn btn-success btn-sm"><i class="	fas fa-user-md" style="font-size: 20px;"></i></a>
-      <a href="#" class="btn btn-primary btn-sm" onclick="enviarEmail()"><i class="far fa-envelope" style="font-size: 20px;"></i></a>
+      <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#exampleModal" onclick="enviarID('{{_id}}')"><i class="far fa-envelope" style="font-size: 20px;"></i></button>
+      
       </td>
      
     </tr>
@@ -29,3 +31,31 @@
 
   </tbody>
 </table>
+
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Enviar Correo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-1"><input type="hidden" id="idhc"></div>
+          <div class="col-sm-8"><span class="small"><b>eMail</b></span><input type="mail" class="form-control form-control-sm" value="{{email}}" id="mail"></div>
+          <div class="col-sm-3 mt-4"> <a href="#" class="btn btn-primary btn-sm" onclick="enviarEmail()" data-dismiss="modal"><i class="far fa-paper-plane" style="font-size: 16px;"></i>Enviar</a></div>
+        </div>
+       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>    
+      </div>
+    </div>
+  </div>
+</div>
