@@ -1,7 +1,6 @@
 function MostrarLocalidad() {
     var obj = JSON.parse(localidades);
-    var oJSON = sortJSON(obj, 'municipio', 'asc');
-    console.log(oJSON);
+    var oJSON = sortJSON(obj, 'municipio', 'asc');   
     var cadena=`<select name="municipio" id="municipio" onchange="selectDepartamento()"  class="form-control form-control-sm" required>
     <option value="">Municipio</option> `;
     oJSON.forEach(element => {

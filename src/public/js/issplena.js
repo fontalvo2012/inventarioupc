@@ -4321,8 +4321,7 @@ function combertirIss(ob) {
 }
 
 function consultarTarifas() {
-    var entidad = $('#entidad').val();
-    console.log(entidad);
+    var entidad = $('#entidad').val(); 
     $.ajax({
         url: '/consultarTarifas',
         type: 'POST',
@@ -4490,8 +4489,7 @@ function verSirugias() {
 
 
 function consultarProcedimientos() {    
-    var entidad = $('#entidad').val();
-    console.log(entidad);
+    var entidad = $('#entidad').val();   
     $.ajax({
         url: '/consultarProcedimientos',
         type: 'POST',
@@ -4509,9 +4507,7 @@ function consultarProcedimientos() {
 
 function consultarItemProcedimientos() {    
     var entidad = $('#entidad').val();
-    var cups=$('#cups').val().substr(0,6);
-    console.log(cups);
-    console.log(entidad);
+    var cups=$('#cups').val().substr(0,6);  
     $.ajax({
         url: '/consultaritemProcedimientos',
         type: 'POST',
@@ -4544,8 +4540,6 @@ function addcups() {
 function consultarItem2() {
     var id = $('#item').val();
     var entidad = $('#entidad').val();
-    console.log('entidad: ', entidad);
-
     if (entidad == "") {
         alert('DEBES SELECCIONAR UNA ENTIDAD');
         $('#entidad').focus();
@@ -4562,8 +4556,7 @@ function consultarItem2() {
             id: id.substr(0, 6),
             entidad: entidad
         },
-        success: (data) => {
-            console.log(data);
+        success: (data) => {           
             item = data;
 
         }
@@ -4583,8 +4576,7 @@ function actualizarTarifa(id) {
             id: id,
             valor: valor
         },
-        success: (data) => {
-            console.log(data);
+        success: (data) => {         
             consultarifas();
         }
     });
@@ -4598,8 +4590,7 @@ function borrarTarifa(id) {
         data: {
             id: id
         },
-        success: (data) => {
-            console.log(data);
+        success: (data) => {       
             consultarifas();
         }
     });
@@ -4607,8 +4598,7 @@ function borrarTarifa(id) {
 
 
 function consultarifas(){
-    const issplena = JSON.parse(plena);
-    console.log('Numero de regitros: ', issplena.length)
+    const issplena = JSON.parse(plena);  
     var entidad = $('#entidad').val();
     var tipo = $('#tipo').val();
     var cup = $('#cups').val();
@@ -4621,7 +4611,7 @@ function consultarifas(){
             entidad: entidad
         },
         success: (data) => {
-            console.log(data);
+       
             if(!data[0]){
                 $('#porc').css('display','block');
                 $('#btcrear').css('display','block');
@@ -4711,8 +4701,7 @@ function ingresarTarifas() {
                 forma: item.forma,
                 porcentaje:porcentaje
             },
-            success: (data) => {
-                console.log(data.valor);
+            success: (data) => {              
                 $('#progreso').html(`
             <div class="progress">
             <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="${(data.valor * 100) / 204}" aria-valuemin="0" aria-valuemax="100" style="width: ${(data.valor * 100) / 204}%"></div>
@@ -4741,8 +4730,7 @@ function all_usuario() {
                 fin: fin,
                 eps, eps
             },
-            success: (data) => {
-                console.log(data);
+            success: (data) => {              
                 if (data == '0') {
                     $('#alert').html(` <div class="alert alert-warning" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> NO SE ENCONTRARON REGISTROS EN ESTE RANGO FECHA ${ini}=>${fin} </div>`);
                 } else {
@@ -4770,8 +4758,7 @@ function capita() {
                 fin: fin,
                 eps, eps
             },
-            success: (data) => {
-                console.log(data);
+            success: (data) => {              
                 if (data == '0') {
                     $('#alert').html(`<div class="alert alert-warning" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> NO SE ENCONTRARON REGISTROS EN ESTE RANGO FECHA ${ini}=>${fin} </div>`);
                 } else {
@@ -4790,8 +4777,7 @@ function completMedicamentos() {
         url: '/ajaxMedicamentos',
         type: 'POST',
         datatype: 'json',
-        success: (data) => {
-            console.log(data);
+        success: (data) => {           
             var array = [];
             data.forEach(element => {
                 array.push(element.medicamento);
@@ -4818,8 +4804,7 @@ function facturarEntidad() {
             fin: fin,
             entidad, entidad
         },
-        success: (data) => {
-            console.log(data);
+        success: (data) => {        
             if (data == 'facturado') {
                 location.href = "/facturas";
             }
@@ -4898,8 +4883,7 @@ function tipoFacturarips() {
         data: {
             entidad: $('#entidad').val()
         },
-        success: (data) => {
-            console.log(data);
+        success: (data) => {          
             if (data == '') {
                 $("#ripboton").html(`<button class="btn btn-warning btn-sm" id="all" onclick="all_usuario()">Crear</button>`);
             } else {
@@ -4921,8 +4905,7 @@ function ripsEventos() {
                 ffinal: $('#ffinal').val(),
                 entidad: $('#entidad').val(),
             },
-            success: (data) => {
-                console.log(data);
+            success: (data) => {            
                 $('#alert').html(` <div class="alert alert-success" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> RIPS CREADOS</div>`);
             }
         });
@@ -4940,8 +4923,7 @@ function verRips() {
         data: {
             entidad: $('#entidad').val()
         },
-        success: (data) => {
-            console.log(data);
+        success: (data) => {        
             var cadena = '';
             data.forEach(element => {
                 cadena += `
@@ -5000,9 +4982,6 @@ function consultarPrefactura(opcion) {
         }
     });
 }
-function generarRip() {
-    console.log(ids);
-}
 
 function consultarfactura() {   
     $.ajax({
@@ -5014,8 +4993,7 @@ function consultarfactura() {
             ini: $('#ini').val(),
             fin: $('#fin').val()          
         },
-        success: (data) => {
-            console.log(data);
+        success: (data) => {         
             var cadena = '';           
             data.forEach(element => {               
                agregarId(element._id);
@@ -5055,8 +5033,7 @@ function verimagen() {
         data: {
             codigo: $('#codigo').val()
         },
-        success: (data) => {
-            console.log(data);
+        success: (data) => {         
             data.imagen.forEach(element => {
                 var image = new Image();
                 image.src = element;
@@ -5116,8 +5093,7 @@ function agregarId(id) {
 
 function consultarCItas() {
    var fecha=$('#fecha').val();
-   var medico=$('#medico').val();
-   console.log(fecha,medico);
+   var medico=$('#medico').val();  
     $.ajax({
         url: '/vercitasfiltro',
         type: 'POST',
@@ -5126,8 +5102,7 @@ function consultarCItas() {
             medico: medico,
             fecha: fecha
         },
-        success: (data) => {
-            console.log(data);
+        success: (data) => {         
             var cadena="";
             var color="white";
             var opcion=""
@@ -5213,8 +5188,7 @@ function consultarCItas() {
 
 function consultarCItasPaciente() {
     var cc=$('#cc').val();   
-    console.log(cc);
-    console.log(fecha,medico);
+  
      $.ajax({
          url: '/vercitaspaciente',
          type: 'POST',
@@ -5223,7 +5197,7 @@ function consultarCItasPaciente() {
              cc: cc,           
          },
          success: (data) => {
-             console.log(data);
+          
              var cadena="";
              var color="white";
              var opcion=""
@@ -5325,8 +5299,7 @@ function conCitas() {
             fecha:$('#fecha').val(),
             medico:$('#medico').val()
         },
-        success: (data) => {
-            console.log(data);
+        success: (data) => {          
             var cadena="";
             data.forEach(element => {
                 cadena+=`     

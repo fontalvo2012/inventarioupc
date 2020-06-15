@@ -4365,8 +4365,7 @@ var medicamentos =`[
                     presentacion: element.presentacion,
                     tipo: 'POS'
                 },
-                success: (data) => {
-                    console.log(data);
+                success: (data) => {                   
                 }
             }); 
 

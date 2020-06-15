@@ -331,7 +331,8 @@ function consultarPacienteporId(){
         <td class="small">${data.direccion}</td>
         <td>
             <a href="/verhc/${data.cedula}" class="btn btn-primary btn-sm"><i class='fas fa-h-square' style='font-size:16px'></i></a>
-            
+            <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
+            data-target="#exampleModal" onclick="MostarUpdatePaciente('${data.cedula}')"><i class='far fa-edit'  style='font-size:16px'></i></button>
         </td>
     </tr>`;
      

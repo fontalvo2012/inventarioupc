@@ -75320,7 +75320,7 @@
                             tipo:cie10[x].Nombre
                         },
                         success: (data) => { 
-                            console.log(data);             
+                                    
                                 
                         }
                     });                   
@@ -75350,7 +75350,7 @@
                         codigo:element.codigo              
                     },
                     success: (data) => { 
-                        console.log(data);
+                     
                         if(data =='si'){
                             cadena+=`            
                             <input type="checkbox" id="${element.codigo}" class="form-cotrol mr-2" onclick="guardarCie10('${element.codigo}','${element.Nombre}','${element.Capitulo}','${element.Descripcion}')" value="${element}" checked>${element.codigo}::${element.Descripcion}<br>            

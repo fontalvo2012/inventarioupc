@@ -30,6 +30,12 @@ router.post('/addpacientes',checkAuthentication,async(req,res)=>{
     }   
     res.render('pacientes/index',{error});
 });
+router.post('/updatePacientes',checkAuthentication,async(req,res)=>{
+    const { id,td,cedula,nombre,snombre,apellido,sapellido,sexo,nacimiento,edad,unidad,ecivil,cdM,cddep,zresidencial,email,direccion,telefono,ciudad,nombre_acom,parentesco,tel_acom} = req.body;
+    await Paciente.updateOne({_id:id},
+        { td,cedula,nombre,snombre,apellido,sapellido,sexo,nacimiento,edad,unidad,ecivil,cdM,cddep,zresidencial,email,direccion,telefono,ciudad,nombre_acom,parentesco,tel_acom});          
+    res.redirect('/consultarpacientes');
+});
 
 router.post('/ajaxpaciente',checkAuthentication,async(req,res)=>{
     const {cedula} = req.body;

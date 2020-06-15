@@ -416,8 +416,7 @@ function CitasApartadas(){
                         <td><a href="#" onclick="borrarCita('${element._id}')" class="btn btn-primary btn-sm">del</a></td>                             
                     </tr> `;
             });
-       cadena+=` </tbody></table>`;
-         console.log(data);
+       cadena+=` </tbody></table>`;        
          $('#agendadas').html(cadena);
         }
     });  

@@ -40,7 +40,7 @@ function consultarmedico(id) {
 
 // --- SELECT ---
 function selectEntidad() {
-  console.log('Select Entidad');
+ 
   $.ajax({
     url: '/selectEntidad',
     type: 'POST',
@@ -67,11 +67,9 @@ function consultarPaciente() {
     data: {
       cedula: cedula
     },
-    success: (data) => {
-      console.log(data);
+    success: (data) => {     
       if (data) {
-        paciente = data;
-        console.log(paciente);
+        paciente = data;      
         $('#nombres').val(data.nombre.toUpperCase() + " " + data.apellido.toUpperCase() + " " + data.sapellido.toUpperCase());
         $('#edad').val(data.edad);
         selectEntidad();
@@ -82,6 +80,42 @@ function consultarPaciente() {
           $('#cc').val("");
         }
       }
+    }
+  });
+}
+
+function MostarUpdatePaciente(cedula){ 
+  $.ajax({
+    url: '/ajaxpaciente',
+    type: 'POST',
+    datatype: 'json',
+    data: {
+      cedula: cedula
+    },
+    success: (data) => {    
+      $('#td').val(data.td);
+      $('#cedula').val(data.cedula);
+      $('#nombre').val(data.nombre);
+      $('#snombre').val(data.snombre);
+      $('#apellido').val(data.apellido);
+      $('#sapellido').val(data.sapellido);
+      $('#sexo').val(data.sexo);
+      $('#nacimiento').val(data.nacimiento);
+      $('#edad').val(data.edad);
+      $('#unidad').val(data.unidad);
+      $('#ecivil').val(data.ecivil);
+      $('#direccion').val(data.direccion);
+      $('#telefono').val(data.telefono);
+      $('#email').val(data.email);
+      $('#nombre_acom').val(data.nombre_acom);
+      $('#parentesco').val(data.parentesco);
+      $('#tel_acom').val(data.tel_acom);
+      $('#ciudad').val(data.ciudad);
+      $('#cdm').val(data.cdm);
+      $('#departamento').val(data.departamento);
+      $('#cddep').val(data.cddep);
+      $('#zresidencial').val(data.zresidencial);
+      $('#id').val(data._id);    
     }
   });
 }
@@ -172,8 +206,7 @@ function facturar() {
       data: {
         fac: fac
       },
-      success: (data) => {
-        console.log(data);
+      success: (data) => {        
         if (data == "ingresado") {
           location.href = "/facturar";
         }
@@ -192,8 +225,7 @@ function verConsecutivo() {
     url: '/consecutivo',
     type: 'POST',
     datatype: 'json',
-    success: (data) => {
-      console.log(data);
+    success: (data) => {     
       $('#consecutivo').val(parseInt(data[0].cons) + 1);
 
     }
@@ -211,10 +243,8 @@ function getfac(id) {
     data:{
       con:id
     },
-    success: (data) => {
-      
-      factura=data[0];
-      console.log(factura);
+    success: (data) => {      
+      factura=data[0];    
     }
   });
 
@@ -230,8 +260,7 @@ function consultarFactura() {
       ini:$('#ini').val(),
       fin:$('#fin').val()
     },
-    success: (data) => {
-      console.log(data);
+    success: (data) => {    
       var cadena="";
       data.forEach(element => {
         cadena+=
