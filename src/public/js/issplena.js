@@ -5134,7 +5134,11 @@ function consultarCItas() {
             data.forEach(element => {
                 if (element.estado == 'ensala') {
                     color="aqua";
-                    opcion=element.estado;
+                    opcion=`  <div class="row">
+                    <div class="col-sm-6">
+                    <a href="#" class="btn btn-danger btn-sm" onclick="cancelarRecepcion('${element._id}')"> <i class='fas fa-user-alt-slash' style='font-size:16px'></i></a>
+                    </div>
+                  </div>`;
                 }
                 else if (element.estado == ''){
                     color="white";
@@ -5296,6 +5300,20 @@ function consultarCItasPaciente() {
          }
      });
  
+ }
+
+ function cancelarRecepcion(id) {
+    $.ajax({
+        url: '/cancelarRec',
+        type: 'POST',
+        datatype: 'json',
+        data: {          
+            id:id
+        },
+        success: (data) => {
+            consultarCItas();
+        }
+    });
  }
 
 function conCitas() {   

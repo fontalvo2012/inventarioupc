@@ -41,6 +41,14 @@ router.get('/cancelar/:id', checkAuthentication, async(req, res) => {
     }); 
     res.redirect('/consultashclinicas');
 });
+router.post('/cancelarRec', checkAuthentication, async(req, res) => {
+    const {id}=req.body;
+    await Cita.updateOne({_id:id},
+        {
+        estado:''      
+    }); 
+    res.redirect('/vercitas');
+});
 router.get('/procedimientoshclinicas', checkAuthentication, async(req, res) => {   
     const entidades= await Entidad.find().lean();
     const medicos= await Medico.find().lean();
