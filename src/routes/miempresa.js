@@ -5,41 +5,49 @@ const db = admin.firestore();
 const fs = require('fs');
 
 const resultado = '';
-const Empresa=require('../model/empresas');
-const Entidad=require('../model/entidad');
-const Factura=require('../model/facturas');
-const Paciente=require('../model/pacientes');
-const Hclinicas=require('../model/hclinicas');
-const Citas=require('../model/citas');
-const Rip=require('../model/rips');
-const Medicos=require('../model/medicos');
-const Tarifas=require('../model/tarifas');
-const Users=require('../model/users');
-const Procedimientos=require('../model/procedimientos');
+const Empresa = require('../model/empresas');
+const Entidad = require('../model/entidad');
+const Factura = require('../model/facturas');
+const Paciente = require('../model/pacientes');
+const Hclinicas = require('../model/hclinicas');
+const Citas = require('../model/citas');
+const Rip = require('../model/rips');
+const Medicos = require('../model/medicos');
+const Tarifas = require('../model/tarifas');
+const Users = require('../model/users');
+const Procedimientos = require('../model/procedimientos');
+
+function checkAuthentication(req, res, next) {
+    if (req.isAuthenticated()) {
+        next();
+    } else {
+        res.redirect("/singIn");
+    }
+}
 
 //MONGO DB=>
-router.get('/empresa',(req,res)=>{
+router.get('/empresa', (req, res) => {
     res.render('empresa/index');
 });
 
-router.post('/empresa',async(req,res)=>{
-    const {nit,rsocial,direccion,habilitacion,resolucion,tresolucion,telefono,email}=req.body;
-    const newEmpresa=Empresa({nit,rsocial,direccion,habilitacion,resolucion,tresolucion,telefono,email});
+router.post('/empresa', async (req, res) => {
+    const { nit, rsocial, direccion, habilitacion, resolucion, tresolucion, telefono, email } = req.body;
+    const newEmpresa = Empresa({ nit, rsocial, direccion, habilitacion, resolucion, tresolucion, telefono, email });
     await newEmpresa.save();
     res.redirect('/empresa');
 });
 //MONGO DB <=
 
 
-router.post('/ripscrear',async(req,res)=>{
-    const {finicio, ffinal,entidad } = req.body;    
-    const empresa = await Empresa.findOne();    
-    var cantAF=0,cantAP=0,cantAC=0,cantUs=0;
-    const cs= await Rip.findOne().sort({consecutivo:'desc'});   
-    const nombre=conseRit(cs.consecutivo);
-   
+router.post('/ripscrear', async (req, res) => {
+    const { finicio, ffinal, entidad } = req.body;
+    const empresa = await Empresa.findOne();
+    var cantAF = 0, cantAP = 0, cantAC = 0, cantUs = 0;
+    const cs = await Rip.findOne().sort({ consecutivo: 'desc' });
+    const nombre = conseRit(cs.consecutivo);
 
-    const factura=await Factura.find(
+
+    const factura = await Factura.find(
         {
             'hc.entidad.nit': entidad,
             estado: 'facturado',
@@ -50,7 +58,7 @@ router.post('/ripscrear',async(req,res)=>{
         }
     );
     if (factura[0]) {
-        const rip= new Rip({consecutivo:cs.consecutivo+1,entidad:entidad,nombre:nombre});
+        const rip = new Rip({ consecutivo: cs.consecutivo + 1, entidad: entidad, nombre: nombre });
         await rip.save();
         const cedulas = await Factura.find().distinct('hc.paciente.cedula',
             {
@@ -130,7 +138,7 @@ router.post('/ripscrear',async(req,res)=>{
 })
 
 function fechafac(fecha) {
-    return fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear();
+    return fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear();
 }
 
 // RIPS EVENTOS
@@ -138,41 +146,71 @@ function fechafac(fecha) {
 
 // RIPS EVENTOS FIN
 
-router.get('/ct/:consecutivo/:nombre',(req,res)=>{
-    const {consecutivo,nombre}=req.params;
-     CrearCT(conseRit(parseInt(consecutivo)),parseInt(consecutivo));
-     res.redirect('/rips');
+router.get('/ct/:consecutivo/:nombre', (req, res) => {
+    const { consecutivo, nombre } = req.params;
+    CrearCT(conseRit(parseInt(consecutivo)), parseInt(consecutivo));
+    res.redirect('/rips');
 });
 
 
-router.post('/descargaRips', async(req, res) => { 
-    const{entidad}=req.body;
-    const valores = await Rip.find({entidad:entidad});
+router.post('/descargaRips', async (req, res) => {
+    const { entidad } = req.body;
+    const valores = await Rip.find({ entidad: entidad });
     res.send(valores);
 
 });
 
 router.get('/descarga/:nombre', (req, res) => {
     const { nombre } = req.params;
-    fs.exists(`file/${nombre}`,function(exists){
-        if(exists){
+    fs.exists(`file/${nombre}`, function (exists) {
+        if (exists) {
             res.download(`file/${nombre}`);
-        }else{
+        } else {
             res.download(`file/none.txt`);
         }
     });
-    
+
 });
 
 
 router.get('/rips', async (req, res) => {
     var entidad = []
     entidad = await Entidad.find().lean();
-    res.render('facturacion/rips', {entidad});
-   
+    res.render('facturacion/rips', { entidad });
+
 });
 
+router.get('/imagenes', checkAuthentication, async (req, res) => {
+    const medico = await Medicos.find().lean();
+    res.render('empresa/imagenes', { medico });
+})
+router.post('/imagenes', checkAuthentication, async (req, res) => {
+    const nombre = req.body.medico;
+    const firma_nombre = req.files.firma_img.name;
+    let firma = req.files.firma_img;
+    if (firma_nombre.substr(-3) == 'png') {
+        firma.mv('./src/public/img/firmas/' + nombre + '.png', (err) => {
+            if (err) console.log(err);
+        });
+    } else {
+        req.flash('login','El formato de la imagen no es correcto debe ser PNG');
+    }
 
+    res.redirect('/imagenes');
+})
+router.post('/logo', checkAuthentication, async (req, res) => {   
+    const logo_nombre = req.files.logo_img.name;
+    let firma = req.files.logo_img;
+    if (logo_nombre.substr(-3) == 'png') {
+        firma.mv('./src/public/img/logo.png', (err) => {
+            if (err) console.log(err);
+        });
+    } else {
+        req.flash('login','El formato del logo no es correcto debe ser PNG');
+    }
+
+    res.redirect('/imagenes');
+})
 
 
 
@@ -194,40 +232,40 @@ function conseRit(num) {
 }
 
 
-router.get('/backup',async(req,res)=>{
+router.get('/backup', async (req, res) => {
     res.render('empresa/backup');
 });
 
-router.get('/descargar_backup',(req,res)=>{
-    fs.exists(`file/backup.txt`,function(exists){
-        if(exists){
+router.get('/descargar_backup', (req, res) => {
+    fs.exists(`file/backup.txt`, function (exists) {
+        if (exists) {
             res.download(`file/backup.txt`);
         }
     });
 })
 
-router.post('/backup',async(req,res)=>{
+router.post('/backup', async (req, res) => {
     fs.unlinkSync('file/backup.txt');
-    const hclincia=await Hclinicas.find();
-    fs.appendFile('file/backup.txt',`>>>>HCLINICAS ${new Date()}<<<<< \n ${hclincia}`, (error) => {if (error) { throw error;}});
-    const paciente=await Paciente.find();
-    fs.appendFile('file/backup.txt',`>>>>PACIENTES ${new Date()}<<<<< \n ${paciente}`, (error) => {if (error) { throw error;}});
-    const citas=await Citas.find();
-    fs.appendFile('file/backup.txt',`>>>>CITAS ${new Date()}<<<<< \n ${citas}`, (error) => {if (error) { throw error;}});
-    const entidades=await Entidad.find();
-    fs.appendFile('file/backup.txt',`>>>>ENTIDADES ${new Date()}<<<<< \n ${entidades}`, (error) => {if (error) { throw error;}});
-    const facturas=await Factura.find();
-    fs.appendFile('file/backup.txt',`>>>>FACTURAS ${new Date()}<<<<< \n ${facturas}`, (error) => {if (error) { throw error;}});
-    const medicos=await Medicos.find();
-    fs.appendFile('file/backup.txt',`>>>>MEDICOS ${new Date()}<<<<< \n ${medicos}`, (error) => {if (error) { throw error;}});
-    const procedimientos=await Procedimientos.find();
-    fs.appendFile('file/backup.txt',`>>>>PROCEDIMIENTOS ${new Date()}<<<<< \n ${procedimientos}`, (error) => {if (error) { throw error;}});
-    const tarifas=await Tarifas.find();
-    fs.appendFile('file/backup.txt',`>>>>TARIFAS ${new Date()}<<<<< \n ${tarifas}`, (error) => {if (error) { throw error;}});
-    const users=await Users.find();
-    fs.appendFile('file/backup.txt',`>>>>USUARIOS ${new Date()}<<<<< \n ${users}`, (error) => {if (error) { throw error;}});
+    const hclincia = await Hclinicas.find();
+    fs.appendFile('file/backup.txt', `>>>>HCLINICAS ${new Date()}<<<<< \n ${hclincia}`, (error) => { if (error) { throw error; } });
+    const paciente = await Paciente.find();
+    fs.appendFile('file/backup.txt', `>>>>PACIENTES ${new Date()}<<<<< \n ${paciente}`, (error) => { if (error) { throw error; } });
+    const citas = await Citas.find();
+    fs.appendFile('file/backup.txt', `>>>>CITAS ${new Date()}<<<<< \n ${citas}`, (error) => { if (error) { throw error; } });
+    const entidades = await Entidad.find();
+    fs.appendFile('file/backup.txt', `>>>>ENTIDADES ${new Date()}<<<<< \n ${entidades}`, (error) => { if (error) { throw error; } });
+    const facturas = await Factura.find();
+    fs.appendFile('file/backup.txt', `>>>>FACTURAS ${new Date()}<<<<< \n ${facturas}`, (error) => { if (error) { throw error; } });
+    const medicos = await Medicos.find();
+    fs.appendFile('file/backup.txt', `>>>>MEDICOS ${new Date()}<<<<< \n ${medicos}`, (error) => { if (error) { throw error; } });
+    const procedimientos = await Procedimientos.find();
+    fs.appendFile('file/backup.txt', `>>>>PROCEDIMIENTOS ${new Date()}<<<<< \n ${procedimientos}`, (error) => { if (error) { throw error; } });
+    const tarifas = await Tarifas.find();
+    fs.appendFile('file/backup.txt', `>>>>TARIFAS ${new Date()}<<<<< \n ${tarifas}`, (error) => { if (error) { throw error; } });
+    const users = await Users.find();
+    fs.appendFile('file/backup.txt', `>>>>USUARIOS ${new Date()}<<<<< \n ${users}`, (error) => { if (error) { throw error; } });
 
-    req.flash('login','backup Creado');
+    req.flash('login', 'backup Creado');
     res.redirect('/backup');
 });
 
