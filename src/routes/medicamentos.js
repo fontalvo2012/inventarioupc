@@ -6,7 +6,9 @@ const Cie10=require('../model/cie10');
 var nodemailer = require('nodemailer');
 
 var transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: {
       user: 'citasorldelcaribe@gmail.com',
       pass: 'otorrinolaringologia2'
