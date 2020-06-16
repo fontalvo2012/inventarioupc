@@ -1,0 +1,421 @@
+
+<style>
+    canvas {
+        width: 300px;
+        height: 300px;
+        background-color: #fff;
+    }
+    .carta {
+        font-size: 14px;
+    }
+
+    .image {
+        background-image: url('/img/agua_alfredo.png');
+        background-repeat: repeat-y;
+        background-size: 500px;
+        background-position-x: center;
+        opacity: 0.8;
+    }
+</style>
+
+
+<div class="row">
+    <div class="col-sm-12 border"><canvas id="pizarra"></canvas></div>    
+</div>
+<div class="row">
+    <div class="col-sm-2">
+        <button onclick="guardarFirma()"> ver firma</button>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    //======================================================================
+    // VARIABLES
+    //======================================================================
+    let miCanvas = document.querySelector('#pizarra');
+    let lineas = [];
+    let correccionX = 0;
+    let correccionY = 0;
+    let pintarLinea = false;
+
+    let posicion = miCanvas.getBoundingClientRect()
+    correccionX = posicion.x;
+    correccionY = posicion.y;
+
+    miCanvas.width = 300;
+    miCanvas.height = 300;
+
+    //======================================================================
+    // FUNCIONES
+    //======================================================================
+    function guardarFirma() {        
+        var img = miCanvas.toDataURL("image/png");
+        var image = new Image();
+        image.src = img;
+        console.log(image);
+        document.getElementById('firma').appendChild(image);
+    }
+    
+    function empezarDibujo() {
+        pintarLinea = true;
+        lineas.push([]);
+    };
+
+    /**
+     * Funcion dibuja la linea
+     */
+    function dibujarLinea(event) {
+        event.preventDefault();
+        if (pintarLinea) {
+            let ctx = miCanvas.getContext('2d')
+            // Estilos de linea
+            ctx.lineJoin = ctx.lineCap = 'round';
+            ctx.lineWidth = 1;
+            // Color de la linea
+            ctx.strokeStyle = '#000';
+            // Marca el nuevo punto
+            let nuevaPosicionX = 0;
+            let nuevaPosicionY = 0;
+            if (event.changedTouches == undefined) {
+                // Versión ratón
+                nuevaPosicionX = event.layerX;
+                nuevaPosicionY = event.layerY;
+            } else {
+                // Versión touch, pantalla tactil
+                nuevaPosicionX = event.changedTouches[0].pageX - correccionX;
+                nuevaPosicionY = event.changedTouches[0].pageY - correccionY;
+            }
+            // Guarda la linea
+            lineas[lineas.length - 1].push({
+                x: nuevaPosicionX,
+                y: nuevaPosicionY
+            });
+            // Redibuja todas las lineas guardadas
+            ctx.beginPath();
+            lineas.forEach(function (segmento) {
+                ctx.moveTo(segmento[0].x, segmento[0].y);
+                segmento.forEach(function (punto, index) {
+                    ctx.lineTo(punto.x, punto.y);
+                });
+            });
+            ctx.stroke();
+        }
+    }
+
+    /**
+     * Funcion que deja de dibujar la linea
+     */
+    function pararDibujar() {
+        pintarLinea = false;
+    }
+
+    //======================================================================
+    // EVENTOS
+    //======================================================================
+
+    // Eventos raton
+    miCanvas.addEventListener('mousedown', empezarDibujo, false);
+    miCanvas.addEventListener('mousemove', dibujarLinea, false);
+    miCanvas.addEventListener('mouseup', pararDibujar, false);
+
+    // Eventos pantallas táctiles
+    miCanvas.addEventListener('touchstart', empezarDibujo, false);
+    miCanvas.addEventListener('touchmove', dibujarLinea, false);
+
+</script>
+<a href="#" class="btn btn-primary btn-sm" onclick="ImprimirHc()"><i class="fas fa-print"
+        style="font-size: 20px;"></i></a>
+<div class="carta border padre p-5 m-0" id="imp">
+
+    <div class="row">
+        <div class="col-sm-12"> <img src="/img/alfredo_logo.png" alt="" width="300"> </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8"></div>
+        <div class="col-sm-4">
+            Impresion 04 JUN 2020
+        </div>
+    </div>
+    <div class="row pt-2 pb-2">
+        <div class="col-sm-12">
+            Fecha: 04/06/2020 <br>
+            PACIENTE: NICOLAS DE JESUS MENDOZA PEREZ <br>
+            IDENTIFICACION: TI 98122469662 <br>
+        </div>
+    </div>
+    <div class="row pt-2 pb-2">
+        <div class="col-sm-12">
+            CONSENTIMIENTO INFORMADO - CIRUGIA PLASTICA FACIAL <br>
+            <p style="text-align: justify;">CONSENTIMIENTO INFORMADO - CIRUGIA PLASTICA FACIAL
+                Es importante que lea esta información de forma cuidadosa y completa. Por favor, ponga sus iniciales en
+                cada página,
+                indicando así que ha leído la página, y firme el consentimiento para la cirugía propuesta por su
+                cirujano.</p>
+        </div>
+    </div>
+    <div class="row pt-2 pb-2 image">
+        <div class="col-sm-12">
+            <b>INTRODUCCION </b> <br>
+            <p style="text-align: justify;" style="background-image: url('/img/agua_alfredo.png');">
+                La CIRUGIA PLASTICA FACIAL son procedimientos quirúrgico que modifican: la RINOPLASTIA (forma de la
+                nariz, y
+                tabique y algunos problemas respiratorios), BLEFAROPLASTIA (parpados), FRONTOPLASTIA (arrugas
+                frontales),
+                ELEVACION DE COLA DE CEJA, TEMPOROPLASTIA (patas de gallina), OTOPLASTIA (forma y separación de orejas),
+                RITIDOPLASTIA CERVICOFACIAL (rejuvenecimiento de tercio inferior facial y cuello), CERVICOPLASTIA
+                (rejuvenecimiento de cuello), LIPOSUCCIÓN DE PAPADA ( aspiración con cánula de grasa del cuello),
+                BICHECTOMIA
+                (retiro de bosas de bichat de mejillas), MENTOPLASTIA (colocación de prótesis de mentón) , AUMENTO DE
+                LABIOS Y
+                SURCOS CON ACIDO HIALURONICO, MANEJO DE LINEAS DE EXPRESION CON GRASA AUTOLOGA, TOXINA
+                BOTULINICA, ELLANSE, HILOS DE SUSPENSION FACIALES, entre otros.
+                La intervención se realiza bajo anestesia general o con anestesia local y sedación según la intervención
+                a realizar. El
+                cirujano incide y modela las estructuras (piel, bolsas grasas, huesos, tejidos blandos, fascia, músculos
+                y
+                cartílagos) para conseguir la forma deseada. En ocasiones se realizan, incisiones internas y externas de
+                acuerdo a cada
+                caso en particular. Para dar forma o sostén es frecuente que se utilicen suturas, injertos de diferentes
+                tejidos del propio
+                paciente (cartílago septal, de oreja o costal, hueso, fascia, sangre o sus derivados) y más raramente,
+                materiales
+                sintéticos aprobados por los entes de vigilancia y control científico (INVIMA) (ej. Mentoplastia).
+                Después de la intervención se podría colocar si la situación o cirugía lo amerita vendajes compresivos,
+                taponamiento
+                nasal si persiste sangrado en cuyo caso se deja dos o tres días. Así mismo son cambiados periódicamente
+                durante su
+                evolución posquirúrgica por el médico tratante.
+                Es habitual el edema postoperatorio y la presencia de equimosis (moretones).
+                No se puede emitir un juicio sobre el resultado de una cirugía facial hasta que no hayan transcurrido
+                varios meses,
+                incluso hasta 18 meses. Este es el tiempo que precisan los tejidos para estabilizarse y las cicatrices
+                para realizar su
+                proceso de maduración.
+                Si en alguna ocasión, ya sea por alteraciones anatómicas iniciales, trastornos en la cicatrización,
+                acúmulos de material
+                sanguíneo, traumatismos postoperatorios, entre otros, se pueden presentar asimetrías o irregularidades
+                en el contorno
+                facial, que pueden hacer necesario una cirugía complementaria o retoque quirúrgico que en cualquier caso
+                no se
+                realizará antes de que las condiciones del paciente y sus tejidos sean optimas y seguras y NO generaran
+                gastos de
+                honorarios de cirujano plástico facial y el paciente solo debe cubrir los costos hospitalarios y
+                asociados que se requieran. <br><br>
+                <b>RIESGOS DE LA CIRUGIA PLASTICA FACIAL</b> <br><br>
+                Cualquier procedimiento quirúrgico entraña un cierto grado de riesgo y es importante que usted comprenda
+                los riesgos
+                asociados a la cirugia. La decisión individual de someterse a una intervención quirúrgica se basa en la
+                comparación del
+                riesgo con el beneficio potencial. Aunque la mayoría de los pacientes no experimentan las siguientes
+                complicaciones,
+                usted debería discutir cada una de ellas con su cirujano plástico facial para asegurarse de que
+                comprende los riesgos,
+                complicaciones potenciales y consecuencias de la cirugia o procedimiento. <br>
+                Sangrado. Es posible, que se presente un episodio de sangrado durante o después de la cirugía. Si se
+                desarrolla
+                un sangrado postoperatorio, puede requerir tratamiento o cirugía de urgencia y pueden retrasar la
+                curación y/o causar
+                cicatrización excesiva. <br>
+                Infección. La infección después de la cirugí
+                adicional que incluye antibióticos y hasta hospitalizacion cuyos costos seran asumidos por el paciente
+                y/o seguro
+                medico según las condiciones de su contrato. Cicatrización. Aunque se espera una buena curación de la
+                herida,
+                pueden darse cicatrices anormales tanto en los tejidos superficiales como en los tejidos profundos, que
+                pueden ser de
+                diferente color al de la piel circundante. Existe la posibilidad de marcas visibles en las áreas
+                suturadas o pequeños
+                quistes cutáneos. Pueden necesitarse tratamientos adicionales para tratar la cicatrización anormal que
+                seran cubiertos
+                por el paciente o su poliza de seguro segùn su contratación. Asimetría. La cara humana es asimétrica
+                normalmente
+                entre sus dos mitades y puede persistir la variación entre los dos lados después de una cirugia facial.
+                Dolor
+                crónico. Un dolor de forma crónica tras una cirugia facial es muy infrecuente pero se puede presentar.
+                Alteraciones
+                de la piel. Las enfermedades y el cáncer de piel pueden desarrollarse independientemente de que se haya
+                realizado
+                cirugía facial ya que esta no influye en la misma. Resultado insatisfactorio. Existe la posibilidad de
+                un resultado
+                insatisfactorio en la cirugía facial a pesar de ser realizados todos los procedimientos adecuadamente
+                por parte de su
+                cirujano plastico facial, como alteraciones en simetria, función, cicatrizacion de la herida, o
+                altercion de sensibilidad,
+                entre otras descritas en literatura medica. De forma infrecuente es necesario realizar cirugía adicional
+                para mejorar los
+                resultados. Cuyos costos hospitalarios y medicos son responsabilidad del paciente al igual que otros
+                procedimientos
+                quirúrgicos adicionales pueden ser necesarios y En ningun caso se generan costos por honorarios de su
+                cirujano
+                plastico facial inicial. Reacciones alérgicas. En casos raros se han descrito alergias locales al
+                vendaje, material de
+                sutura o preparados tópicos. Las reacciones sistémicas, que son más serias, pueden ocurrir por
+                medicaciones utilizadas
+                durante la cirugía o prescritas posteriormente. Las reacciones alérgicas pueden requerir tratamiento
+                adicional.Si usted
+                sufre alergias conocidas es necesario que informe su médico y a todo el personal médico. Cicatrización
+                retardada.
+                Existe la posibilidad de apertura de la herida o retraso en la cicatrización. Efectos a largo plazo.
+                Pueden ocurrir
+                alteraciones subsecuentes en el aspecto facial o nasal como resultado del envejecimiento, pérdida o
+                ganancia de peso,
+                exposición al sol, u otras circunstancias no relacionadas con la cirugía. Anestesia. Tanto la anestesia
+                local como la
+                general implican un riesgo. Existe la posibilidad de complicaciones, lesiones e incluso desenlace
+                critico, por cualquier
+                forma de anestesia o sedación quirúrgica. Información más detallada le será facilitada por el propio
+                equipo de
+                anestesiólogos, que así mismo, recabarán el correspondiente consentimiento escrito.SEGURO DE SALUDLa
+                mayoría
+                de las compañías de seguros sanitarios excluyen la cobertura de intervenciones de cirugía estética y de
+                cualquier
+                complicación que pudiera derivarse de la cirugía. Por favor, revise detenidamente las condiciones de su
+                póliza de
+                seguro sanitario.ASPECTOS PARTICULARESA ser descritos para cada paciente en atención a ciertos
+                antecedentes
+                que hagan más especial su caso.RESPONSABILIDADES ECONOMICASEl costo de la cirugía resulta de diversos
+                cargos por servicios prestados. El total incluye los honorarios del cirujano, el costo de los implantes
+                y material quirúrgico,
+                anestesia, y posibles cargos del hospital intraoperatorio, dependiendo de dónde se realice la cirugía
+                esta relacion de costo puede variar de comun acuerdo entre las partes y seria anotada al final de este
+                consentimiento. Si el costo de la cirugía está cubierto por un seguro, usted puede ser responsable de
+                pagos adicionales,
+                deducciones y cargos no cubiertos. Puede haber costos adicionales si se dan complicaciones derivadas de
+                la cirugía.
+                Los cargos por cirugía complementria, retoques o cirugía con
+                corren a cargo del paciente.RENUNCIALos documentos de consentimiento informado se emplean para comunicar
+                información acerca del tratamiento quirúrgico propuesto para una situación determinada, así como para
+                mostrar los
+                riesgos y formas alternativas de tratamiento. El proceso de consentimiento informado pretende definir
+                los principios para
+                dar a conocer los riesgos, que generalmente satisfará las necesidades de la mayoría de los pacientes en
+                la mayoría de
+                las circunstancias.Sin embargo, no debe considerarse que los documentos de consentimiento informado
+                incluyan todos
+                los aspectos sobre otros métodos de tratamiento o riesgos posibles. Su cirujano plástico facial puede
+                proporcionarle
+                información adicional o diferente, basada en todos los hechos de su caso particular y en el estado del
+                conocimiento
+                médico.Los documentos de consentimiento informado no pretenden definir o servir como el modelo del
+                cuidado médico.
+                Éste será determinado en base a todos los hechos involucrados en un caso individual, y está sujeto a
+                cambios, puesto
+                que el conocimiento científico y la tecnología avanzan, y los modelos de práctica evolucionan."Sin
+                embargo, no debe
+                considerarse que los documentos donde se deja constancia del consentimiento informado del paciente
+                incluyan todos y
+                cada uno de los aspectos sobre los métodos de tratamiento o diagnósticos o los riesgos posibles, pues
+                aquello es
+                imposible debido a que existen riesgos que ocurren con menor frecuencia y su materialización no depende
+                de la
+                actividad del profesional asistencial; el profesional que lo atiende puede proporcionarle de manera
+                verbal información
+                adicional o distinta acerca de los eventuales riesgos que puedan ocurrir de acuerdo con las condiciones
+                particulares del
+                paciente y de la ciencia médica".Es importante que lea cuidadosamente la información anterior y hayan
+                sido
+                respondidas todas sus preguntas antes de que firme este consentimiento.CONSENTIMIENTO PARA CIRUGIA
+                1. Por la presente autorizo al DR. ALFREDO LUIS MENDOZA SALAZAR y a los ayudantes que sean
+                seleccionados para realizar el procedimiento denominado :
+                ________________________________________________________________________________________________
+                ________________________________________________________________________________________________
+                _____________________________________________He recibido y se me ha explicado el documento :
+                "Consentimiento informado para cirugia PLASTICA FACIAL ".2. Soy consciente de que durante el curso de la
+                intervención y el tratamiento médico o anestesia, pueden darse situaciones imprevistas que necesiten
+                procedimientos
+                diferentes a los propuestos. Por la presente autorizo al cirujano citado y a sus ayudantes a realizar
+                estos otros
+                procedimientos en el ejercicio de su juicio profesional necesario y deseable. La autorización que otorga
+                este párrafo
+                incluirá cualquier situación que requiera tratamiento y que no fuera conocida por el cirujano en el
+                momento de iniciar el
+                procedimiento.3. Doy el consentimiento para la administración de los anestésicos que se consideren
+                necesarios o
+                aconsejables. Comprendo que cualquier tipo de anestesia entraña un riesgo y la posibilidad de
+                complicaciones, lesiones
+                y a veces situaciones mas criticas sin perjuicio de la información más detallada que pueda facilitar el
+                propio equipo de
+                anestesiólogos, y a quien otorgaré el correspondiente consentimiento escrito.4. Estoy de acuerdo en que
+                no se me ha
+                dado garantía por parte de nadie en cuanto al resultado que puede ser obtenido.5. Me ha sido explicado
+                de forma
+                comprensible: el(los) tratamiento(s) citado(s) anteriormente o procedimientos a realizar, los
+                procedimientos alternativos
+                o métodos de tratamiento, los riesgos del procedimiento o tratamiento propuesto.Doy consentimiento a
+                dicha(s)
+                intervención(es) y, en el caso de existir alguna modificación de la técnica quirúrgica a emplear, así
+                como alguna
+                modificación en la indicación primaria surgida durante el transcurso de dicha intervención, autorizo a
+                para que pueda variar lo anteriormente expuesto, debiendo dichos Médicos informar a mis familiares, o a
+                ___________________________, de las referidas modificaciones durante la intervención quirúrgica o
+                después de ésta,
+                si la urgencia así lo requiriese.
+                AUTORIZACION DE USO DE IMAGEN SOBRE FOTOGRAFIAS Y VIDEOS.Mediante el
+                presente
+                autorizo para ser fotografiado y/o filmación de la(s) intervención(es) o procedimiento(s) que se van a
+                realizar con fines
+                médicos, científicos o educativos, puesto que se va a mantener mi dignidad como paciente. Autorizo al
+                Dr. Alfredo Luis
+                Mendoza Salazar para el uso informativo de estas imágenes para poder ser publicadas en: su página web y
+                sus perfiles
+                en redes sociales, filmaciones destinadas a difusión informativa, fotografías para revistas o
+                publicaciones de ámbito
+                relacionado con su sector médico, manteniendo mi dignidad como paciente.SI _________ NO
+                _________Igualmente
+                he sido informado, y me doy plenamente por enterado, de que el presente consentimiento podrá ser
+                revocado por el
+                abajo firmante en cualquier momento, así como que, en su caso, dicha revocación deberá hacerse por
+                escrito.Así pues,
+                doy el consentimiento para el tratamiento o procedimiento, estando satisfecho/a con la información que
+                se me ha
+                facilitado.Ciudad _______________________ fecha _______________________________
+                ______________________________ _______________________________Firma del Paciente
+                Firma del Cirujano Plástico FacialI.D #
+            </p>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 border"><div id="firma"></div></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <b>TRATAMIENTOS ALTERNATIVOS </b><br>
+            Si existen o no formas alternativas de tratamiento quirurgico o no quirúrgico reconocidas por la literatura
+            médica deben
+            ser informadas por el medico o preguntadas por el paciente.
+        </div>
+    </div>
+ 
+    <div class="row mt-5">
+        <div class="col-sm-6">
+            <img src="/img/alfredo_pie.png" alt="" width="1000">
+        </div>
+    </div>
+
+</div>
+
+<!-- Button trigger modal -->
+
+
+

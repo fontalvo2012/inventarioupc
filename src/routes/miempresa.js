@@ -243,6 +243,9 @@ router.get('/descargar_backup', (req, res) => {
         }
     });
 })
+router.get('/acuerdo',checkAuthentication,(req,res)=>{
+    res.render('empresa/acuerdo');
+})
 
 router.post('/backup', async (req, res) => {
     fs.unlinkSync('file/backup.txt');

@@ -16,8 +16,15 @@ function checkAuthentication(req,res,next){
 
 router.post('/addentidades',checkAuthentication,async(req,res)=>{
     const {nit,rsocial,email,direccion,telefono,regimen,tipoid,cdeps,contrato,vcap,tfac} = req.body;
-    const newEntidad= new Entidad({nit,rsocial,email,direccion,telefono,regimen,tipoid,cdeps,contrato,vcap,tfac});
-    await newEntidad.save();
+    const newEntidad= new Entidad({nit:nit.trim(),rsocial,email,direccion,telefono,regimen,tipoid,cdeps,contrato,vcap,tfac});
+    const entidad=await Entidad.findOne({nit:nit.trim()});
+    if (entidad) {
+        req.flash('login',`Una entidad ya fue registrada con el Nit: ${nit}`);
+    }else{        
+        await newEntidad.save();
+        req.flash('success',`Se creo la entidad`);
+    }
+   
     res.redirect('/addentidades');
 });
 

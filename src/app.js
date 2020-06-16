@@ -38,6 +38,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use((req,res,next)=>{
     app.locals.login=req.flash('login');
+    app.locals.success=req.flash('success');
     app.locals.user=req.user;
     next();
 }) 
