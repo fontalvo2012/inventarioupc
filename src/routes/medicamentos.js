@@ -17,7 +17,7 @@ router.post('/mail',checkAuthentication,async(req,res)=>{
     const {contenido,mail}=req.body
    
     var mailOptions = {
-        from: 'programadoresudc@gmail.com',
+        from: 'citasorldelcaribe@gmail.com',
         to: mail,
         subject: 'Historia Clinica',
         html: `<b>Descargar HC aqui: </b><a href="http://159.89.144.24:4400/imprimirhc2/${contenido}">HC</a><br>
@@ -27,7 +27,7 @@ router.post('/mail',checkAuthentication,async(req,res)=>{
       
       transporter.sendMail(mailOptions, function(error, info){
         if (error) {
-          console.log('error');
+          console.log('error',error);
           res.send('0');
         } else {
           console.log('Email sent: ' + info.response);
