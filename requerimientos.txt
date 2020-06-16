@@ -1,0 +1,19 @@
+
+	.::Facturacion::.
+
++)Cambiar la NavBar.(ok)
++)Quitar Home(ok)
++)Login(ok)
++)Separar Item de consulta de item 
++)Agregar Filtro consulta de item
++)Separa Registro de entidad de consulta de entidad
++)consulta pacientes(ok)
++)Filtro pacientes(ok)
++)Actualizar pacientes(telefono,email,direccion)
++)razon de cita
++)mostrar citas
++)filtrar citas
++)cambiar fecha de citas
++)cancelar citas
++)cambiar medico de cita
++)formulario de atencion de citas
