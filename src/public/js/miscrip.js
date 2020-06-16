@@ -119,6 +119,41 @@ function MostarUpdatePaciente(cedula){
     }
   });
 }
+function MostarInputPaciente(){ 
+  $.ajax({
+    url: '/ajaxpaciente',
+    type: 'POST',
+    datatype: 'json',
+    data: {
+      cedula: $('#cedula').val()
+    },
+    success: (data) => {    
+      $('#td').val(data.td);
+      $('#cedula').val(data.cedula);
+      $('#nombre').val(data.nombre);
+      $('#snombre').val(data.snombre);
+      $('#apellido').val(data.apellido);
+      $('#sapellido').val(data.sapellido);
+      $('#sexo').val(data.sexo);
+      $('#nacimiento').val(data.nacimiento);
+      $('#edad').val(data.edad);
+      $('#unidad').val(data.unidad);
+      $('#ecivil').val(data.ecivil);
+      $('#direccion').val(data.direccion);
+      $('#telefono').val(data.telefono);
+      $('#email').val(data.email);
+      $('#nombre_acom').val(data.nombre_acom);
+      $('#parentesco').val(data.parentesco);
+      $('#tel_acom').val(data.tel_acom);
+      $('#ciudad').val(data.ciudad);
+      $('#cdm').val(data.cdm);
+      $('#departamento').val(data.departamento);
+      $('#cddep').val(data.cddep);
+      $('#zresidencial').val(data.zresidencial);
+      $('#id').val(data._id);    
+    }
+  });
+}
 
 
 function consultarEntidad() {

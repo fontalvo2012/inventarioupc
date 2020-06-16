@@ -7,8 +7,7 @@
 </style>
 
 <div class="row">
-    <div class="col-sm-4 border"><canvas id="pizarra"></canvas></div>
-    <div class="col-sm-4 border"><div id="firma"></div></div>
+    <div class="col-sm-12 border"><canvas id="pizarra"></canvas></div>    
 </div>
 <div class="row">
     <div class="col-sm-2">
@@ -107,7 +106,8 @@
     miCanvas.addEventListener('mouseup', pararDibujar, false);
 
     // Eventos pantallas táctiles
-    miCanvas.addEventListener('touchstart', empezarDibujo, false);
-    miCanvas.addEventListener('touchmove', dibujarLinea, false);
+    miCanvas.addEventListener('touchstart', empezarDibujo, true);
+    miCanvas.addEventListener('touchmove', dibujarLinea, true);
+    miCanvas.addEventListener('touchend', pararDibujar, true);
 
 </script>

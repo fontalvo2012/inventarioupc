@@ -1,10 +1,10 @@
-
 <style>
     canvas {
-        width: 300px;
-        height: 300px;
+        width: 800px;
+        height: 200px;
         background-color: #fff;
     }
+
     .carta {
         font-size: 14px;
     }
@@ -18,131 +18,41 @@
     }
 </style>
 
-
-<div class="row">
-    <div class="col-sm-12 border"><canvas id="pizarra"></canvas></div>    
-</div>
-<div class="row">
-    <div class="col-sm-2">
-        <button onclick="guardarFirma()"> ver firma</button>
+  <div class="row">
+        <div class="col-sm-12 border"><canvas id="pizarra"></canvas></div>       
     </div>
-</div>
+    <div class="row">
+        <div class="col-sm-2">
+            <button onclick="guardarFirma()" class="btn btn-info btn-sm"> firmar</button>
+        </div>
+        <div class="col-sm-2">
+            <button onclick=" clearcanvas();" class="btn btn-warning btn-sm"> Borrar</button>
+        </div>
+    </div> 
+
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
-<script>
-    //======================================================================
-    // VARIABLES
-    //======================================================================
-    let miCanvas = document.querySelector('#pizarra');
-    let lineas = [];
-    let correccionX = 0;
-    let correccionY = 0;
-    let pintarLinea = false;
 
-    let posicion = miCanvas.getBoundingClientRect()
-    correccionX = posicion.x;
-    correccionY = posicion.y;
-
-    miCanvas.width = 300;
-    miCanvas.height = 300;
-
-    //======================================================================
-    // FUNCIONES
-    //======================================================================
-    function guardarFirma() {        
-        var img = miCanvas.toDataURL("image/png");
-        var image = new Image();
-        image.src = img;
-        console.log(image);
-        document.getElementById('firma').appendChild(image);
-    }
-    
-    function empezarDibujo() {
-        pintarLinea = true;
-        lineas.push([]);
-    };
-
-    /**
-     * Funcion dibuja la linea
-     */
-    function dibujarLinea(event) {
-        event.preventDefault();
-        if (pintarLinea) {
-            let ctx = miCanvas.getContext('2d')
-            // Estilos de linea
-            ctx.lineJoin = ctx.lineCap = 'round';
-            ctx.lineWidth = 1;
-            // Color de la linea
-            ctx.strokeStyle = '#000';
-            // Marca el nuevo punto
-            let nuevaPosicionX = 0;
-            let nuevaPosicionY = 0;
-            if (event.changedTouches == undefined) {
-                // Versión ratón
-                nuevaPosicionX = event.layerX;
-                nuevaPosicionY = event.layerY;
-            } else {
-                // Versión touch, pantalla tactil
-                nuevaPosicionX = event.changedTouches[0].pageX - correccionX;
-                nuevaPosicionY = event.changedTouches[0].pageY - correccionY;
-            }
-            // Guarda la linea
-            lineas[lineas.length - 1].push({
-                x: nuevaPosicionX,
-                y: nuevaPosicionY
-            });
-            // Redibuja todas las lineas guardadas
-            ctx.beginPath();
-            lineas.forEach(function (segmento) {
-                ctx.moveTo(segmento[0].x, segmento[0].y);
-                segmento.forEach(function (punto, index) {
-                    ctx.lineTo(punto.x, punto.y);
-                });
-            });
-            ctx.stroke();
-        }
-    }
-
-    /**
-     * Funcion que deja de dibujar la linea
-     */
-    function pararDibujar() {
-        pintarLinea = false;
-    }
-
-    //======================================================================
-    // EVENTOS
-    //======================================================================
-
-    // Eventos raton
-    miCanvas.addEventListener('mousedown', empezarDibujo, false);
-    miCanvas.addEventListener('mousemove', dibujarLinea, false);
-    miCanvas.addEventListener('mouseup', pararDibujar, false);
-
-    // Eventos pantallas táctiles
-    miCanvas.addEventListener('touchstart', empezarDibujo, false);
-    miCanvas.addEventListener('touchmove', dibujarLinea, false);
-
-</script>
 <a href="#" class="btn btn-primary btn-sm" onclick="ImprimirHc()"><i class="fas fa-print"
         style="font-size: 20px;"></i></a>
 <div class="carta border padre p-5 m-0" id="imp">
@@ -394,10 +304,7 @@
             </p>
 
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12 border"><div id="firma"></div></div>
-    </div>
+    </div>            
     <div class="row">
         <div class="col-sm-12">
             <b>TRATAMIENTOS ALTERNATIVOS </b><br>
@@ -406,8 +313,13 @@
             ser informadas por el medico o preguntadas por el paciente.
         </div>
     </div>
- 
-    <div class="row mt-5">
+       <div class="row">
+        <div class="col-sm-12 border">
+            <div  id="firma"></div>
+        </div>
+    </div> 
+  
+    <div class="row">
         <div class="col-sm-6">
             <img src="/img/alfredo_pie.png" alt="" width="1000">
         </div>
@@ -416,6 +328,3 @@
 </div>
 
 <!-- Button trigger modal -->
-
-
-
