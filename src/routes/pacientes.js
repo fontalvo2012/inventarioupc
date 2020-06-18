@@ -44,7 +44,7 @@ router.post('/ajaxpaciente',checkAuthentication,async(req,res)=>{
 });
 
 router.get('/consultarpacientes',checkAuthentication,async(req,res)=>{
-    const valores=await Paciente.find().lean();
+    const valores=await Paciente.find().sort('nombre').lean();
     const medicos=await Medico.find().lean();
     res.render('pacientes/consultar',{valores,medicos});
 });

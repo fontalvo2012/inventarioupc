@@ -4307,10 +4307,10 @@ plena = `
     }
 ]
 `;
-var ids=[];
-var sirujias=[];
-var mayor=0;
-var ind=0;
+var ids = [];
+var sirujias = [];
+var mayor = 0;
+var ind = 0;
 function combertirIss(ob) {
     var obj = JSON.parse(ob);
     array = [];
@@ -4321,7 +4321,7 @@ function combertirIss(ob) {
 }
 
 function consultarTarifas() {
-    var entidad = $('#entidad').val(); 
+    var entidad = $('#entidad').val();
     $.ajax({
         url: '/consultarTarifas',
         type: 'POST',
@@ -4329,104 +4329,104 @@ function consultarTarifas() {
         data: {
             entidad: entidad
         },
-        success: (data) => {               
+        success: (data) => {
             $(".completarcups").autocomplete({
                 source: data
-            });          
+            });
         }
     });
 }
 
 function costoCirujia(uvr) {
-    var valor=0;
-    if (uvr <= 20) { valor=12890;};
-    if (uvr >= 21 && uvr <=30) { valor=26790;};
-    if (uvr >= 31 && uvr <=40) { valor=44270;};
-    if (uvr >= 41 && uvr <=50) { valor=55605;};
-    if (uvr >= 51 && uvr <=60) { valor=81175;};
-    if (uvr >= 61 && uvr <=70) { valor=96520;};
-    if (uvr >= 71 && uvr <=80) { valor=114830;};
-    if (uvr >= 81 && uvr <=90) { valor=129655;};
-    if (uvr >= 91 && uvr <=100) { valor=144645;};
-    if (uvr >= 101 && uvr <=110) { valor=148545;};
-    if (uvr >= 111 && uvr <=130) { valor=153075};   
-    if (uvr >= 131 && uvr <=150) { valor=186410;};
-    if (uvr >= 151 && uvr <=170) { valor=204700;};
-    if (uvr >= 171 && uvr <=200) { valor=246970;};
-    if (uvr >= 201 && uvr <=230) { valor=279405;};
-    if (uvr >= 231 && uvr <=260) { valor=318255;};
-    if (uvr >= 261 && uvr <=290) { valor=356455;};
-    if (uvr >= 291 && uvr <=320) { valor=401015;};
-    if (uvr >= 321 && uvr <=350) { valor=445560;};
-    if (uvr >= 351 && uvr <=380) { valor=471015;};
-    if (uvr >= 381 && uvr <=410) { valor=503460;};
-    if (uvr >= 411 && uvr <=450) { valor=548020;};
+    var valor = 0;
+    if (uvr <= 20) { valor = 12890; };
+    if (uvr >= 21 && uvr <= 30) { valor = 26790; };
+    if (uvr >= 31 && uvr <= 40) { valor = 44270; };
+    if (uvr >= 41 && uvr <= 50) { valor = 55605; };
+    if (uvr >= 51 && uvr <= 60) { valor = 81175; };
+    if (uvr >= 61 && uvr <= 70) { valor = 96520; };
+    if (uvr >= 71 && uvr <= 80) { valor = 114830; };
+    if (uvr >= 81 && uvr <= 90) { valor = 129655; };
+    if (uvr >= 91 && uvr <= 100) { valor = 144645; };
+    if (uvr >= 101 && uvr <= 110) { valor = 148545; };
+    if (uvr >= 111 && uvr <= 130) { valor = 153075 };
+    if (uvr >= 131 && uvr <= 150) { valor = 186410; };
+    if (uvr >= 151 && uvr <= 170) { valor = 204700; };
+    if (uvr >= 171 && uvr <= 200) { valor = 246970; };
+    if (uvr >= 201 && uvr <= 230) { valor = 279405; };
+    if (uvr >= 231 && uvr <= 260) { valor = 318255; };
+    if (uvr >= 261 && uvr <= 290) { valor = 356455; };
+    if (uvr >= 291 && uvr <= 320) { valor = 401015; };
+    if (uvr >= 321 && uvr <= 350) { valor = 445560; };
+    if (uvr >= 351 && uvr <= 380) { valor = 471015; };
+    if (uvr >= 381 && uvr <= 410) { valor = 503460; };
+    if (uvr >= 411 && uvr <= 450) { valor = 548020; };
     return valor;
 }
 function costoMateriales(uvr) {
-    var valor=0;
-    if (uvr <= 20) { valor=31000;};
-    if (uvr >= 21 && uvr <=30) { valor=32005;};
-    if (uvr >= 31 && uvr <=40) { valor=33110;};
-    if (uvr >= 41 && uvr <=50) { valor=45305;};
-    if (uvr >= 51 && uvr <=60) { valor=57410;};
-    if (uvr >= 61 && uvr <=70) { valor=82315;};
-    if (uvr >= 71 && uvr <=80) { valor=88610;};
-    if (uvr >= 81 && uvr <=90) { valor=95015;};
-    if (uvr >= 91 && uvr <=100) { valor=109205;};
-    if (uvr >= 101 && uvr <=110) { valor=123310;};
-    if (uvr >= 111 && uvr <=130) { valor=131115};   
-    if (uvr >= 131 && uvr <=150) { valor=140120;};
-    if (uvr >= 151 && uvr <=170) { valor=152910;};
+    var valor = 0;
+    if (uvr <= 20) { valor = 31000; };
+    if (uvr >= 21 && uvr <= 30) { valor = 32005; };
+    if (uvr >= 31 && uvr <= 40) { valor = 33110; };
+    if (uvr >= 41 && uvr <= 50) { valor = 45305; };
+    if (uvr >= 51 && uvr <= 60) { valor = 57410; };
+    if (uvr >= 61 && uvr <= 70) { valor = 82315; };
+    if (uvr >= 71 && uvr <= 80) { valor = 88610; };
+    if (uvr >= 81 && uvr <= 90) { valor = 95015; };
+    if (uvr >= 91 && uvr <= 100) { valor = 109205; };
+    if (uvr >= 101 && uvr <= 110) { valor = 123310; };
+    if (uvr >= 111 && uvr <= 130) { valor = 131115 };
+    if (uvr >= 131 && uvr <= 150) { valor = 140120; };
+    if (uvr >= 151 && uvr <= 170) { valor = 152910; };
     return valor;
 }
 function agregarirugia() {
 
-    var cc= $('#cc').val();
-    var entidad= $('#entidad').val();
-    var cups= $('#cups').val();
-    var uvr= $('#uvr').val();
-    var porc= $('#porc').val();
-    var Via= $('#via').val();
-    var medico= $('#medico').val();
-    var pr=0;
-    var cirujano=0;
-    var anestesiologo=0;
-    var ayudante=0;  
+    var cc = $('#cc').val();
+    var entidad = $('#entidad').val();
+    var cups = $('#cups').val();
+    var uvr = $('#uvr').val();
+    var porc = $('#porc').val();
+    var Via = $('#via').val();
+    var medico = $('#medico').val();
+    var pr = 0;
+    var cirujano = 0;
+    var anestesiologo = 0;
+    var ayudante = 0;
 
-    if(parseInt(uvr)>mayor){       
-        if(sirujias[0]){
-            if (sirujias[ind].Via==Via) {
-                sirujias[ind].pr=65;
-                sirujias[ind].total= (sirujias[ind].cirujano+sirujias[ind].anestesiologo+sirujias[ind].ayudante+sirujias[ind].quirofano+sirujias[ind].materiales)*0.65;
-            }else{
-                sirujias[ind].pr=75;
-                sirujias[ind].total= (sirujias[ind].cirujano+sirujias[ind].anestesiologo+sirujias[ind].ayudante+sirujias[ind].quirofano+sirujias[ind].materiales)*0.75;
-            }           
-        }         
-        mayor=parseInt(uvr);
-        pr= 100;
-        ind=sirujias.length;
-    }else{
-        if (sirujias[ind].Via==Via) {
-            pr=65;
-        }else{
-            pr=75;
-        }         
+    if (parseInt(uvr) > mayor) {
+        if (sirujias[0]) {
+            if (sirujias[ind].Via == Via) {
+                sirujias[ind].pr = 65;
+                sirujias[ind].total = (sirujias[ind].cirujano + sirujias[ind].anestesiologo + sirujias[ind].ayudante + sirujias[ind].quirofano + sirujias[ind].materiales) * 0.65;
+            } else {
+                sirujias[ind].pr = 75;
+                sirujias[ind].total = (sirujias[ind].cirujano + sirujias[ind].anestesiologo + sirujias[ind].ayudante + sirujias[ind].quirofano + sirujias[ind].materiales) * 0.75;
+            }
+        }
+        mayor = parseInt(uvr);
+        pr = 100;
+        ind = sirujias.length;
+    } else {
+        if (sirujias[ind].Via == Via) {
+            pr = 65;
+        } else {
+            pr = 75;
+        }
     }
-    cirujano=(parseInt(uvr)*1270)*parseInt(porc)/100+(parseInt(uvr)*1270);
-    anestesiologo=(parseInt(uvr)*960)*parseInt(porc)/100+(parseInt(uvr)*960);
-    ayudante=(parseInt(uvr)*360)*parseInt(porc)/100+(parseInt(uvr)*360);
-    var total=(cirujano+anestesiologo+ayudante+costoCirujia(uvr)+costoMateriales(uvr))*parseInt(pr)/100;
-    
-    var p={       
+    cirujano = (parseInt(uvr) * 1270) * parseInt(porc) / 100 + (parseInt(uvr) * 1270);
+    anestesiologo = (parseInt(uvr) * 960) * parseInt(porc) / 100 + (parseInt(uvr) * 960);
+    ayudante = (parseInt(uvr) * 360) * parseInt(porc) / 100 + (parseInt(uvr) * 360);
+    var total = (cirujano + anestesiologo + ayudante + costoCirujia(uvr) + costoMateriales(uvr)) * parseInt(pr) / 100;
+
+    var p = {
         cups,
         uvr,
         cirujano,
         anestesiologo,
         ayudante,
-        quirofano:costoCirujia(uvr),
-        materiales:costoMateriales(uvr),
+        quirofano: costoCirujia(uvr),
+        materiales: costoMateriales(uvr),
         Via,
         entidad,
         cc,
@@ -4436,38 +4436,38 @@ function agregarirugia() {
     }
     sirujias.push(p);
     $('#cups').val('');
-    $('#uvr').val('0');        
+    $('#uvr').val('0');
     $('#porc').val('0');
     verSirugias();
-  
+
 }
 
 
 function quitarItem(id) {
     sirujias.splice(id, 1);
-    var m=0;
-    var i=0;
+    var m = 0;
+    var i = 0;
     for (let index = 0; index < sirujias.length; index++) {
-      if (sirujias[index].uvr>m) {
-          m=sirujias[index].uvr;
-          i=index;
+        if (sirujias[index].uvr > m) {
+            m = sirujias[index].uvr;
+            i = index;
 
-      }        
-    }    
+        }
+    }
 
-    ind=i;
-    mayor=sirujias[ind].uvr;
-    sirujias[ind].total= (sirujias[ind].cirujano+sirujias[ind].anestesiologo+sirujias[ind].ayudante+sirujias[ind].quirofano+sirujias[ind].materiales);
-    sirujias[ind].pr=100;
+    ind = i;
+    mayor = sirujias[ind].uvr;
+    sirujias[ind].total = (sirujias[ind].cirujano + sirujias[ind].anestesiologo + sirujias[ind].ayudante + sirujias[ind].quirofano + sirujias[ind].materiales);
+    sirujias[ind].pr = 100;
     verSirugias();
 }
 
 function verSirugias() {
-    var cadena='';
-    var cont=0;
+    var cadena = '';
+    var cont = 0;
     $('#sir').val(JSON.stringify(sirujias));
     sirujias.forEach(element => {
-        cadena+=`             
+        cadena += `             
         <tr>
             <td>${cont}</td>
             <td>${element.cups}</td>
@@ -4488,8 +4488,8 @@ function verSirugias() {
 
 
 
-function consultarProcedimientos() {    
-    var entidad = $('#entidad').val();   
+function consultarProcedimientos() {
+    var entidad = $('#entidad').val();
     $.ajax({
         url: '/consultarProcedimientos',
         type: 'POST',
@@ -4497,29 +4497,29 @@ function consultarProcedimientos() {
         data: {
             entidad: entidad
         },
-        success: (data) => {             
+        success: (data) => {
             $("#cups").autocomplete({
                 source: data
-            });          
+            });
         }
     });
 }
 
-function consultarItemProcedimientos() {    
+function consultarItemProcedimientos() {
     var entidad = $('#entidad').val();
-    var cups=$('#cups').val().substr(0,6);  
+    var cups = $('#cups').val().substr(0, 6);
     $.ajax({
         url: '/consultaritemProcedimientos',
         type: 'POST',
         datatype: 'json',
         data: {
             entidad: entidad,
-            cups:cups
+            cups: cups
         },
-        success: (data) => {   
+        success: (data) => {
             $('#uvr').val(data.valor);
             $('#porc').val(data.porcentaje);
-                   
+
         }
     });
 }
@@ -4556,7 +4556,7 @@ function consultarItem2() {
             id: id.substr(0, 6),
             entidad: entidad
         },
-        success: (data) => {           
+        success: (data) => {
             item = data;
 
         }
@@ -4576,13 +4576,13 @@ function actualizarTarifa(id) {
             id: id,
             valor: valor
         },
-        success: (data) => {         
+        success: (data) => {
             consultarifas();
         }
     });
 }
 
-function borrarTarifa(id) {   
+function borrarTarifa(id) {
     $.ajax({
         url: '/borrartarifas',
         type: 'POST',
@@ -4590,15 +4590,15 @@ function borrarTarifa(id) {
         data: {
             id: id
         },
-        success: (data) => {       
+        success: (data) => {
             consultarifas();
         }
     });
 }
 
 
-function consultarifas(){
-    const issplena = JSON.parse(plena);  
+function consultarifas() {
+    const issplena = JSON.parse(plena);
     var entidad = $('#entidad').val();
     var tipo = $('#tipo').val();
     var cup = $('#cups').val();
@@ -4611,20 +4611,20 @@ function consultarifas(){
             entidad: entidad
         },
         success: (data) => {
-       
-            if(!data[0]){
-                $('#porc').css('display','block');
-                $('#btcrear').css('display','block');
-                $('#vcups').css('display','none');
-            }else{
-                $('#vcups').css('display','block');
-                $('#porc').css('display','none');
-                $('#btcrear').css('display','none');
-               
+
+            if (!data[0]) {
+                $('#porc').css('display', 'block');
+                $('#btcrear').css('display', 'block');
+                $('#vcups').css('display', 'none');
+            } else {
+                $('#vcups').css('display', 'block');
+                $('#porc').css('display', 'none');
+                $('#btcrear').css('display', 'none');
+
             }
             var cadena = '';
             data.forEach(element => {
-                if(cup == ''){
+                if (cup == '') {
                     if (element.tipo == tipo) {
                         cadena += ` 
                         <tr>
@@ -4638,8 +4638,8 @@ function consultarifas(){
                             </td>
                             <td><a href="#" class="btn btn-danger btn-sm" onclick="borrarTarifa('${element._id}')" ><i class='far fa-trash-alt' style='font-size:12px'></i></a></td>
                         </tr>`;
-                        }
-                }else{
+                    }
+                } else {
                     if (element.cups == cup) {
                         cadena += ` 
                         <tr>
@@ -4654,9 +4654,9 @@ function consultarifas(){
                             </td>
                             <td><a href="#" class="btn btn-danger btn-sm" onclick="borrarTarifa('${element._id}')" ><i class='far fa-trash-alt' style='font-size:12px'></i></a></td>
                         </tr>`;
-                        }
+                    }
                 }
-            
+
 
             });
             $('#vertarifas').html(cadena);
@@ -4669,12 +4669,12 @@ function ingresarTarifas() {
 
     const issplena = JSON.parse(plena);
     var porcentaje = $('#porcentaje').val();
-    var valor=0;
+    var valor = 0;
     var entidad = $('#entidad').val();
     issplena.forEach(item => {
-        valor=parseInt(item.valor);
-        if (item.tipo=='c') {
-           valor= parseInt(item.valor) + (parseInt(item.valor) * (porcentaje / 100))
+        valor = parseInt(item.valor);
+        if (item.tipo == 'c') {
+            valor = parseInt(item.valor) + (parseInt(item.valor) * (porcentaje / 100))
         }
         $.ajax({
             url: '/addTarifa',
@@ -4699,9 +4699,9 @@ function ingresarTarifas() {
                 f_procedimiento: item.f_procedimiento,
                 tipo: item.tipo,
                 forma: item.forma,
-                porcentaje:porcentaje
+                porcentaje: porcentaje
             },
-            success: (data) => {              
+            success: (data) => {
                 $('#progreso').html(`
             <div class="progress">
             <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="${(data.valor * 100) / 204}" aria-valuemin="0" aria-valuemax="100" style="width: ${(data.valor * 100) / 204}%"></div>
@@ -4730,7 +4730,7 @@ function all_usuario() {
                 fin: fin,
                 eps, eps
             },
-            success: (data) => {              
+            success: (data) => {
                 if (data == '0') {
                     $('#alert').html(` <div class="alert alert-warning" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> NO SE ENCONTRARON REGISTROS EN ESTE RANGO FECHA ${ini}=>${fin} </div>`);
                 } else {
@@ -4758,7 +4758,7 @@ function capita() {
                 fin: fin,
                 eps, eps
             },
-            success: (data) => {              
+            success: (data) => {
                 if (data == '0') {
                     $('#alert').html(`<div class="alert alert-warning" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> NO SE ENCONTRARON REGISTROS EN ESTE RANGO FECHA ${ini}=>${fin} </div>`);
                 } else {
@@ -4777,7 +4777,7 @@ function completMedicamentos() {
         url: '/ajaxMedicamentos',
         type: 'POST',
         datatype: 'json',
-        success: (data) => {           
+        success: (data) => {
             var array = [];
             data.forEach(element => {
                 array.push(element.medicamento);
@@ -4804,7 +4804,7 @@ function facturarEntidad() {
             fin: fin,
             entidad, entidad
         },
-        success: (data) => {        
+        success: (data) => {
             if (data == 'facturado') {
                 location.href = "/facturas";
             }
@@ -4883,7 +4883,7 @@ function tipoFacturarips() {
         data: {
             entidad: $('#entidad').val()
         },
-        success: (data) => {          
+        success: (data) => {
             if (data == '') {
                 $("#ripboton").html(`<button class="btn btn-warning btn-sm" id="all" onclick="all_usuario()">Crear</button>`);
             } else {
@@ -4905,7 +4905,7 @@ function ripsEventos() {
                 ffinal: $('#ffinal').val(),
                 entidad: $('#entidad').val(),
             },
-            success: (data) => {            
+            success: (data) => {
                 $('#alert').html(` <div class="alert alert-success" role="alert"><i class='fas fa-exclamation-triangle' style='font-size:24px'></i> RIPS CREADOS</div>`);
             }
         });
@@ -4923,7 +4923,7 @@ function verRips() {
         data: {
             entidad: $('#entidad').val()
         },
-        success: (data) => {        
+        success: (data) => {
             var cadena = '';
             data.forEach(element => {
                 cadena += `
@@ -4946,7 +4946,7 @@ function verRips() {
     });
 }
 
-function consultarPrefactura(opcion) {   
+function consultarPrefactura(opcion) {
     $.ajax({
         url: '/prefacturaitem',
         type: 'POST',
@@ -4958,9 +4958,9 @@ function consultarPrefactura(opcion) {
             opcion: opcion
         },
         success: (data) => {
-            var cadena = '';           
-            data.forEach(element => {               
-               agregarId(element.id);
+            var cadena = '';
+            data.forEach(element => {
+                agregarId(element.id);
                 cadena += ` 
                  <tr>
                  <th scope="row"><input type="checkbox" id="${element.id}" value="${element.id}" onclick="SeleccionarFactura('${element.id}')"  class="form-control ck" style="width: 14px;"></th>
@@ -4976,14 +4976,14 @@ function consultarPrefactura(opcion) {
                  </td>           
                </tr>`
             });
-           
+
             $('#prefacturas').html(cadena);
             SelecccionarTOdo();
         }
     });
 }
 
-function consultarfactura() {   
+function consultarfactura() {
     $.ajax({
         url: '/facturaItem',
         type: 'POST',
@@ -4991,18 +4991,18 @@ function consultarfactura() {
         data: {
             entidad: $('#entidad').val(),
             ini: $('#ini').val(),
-            fin: $('#fin').val()          
+            fin: $('#fin').val()
         },
-        success: (data) => {         
-            var cadena = '';           
-            data.forEach(element => {               
-               agregarId(element._id);
-               var item='';
-               if(element.hc.tipo){
-                    item="SIRUGIA"
-               }else{
-                    item=element.hc.item.nombre
-               }
+        success: (data) => {
+            var cadena = '';
+            data.forEach(element => {
+                agregarId(element._id);
+                var item = '';
+                if (element.hc.tipo) {
+                    item = "SIRUGIA"
+                } else {
+                    item = element.hc.item.nombre
+                }
                 cadena += ` 
                  <tr>
                  <th scope="row"><input type="checkbox" id="${element._id}" value="${element._id}" onclick="SeleccionarFactura('${element._id}')"  class="form-control ck" style="width: 14px;"></th>
@@ -5019,7 +5019,7 @@ function consultarfactura() {
                  </td>           
                </tr>`
             });
-           
+
             $('#fs').html(cadena);
             SelecccionarTOdo();
         }
@@ -5033,7 +5033,7 @@ function verimagen() {
         data: {
             codigo: $('#codigo').val()
         },
-        success: (data) => {         
+        success: (data) => {
             data.imagen.forEach(element => {
                 var image = new Image();
                 image.src = element;
@@ -5046,17 +5046,17 @@ function verimagen() {
 }
 
 function facturarxid() {
-    var i=JSON.stringify(ids);
+    var i = JSON.stringify(ids);
     $.ajax({
         url: '/facturarporId',
         type: 'POST',
         datatype: 'json',
         data: {
             ids: i,
-            eps:$('#entidad').val()
+            eps: $('#entidad').val()
         },
         success: (data) => {
-            if (data=='facturado') {
+            if (data == 'facturado') {
                 consultarPrefactura('nombre');
             }
         }
@@ -5064,26 +5064,26 @@ function facturarxid() {
 }
 
 
-function SeleccionarFactura(id){   
-    if($('#'+id).is(':checked') ){
-        ids.push($('#'+id).val());       
-    }else{
-      
+function SeleccionarFactura(id) {
+    if ($('#' + id).is(':checked')) {
+        ids.push($('#' + id).val());
+    } else {
+
         for (let index = 0; index < ids.length; index++) {
-            if(ids[index]==$('#'+id).val()){
-                ids.splice(index,1);
-            }            
+            if (ids[index] == $('#' + id).val()) {
+                ids.splice(index, 1);
+            }
         }
     }
 }
 
 function SelecccionarTOdo() {
-    $('.ck').attr('checked',true);    
+    $('.ck').attr('checked', true);
 }
 
 function QuitarTOdo() {
-    $('.ck').attr('checked',true); 
-    ids=[];   
+    $('.ck').attr('checked', true);
+    ids = [];
 }
 
 function agregarId(id) {
@@ -5092,8 +5092,8 @@ function agregarId(id) {
 
 
 function consultarCItas() {
-   var fecha=$('#fecha').val();
-   var medico=$('#medico').val();  
+    var fecha = $('#fecha').val();
+    var medico = $('#medico').val();
     $.ajax({
         url: '/vercitasfiltro',
         type: 'POST',
@@ -5102,22 +5102,22 @@ function consultarCItas() {
             medico: medico,
             fecha: fecha
         },
-        success: (data) => {         
-            var cadena="";
-            var color="white";
-            var opcion=""
+        success: (data) => {
+            var cadena = "";
+            var color = "white";
+            var opcion = ""
             data.forEach(element => {
                 if (element.estado == 'ensala') {
-                    color="aqua";
-                    opcion=`  <div class="row">
+                    color = "aqua";
+                    opcion = `  <div class="row">
                     <div class="col-sm-6">
                     <a href="#" class="btn btn-danger btn-sm" onclick="cancelarRecepcion('${element._id}')"> <i class='fas fa-user-alt-slash' style='font-size:16px'></i></a>
                     </div>
                   </div>`;
                 }
-                else if (element.estado == ''){
-                    color="white";
-                    opcion=`
+                else if (element.estado == '') {
+                    color = "white";
+                    opcion = `
                     <div class="row">
                     <div class="col-sm-6">
                         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#m${element._id}"
@@ -5130,7 +5130,7 @@ function consultarCItas() {
                  
                   <div class="modal fade" id="m${element._id}" tabindex="-1" role="dialog" aria-labelledby="accionLabel"
                     aria-hidden="true">
-                    <div class="modal-dialog" role="document">
+                    <div class="modal-dialog modal-sm" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
                           <h5 class="modal-title" id="accionLabel">${element.nombres}</h5>
@@ -5142,17 +5142,21 @@ function consultarCItas() {
                           <form action="/ensala/${element._id}" method="post">
                           <input type="hidden" name="entidad" id="entidad" value="${element.entidad.nit}">
                             <div class="form-group">
+                            
                               <div class="row">
-                                <div class="col-sm-4"><span class="small"><b>Copago</b></span><input type="number" id="copago"
+                                <div class="col-sm-3"><span class="small"><b>Copago</b></span><input type="number" id="copago"
                                     name="copago" value="0" class="form-control form-control-sm" placeholder="Copago" required></div>
-                                <div class="col-sm-4"><span class="small"><b>Autorizacion</b></span><input type="text" id="Autorizacion"
+                                <div class="col-sm-3"><span class="small"><b>Autorizacion</b></span><input type="text" id="Autorizacion"
                                     name="autorizacion" class="form-control form-control-sm" placeholder="Autorizacion"></div>
-                                 <div class="col-sm-4"><span class="small"><b>Valor</b></span><input type="text" id="valor"
+                                <div class="col-sm-3"><span class="small"><b>Valor</b></span><input type="text" id="valor"
                                     name="valor" class="form-control form-control-sm" value="${element.item.valor}" placeholder="Valor" required></div>
+                                <div class="col-sm-3"><span class="small"><b>Cantidad</b></span><input type="text" id="Cantidad"
+                                    name="cantidad" class="form-control form-control-sm" value="1" placeholder="Cantidad" required></div>
+                               
                               </div>
                               <div class="row mt-3">
-                                <div class="col-sm-12"><button class="btn btn-primary btn-sm"><i class='far fa-save'
-                                      style='font-size:18px'></i> Guardar</button></div>
+                              <div class="col-sm-4"><input type="checkbox" id="posquirurgico" name="posquirurgico" value="si" ><span class="small mr-2"><b> Posquirurgico</b></span></div>                                  
+                              <div class="col-sm-8"><button class="btn btn-primary btn-sm"><i class='far fa-save' style='font-size:18px'></i> Guardar</button></div>
                               </div>
                             </div>
                           </form>
@@ -5165,11 +5169,11 @@ function consultarCItas() {
                     </div>
                   </div>
                     `;
-                }else{
-                    var color="grey";
-                    opcion=element.estado;
-                }              
-                cadena+=`   
+                } else {
+                    var color = "grey";
+                    opcion = element.estado;
+                }
+                cadena += `   
                 <tr style="background-color: ${color};">
                 <th scope="col">${element.fecha} ${element.hora}</th>
                 <th scope="col">${element.paciente.cedula}</th>
@@ -5179,7 +5183,7 @@ function consultarCItas() {
                 <th scope="col">${element.motivo}</th>
                 <th>${opcion}</th>
               </tr>`;
-            }); 
+            });
             $('#contenido_cita').html(cadena);
         }
     });
@@ -5187,28 +5191,28 @@ function consultarCItas() {
 }
 
 function consultarCItasPaciente() {
-    var cc=$('#cc').val();   
-  
-     $.ajax({
-         url: '/vercitaspaciente',
-         type: 'POST',
-         datatype: 'json',
-         data: {
-             cc: cc,           
-         },
-         success: (data) => {
-          
-             var cadena="";
-             var color="white";
-             var opcion=""
-             data.forEach(element => {
-                 if (element.estado == 'ensala') {
-                     color="aqua";
-                     opcion=element.estado;
-                 }
-                 else if (element.estado == ''){
-                     color="white";
-                     opcion=`
+    var cc = $('#cc').val();
+
+    $.ajax({
+        url: '/vercitaspaciente',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            cc: cc,
+        },
+        success: (data) => {
+
+            var cadena = "";
+            var color = "white";
+            var opcion = ""
+            data.forEach(element => {
+                if (element.estado == 'ensala') {
+                    color = "aqua";
+                    opcion = element.estado;
+                }
+                else if (element.estado == '') {
+                    color = "white";
+                    opcion = `
                      <div class="row">
                      <div class="col-sm-6">
                          <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#m${element._id}"
@@ -5232,20 +5236,24 @@ function consultarCItasPaciente() {
                          <div class="modal-body">
                            <form action="/ensala/${element._id}" method="post">
                            <input type="hidden" name="entidad" id="entidad" value="${element.entidad.nit}">
-                             <div class="form-group">
-                               <div class="row">
-                                 <div class="col-sm-4"><span class="small"><b>Copago</b></span><input type="number" id="copago"
-                                     name="copago" value="0" class="form-control form-control-sm" placeholder="Copago" required></div>
-                                 <div class="col-sm-4"><span class="small"><b>Autorizacion</b></span><input type="text" id="Autorizacion"
-                                     name="autorizacion" class="form-control form-control-sm" placeholder="Autorizacion"></div>
-                                  <div class="col-sm-4"><span class="small"><b>Valor</b></span><input type="text" id="valor"
-                                     name="valor" class="form-control form-control-sm" value="${element.item.valor}" placeholder="Valor" required></div>
-                               </div>
-                               <div class="row mt-3">
-                                 <div class="col-sm-12"><button class="btn btn-primary btn-sm"><i class='far fa-save'
-                                       style='font-size:18px'></i> Guardar</button></div>
-                               </div>
+                           <div class="form-group">
+                           
+                             <div class="row">
+                               <div class="col-sm-3"><span class="small"><b>Copago</b></span><input type="number" id="copago"
+                                   name="copago" value="0" class="form-control form-control-sm" placeholder="Copago" required></div>
+                               <div class="col-sm-3"><span class="small"><b>Autorizacion</b></span><input type="text" id="Autorizacion"
+                                   name="autorizacion" class="form-control form-control-sm" placeholder="Autorizacion"></div>
+                               <div class="col-sm-3"><span class="small"><b>Valor</b></span><input type="text" id="valor"
+                                   name="valor" class="form-control form-control-sm" value="${element.item.valor}" placeholder="Valor" required></div>
+                               <div class="col-sm-3"><span class="small"><b>Cantidad</b></span><input type="text" id="Cantidad"
+                                   name="cantidad" class="form-control form-control-sm" value="1" placeholder="Cantidad" required></div>
+                              
                              </div>
+                             <div class="row mt-3">
+                             <div class="col-sm-4"><input type="checkbox" id="posquirurgico" name="posquirurgico" value="si" ><span class="small mr-2"><b> Posquirurgico</b></span></div>                                  
+                             <div class="col-sm-8"><button class="btn btn-primary btn-sm"><i class='far fa-save' style='font-size:18px'></i> Guardar</button></div>
+                             </div>
+                           </div>
                            </form>
                          </div>
                          <div class="modal-footer">
@@ -5255,11 +5263,11 @@ function consultarCItasPaciente() {
                      </div>
                    </div>
                      `;
-                 }else{
-                     var color="grey";
-                     opcion=element.estado;
-                 }              
-                 cadena+=`   
+                } else {
+                    var color = "grey";
+                    opcion = element.estado;
+                }
+                cadena += `   
                  <tr style="background-color: ${color};">
                  <th scope="col">${element.fecha} ${element.hora}</th>
                  <th scope="col">${element.paciente.cedula}</th>
@@ -5269,40 +5277,40 @@ function consultarCItasPaciente() {
                  <th scope="col">${element.motivo}</th>
                  <th>${opcion}</th>
                </tr>`;
-             }); 
-             $('#contenido_cita').html(cadena);
-         }
-     });
- 
- }
+            });
+            $('#contenido_cita').html(cadena);
+        }
+    });
 
- function cancelarRecepcion(id) {
+}
+
+function cancelarRecepcion(id) {
     $.ajax({
         url: '/cancelarRec',
         type: 'POST',
         datatype: 'json',
-        data: {          
-            id:id
+        data: {
+            id: id
         },
         success: (data) => {
             consultarCItas();
         }
     });
- }
+}
 
-function conCitas() {   
+function conCitas() {
     $.ajax({
         url: '/conCitas',
         type: 'POST',
         datatype: 'json',
         data: {
-            fecha:$('#fecha').val(),
-            medico:$('#medico').val()
+            fecha: $('#fecha').val(),
+            medico: $('#medico').val()
         },
-        success: (data) => {          
-            var cadena="";
+        success: (data) => {
+            var cadena = "";
             data.forEach(element => {
-                cadena+=`     
+                cadena += `     
                 <tr>
                     <th scope="row" class="small">${element.paciente.cedula}</th>
                     <td class="small">${element.nombres}</td>
@@ -5320,8 +5328,8 @@ function conCitas() {
 }
 
 function AgregarCie() {
-    var cadena=$('#impd').val();
-    cadena+="\n - "+$('#dg2').val();    
+    var cadena = $('#impd').val();
+    cadena += "\n - " + $('#dg2').val();
     $('#impd').val(cadena);
     $('#dg2').val("");
 }

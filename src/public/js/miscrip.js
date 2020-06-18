@@ -5,7 +5,7 @@ var factura = [];
 var eps = [];
 var item = [];
 var listitem = [];
-var total=0;
+var total = 0;
 
 
 firebase.initializeApp({
@@ -40,7 +40,7 @@ function consultarmedico(id) {
 
 // --- SELECT ---
 function selectEntidad() {
- 
+
   $.ajax({
     url: '/selectEntidad',
     type: 'POST',
@@ -67,9 +67,9 @@ function consultarPaciente() {
     data: {
       cedula: cedula
     },
-    success: (data) => {     
+    success: (data) => {
       if (data) {
-        paciente = data;      
+        paciente = data;
         $('#nombres').val(data.nombre.toUpperCase() + " " + data.apellido.toUpperCase() + " " + data.sapellido.toUpperCase());
         $('#edad').val(data.edad);
         selectEntidad();
@@ -84,7 +84,7 @@ function consultarPaciente() {
   });
 }
 
-function MostarUpdatePaciente(cedula){ 
+function MostarUpdatePaciente(cedula) {
   $.ajax({
     url: '/ajaxpaciente',
     type: 'POST',
@@ -92,7 +92,7 @@ function MostarUpdatePaciente(cedula){
     data: {
       cedula: cedula
     },
-    success: (data) => {    
+    success: (data) => {
       $('#td').val(data.td);
       $('#cedula').val(data.cedula);
       $('#nombre').val(data.nombre);
@@ -115,11 +115,11 @@ function MostarUpdatePaciente(cedula){
       $('#departamento').val(data.departamento);
       $('#cddep').val(data.cddep);
       $('#zresidencial').val(data.zresidencial);
-      $('#id').val(data._id);    
+      $('#id').val(data._id);
     }
   });
 }
-function MostarInputPaciente(){ 
+function MostarInputPaciente() {
   $.ajax({
     url: '/ajaxpaciente',
     type: 'POST',
@@ -127,30 +127,54 @@ function MostarInputPaciente(){
     data: {
       cedula: $('#cedula').val()
     },
-    success: (data) => {    
-      $('#td').val(data.td);
-      $('#cedula').val(data.cedula);
-      $('#nombre').val(data.nombre);
-      $('#snombre').val(data.snombre);
-      $('#apellido').val(data.apellido);
-      $('#sapellido').val(data.sapellido);
-      $('#sexo').val(data.sexo);
-      $('#nacimiento').val(data.nacimiento);
-      $('#edad').val(data.edad);
-      $('#unidad').val(data.unidad);
-      $('#ecivil').val(data.ecivil);
-      $('#direccion').val(data.direccion);
-      $('#telefono').val(data.telefono);
-      $('#email').val(data.email);
-      $('#nombre_acom').val(data.nombre_acom);
-      $('#parentesco').val(data.parentesco);
-      $('#tel_acom').val(data.tel_acom);
-      $('#ciudad').val(data.ciudad);
-      $('#cdm').val(data.cdm);
-      $('#departamento').val(data.departamento);
-      $('#cddep').val(data.cddep);
-      $('#zresidencial').val(data.zresidencial);
-      $('#id').val(data._id);    
+    success: (data) => {
+      if (data != "") {
+        $('#td').val(data.td);
+        $('#cedula').val(data.cedula);
+        $('#nombre').val(data.nombre);
+        $('#snombre').val(data.snombre);
+        $('#apellido').val(data.apellido);
+        $('#sapellido').val(data.sapellido);
+        $('#sexo').val(data.sexo);
+        $('#nacimiento').val(data.nacimiento);
+        $('#edad').val(data.edad);
+        $('#unidad').val(data.unidad);
+        $('#ecivil').val(data.ecivil);
+        $('#direccion').val(data.direccion);
+        $('#telefono').val(data.telefono);
+        $('#email').val(data.email);
+        $('#nombre_acom').val(data.nombre_acom);
+        $('#parentesco').val(data.parentesco);
+        $('#tel_acom').val(data.tel_acom);
+        $('#ciudad').val(data.ciudad);
+        $('#cdm').val(data.cdm);
+        $('#departamento').val(data.departamento);
+        $('#cddep').val(data.cddep);
+        $('#zresidencial').val(data.zresidencial);
+        $('#id').val(data._id);
+      }else{
+        $('#nombre').val("");
+        $('#snombre').val("");
+        $('#apellido').val("");
+        $('#sapellido').val("");
+        $('#sexo').val("");
+        $('#nacimiento').val("");
+        $('#edad').val("");
+        $('#unidad').val("");
+        $('#ecivil').val("");
+        $('#direccion').val("");
+        $('#telefono').val("");
+        $('#email').val("");
+        $('#nombre_acom').val("");
+        $('#parentesco').val("");
+        $('#tel_acom').val("");
+        $('#ciudad').val("");
+        $('#cdm').val("");
+        $('#departamento').val("");
+        $('#cddep').val("");
+        $('#zresidencial').val("");
+        $('#id').val("");
+      }
     }
   });
 }
@@ -173,44 +197,44 @@ function consultarEntidad() {
 }
 
 function facturar() {
-  diaActual = new Date();  
+  diaActual = new Date();
   var day = diaActual.getDate();
   var month = diaActual.getMonth() + 1;
   var year = diaActual.getFullYear();
-  if(parseInt(day)<10) day='0'+day;
-  if(parseInt(month)<10) month='0'+month;
-  fecha = day + '/' + month + '/' + year ;
+  if (parseInt(day) < 10) day = '0' + day;
+  if (parseInt(month) < 10) month = '0' + month;
+  fecha = day + '/' + month + '/' + year;
 
-  vencimiento= new Date();
-  vencimiento.setDate(diaActual.getDate()+30); 
+  vencimiento = new Date();
+  vencimiento.setDate(diaActual.getDate() + 30);
   var day = vencimiento.getDate();
   var month = vencimiento.getMonth() + 1;
   var year = vencimiento.getFullYear();
-  if(parseInt(day)<10) day='0'+day;
-  if(parseInt(month)<10) month='0'+month;
-  vence = day + '/' + month + '/' + year ;
-  
+  if (parseInt(day) < 10) day = '0' + day;
+  if (parseInt(month) < 10) month = '0' + month;
+  vence = day + '/' + month + '/' + year;
+
   var fechai = new Date($('#inicio').val());
   var dias = 1; // Número de días a agregar
-  fechai.setDate(fechai.getDate() + dias);  
+  fechai.setDate(fechai.getDate() + dias);
   var day = fechai.getDate();
-  var month = fechai.getMonth()+1;
+  var month = fechai.getMonth() + 1;
   var year = fechai.getFullYear();
-  if(parseInt(day)<10) day='0'+day;
-  if(parseInt(month)<10) month='0'+month;
-  pinicio = day + '/' + month + '/' + year ;
-  console.log('inicio: '+pinicio);
+  if (parseInt(day) < 10) day = '0' + day;
+  if (parseInt(month) < 10) month = '0' + month;
+  pinicio = day + '/' + month + '/' + year;
+  console.log('inicio: ' + pinicio);
 
   var fechaf = new Date($('#fin').val());
   var dias = 1; // Número de días a agregar
   fechaf.setDate(fechaf.getDate() + dias);
   var day = fechaf.getDate();
-  var month = fechaf.getMonth()+1;
+  var month = fechaf.getMonth() + 1;
   var year = fechaf.getFullYear();
-  if(parseInt(day)<10) day='0'+day;
-  if(parseInt(month)<10) month='0'+month;
-  pfinal = day + '/' + month + '/' + year ;
-  console.log('Final: '+pfinal);
+  if (parseInt(day) < 10) day = '0' + day;
+  if (parseInt(month) < 10) month = '0' + month;
+  pfinal = day + '/' + month + '/' + year;
+  console.log('Final: ' + pfinal);
 
   var consecutivo = parseInt($('#consecutivo').val());
   var factura = {
@@ -221,11 +245,11 @@ function facturar() {
     telefonos: '6552095-3023513182',
     email: 'gerencia@carlosparra.co',
     prefijo: 'CP',
-    total:total,
-    vencimiento:vence,
-    fecha:fecha,
-    pinicio:pinicio,
-    pfinal:pfinal,
+    total: total,
+    vencimiento: vence,
+    fecha: fecha,
+    pinicio: pinicio,
+    pfinal: pfinal,
     consecutivo: consecutivo,
     paciente: paciente,
     eps: eps,
@@ -233,7 +257,7 @@ function facturar() {
   }
   var fac = JSON.stringify(factura);
 
-  if ($('#cc').val() != "" && $('#entidad').val() != ""  && listitem[0]) {
+  if ($('#cc').val() != "" && $('#entidad').val() != "" && listitem[0]) {
     $.ajax({
       url: '/facturar',
       type: 'POST',
@@ -241,7 +265,7 @@ function facturar() {
       data: {
         fac: fac
       },
-      success: (data) => {        
+      success: (data) => {
         if (data == "ingresado") {
           location.href = "/facturar";
         }
@@ -260,7 +284,7 @@ function verConsecutivo() {
     url: '/consecutivo',
     type: 'POST',
     datatype: 'json',
-    success: (data) => {     
+    success: (data) => {
       $('#consecutivo').val(parseInt(data[0].cons) + 1);
 
     }
@@ -275,11 +299,11 @@ function getfac(id) {
     url: '/getfac',
     type: 'POST',
     datatype: 'json',
-    data:{
-      con:id
+    data: {
+      con: id
     },
-    success: (data) => {      
-      factura=data[0];    
+    success: (data) => {
+      factura = data[0];
     }
   });
 
@@ -291,20 +315,20 @@ function consultarFactura() {
     url: '/consultasFactura',
     type: 'POST',
     datatype: 'json',
-    data:{
-      ini:$('#ini').val(),
-      fin:$('#fin').val()
+    data: {
+      ini: $('#ini').val(),
+      fin: $('#fin').val()
     },
-    success: (data) => {    
-      var cadena="";
+    success: (data) => {
+      var cadena = "";
       data.forEach(element => {
-        cadena+=
-        `<tr>
+        cadena +=
+          `<tr>
           <td><b>${element.prefijo}${element.consecutivo}</b></td>
           <td><${element.eps.rsocial}/td>
           <td>${element.fecha}</td>
           <td>${element.paciente.nombre}${element.paciente.apellido}${element.paciente.sapellido}</td>
-          <td>$${ number_format(element.total, 2) }</td>
+          <td>$${ number_format(element.total, 2)}</td>
             <td><a href="#" class="btn btn-warning btn-sm">ver</a></td>
           </tr>`;
       });
@@ -317,27 +341,27 @@ function consultarFactura() {
 function imprSelec(nombre) {
   var ficha = document.getElementById(nombre);
   var ventimp = window.open(' ', 'popimpr');
-  ventimp.document.write( ficha.innerHTML );
+  ventimp.document.write(ficha.innerHTML);
   ventimp.document.close();
-  ventimp.print( );
+  ventimp.print();
   ventimp.close();
 }
 
 function imprimirElemento() {
-var cadena="";
-var array=[];
-array = factura.items;
-var total=0;
-array.forEach(element => {
-  total+=parseInt(element.valor);
-  cadena+=` 
+  var cadena = "";
+  var array = [];
+  array = factura.items;
+  var total = 0;
+  array.forEach(element => {
+    total += parseInt(element.valor);
+    cadena += ` 
   <div class="col-sm-3">${element.cups}</div>
   <div class="col-sm-3">${element.nombre}</div>
   <div class="col-sm-2">${element.autorizacion}</div>                                        
   <div class="col-sm-2">0%</div>                                        
-  <div class="col-sm-2">$ ${number_format(element.valor,2)}</div>`;
-});
-  var cadena=` <div id="print">
+  <div class="col-sm-2">$ ${number_format(element.valor, 2)}</div>`;
+  });
+  var cadena = ` <div id="print">
           <table border="1" style="width:100%;">
               <tr>
                   <td style="padding: 10px; "><img src="img/logo.png" alt="" width="200px"></td>
@@ -384,7 +408,7 @@ array.forEach(element => {
                 <div class="col-sm-2"><b>Valor</b></div>
             </div>
             <div class="row m-2 border">
-               `+cadena+`
+               `+ cadena + `
             </div>
         </td>
     </tr>
@@ -444,7 +468,7 @@ array.forEach(element => {
   ventana.document.write('</body></html>');
   ventana.document.close();
   ventana.focus();
-  ventana.onload = function() {
+  ventana.onload = function () {
     ventana.print();
     ventana.close();
   };
@@ -452,25 +476,24 @@ array.forEach(element => {
 }
 
 function number_format(amount, decimals) {
-  amount += ''; 
+  amount += '';
   amount = parseFloat(amount.replace(/[^0-9\.]/g, ''));
-  decimals = decimals || 0; 
-  if (isNaN(amount) || amount === 0) 
-      return parseFloat(0).toFixed(decimals);
+  decimals = decimals || 0;
+  if (isNaN(amount) || amount === 0)
+    return parseFloat(0).toFixed(decimals);
   amount = '' + amount.toFixed(decimals);
   var amount_parts = amount.split('.'),
-      regexp = /(\d+)(\d{3})/;
+    regexp = /(\d+)(\d{3})/;
   while (regexp.test(amount_parts[0]))
-      amount_parts[0] = amount_parts[0].replace(regexp, '$1' + ',' + '$2');
+    amount_parts[0] = amount_parts[0].replace(regexp, '$1' + ',' + '$2');
   return amount_parts.join('.');
 }
 
 // NUMERO  A LETRAS
 
-function Unidades(num){
- 
-  switch(num)
-  {
+function Unidades(num) {
+
+  switch (num) {
     case 1: return "UN";
     case 2: return "DOS";
     case 3: return "TRES";
@@ -481,20 +504,18 @@ function Unidades(num){
     case 8: return "OCHO";
     case 9: return "NUEVE";
   }
- 
+
   return "";
 }
- 
-function Decenas(num){
- 
-  decena = Math.floor(num/10);
+
+function Decenas(num) {
+
+  decena = Math.floor(num / 10);
   unidad = num - (decena * 10);
- 
-  switch(decena)
-  {
+
+  switch (decena) {
     case 1:
-      switch(unidad)
-      {
+      switch (unidad) {
         case 0: return "DIEZ";
         case 1: return "ONCE";
         case 2: return "DOCE";
@@ -504,8 +525,7 @@ function Decenas(num){
         default: return "DIECI" + Unidades(unidad);
       }
     case 2:
-      switch(unidad)
-      {
+      switch (unidad) {
         case 0: return "VEINTE";
         default: return "VEINTI" + Unidades(unidad);
       }
@@ -519,21 +539,20 @@ function Decenas(num){
     case 0: return Unidades(unidad);
   }
 }//Unidades()
- 
-function DecenasY(strSin, numUnidades){
+
+function DecenasY(strSin, numUnidades) {
   if (numUnidades > 0)
     return strSin + " Y " + Unidades(numUnidades)
- 
+
   return strSin;
 }//DecenasY()
- 
-function Centenas(num){
- 
+
+function Centenas(num) {
+
   centenas = Math.floor(num / 100);
   decenas = num - (centenas * 100);
- 
-  switch(centenas)
-  {
+
+  switch (centenas) {
     case 1:
       if (decenas > 0)
         return "CIENTO " + Decenas(decenas);
@@ -547,79 +566,79 @@ function Centenas(num){
     case 8: return "OCHOCIENTOS " + Decenas(decenas);
     case 9: return "NOVECIENTOS " + Decenas(decenas);
   }
- 
+
   return Decenas(decenas);
 }//Centenas()
- 
-function Seccion(num, divisor, strSingular, strPlural){
+
+function Seccion(num, divisor, strSingular, strPlural) {
   cientos = Math.floor(num / divisor)
   resto = num - (cientos * divisor)
- 
+
   letras = "";
- 
+
   if (cientos > 0)
     if (cientos > 1)
       letras = Centenas(cientos) + " " + strPlural;
     else
       letras = strSingular;
- 
+
   if (resto > 0)
     letras += "";
- 
+
   return letras;
 }//Seccion()
- 
-function Miles(num){
+
+function Miles(num) {
   divisor = 1000;
   cientos = Math.floor(num / divisor)
   resto = num - (cientos * divisor)
- 
+
   strMiles = Seccion(num, divisor, "MIL", "MIL");
   strCentenas = Centenas(resto);
- 
-  if(strMiles == "")
+
+  if (strMiles == "")
     return strCentenas;
- 
+
   return strMiles + " " + strCentenas;
- 
+
   //return Seccion(num, divisor, "UN MIL", "MIL") + " " + Centenas(resto);
 }//Miles()
- 
-function Millones(num){
+
+function Millones(num) {
   divisor = 1000000;
   cientos = Math.floor(num / divisor)
   resto = num - (cientos * divisor)
- 
+
   strMillones = Seccion(num, divisor, "UN MILLON", "MILLONES");
   strMiles = Miles(resto);
- 
-  if(strMillones == "")
+
+  if (strMillones == "")
     return strMiles;
- 
+
   return strMillones + " " + strMiles;
- 
+
   //return Seccion(num, divisor, "UN MILLON", "MILLONES") + " " + Miles(resto);
 }//Millones()
- 
-function NumeroALetras(num,centavos){
+
+function NumeroALetras(num, centavos) {
   var data = {
     numero: num,
     enteros: Math.floor(num),
     centavos: (((Math.round(num * 100)) - (Math.floor(num) * 100))),
     letrasCentavos: "",
   };
-  if(centavos == undefined || centavos==false) {
-    data.letrasMonedaPlural="EUROS";
-    data.letrasMonedaSingular="EURO";
-  }else{
-    data.letrasMonedaPlural="CENTIMOS";
-    data.letrasMonedaSingular="CENTIMO";
+  if (centavos == undefined || centavos == false) {
+    data.letrasMonedaPlural = "EUROS";
+    data.letrasMonedaSingular = "EURO";
+  } else {
+    data.letrasMonedaPlural = "CENTIMOS";
+    data.letrasMonedaSingular = "CENTIMO";
   }
- 
+
   if (data.centavos > 0)
-    data.letrasCentavos = "CON " + NumeroALetras(data.centavos,true);
- 
-  if(data.enteros == 0)
+    data.letrasCentavos = "CON " + NumeroALetras(data.centavos, true);
+
+  if (data.enteros == 0)
     return "CERO " + data.letrasMonedaPlural + " " + data.letrasCentavos;
   if (data.enteros == 1)
     return Millones(data.enteros) + " " + data.letrasMonedaSingular + " " + data.letrasCentavos;

@@ -99,9 +99,9 @@ router.post('/vercitaspaciente',async(req,res)=>{
 
 router.post('/ensala/:id',async(req,res)=>{
     const {id}=req.params; 
-    const {copago,autorizacion,valor,entidad}=req.body;    
+    const {copago,autorizacion,valor,entidad,cantidad,posquirurgico}=req.body;    
     const autoriz= await Factura.find({'hc.entidad.nit':entidad,'hc.autorizacion':autorizacion});  
-    
+    console.log(posquirurgico)
     if(autoriz[0]){        
         if(autoriz[0].hc.autorizacion==""){
             await Cita.updateOne({_id:id},
@@ -109,7 +109,9 @@ router.post('/ensala/:id',async(req,res)=>{
                 copago:copago,
                 autorizacion:autorizacion,        
                 estado:'ensala',
-                valor:valor        
+                valor:valor,
+                cantidad:cantidad,
+                posquirurgico:posquirurgico     
             }); 
             const cita=await Cita.findOne({_id:id});
             if (cita.item.tipo=='p') {
@@ -125,7 +127,9 @@ router.post('/ensala/:id',async(req,res)=>{
             copago:copago,
             autorizacion:autorizacion,        
             estado:'ensala',
-            valor:valor        
+            valor:valor,
+            cantidad:cantidad,
+            posquirurgico:posquirurgico          
         }); 
         const cita=await Cita.findOne({_id:id});
         if (cita.item.tipo=='p') {

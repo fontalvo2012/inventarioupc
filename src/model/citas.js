@@ -19,7 +19,9 @@ const citaSchema= new Schema({
     nmedico:{type:Object,required:false},
     nitem:{type:Object,required:false},
     valor:{type:Number,required:false},
+    cantidad:{type:Number,required:false},
     nentidad:{type:String,required:false},
+    posquirurgico:{type:String,required:false},
     fcreacion:{type:Date,default:Date.now()}
 });
 
