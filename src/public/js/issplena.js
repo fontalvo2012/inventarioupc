@@ -5241,11 +5241,11 @@ function consultarCItasPaciente() {
                              <div class="row">
                                <div class="col-sm-3"><span class="small"><b>Copago</b></span><input type="number" id="copago"
                                    name="copago" value="0" class="form-control form-control-sm" placeholder="Copago" required></div>
-                               <div class="col-sm-3"><span class="small"><b>Autorizacion</b></span><input type="text" id="Autorizacion"
+                               <div class="col-sm-4"><span class="small"><b>Autorizacion</b></span><input type="text" id="Autorizacion"
                                    name="autorizacion" class="form-control form-control-sm" placeholder="Autorizacion"></div>
                                <div class="col-sm-3"><span class="small"><b>Valor</b></span><input type="text" id="valor"
                                    name="valor" class="form-control form-control-sm" value="${element.item.valor}" placeholder="Valor" required></div>
-                               <div class="col-sm-3"><span class="small"><b>Cantidad</b></span><input type="text" id="Cantidad"
+                               <div class="col-sm-2"><span class="small"><b>Cantidad</b></span><input type="text" id="Cantidad"
                                    name="cantidad" class="form-control form-control-sm" value="1" placeholder="Cantidad" required></div>
                               
                              </div>

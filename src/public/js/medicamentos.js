@@ -4458,105 +4458,105 @@ function completarMedicamentos() {
 }
 
 
- //======================================================================
-    // VARIABLES
-    //======================================================================
-    let miCanvas = document.querySelector('#pizarra');
-    let lineas = [];
-    let correccionX = 0;
-    let correccionY = 0;
-    let pintarLinea = false;
-    let ctx = miCanvas.getContext('2d')
-    let posicion = miCanvas.getBoundingClientRect()
-    correccionX = posicion.x;
-    correccionY = posicion.y;
+//  //======================================================================
+//     // VARIABLES
+//     //======================================================================
+//     let miCanvas = document.querySelector('#pizarra');
+//     let lineas = [];
+//     let correccionX = 0;
+//     let correccionY = 0;
+//     let pintarLinea = false;
+//     let ctx = miCanvas.getContext('2d')
+//     let posicion = miCanvas.getBoundingClientRect()
+//     correccionX = posicion.x;
+//     correccionY = posicion.y;
 
-    miCanvas.width = 800;
-    miCanvas.height = 200;
+//     miCanvas.width = 800;
+//     miCanvas.height = 200;
 
-    //======================================================================
-    // FUNCIONES
-    //======================================================================
-    function guardarFirma() {        
+//     //======================================================================
+//     // FUNCIONES
+//     //======================================================================
+//     function guardarFirma() {        
       
-        var img = miCanvas.toDataURL("image/png");
-        var image = new Image();
-        image.src = img;
-        image.width=400;      
-        $('#firma').html(image);
-        clearcanvas();
+//         var img = miCanvas.toDataURL("image/png");
+//         var image = new Image();
+//         image.src = img;
+//         image.width=400;      
+//         $('#firma').html(image);
+//         clearcanvas();
       
-    }
+//     }
     
-    function empezarDibujo() {
-        pintarLinea = true;
-        lineas.push([]);
-    };
+//     function empezarDibujo() {
+//         pintarLinea = true;
+//         lineas.push([]);
+//     };
 
-    /**
-     * Funcion dibuja la linea
-     */
-    function clearcanvas() {
-        //elimina todo lo del canvas --->
-        ctx.clearRect(0, 0, miCanvas.width, miCanvas.height);
-        lineas =[];
-    }
+//     /**
+//      * Funcion dibuja la linea
+//      */
+//     function clearcanvas() {
+//         //elimina todo lo del canvas --->
+//         ctx.clearRect(0, 0, miCanvas.width, miCanvas.height);
+//         lineas =[];
+//     }
 
-    function dibujarLinea(event) {
-        event.preventDefault();
-        if (pintarLinea) {           
-            // Estilos de linea
-            ctx.lineJoin = ctx.lineCap = 'round';
-            ctx.lineWidth = 2;
-            // Color de la linea
-            ctx.strokeStyle = '#000';
-            // Marca el nuevo punto
-            let nuevaPosicionX = 0;
-            let nuevaPosicionY = 0;
-            if (event.changedTouches == undefined) {
-                // Versión ratón
-                nuevaPosicionX = event.layerX;
-                nuevaPosicionY = event.layerY;
-            } else {
-                // Versión touch, pantalla tactil
-                nuevaPosicionX = event.changedTouches[0].pageX - correccionX;
-                nuevaPosicionY = event.changedTouches[0].pageY - correccionY;
-            }
-            console.log(nuevaPosicionX,nuevaPosicionY);
-            // Guarda la linea
-            lineas[lineas.length - 1].push({
-                x: nuevaPosicionX,
-                y: nuevaPosicionY
-            });
-            // Redibuja todas las lineas guardadas
-            ctx.beginPath();
-            lineas.forEach(function (segmento) {
-                ctx.moveTo(segmento[0].x, segmento[0].y);
-                segmento.forEach(function (punto, index) {
-                    ctx.lineTo(punto.x, punto.y);
-                });
-            });
-            ctx.stroke();
-        }
-    }
+//     function dibujarLinea(event) {
+//         event.preventDefault();
+//         if (pintarLinea) {           
+//             // Estilos de linea
+//             ctx.lineJoin = ctx.lineCap = 'round';
+//             ctx.lineWidth = 2;
+//             // Color de la linea
+//             ctx.strokeStyle = '#000';
+//             // Marca el nuevo punto
+//             let nuevaPosicionX = 0;
+//             let nuevaPosicionY = 0;
+//             if (event.changedTouches == undefined) {
+//                 // Versión ratón
+//                 nuevaPosicionX = event.layerX;
+//                 nuevaPosicionY = event.layerY;
+//             } else {
+//                 // Versión touch, pantalla tactil
+//                 nuevaPosicionX = event.changedTouches[0].pageX - correccionX;
+//                 nuevaPosicionY = event.changedTouches[0].pageY - correccionY;
+//             }
+//             console.log(nuevaPosicionX,nuevaPosicionY);
+//             // Guarda la linea
+//             lineas[lineas.length - 1].push({
+//                 x: nuevaPosicionX,
+//                 y: nuevaPosicionY
+//             });
+//             // Redibuja todas las lineas guardadas
+//             ctx.beginPath();
+//             lineas.forEach(function (segmento) {
+//                 ctx.moveTo(segmento[0].x, segmento[0].y);
+//                 segmento.forEach(function (punto, index) {
+//                     ctx.lineTo(punto.x, punto.y);
+//                 });
+//             });
+//             ctx.stroke();
+//         }
+//     }
 
-    /**
-     * Funcion que deja de dibujar la linea
-     */
-    function pararDibujar() {
-        pintarLinea = false;
-    }
+//     /**
+//      * Funcion que deja de dibujar la linea
+//      */
+//     function pararDibujar() {
+//         pintarLinea = false;
+//     }
 
-    //======================================================================
-    // EVENTOS
-    //======================================================================
+//     //======================================================================
+//     // EVENTOS
+//     //======================================================================
 
-    // Eventos raton
-    miCanvas.addEventListener('mousedown', empezarDibujo, false);
-    miCanvas.addEventListener('mousemove', dibujarLinea, false);
-    miCanvas.addEventListener('mouseup', pararDibujar, false);
+//     // Eventos raton
+//     miCanvas.addEventListener('mousedown', empezarDibujo, false);
+//     miCanvas.addEventListener('mousemove', dibujarLinea, false);
+//     miCanvas.addEventListener('mouseup', pararDibujar, false);
 
-    // Eventos pantallas táctiles
-    miCanvas.addEventListener('touchstart', empezarDibujo, false);
-    miCanvas.addEventListener('touchmove', dibujarLinea, false);
-    miCanvas.addEventListener('touchend', pararDibujar, true);
+//     // Eventos pantallas táctiles
+//     miCanvas.addEventListener('touchstart', empezarDibujo, false);
+//     miCanvas.addEventListener('touchmove', dibujarLinea, false);
+//     miCanvas.addEventListener('touchend', pararDibujar, true);

@@ -337,7 +337,8 @@ function crearCitas(hora) {
         nmedico:nmedico,
         nitem:nitem,
         valor:0,
-        nentidad:nentidad
+        nentidad:nentidad,
+        nro:''
     };
     var c = JSON.stringify(cita);
     if ($('#cc').val()=="") {       

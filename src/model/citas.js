@@ -3,6 +3,7 @@ const {Schema}=mongoose;
 
 const citaSchema= new Schema({
     id:{type:Number,required:true},
+    nro:{type:Number,required:false},
     medico:{type:String,required:true},
     fecha:{type:String,required:false},
     hora:{type:String,required:false},
@@ -24,6 +25,5 @@ const citaSchema= new Schema({
     posquirurgico:{type:String,required:false},
     fcreacion:{type:Date,default:Date.now()}
 });
-
 module.exports=mongoose.model('citas',citaSchema);
 

@@ -19,7 +19,11 @@ router.post('/apartadas',async(req,res)=>{
 
 router.post('/addcitas',async(req,res)=>{
     const {cita}=req.body;
-    const newcita=new Cita(JSON.parse(cita));
+    const ncitas=await Cita.find();
+    console.log(ncitas.length);
+    const c=JSON.parse(cita);
+    c.nro=ncitas.length;
+    const newcita=new Cita(c);
     await newcita.save();
     res.send('realizado');
 });
@@ -118,6 +122,7 @@ router.post('/ensala/:id',async(req,res)=>{
                 const newFactura = new Factura({ codigo: 0, hc: cita, estado: 'PREFACTURA', descripcion: 'FATURACION DE PROCEDIMIENTO' });     
                 await newFactura.save();
             }       
+            req.flash('success','Adminision: '+cita.nro)
         }else{
             req.flash('login', 'El Numero autorizacion existe!');
         }
@@ -136,7 +141,9 @@ router.post('/ensala/:id',async(req,res)=>{
             const newFactura = new Factura({ codigo: 0, hc: cita, estado: 'PREFACTURA', descripcion: 'FATURACION DE PROCEDIMIENTO' });     
             await newFactura.save();
         }     
+        req.flash('success','Adminision: '+cita.nro)
     }
+    
     res.redirect('/vercitas');
 });
 

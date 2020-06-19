@@ -14,26 +14,33 @@
             <div class="card-body">
                   <form action="/login" method="post">
                 <div class="form-group">
+                    <span class="small">Usuario</span>
                     <input type="text" name="user" id="user" class="form-control form-control-sm"
                         placeholder="Usuario:" required>
                 </div>
                 <div class="form-group">
+                    <span class="small">Contraseña</span>
                     <input type="password" name="password" id="password" class="form-control form-control-sm"
                         placeholder="Contraseña" required>
                 </div>
                 <div class="form-group">
+                     <span class="small">Nombres</span>
                     <input type="text" name="nombre" id="nombre" class="form-control form-control-sm"
                         placeholder="Nombres" required>
                 </div>
                 <div class="form-group">
+                     <span class="small">Firma</span>
                     <input type="text" name="firma" id="firma" class="form-control form-control-sm"
                         placeholder="Cedula" required>
                 </div>
                  <div class="form-group">
+                      <span class="small">perfil</span>
                     <select name="perfil" id="perfil" class="form-control form-control-sm">
                         <option value="Secretaria">Secretaria</option>
                         <option value="Medico">Medico</option>
                         <option value="admin">Administrador</option>
+                        <option value="fact">Facturador</option>
+                        <option value="cont">contador</option>
                     </select>
                 </div>
                 <div class="form-group">
