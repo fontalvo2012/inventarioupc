@@ -4790,6 +4790,29 @@ function completMedicamentos() {
     });
 }
 
+function completUso() {
+    $.ajax({
+        url: '/ajaxUso',
+        type: 'POST',
+        datatype: 'json',
+        data:{
+            nombre:$('#medicamento').val()
+        },
+        success: (data) => { 
+            console.log(data);
+            $("#uso").autocomplete({
+                source: duplicadosELiminar(data)
+            });
+        }
+    });
+}
+function duplicadosELiminar(a) {
+    for(var i = a.length -1; i >=0; i--){
+        if(a.indexOf(a[i]) !== i) a[i] = '';
+      }
+      return a
+}
+
 
 function facturarEntidad() {
     var ini = $('#ini').val();
@@ -4839,6 +4862,22 @@ function AgregarMed() {
     $('#medicamento').val('');
     $('#uso').val('');
 }
+
+function addmedicamentos() {     
+    $.ajax({
+        url: '/addmedicamentos',
+        type: 'POST',
+        datatype: 'json',
+        data:{
+            nombre:$('#medicamento').val(),
+            uso:$('#uso').val()
+        },
+        success: (data) => {               
+           console.log(data);        
+        }
+    });
+}
+
 
 function QuitarMedicamento(id) {
     receta.splice(id, 1);

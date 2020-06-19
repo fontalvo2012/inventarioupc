@@ -4444,6 +4444,7 @@ function combertirMedicamento(ob) {
     });
 }
 
+
 function completarMedicamentos() { 
     $.ajax({
         url: '/medicamentosArray',

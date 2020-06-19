@@ -3,6 +3,7 @@ const router = Router();
 const Insumo=require('../model/insumos');
 const Medicamentos=require('../model/medicamentos');
 const Cie10=require('../model/cie10');
+const Hclinicas =require('../model/hclinicas');
 var nodemailer = require('nodemailer');
 
 var transporter = nodemailer.createTransport({
@@ -77,6 +78,37 @@ router.post('/insumos',checkAuthentication, async(req, res) => {
     await medicamentos.save();
     res.redirect('/medicamentos');
  })
+
+ router.post('/addmedicamentos',checkAuthentication,async(req,res)=>{
+    const {nombre,uso}= req.body;
+    const codigo=await Medicamentos.find();
+    const m=await Medicamentos.findOne({nombre:nombre.trim()});
+    if(m){
+        res.send('El medicamento existe');
+    }else{
+        const medicamentos = new Medicamentos({codigo:codigo.length,nombre:nombre.trim(),uso});
+        await medicamentos.save();
+        res.send('Ingresado');
+    } 
+ })
+
+ router.post('/ajaxUso',checkAuthentication,async(req,res)=>{
+     const arrayUso=[];
+     const {nombre}=req.body;
+     const usos= await Hclinicas.find({'receta.medicamento':nombre}).sort('receta.medicamento');
+     if(usos){
+        usos.forEach(element => {
+             for (let index = 0; index < element.receta.length; index++) {               
+                if(element.receta[index].medicamento.trim() == nombre.trim()){
+                    console.log(element.receta[index].uso);
+                    arrayUso.push(element.receta[index].uso);
+                } 
+             }
+         });
+     }
+    
+     res.send(arrayUso)
+ })
  router.post('/medicamentosAjax',checkAuthentication,async(req,res)=>{
     const {nombre,presentacion,tipo,codigo}= req.body;   
     const medicamentos = new Medicamentos({codigo,nombre,presentacion,tipo});
@@ -88,16 +120,15 @@ router.post('/insumos',checkAuthentication, async(req, res) => {
      res.render('medicamentos/medicamentos',{medicamentos});
 })
 
-router.get('/parametros',checkAuthentication,async(req,res)=>{
-   
+router.get('/parametros',checkAuthentication,async(req,res)=>{   
     res.render('medicamentos/parametros');
 })
 
 router.post('/medicamentosArray',checkAuthentication,async(req,res)=>{
-    const medicamentos= await Medicamentos.find().lean();
+    const medicamentos= await Medicamentos.find().sort('nombre').lean();
     const medicamentoAr=[];
     medicamentos.forEach(element => {
-        medicamentoAr.push(element.nombre+" "+element.presentacion);
+        medicamentoAr.push(element.nombre);
     });
     res.send(medicamentoAr);
 })

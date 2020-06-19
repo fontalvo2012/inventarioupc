@@ -164,7 +164,7 @@
                                     <div class="col-sm-8">
                                         <span><b>Medicamento</b></span>
                                         <input type="text" class="form-control form-control-sm medicamentos"
-                                            id="medicamento" name="medicamento" placeholder="Medicamentos">
+                                            id="medicamento" name="medicamento" onblur="completUso()" placeholder="Medicamentos">
                                     </div>
                                     <div class="col-sm-4">
                                         <span><b>Cantidad</b></span>
@@ -183,7 +183,7 @@
                             </div>
                             <div class="col-sm-3 mt-4">
                                 <div class="col-sm-4 mt-3 ml-0 mr-0">
-                                    <a href="#" class="btn btn-success btn-sm btn-block" onclick="AgregarMed()"><b><i
+                                    <a href="#" class="btn btn-success btn-sm btn-block" onclick="addmedicamentos();AgregarMed();"><b><i
                                                 class='fas fa-plus' style='font-size:20px'></i></b></a>
                                 </div>
                             </div>
