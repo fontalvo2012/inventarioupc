@@ -23,8 +23,24 @@ function checkAuthentication(req, res, next) {
 router.get('/prefactura', checkAuthentication, async (req, res) => {
     const entidades = await Entidad.find().lean();
     const prefacturas = await Factura.find({ estado: 'PREFACTURA' }).lean();
-    res.render('facturacion/prefactura', { prefacturas, entidades });
+    var f=fechaformat();
+    res.render('facturacion/prefactura', { prefacturas, entidades,f });
 });
+
+function fechaformat() {
+    const fecha=new Date();
+    var ano=fecha.getFullYear();
+    var mes=fecha.getMonth()+1;
+    var dia=fecha.getDate();
+    if (dia<10) {
+        dia='0'+dia;
+    }
+    if(mes<10){
+        mes='0'+mes;
+    }
+
+    return ano+'-'+mes+'-'+dia;
+}
 
 router.post('/prefactura', checkAuthentication, async (req, res) => {
     const { entidad, ini, fin } = req.body;
@@ -75,7 +91,7 @@ router.post('/facturaItem',checkAuthentication,async(req,res)=>{
         }
 
         facturas = await Factura.findOne({ codigo: codigos[index] }).lean();
-        datos[index] = { _id: facturas._id, codigo: codigos[index], anexo: anexo, item: facturas.hc.item, entidad: facturas.hc.entidad, hc: facturas.hc, total: total, fecha: fechafac(facturas.fecha) };
+        datos[index] = { _id: facturas._id, codigo: codigos[index], anexo: anexo, item: facturas.hc.item, entidad: facturas.hc.entidad, hc: facturas.hc, total: total, fecha:facturas.fecha};
     }   
     console.log(datos);
     res.send(datos);
@@ -107,7 +123,7 @@ router.get('/facturas', checkAuthentication, async (req, res) => {
 
         facturas = await Factura.findOne({ codigo: codigos[index] }).lean();
 
-        datos[index] = { id: facturas._id, cd: codigos[index], anexo: anexo, item: facturas.hc.item, entidad: facturas.hc.entidad, hc: facturas.hc, total: total, fecha: fechafac(facturas.fecha) };
+        datos[index] = { id: facturas._id, cd: codigos[index], anexo: anexo, item: facturas.hc.item, entidad: facturas.hc.entidad, hc: facturas.hc, total: total, fecha: facturas.fecha };
     }
     res.render('facturacion/facturas', { datos, entidades });
 });
@@ -132,15 +148,18 @@ router.post('/prefacturaitem', checkAuthentication, async (req, res) => {
                 nombres: element.hc.nombres,
                 entidad: element.hc.entidad.rsocial,
                 item: element.hc.item.nombre,
+                cups: element.hc.item.cups,
+                cantidad: element.hc.cantidad,
+                nro: element.hc.nro,
+                pos:element.hc.posquirurgico,
                 autorizacion: element.hc.autorizacion,
                 copago: parseInt(element.hc.copago),
                 valor: parseInt(element.hc.valor),
-
+                total: (parseInt(element.hc.valor)*parseInt(element.hc.cantidad))-parseInt(element.hc.copago)
             });
     });
 
-    var oJSON = sortJSON(datos, opcion, 'asc');
-    console.log(oJSON);
+    var oJSON = sortJSON(datos, opcion, 'asc');   
     res.send(oJSON);
 
 });
@@ -220,7 +239,8 @@ router.post('/facturar', checkAuthentication, async (req, res) => {
 
 
 router.post('/facturarporId', checkAuthentication, async (req, res) => {
-    const { ids, eps } = req.body
+    const { ids, eps,fechaf } = req.body
+    console.log('FECHA_FAC',new Date(fechaf));
     const i = JSON.parse(ids);
     var fa=await Factura.find({estado:'facturado'});
     var max =0;
@@ -240,26 +260,23 @@ router.post('/facturarporId', checkAuthentication, async (req, res) => {
                 {
                     codigo: cont,
                     estado: 'facturado',
-                    fecha: Date.now(),
+                    fecha:new Date(fechaf),
                     vencimiento: Vencimiento(30)
                 });
         }
     } else {
-
         for (let index = 0; index < i.length; index++) {
             await Factura.updateOne(
                 { _id: i[index] },
                 {
                     codigo: cont,
                     estado: 'facturado',
-                    fecha: Date.now(),
+                    fecha: new Date(fechaf),
                     vencimiento: Vencimiento(30)
                 });
             cont++;
         }
     }
-
-
     res.send('facturado')
 });
 

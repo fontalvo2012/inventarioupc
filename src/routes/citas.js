@@ -42,6 +42,7 @@ router.get('/vercitas',async(req,res)=>{
     console.log(f);
     res.render('citas/consultas',{valores,f,medicos}); 
 });
+
 function fechaformat() {
     const fecha=new Date();
     var ano=fecha.getFullYear();
@@ -94,20 +95,67 @@ router.post('/vercitasfiltro',async(req,res)=>{
    res.send(citas);   
 });
 
+
 router.post('/vercitaspaciente',async(req,res)=>{
     const {cc}=req.body; 
     const valores = await Cita.find({'paciente.cedula':cc}).lean();
     console.log(valores) ;
     res.send(valores);  
  });
-
+ 
 router.post('/ensala/:id',async(req,res)=>{
     const {id}=req.params; 
-    const {copago,autorizacion,valor,entidad,cantidad,posquirurgico}=req.body;    
-    const autoriz= await Factura.find({'hc.entidad.nit':entidad,'hc.autorizacion':autorizacion});  
-    console.log(posquirurgico)
+    const {copago,autorizacion,valor,entidad,cantidad,posquirurgico}=req.body;
+    console.log(id,valor,copago,posquirurgico,cantidad);
+    const autoriz= await Factura.find({'hc.entidad.nit':entidad,'hc.autorizacion':autorizacion});    
     if(autoriz[0]){        
-        if(autoriz[0].hc.autorizacion==""){
+        if(autoriz[0].hc.autorizacion==""){          
+            var cita=await Cita.findOne({_id:id});
+            console.log(cita)
+            if (cita.item.tipo=='p') {
+                await Cita.updateOne({_id:id},
+                    {
+                    copago:copago,
+                    autorizacion:autorizacion,        
+                    estado:'atendido',
+                    valor:valor,
+                    cantidad:cantidad,
+                    posquirurgico:posquirurgico     
+                }); 
+                cita=await Cita.findOne({_id:id});
+                const newFactura = new Factura({ codigo: 0, hc: cita, estado: 'PREFACTURA', descripcion: 'FATURACION DE PROCEDIMIENTO' });     
+                await newFactura.save();
+            } else{
+                await Cita.updateOne({_id:id},
+                    {
+                    copago:copago,
+                    autorizacion:autorizacion,        
+                    estado:'ensala',
+                    valor:valor,
+                    cantidad:cantidad,
+                    posquirurgico:posquirurgico     
+                }); 
+            }      
+            req.flash('success','Adminision: '+cita.nro)
+        }else{
+            req.flash('login', 'El Numero autorizacion existe!');
+        }
+    } else{        
+        var cita=await Cita.findOne({_id:id});
+        if (cita.item.tipo=='p'){            
+            await Cita.updateOne({_id:id},
+                {
+                copago:copago,
+                autorizacion:autorizacion,        
+                estado:'atendido',
+                valor:valor,
+                cantidad:cantidad,
+                posquirurgico:posquirurgico          
+            }); 
+            cita=await Cita.findOne({_id:id});
+            const newFactura = new Factura({ codigo: 0, hc: cita, estado: 'PREFACTURA', descripcion: 'FATURACION DE PROCEDIMIENTO' });     
+            await newFactura.save();
+        }else{
             await Cita.updateOne({_id:id},
                 {
                 copago:copago,
@@ -115,35 +163,11 @@ router.post('/ensala/:id',async(req,res)=>{
                 estado:'ensala',
                 valor:valor,
                 cantidad:cantidad,
-                posquirurgico:posquirurgico     
+                posquirurgico:posquirurgico          
             }); 
-            const cita=await Cita.findOne({_id:id});
-            if (cita.item.tipo=='p') {
-                const newFactura = new Factura({ codigo: 0, hc: cita, estado: 'PREFACTURA', descripcion: 'FATURACION DE PROCEDIMIENTO' });     
-                await newFactura.save();
-            }       
-            req.flash('success','Adminision: '+cita.nro)
-        }else{
-            req.flash('login', 'El Numero autorizacion existe!');
-        }
-    } else{
-        await Cita.updateOne({_id:id},
-            {
-            copago:copago,
-            autorizacion:autorizacion,        
-            estado:'ensala',
-            valor:valor,
-            cantidad:cantidad,
-            posquirurgico:posquirurgico          
-        }); 
-        const cita=await Cita.findOne({_id:id});
-        if (cita.item.tipo=='p') {
-            const newFactura = new Factura({ codigo: 0, hc: cita, estado: 'PREFACTURA', descripcion: 'FATURACION DE PROCEDIMIENTO' });     
-            await newFactura.save();
-        }     
+        }    
         req.flash('success','Adminision: '+cita.nro)
-    }
-    
+    }    
     res.redirect('/vercitas');
 });
 

@@ -4998,22 +4998,31 @@ function consultarPrefactura(opcion) {
         },
         success: (data) => {
             var cadena = '';
+            var cont =0;
+            color='white';
             data.forEach(element => {
                 agregarId(element.id);
+                if(element.pos=='si'){
+                    color='cyan';
+                }
                 cadena += ` 
-                 <tr>
-                 <th scope="row"><input type="checkbox" id="${element.id}" value="${element.id}" onclick="SeleccionarFactura('${element.id}')"  class="form-control ck" style="width: 14px;"></th>
+                 <tr  style="background-color: ${color};">                 
+                 <th><div class='row'><div class="col-sm-3"><input type="checkbox" id="${element.id}" value="${element.id}" onclick="SeleccionarFactura('${element.id}')"  class="form-control ck" style="width: 14px;"></div><div class="col-sm-3 mt-2">#${cont}</div></div></th>                              
+                 <td class="mt-4"><div class="col-sm-2 mt-2">#${element.nro}</div></td>
                  <td>${element.fecha}</td>
                  <td>${element.nombres}</td>                 
                  <td>${element.entidad}</td>                 
-                 <td>${element.item}</td>
+                 <td>${element.cups}</td>                 
+                 <td>${element.item} <b>X ${element.cantidad}</b></td>
                  <td>${element.autorizacion}</td>
                  <td>${number_format(element.copago)}</td>
                  <td>${number_format(element.valor)}</td>
+                 <td>${number_format(element.total)}</td>
                  <td>
                  <a href="/imprimirprefac/${element.id}" class="btn btn-primary btn-sm"><i class="fas fa-print" style="font-size: 16px;"></i></a>
                  </td>           
-               </tr>`
+               </tr>`;
+               cont++;
             });
 
             $('#prefacturas').html(cadena);
@@ -5092,7 +5101,8 @@ function facturarxid() {
         datatype: 'json',
         data: {
             ids: i,
-            eps: $('#entidad').val()
+            eps: $('#entidad').val(),
+            fechaf:$('#fechaf').val()
         },
         success: (data) => {
             if (data == 'facturado') {
