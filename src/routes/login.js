@@ -31,10 +31,9 @@ passport.use('local-singup', new strategy({
         const {nombre,firma,perfil}=req.body;
         
         if (perfil=='admin') {newUser.admin=1;}
-        if (perfil=='Secretaria') {newUser.secre=1;}
-        if (perfil=='Medico') {newUser.med=1;}
-        if (perfil=='fact') {newUser.fact=1;}
-        if (perfil=='cont') {newUser.cont=1;}
+        if (perfil=='sede') {newUser.sede=1;}
+        if (perfil=='cordinador') {newUser.cordinador=1;}
+      
 
         newUser.username=user;
         newUser.password=bcrypt.hashSync(password);
@@ -66,7 +65,7 @@ passport.use('local-singin', new strategy({
     
 }));
 
-router.get('/login',checkAuthentication,(req, res,next) => {
+router.get('/login',(req, res,next) => {
     res.render('login/index');
 });
 
