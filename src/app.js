@@ -6,13 +6,10 @@ const passport = require('passport');
 const session = require('express-session');
 const flash = require('connect-flash');
 const fileUpload = require('express-fileupload');
-
 const app = express();
-
-
 //setting
 require('./database');
-app.set('port',process.env.PORT || 6700);
+app.set('port',process.env.PORT || 80);
 app.set('views',path.join(__dirname,'views'));
 app.set('file',path.join(__dirname,'file'));
 
@@ -45,16 +42,8 @@ app.use((req,res,next)=>{
 //route
 app.use(require('./routes'));
 app.use(require('./routes/index'));
-app.use(require('./routes/citas'));
-app.use(require('./routes/medicos'));
-app.use(require('./routes/item'));
-app.use(require('./routes/pacientes'));
-app.use(require('./routes/entidades'));
-app.use(require('./routes/miempresa'));
-app.use(require('./routes/facturacion'));
 app.use(require('./routes/login'));
-app.use(require('./routes/hclinicas'));
-app.use(require('./routes/medicamentos'));
+
 
 //static file
 app.use(express.static(path.join(__dirname,'public')));
