@@ -1,0 +1,21 @@
+<div class="card">
+    <input type="hidden" value="{{id}}" id="id">
+    <div class="card-header">
+        <h4> Pedidos Solicitados por {{pedido.usuario}}</h4>
+    </div>
+<div class="card-body">
+    <div class="row small">
+        <div class="col-sm-7"><b>Insumo</b></div>    
+        <div class="col-sm-1"><b>Cantidad</b></div>
+    </div>
+    {{#each pedido.pedidos}}
+    <div class="row small mt-1">
+        <div class="col-sm-7">{{producto}}</div>        
+        <div class="col-sm-1" style="color: royalblue;">{{autorizado}}</div> 
+    </div>
+    {{/each}}
+</div>
+<div class="card-footer">
+    <button class="btn btn-success btn-sm" onclick="Despachado()">Despachado</button>
+</div>
+</div>

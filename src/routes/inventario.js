@@ -23,7 +23,7 @@ router.post('/crearInsumos', checkAuthentication, async (req, res) => {
     const p = JSON.parse(datos);
     const productos = new Productos({ codigo_Articulo: p.codigo_Articulo, nombre_Articulo: p.nombre_Articulo, Referencia: p.nombre_Articulo, fecha_Compra: p.fecha_Compra, proveedor: p.proveedor, linea: p.linea, marca: p.marca, medida: p.medida, cantidad_Total: p.cantidad_Total, costo: p.costo });
     await productos.save();
-    res.send(p);
+    res.send(p.codigo_Articulo);
 });
 
 router.post('/validarProducto', checkAuthentication, async (req, res) => {
@@ -181,21 +181,6 @@ router.post('/saldos', checkAuthentication, async (req, res) => {
 });
 //SUPERVISOR
 
-async function validarCantidad (codigo) {
-    var total=0;
-    console.log('codigo: ',codigo);
-    const pedidos= await Pedidos.find({estado:'solicitado'});
-    pedidos.forEach(element => {
-       for (let index = 0; index < element.pedidos.length; index++) {
-          if(element.pedidos[index].codigo==codigo){
-              total+=parseInt(element.pedidos[index].cantidad);
-              
-          }           
-       }
-    });   
-    return total;
-}
-
 router.post('/actualizarCantidad', checkAuthentication, async (req, res) => { 
     const {id,cantidad,codigo}=req.body;
 
@@ -229,4 +214,29 @@ router.post('/actualizarCantidad', checkAuthentication, async (req, res) => {
 
 });
 
+router.post('/autorizar', checkAuthentication, async (req, res) => { 
+    const {id}=req.body;
+    await Pedidos.updateOne({_id:id},{estado:'autorizado',supervisor:req.user.nombre});     
+    res.send('autorizado');
+})
+
+
+//DESPACHO
+router.get('/despacho', checkAuthentication, async (req, res) => { 
+    const pedidos= await Pedidos.find({estado:'autorizado'}).lean();
+    console.log(pedidos) 
+    res.render('inventario/despacho',{pedidos});
+});
+router.get('/verPedidoSedesDespacho/:id', checkAuthentication, async (req, res) => { 
+    const {id}=req.params;
+    const pedido=await Pedidos.findOne({_id:id}).lean();  
+    res.render('inventario/pedidosDespacho',{pedido,id});
+});
+//DESPACHO
+
+
+router.get('/saldos', checkAuthentication, async (req, res) => {   
+    const productos=await Productos.find().lean();  
+    res.render('inventario/saldos',{productos});
+});
 module.exports = router;

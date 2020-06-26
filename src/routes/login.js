@@ -28,11 +28,12 @@ passport.use('local-singup', new strategy({
     if(us){
         done(null,false,req.flash('login', 'El Usuario ya ha sido registrado'));
     }else{
-        const {nombre,firma,perfil}=req.body;
+        const {nombre,firma,perfil,empleado}=req.body;
         
         if (perfil=='admin') {newUser.admin=1;}
         if (perfil=='sede') {newUser.sede=1;}
         if (perfil=='cordinador') {newUser.cordinador=1;}
+        if (perfil=='despacho') {newUser.despacho=1;}
       
 
         newUser.username=user;
@@ -40,7 +41,7 @@ passport.use('local-singup', new strategy({
         newUser.perfil=perfil;
         newUser.nombre=nombre;
         newUser.medico=firma;
-        newUser.firma=firma+'.png';     
+        newUser.empleado=empleado;     
         await newUser.save();
         done(null, newUser);
     }    

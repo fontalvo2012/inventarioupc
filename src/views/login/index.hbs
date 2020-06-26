@@ -1,8 +1,4 @@
-{{!-- {{#if login}}
-<div class="alert alert-danger" role="alert">
- <h4>{{login}}</h4>
-</div>
-{{/if}} --}}
+
 <div class="row" style="margin-left: 25%; margin-top: 10%;">
     <div class="col-sm-5">
         <div class="card">
@@ -25,9 +21,14 @@
                     </div>
 
                     <div class="form-group">
-                        <span class="small">Nombres</span>
+                        <span class="small">Sede/area</span>
                         <input type="text" name="nombre" id="nombre" class="form-control form-control-sm"
-                            placeholder="Nombres" required>
+                            placeholder="Sede/Area" required>
+                    </div>
+                    <div class="form-group">
+                        <span class="small">Empleado</span>
+                        <input type="text" name="empleado" id="empleado" class="form-control form-control-sm"
+                            placeholder="Empleado" required>
                     </div>
                     <div class="form-group">
                         <span class="small">Cedula</span>
@@ -35,14 +36,14 @@
                             placeholder="Cedula" required>
                     </div>
                     <div class="row">
-                        <div class="col-sm-4">
+                        <div class="col-sm-8">
                             <div class="form-group">
                                 <span class="small">perfil</span>
                                 <select name="perfil" id="perfil" class="form-control form-control-sm">
                                     <option value="">Seleccione</option>
                                     <option value="admin">Administrador</option>
                                     <option value="cordinador">cordinador</option>
-                                    <option value="bodega">Usuario Bodega</option>
+                                    <option value="despacho">Usuario Bodega</option>
                                     <option value="sede"> Usuario sede</option>
                                 </select>
                             </div>

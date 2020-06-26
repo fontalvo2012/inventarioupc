@@ -43,6 +43,8 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto ">
+
+        {{#if user.cordinador}}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
@@ -51,9 +53,11 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item" href="/cordinador"><i class='fas fa-angle-double-right' style='font-size:12px'></i>
               revisar</a>
-            
+
           </div>
         </li>
+        {{/if}}
+        {{#if user.sede}}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
@@ -65,6 +69,19 @@
             <a class="dropdown-item" href="/consultarPedidos"><i class='fas fa-angle-double-right'
                 style='font-size:12px'></i>
               Consultar Pedidos</a>
+          </div>
+        </li>
+        {{/if}}
+        {{#if user.despacho}}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <i class='fas fa-fax' style='font-size:16px'></i> Despacho
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="/despacho"><i class='fas fa-angle-double-right' style='font-size:12px'></i>
+              Pedidos</a>
+
           </div>
         </li>
         <ul class="navbar-nav ml-auto ">
@@ -84,6 +101,7 @@
                 Surtir</a>
             </div>
           </li>
+          {{/if}}
           {{#if user.admin}}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"

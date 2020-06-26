@@ -7,7 +7,8 @@ const pedidosSchema= new Schema({
     pedidos:{type:Object,required:true},
     fecha:{type:Date,default:Date.now()},   
     estado:{type:String,required:false},
-    usuario:{type:String,required:false}
+    usuario:{type:String,required:false},
+    supervisor:{type:String,required:false}
 
 });
 

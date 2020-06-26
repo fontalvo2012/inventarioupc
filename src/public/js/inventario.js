@@ -7288,21 +7288,22 @@ const inventario = [
 
 function crearInsumosMasivos() {
     var dato = "";
-    inventario.forEach(element => {
-        dato = JSON.stringify(element);
-        $.ajax({
-            url: '/crearInsumos',
-            type: 'POST',
-            datatype: 'json',
-            data: {
-                datos: dato
-            },
-            success: (data) => {
-                console.log(data);
-            }
+    if(confirm('desea inicializar los insumos')){
+        inventario.forEach(element => {
+            dato = JSON.stringify(element);
+            $.ajax({
+                url: '/crearInsumos',
+                type: 'POST',
+                datatype: 'json',
+                data: {
+                    datos: dato
+                },
+                success: (data) => {
+                    console.log(data);
+                }
+            });
         });
-    });
-
+    }
 }
 
 function crearInsumos() {
@@ -7316,23 +7317,25 @@ function crearInsumos() {
             "cantidad_Total": "0",
             "costo": "0"
         }`;
-    $.ajax({
-        url: '/crearInsumos',
-        type: 'POST',
-        datatype: 'json',
-        data: {
-            datos: dato
-        },
-        success: (data) => {
-            console.log(data);
-            $('#codigo').val("");
-            $('#nombre').val("");
-            $('#referencia').val("");
-            $('#linea').val("");
-            $('#marca').val("");
-            $('#marca').val("");
-        }
-    });
+    if (confirm('Desea Crear los productos')) {
+        $.ajax({
+            url: '/crearInsumos',
+            type: 'POST',
+            datatype: 'json',
+            data: {
+                datos: dato
+            },
+            success: (data) => {
+                console.log(data);
+                $('#codigo').val("");
+                $('#nombre').val("");
+                $('#referencia').val("");
+                $('#linea').val("");
+                $('#marca').val("");
+                $('#marca').val("");
+            }
+        });
+    }
 
 }
 
@@ -7501,8 +7504,7 @@ function totalCantidad() {
         data: {
             codigo
         },
-        success: (data) => {
-           //console.log(data);
+        success: (data) => {          
            ca=parseInt(data);
         }
     });
@@ -7533,4 +7535,19 @@ function cambiarCantidad(codigo) {
         alert('No hay valor');
     }  
   
+}
+
+function Autorizar() {
+    var id=$('#id').val();
+    $.ajax({
+        url: '/autorizar',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            id
+        },
+        success: (data) => {
+            location.href="/cordinador";           
+        }
+    });
 }
