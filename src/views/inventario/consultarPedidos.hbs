@@ -1,0 +1,59 @@
+<div class="card">
+    <div class="card-header">
+        <h4>Consulta de Pedidos</h4>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Detalles</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each pedido}}
+                <tr>
+                    <th scope="row">{{nro}}</th>
+                    <td>{{fecha}}</td>
+                    <td>{{estado}}</td>
+                    <td> <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                            data-target="#exampleModal{{nro}}">
+                            Detalle
+                        </button></td>
+                </tr>
+                <!-- Button trigger modal -->
+
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal{{nro}}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Detalles</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                 {{#each pedidos}}
+                             <div class="row small">
+                                 <div class="col-sm-11">{{producto}}</div>
+                                 <div class="col-sm-1">{{cantidad}}</div>                                
+                             </div>
+                               {{/each}}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>

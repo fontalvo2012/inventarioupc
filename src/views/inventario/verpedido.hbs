@@ -1,0 +1,24 @@
+<div class="card">
+    <input type="hidden" value="{{id}}" id="id">
+    <div class="card-header">
+        <h4> Pedidos Solicitados por {{pedido.usuario}}</h4>
+    </div>
+<div class="card-body">
+    <div class="row small">
+        <div class="col-sm-7"><b>Insumo</b></div>
+        <div class="col-sm-1"><b>Can</b></div>
+        <div class="col-sm-1"><b>Aut</b></div>
+        <div class="col-sm-2"><b>Modificar</b></div>
+        <div class="col-sm-1"><b>..</b></div>
+    </div>
+    {{#each pedido.pedidos}}
+    <div class="row small mt-1">
+        <div class="col-sm-7">{{producto}}</div>
+        <div class="col-sm-1">{{cantidad}}</div>
+        <div class="col-sm-1" style="color: royalblue;">{{autorizado}}</div>
+        <div class="col-sm-2"><input type="text" id="cantidad{{codigo}}" class="form-control form-control-sm" name="cantidad" placeholder="Cantidad"></div>
+        <div class="col-sm-1"><a href="#" class="btn btn-info btn-sm" onclick="cambiarCantidad('{{codigo}}')"><i class='fas fa-edit' style='font-size:16px'></i></a></div>
+    </div>
+    {{/each}}
+</div>
+</div>

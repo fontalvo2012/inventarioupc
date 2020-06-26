@@ -2,48 +2,55 @@
 <div class="alert alert-danger" role="alert">
  <h4>{{login}}</h4>
 </div>
-
 {{/if}} --}}
-<div class="row" style="margin-left: 25%; margin-top: 10%;" >
+<div class="row" style="margin-left: 25%; margin-top: 10%;">
     <div class="col-sm-5">
         <div class="card">
             <div class="card-header">
-              
-              <h5><b>Registros de Usuarios</b></h5>
+            <h5><b>Registros de Usuarios</b></h5>
             </div>
             <div class="card-body">
-                  <form action="/login" method="post">
-                <div class="form-group">
-                    <span class="small">Usuario</span>
-                    <input type="text" name="user" id="user" class="form-control form-control-sm"
-                        placeholder="Usuario:" required>
-                </div>
-                <div class="form-group">
-                    <span class="small">Contraseña</span>
-                    <input type="password" name="password" id="password" class="form-control form-control-sm"
-                        placeholder="Contraseña" required>
-                </div>
-                <div class="form-group">
-                     <span class="small">Nombres</span>
-                    <input type="text" name="nombre" id="nombre" class="form-control form-control-sm"
-                        placeholder="Nombres" required>
-                </div>
-                <div class="form-group">
-                     <span class="small">Firma</span>
-                    <input type="text" name="firma" id="firma" class="form-control form-control-sm"
-                        placeholder="Cedula" required>
-                </div>
-                 <div class="form-group">
-                      <span class="small">perfil</span>
-                    <select name="perfil" id="perfil" class="form-control form-control-sm">                    
-                        <option value="sede">Sede</option>
-                        <option value="admin">Administrador</option>
-                        <option value="cordinador">cordinador</option>                    
-                    </select>
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-success btn-sm btn-block">Ingresar</button>
-                </div>
+                <form action="/login" method="post">
+
+                    <div class="form-group">
+                        <span class="small">Usuario</span>
+                        <input type="text" name="user" id="user" class="form-control form-control-sm"
+                            placeholder="Usuario:" required>
+                    </div>
+
+                    <div class="form-group">
+                        <span class="small">Contraseña</span>
+                        <input type="password" name="password" id="password" class="form-control form-control-sm"
+                            placeholder="Contraseña" required>
+                    </div>
+
+                    <div class="form-group">
+                        <span class="small">Nombres</span>
+                        <input type="text" name="nombre" id="nombre" class="form-control form-control-sm"
+                            placeholder="Nombres" required>
+                    </div>
+                    <div class="form-group">
+                        <span class="small">Cedula</span>
+                        <input type="text" name="firma" id="firma" class="form-control form-control-sm"
+                            placeholder="Cedula" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="small">perfil</span>
+                                <select name="perfil" id="perfil" class="form-control form-control-sm">
+                                    <option value="">Seleccione</option>
+                                    <option value="admin">Administrador</option>
+                                    <option value="cordinador">cordinador</option>
+                                    <option value="bodega">Usuario Bodega</option>
+                                    <option value="sede"> Usuario sede</option>
+                                </select>
+                            </div>
+                        </div>                         
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-success btn-sm btn-block"> Ingresar </button>
+                    </div>
             </div>
             </form>
         </div>

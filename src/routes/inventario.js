@@ -3,6 +3,7 @@ const router = Router();
 const Productos = require('../model/productos');
 const Proveedores = require('../model/proveedores');
 const Compras = require('../model/compras');
+const Pedidos = require('../model/pedidos');
 
 function checkAuthentication(req, res, next) {
     if (req.isAuthenticated()) {
@@ -105,4 +106,127 @@ router.post('/compras', checkAuthentication, async (req, res) => {
 
 });
 //COMPRAS
+router.get('/pedidos', checkAuthentication, async (req, res) => {   
+    res.render('inventario/pedidos');
+});
+router.post('/pedidos', checkAuthentication, async (req, res) => {
+    const {pedido}= req.body;
+    const contador=await Pedidos.find();    
+    if(pedido!=""){
+        const p=JSON.parse(pedido);
+        const pedi=new Pedidos({nro:contador.length,pedidos:p,estado:'solicitado',usuario:req.user.nombre});
+        await pedi.save();
+        console.log(p);
+        req.flash('success',"PEDIDO FUE CREADO CORRECTAMENTE!")
+    }else{
+        req.flash('login',"NO SE ENTONTRARON DATOS EN EL PEDIDO!");
+    }   
+    res.redirect('/pedidos');
+});
+
+router.post('/verificarProducto', checkAuthentication, async (req, res) => {
+    const {codigo,cantidad}= req.body;
+    const producto=await Productos.findOne({codigo_Articulo:codigo});
+    var can=parseInt(producto.cantidad_Total); 
+    var total=0;   
+    const pedidos= await Pedidos.find({estado:'solicitado'});
+    pedidos.forEach(element => {
+       for (let index = 0; index < element.pedidos.length; index++) {
+          if(element.pedidos[index].codigo==codigo){
+              total+=parseInt(element.pedidos[index].cantidad);
+              
+          }           
+       }
+    });  
+    
+    console.log(can-total);
+    if(parseInt(cantidad)>(can-total)){        
+        res.send((can-total)+"");
+    }else{         
+        res.send('si');
+    }
+    
+});
+router.get('/consultarPedidos', checkAuthentication, async (req, res) => { 
+    const pedido=await Pedidos.find({usuario:req.user.nombre}).lean();  
+    res.render('inventario/consultarPedidos',{pedido});
+});
+//PEDIDOS
+// SUPERVISOR
+router.get('/cordinador', checkAuthentication, async (req, res) => { 
+    const pedido=await Pedidos.find({estado:'solicitado'}).lean();  
+    res.render('inventario/cordinador',{pedido});
+});
+
+router.get('/verPedidoSedes/:id', checkAuthentication, async (req, res) => { 
+    const {id}=req.params;
+    const pedido=await Pedidos.findOne({_id:id}).lean();  
+    res.render('inventario/verpedido',{pedido,id});
+});
+
+router.post('/saldos', checkAuthentication, async (req, res) => { 
+    const {codigo}=req.body;
+    var total=0;  
+    const pedidos= await Pedidos.find({estado:'solicitado'});
+    pedidos.forEach(element => {
+       for (let index = 0; index < element.pedidos.length; index++) {
+          if(element.pedidos[index].codigo==codigo){
+              total+=parseInt(element.pedidos[index].cantidad);
+              
+          }           
+       }
+    });
+    console.log(total);
+    res.send(''+total);
+});
+//SUPERVISOR
+
+async function validarCantidad (codigo) {
+    var total=0;
+    console.log('codigo: ',codigo);
+    const pedidos= await Pedidos.find({estado:'solicitado'});
+    pedidos.forEach(element => {
+       for (let index = 0; index < element.pedidos.length; index++) {
+          if(element.pedidos[index].codigo==codigo){
+              total+=parseInt(element.pedidos[index].cantidad);
+              
+          }           
+       }
+    });   
+    return total;
+}
+
+router.post('/actualizarCantidad', checkAuthentication, async (req, res) => { 
+    const {id,cantidad,codigo}=req.body;
+
+    const producto=await Productos.findOne({codigo_Articulo:codigo});
+    var can=parseInt(producto.cantidad_Total); 
+    var total=0;   
+    const pedidos= await Pedidos.find({estado:'solicitado'});
+    pedidos.forEach(element => {
+       for (let index = 0; index < element.pedidos.length; index++) {
+          if(element.pedidos[index].codigo==codigo){
+              total+=parseInt(element.pedidos[index].autorizado);              
+          }           
+       }
+    });  
+    
+    console.log(can-total);
+    if(parseInt(cantidad)>(can-total)){        
+        res.send((can-total)+"");
+    }else{         
+        const pedido=await Pedidos.findOne({_id:id}); 
+        const pe=pedido.pedidos;
+        for (let index = 0; index < pe.length; index++) {
+            if(pe[index].codigo==codigo){
+                pe[index].autorizado=cantidad;
+            }        
+        }
+        await Pedidos.updateOne({_id:id},{pedidos:pe});
+        res.send('si');
+    }
+
+
+});
+
 module.exports = router;

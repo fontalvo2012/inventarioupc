@@ -1,0 +1,43 @@
+<form action="/pedidos" method="POST">
+    <input type="hidden" id="pedido" name="pedido" required>
+    <div class="card">
+    <div class="card-header">
+        <h4>Crear Pedido</h4>
+    </div>    
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-4">
+                <span class="small">Producto</span>
+                <input type="text" id="producto" name="producto" placeholder="Producto" onblur="ValidarProducto()"
+                    class="form-control form-control-sm productos">
+            </div>
+            <div class="col-sm-1">
+                <span class="small">Cantidad</span>
+                <input type="text" id="cantidad" name="cantidad" placeholder="#" class="form-control form-control-sm">
+            </div>
+            <div class="col-sm-4 mt-4"><a href="#" class="btn btn-info btn-sm" onclick="verificarProducto()"><i class='fas fa-angle-double-down'
+                        style='font-size:16px'></i></a></div>
+            <div class="col-sm-3 mt-4"><button class="btn btn-success btn-sm">Crear Pedido</button></a></div>
+        </div>
+    </div>
+</div>
+</form>
+<div class="card">
+    <div class="card-body">
+        <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Producto</th>
+      <th scope="col">Cantidad</th>
+      <th scope="col">accion</th>   
+
+    </tr>
+  </thead>
+  <tbody id="contenido">
+    
+    
+  </tbody>
+</table>
+    </div>
+</div>

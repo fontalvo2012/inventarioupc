@@ -7373,7 +7373,7 @@ function completarProducto() {
         }
     });
 }
-
+completarProducto();
 function ValidarProducto() {
     var producto = $('#producto').val();
     var index = producto.indexOf(':');
@@ -7422,4 +7422,115 @@ function mostrarCarrito() {
     </tr>
         `;
     $('#productos').html(cadena);
+}
+
+
+
+//PEDIDO
+var pedido=[];
+var ca=0;
+function addProductoPedido() {
+    if($('#producto').val()!="" && $('#cantidad').val()!=""){
+        var index=$('#producto').val().indexOf(':');
+        var codigo=$('#producto').val().substring(0,index);
+        pedido.push({codigo,producto:$('#producto').val(),cantidad:$('#cantidad').val(),autorizado:$('#cantidad').val()});
+    }else{
+        alert('debe llenar la cantida o elegir el producto');
+    }
+    mostrarPedido();   
+    $('#pedido').val(JSON.stringify(pedido));
+    $('#producto').val('');
+    $('#cantidad').val('');
+}
+
+function mostrarPedido() {
+    var cadena="";
+    var cont=0;
+
+    pedido.forEach(element => {        
+        cadena+=`
+        <tr>
+            <th scope="row">${cont}</th>
+            <td>${element.producto}</td>
+            <td>${element.cantidad}</td>     
+            <td><a href="#" onclick="quirarArrayPedido(${cont})">quitar</a></td>     
+        </tr>
+        `;
+        cont++;
+    });
+    $('#contenido').html(cadena);
+}
+
+function quirarArrayPedido(i) {
+    pedido.splice(i);
+    mostrarPedido();
+}
+
+function verificarProducto() {
+    var producto = $('#producto').val();
+    var cantidad=$('#cantidad').val();
+    var index = producto.indexOf(':');
+    var codigo = producto.substring(0, index);
+    $.ajax({
+        url: '/verificarProducto',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            codigo,
+            cantidad
+        },
+        success: (data) => {            
+            if (data=='si') {              
+                addProductoPedido();               
+            } else {               
+                $('#cantidad').val('');
+                alert('Este pedido solo cuenta con '+data+' en el Inventario');        
+            }
+        }
+    });
+}
+
+function totalCantidad() {
+    var producto = $('#producto').val();
+    var index = producto.indexOf(':');
+    var codigo = producto.substring(0, index);
+    $.ajax({
+        url: '/saldos',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            codigo
+        },
+        success: (data) => {
+           //console.log(data);
+           ca=parseInt(data);
+        }
+    });
+}
+
+function cambiarCantidad(codigo) {       
+    var cantidad=$('#cantidad'+codigo).val(); 
+    if(cantidad!=""){
+        $.ajax({
+            url: '/actualizarCantidad',
+            type: 'POST',
+            datatype: 'json',
+            data: {
+                codigo,
+                cantidad,
+                id:$('#id').val()
+            },
+            success: (data) => {            
+                if (data=='si') {              
+                      location.href="/verPedidoSedes/"+$('#id').val();          
+                } else {               
+                    $('#cantidad'+codigo).val('');
+                    alert('Este pedido solo cuenta con '+data+' en el Inventario');        
+                }
+            }
+        });
+    }else{
+        alert('No hay valor');
+    }  
+  
 }
