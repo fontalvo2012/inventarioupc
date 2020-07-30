@@ -647,3 +647,20 @@ function NumeroALetras(num, centavos) {
 }//NumeroALetras()
 
 //NUMERO  A LETRAS
+function Imprimir() {
+
+  var ventana = window.open('', 'PRINT', 'height=400,width=600');
+  ventana.document.write('<html><head><title>' + document.title + '</title>');
+  ventana.document.write('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">'); //Aquí agregué la hoja de estilos
+  ventana.document.write('</head><body class="p-4" >');
+  ventana.document.write('<div> <img src="/img/logo.png"  width="400" ></div>');
+  ventana.document.write($('#imp').html());
+  ventana.document.write('</body></html>');
+  ventana.document.close();
+  ventana.focus();
+  ventana.onload = function() {
+    ventana.print();
+    ventana.close();
+  };
+  return true;
+}

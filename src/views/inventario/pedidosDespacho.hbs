@@ -1,9 +1,12 @@
+
+        <a href="#" class="btn btn-primary btn-sm" onclick="Imprimir()"><i class="fas fa-print"
+                style="font-size: 20px;"></i></a>
 <div class="card">
     <input type="hidden" value="{{id}}" id="id">
     <div class="card-header">
         <h4> Pedidos Solicitados por {{pedido.usuario}}</h4>
     </div>
-<div class="card-body">
+<div class="card-body" id="imp">
     <div class="row small">
         <div class="col-sm-7"><b>Insumo</b></div>    
         <div class="col-sm-1"><b>Cantidad</b></div>
