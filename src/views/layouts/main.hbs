@@ -84,6 +84,9 @@
 
           </div>
         </li>
+
+        {{/if}}
+        {{#if user.admin}}
         <ul class="navbar-nav ml-auto ">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
@@ -101,25 +104,24 @@
                 Surtir</a>
             </div>
           </li>
-          {{/if}}
-          {{#if user.admin}}
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class='fas fa-unlock-alt' style='font-size:16px'></i> Seguridad
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="/login"><i class='fas fa-angle-double-right' style='font-size:12px'></i>
-                Usuarios</a>
-            </div>
-          </li>
-          {{/if}}
-          <li class="nav-item">
-            <a class="nav-link " href="/salir" role="button" aria-haspopup="true" aria-expanded="false">
-              <i class='fas fa-power-off' style='font-size:16px'></i> Salir
-            </a>
-          </li>
         </ul>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <i class='fas fa-unlock-alt' style='font-size:16px'></i> Seguridad
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="/login"><i class='fas fa-angle-double-right' style='font-size:12px'></i>
+              Usuarios</a>
+          </div>
+        </li>
+        {{/if}}
+        <li class="nav-item">
+          <a class="nav-link " href="/salir" role="button" aria-haspopup="true" aria-expanded="false">
+            <i class='fas fa-power-off' style='font-size:16px'></i> Salir
+          </a>
+        </li>
+      </ul>
     </div>
   </nav>
   <div class="fuera ml-5">
