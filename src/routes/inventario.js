@@ -220,7 +220,11 @@ router.post('/autorizar', checkAuthentication, async (req, res) => {
     res.send('autorizado');
 })
 
-
+router.post('/despachar', checkAuthentication, async (req, res) => { 
+    const {id}=req.body;
+    await Pedidos.updateOne({_id:id},{estado:'despachado',supervisor:req.user.nombre});     
+    res.send('despachado');
+})
 //DESPACHO
 router.get('/despacho', checkAuthentication, async (req, res) => { 
     const pedidos= await Pedidos.find({estado:'autorizado'}).lean();
@@ -238,8 +242,6 @@ router.get('/despacho', checkAuthentication, async (req, res) => {
 
         pedidos[i].fecha=pedidos[i].fecha.getDate()+'/'+(pedidos[i].fecha.getMonth()+1)+'/'+pedidos[i].fecha.getFullYear()+' '+hora+':'+minuto;        
     }
-
-  
 
     console.log(pedidos)
     res.render('inventario/despacho',{pedidos});

@@ -7551,3 +7551,18 @@ function Autorizar() {
         }
     });
 }
+
+
+function Despachado(id) {    
+    $.ajax({
+        url: '/despachar',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            id
+        },
+        success: (data) => {
+            location.href="/cordinador";           
+        }
+    });
+}

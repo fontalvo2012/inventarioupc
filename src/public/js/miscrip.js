@@ -602,7 +602,7 @@ function Miles(num) {
   return strMiles + " " + strCentenas;
 
   //return Seccion(num, divisor, "UN MIL", "MIL") + " " + Centenas(resto);
-}//Miles()
+}
 
 function Millones(num) {
   divisor = 1000000;
@@ -619,6 +619,10 @@ function Millones(num) {
 
   //return Seccion(num, divisor, "UN MILLON", "MILLONES") + " " + Miles(resto);
 }//Millones()
+
+function Despachado(Despachado) {
+  
+}
 
 function NumeroALetras(num, centavos) {
   var data = {

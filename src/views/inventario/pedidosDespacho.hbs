@@ -17,8 +17,9 @@
         <div class="col-sm-1" style="color: royalblue;">{{autorizado}}</div> 
     </div>
     {{/each}}
+    <span>{{id}}</span>
 </div>
 <div class="card-footer">
-    <button class="btn btn-success btn-sm" onclick="Despachado()">Despachado</button>
+    <button class="btn btn-success btn-sm" onclick="Despachado('{{id}}')">Despachado</button>
 </div>
 </div>
