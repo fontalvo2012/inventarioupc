@@ -224,7 +224,24 @@ router.post('/autorizar', checkAuthentication, async (req, res) => {
 //DESPACHO
 router.get('/despacho', checkAuthentication, async (req, res) => { 
     const pedidos= await Pedidos.find({estado:'autorizado'}).lean();
-    console.log(pedidos) 
+   
+    for (let i = 0; i < pedidos.length; i++) {
+        var hora=pedidos[i].fecha.getHours();
+        var minuto = pedidos[i].fecha.getMinutes();
+
+        if(hora<10){
+            hora='0'+hora;
+        }
+        if(minuto<10){
+            minuto='0'+minuto;
+        }
+
+        pedidos[i].fecha=pedidos[i].fecha.getDate()+'/'+(pedidos[i].fecha.getMonth()+1)+'/'+pedidos[i].fecha.getFullYear()+' '+hora+':'+minuto;        
+    }
+
+  
+
+    console.log(pedidos)
     res.render('inventario/despacho',{pedidos});
 });
 router.get('/verPedidoSedesDespacho/:id', checkAuthentication, async (req, res) => { 
