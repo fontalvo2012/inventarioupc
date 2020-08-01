@@ -4,6 +4,7 @@ const Productos = require('../model/productos');
 const Proveedores = require('../model/proveedores');
 const Compras = require('../model/compras');
 const Pedidos = require('../model/pedidos');
+const Users = require('../model/users');
 
 function checkAuthentication(req, res, next) {
     if (req.isAuthenticated()) {
@@ -12,10 +13,75 @@ function checkAuthentication(req, res, next) {
         res.redirect("/singIn");
     }
 }
-// => MONGO DB
-// PRODUCTOS
+
 router.get('/inventario', checkAuthentication, async (req, res) => {
     res.render('inventario/index');
+});
+router.get('/informeDespachado', checkAuthentication, async (req, res) => {
+    const users =await Users.find({perfil:'sede'}).lean();  
+    res.render('inventario/informe_despachado',{users});
+});
+
+router.get('/verpedido/:id', checkAuthentication, async (req, res) => {
+    const {id}= req.params;
+    const pedido = await Pedidos.findOne({_id:id}).lean();  
+    var hora=pedido.fecha.getHours();
+    var minuto = pedido.fecha.getMinutes();
+    pedido.fecha=pedido.fecha.getDate()+'/'+(pedido.fecha.getMonth()+1)+'/'+pedido.fecha.getFullYear()+' '+hora+':'+minuto;
+    console.log(pedido);
+    res.render('inventario/revisar',{pedido});
+});
+
+router.post('/informeDespachado', checkAuthentication, async (req, res) => {
+    const {inicio,final,usuario,tipo}=req.body; 
+    var pedidos=[];
+    var respedidos=[];
+     
+        if(tipo==""){
+             pedidos = await Pedidos.find(
+                {
+                    usuario: usuario,                 
+                    fecha: {
+                        $gte: new Date(inicio),
+                        $lte: new Date(final)
+                    }
+                });
+        }else{
+             pedidos = await Pedidos.find(
+                {
+                    usuario: usuario,
+                    estado: tipo,
+                    fecha: {
+                        $gte: new Date(inicio),
+                        $lte: new Date(final)
+                    }
+                });
+        }
+        var p=pedidos;
+        for (let i = 0; i < p.length; i++) {
+            var hora=p[i].fecha.getHours();
+            var minuto = p[i].fecha.getMinutes();
+    
+            if(hora<10){
+                hora='0'+hora;
+            }
+
+            if(minuto<10){
+                minuto='0'+minuto;
+            }
+
+            var f=p[i].fecha.getDate()+'/'+(p[i].fecha.getMonth()+1)+'/'+p[i].fecha.getFullYear()+' '+hora+':'+minuto;
+            respedidos.push({
+                _id:p[i]._id,
+                fecha:f,
+                usuario:p[i].usuario,
+                nro:p[i].nro,
+                estado:p[i].estado
+            });
+            console.log(respedidos);       
+        }
+      
+    res.send(respedidos);
 });
 
 router.post('/crearInsumos', checkAuthentication, async (req, res) => {
@@ -34,7 +100,6 @@ router.post('/validarProducto', checkAuthentication, async (req, res) => {
     } else {
         res.send('no');
     }
-
 });
 
 router.post('/completarProducto', checkAuthentication, async (req, res) => {
@@ -48,7 +113,7 @@ router.post('/completarProducto', checkAuthentication, async (req, res) => {
 
 router.post('/crearInsumosform', checkAuthentication, async (req, res) => {
     const { codigo, nombre, referencia, linea, marca, medida } = req.body;
-    const productos = new Productos({ codigo_Articulo: codigo, nombre_Articulo: nombre, Referencia: referencia, linea: linea, marca: marca, medida: medida, cantidad_Total: '0', costo: '0' });
+    const productos = new Productos({ codigo_Articulo: codigo, nombre_Articulo: nombre, Referencia: referencia, linea: linea, marca: marca, medida: medida, costo: '0' });
     await productos.save();
     req.flash('success', 'Datos registrados')
     res.redirect('/inventario');

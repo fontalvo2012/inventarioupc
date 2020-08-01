@@ -620,9 +620,6 @@ function Millones(num) {
   //return Seccion(num, divisor, "UN MILLON", "MILLONES") + " " + Miles(resto);
 }//Millones()
 
-function Despachado(Despachado) {
-  
-}
 
 function NumeroALetras(num, centavos) {
   var data = {

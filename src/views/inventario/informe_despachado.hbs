@@ -1,0 +1,47 @@
+<div class="row">
+    <div class="col-sm-2"> 
+        <span class="small">Usuarios</span>
+        <select name="usuario" id="usuario" class="form-control form-control-sm"> 
+            <option value="">----</option>
+            {{#each users}}
+            <option value="{{nombre}}">{{nombre}}</option>
+            {{/each}}
+        </select>
+    </div>
+     <div class="col-sm-2"> 
+        <span class="small">Tipo</span>
+        <select name="tipo" id="tipo" class="form-control form-control-sm"> 
+            <option value="">----</option>
+            <option value="despachado">Despachado</option>
+            <option value="autirizado">Autirizado</option>
+            <option value="solicitado">Solicitado</option>
+        </select>
+    </div>
+    <div class="col-sm-2">
+        <span class="small">Inicio</span>
+        <input type="date" name="inicio" id="inicio" class="form-control form-control-sm">
+    </div>
+    <div class="col-sm-2">
+        <span class="small">Final</span>
+        <input type="date" name="final" id="final" class="form-control form-control-sm">
+    </div>
+    <div class="col-sm-3 pt-4">        
+       <button class="btn btn-success btn-sm" onclick="cosultarPedido()">Buscar</button>
+    </div>
+</div>
+<div>
+    <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+       <th scope="col">Usuarios</th>
+      <th scope="col">Fecha</th>     
+      <th scope="col">estado</th>
+      <th scope="col">ver</th>
+    </tr>
+  </thead>
+  <tbody id="pedido">
+ 
+  </tbody>
+</table>
+</div>

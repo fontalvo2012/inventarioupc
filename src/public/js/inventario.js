@@ -7551,6 +7551,34 @@ function Autorizar() {
         }
     });
 }
+function cosultarPedido() { 
+    $.ajax({
+        url: '/informeDespachado  ',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+            inicio:$('#inicio').val(),
+            final:$('#final').val(),
+            tipo:$('#tipo').val(),
+            usuario:$('#usuario').val(),
+        },
+        success: (data) => {
+            var cadena="";
+            data.forEach(element => {
+                cadena+=` 
+                <tr>
+                <th scope="row">${element.nro}</th>
+                <th scope="row">${element.usuario}</th>
+                <td>${element.fecha}</td>
+                <td>${element.estado}</td>
+                <td><a href="/verpedido/${element._id}">ver</a></td>
+              </tr>`
+            });
+            $('#pedido').html(cadena)
+          console.log(data)          
+        }
+    });
+}
 
 
 function Despachado(id) {    
