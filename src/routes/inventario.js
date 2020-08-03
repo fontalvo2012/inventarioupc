@@ -236,6 +236,7 @@ router.get('/consultarPedidos', checkAuthentication, async (req, res) => {
 // SUPERVISOR
 router.get('/cordinador', checkAuthentication, async (req, res) => { 
     const pedido=await Pedidos.find({estado:'solicitado'}).lean(); 
+
     for (let i = 0; i < pedido.length; i++) {
         var hora=pedido[i].fecha.getHours();
         var minuto = pedido[i].fecha.getMinutes();
@@ -247,7 +248,7 @@ router.get('/cordinador', checkAuthentication, async (req, res) => {
             minuto='0'+minuto;
         }
 
-        pedidos[i].fecha=pedido[i].fecha.getDate()+'/'+(pedido[i].fecha.getMonth()+1)+'/'+pedido[i].fecha.getFullYear()+' '+hora+':'+minuto;        
+        pedido[i].fecha=pedido[i].fecha.getDate()+'/'+(pedido[i].fecha.getMonth()+1)+'/'+pedido[i].fecha.getFullYear()+' '+hora+':'+minuto;        
     }
     
     res.render('inventario/cordinador',{pedido});
