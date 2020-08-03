@@ -7618,7 +7618,7 @@ function Despachado(id) {
             id
         },
         success: (data) => {
-            location.href="/cordinador";           
+            location.href="/despacho";           
         }
     });
 }
