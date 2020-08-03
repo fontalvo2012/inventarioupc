@@ -213,9 +213,25 @@ router.post('/verificarProducto', checkAuthentication, async (req, res) => {
     
 });
 router.get('/consultarPedidos', checkAuthentication, async (req, res) => { 
-    const pedido=await Pedidos.find({usuario:req.user.nombre}).lean();  
-    res.render('inventario/consultarPedidos',{pedido});
+    const pedidos=await Pedidos.find({usuario:req.user.nombre}).lean();  
+       
+    for (let i = 0; i < pedidos.length; i++) {
+        var hora=pedidos[i].fecha.getHours();
+        var minuto = pedidos[i].fecha.getMinutes();
+
+        if(hora<10){
+            hora='0'+hora;
+        }
+        if(minuto<10){
+            minuto='0'+minuto;
+        }
+
+        pedidos[i].fecha=pedidos[i].fecha.getDate()+'/'+(pedidos[i].fecha.getMonth()+1)+'/'+pedidos[i].fecha.getFullYear()+' '+hora+':'+minuto;        
+    }
+    
+    res.render('inventario/consultarPedidos',{pedidos});
 });
+
 //PEDIDOS
 // SUPERVISOR
 router.get('/cordinador', checkAuthentication, async (req, res) => { 
