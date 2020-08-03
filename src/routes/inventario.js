@@ -245,6 +245,12 @@ router.get('/verPedidoSedes/:id', checkAuthentication, async (req, res) => {
     res.render('inventario/verpedido',{pedido,id});
 });
 
+router.get('/verPedidoDespacho/:id', checkAuthentication, async (req, res) => { 
+    const {id}=req.params;
+    const pedido=await Pedidos.findOne({_id:id}).lean();  
+    res.render('inventario/verpedidodespacho',{pedido,id});
+});
+
 router.post('/saldos', checkAuthentication, async (req, res) => { 
     const {codigo}=req.body;
     var total=0;  
@@ -293,6 +299,37 @@ router.post('/actualizarCantidad', checkAuthentication, async (req, res) => {
     }
 
 
+});
+
+router.post('/actualizarCantidadDespacho', checkAuthentication, async (req, res) => { 
+    const {id,cantidad,codigo}=req.body;
+
+    const producto=await Productos.findOne({codigo_Articulo:codigo});
+    var can=parseInt(producto.cantidad_Total); 
+    var total=0;   
+    const pedidos= await Pedidos.find({estado:'solicitado'});
+    pedidos.forEach(element => {
+       for (let index = 0; index < element.pedidos.length; index++) {
+          if(element.pedidos[index].codigo==codigo){
+              total+=parseInt(element.pedidos[index].autorizado);              
+          }           
+       }
+    });  
+    
+    console.log(can-total);
+    if(parseInt(cantidad)>(can-total)){        
+        res.send((can-total)+"");
+    }else{         
+        const pedido=await Pedidos.findOne({_id:id}); 
+        const pe=pedido.pedidos;
+        for (let index = 0; index < pe.length; index++) {
+            if(pe[index].codigo==codigo){
+                pe[index].despachado=cantidad;
+            }        
+        }
+        await Pedidos.updateOne({_id:id},{pedidos:pe});
+        res.send('si');
+    }
 });
 
 router.post('/autorizar', checkAuthentication, async (req, res) => { 

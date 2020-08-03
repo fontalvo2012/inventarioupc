@@ -7436,7 +7436,7 @@ function addProductoPedido() {
     if($('#producto').val()!="" && $('#cantidad').val()!=""){
         var index=$('#producto').val().indexOf(':');
         var codigo=$('#producto').val().substring(0,index);
-        pedido.push({codigo,producto:$('#producto').val(),cantidad:$('#cantidad').val(),autorizado:$('#cantidad').val()});
+        pedido.push({codigo,producto:$('#producto').val(),cantidad:$('#cantidad').val(),autorizado:$('#cantidad').val(),despachado:'0'});
     }else{
         alert('debe llenar la cantida o elegir el producto');
     }
@@ -7525,6 +7525,34 @@ function cambiarCantidad(codigo) {
             success: (data) => {            
                 if (data=='si') {              
                       location.href="/verPedidoSedes/"+$('#id').val();          
+                } else {               
+                    $('#cantidad'+codigo).val('');
+                    alert('Este pedido solo cuenta con '+data+' en el Inventario');        
+                }
+            }
+        });
+    }else{
+        alert('No hay valor');
+    }  
+  
+}
+
+
+function cambiarCantidadDespacho(codigo) {       
+    var cantidad=$('#cantidad'+codigo).val(); 
+    if(cantidad!=""){
+        $.ajax({
+            url: '/actualizarCantidadDespacho',
+            type: 'POST',
+            datatype: 'json',
+            data: {
+                codigo,
+                cantidad,
+                id:$('#id').val()
+            },
+            success: (data) => {            
+                if (data=='si') {              
+                    location.href=`/verPedidoDespacho/${$('#id').val()}`; 
                 } else {               
                     $('#cantidad'+codigo).val('');
                     alert('Este pedido solo cuenta con '+data+' en el Inventario');        
