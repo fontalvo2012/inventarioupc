@@ -5,6 +5,7 @@ const Proveedores = require('../model/proveedores');
 const Compras = require('../model/compras');
 const Pedidos = require('../model/pedidos');
 const Users = require('../model/users');
+const Solicitud = require('../model/solicitudes');
 
 function checkAuthentication(req, res, next) {
     if (req.isAuthenticated()) {
@@ -391,4 +392,20 @@ router.get('/saldos', checkAuthentication, async (req, res) => {
     const productos=await Productos.find().lean();  
     res.render('inventario/saldos',{productos});
 });
+
+
+router.get('/solicitudes', checkAuthentication, async (req, res) => {   
+    const solicitudes= await Solicitud.find({usuario:req.user.medico}).lean();
+    console.log(req.user.medico);
+    console.log(solicitudes);
+    res.render('inventario/solicitudes',{solicitudes});
+});
+
+router.post('/solicitudes', checkAuthentication, async (req, res) => { 
+    const {cantidad,producto} = req.body;
+    const solicitud = new Solicitud({productos:producto,cantidad,usuario:req.user.medico})
+    await solicitud.save();
+    res.redirect('/solicitudes');
+});
+
 module.exports = router;
