@@ -24,7 +24,7 @@ passport.use('local-singup', new strategy({
 }, async(req, user, password, done) => {
     const newUser= new Users();
     const us=await Users.findOne({username:user});
-    const {nombre,firma,empleado,p1,p2,p3,p4}=req.body; 
+    const {nombre,firma,empleado,p1,p2,p3,p4,jefe}=req.body; 
     
     if (p1=='si') {admin=1;} else{admin=0;}
     if (p2=='si') {sede=1;} else{sede=0;}
@@ -39,7 +39,9 @@ passport.use('local-singup', new strategy({
                 admin,
                 cordinador,
                 despacho,
-                sede
+                sede,
+                jefe,
+                empleado
             });
     }else{
             
@@ -53,6 +55,7 @@ passport.use('local-singup', new strategy({
         newUser.nombre=nombre;
         newUser.medico=firma;
         newUser.empleado=empleado;     
+        newUser.jefe=jefe;     
         await newUser.save();
         done(null, newUser);
     }    
@@ -75,8 +78,9 @@ passport.use('local-singin', new strategy({
     }
 }));
 
-router.get('/login',(req, res,next) => {
-    res.render('login/index');
+router.get('/login',async(req, res,next) => {
+    const users= await Users.find({cordinador:1}).lean();
+    res.render('login/index',{users});
 });
 
 router.get('/singIn', async (req, res) => {
