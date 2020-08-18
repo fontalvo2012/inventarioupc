@@ -4,7 +4,7 @@ const {Schema}=mongoose;
 const usersSchema= new Schema({
     username:{type:String,required:true},
     password:{type:String,required:true},
-    perfil:{type:String,required:true},
+    perfil:{type:String,required:false},
     nombre:{type:String,required:true},
     medico:{type:String,required:true},
     empleado:{type:String,required:false},       

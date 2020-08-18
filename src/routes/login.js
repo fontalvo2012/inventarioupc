@@ -24,21 +24,32 @@ passport.use('local-singup', new strategy({
 }, async(req, user, password, done) => {
     const newUser= new Users();
     const us=await Users.findOne({username:user});
+    const {nombre,firma,empleado,p1,p2,p3,p4}=req.body; 
+    
+    if (p1=='si') {admin=1;} else{admin=0;}
+    if (p2=='si') {sede=1;} else{sede=0;}
+    if (p3=='si') {cordinador=1;} else{cordinador=0;}
+    if (p4=='si') {despacho=1;} else{despacho=0;}
 
     if(us){
-        done(null,false,req.flash('login', 'El Usuario ya ha sido registrado'));
+        done(null,false,req.flash('login', 'La contraseña ha sido cambiada'));
+        await Users.updateOne({username:user},
+            {
+                password:bcrypt.hashSync(password),
+                admin,
+                cordinador,
+                despacho,
+                sede
+            });
     }else{
-        const {nombre,firma,perfil,empleado}=req.body;
-        
-        if (perfil=='admin') {newUser.admin=1;}
-        if (perfil=='sede') {newUser.sede=1;}
-        if (perfil=='cordinador') {newUser.cordinador=1;}
-        if (perfil=='despacho') {newUser.despacho=1;}
-      
+            
+        if (p1=='si') {newUser.admin=1;} else{newUser.admin=0;}
+        if (p2=='si') {newUser.sede=1;} else{newUser.sede=0;}
+        if (p3=='si') {newUser.cordinador=1;} else{newUser.cordinador=0;}
+        if (p4=='si') {newUser.despacho=1;} else{newUser.despacho=0;}
 
         newUser.username=user;
-        newUser.password=bcrypt.hashSync(password);
-        newUser.perfil=perfil;
+        newUser.password=bcrypt.hashSync(password);        
         newUser.nombre=nombre;
         newUser.medico=firma;
         newUser.empleado=empleado;     
@@ -62,8 +73,6 @@ passport.use('local-singin', new strategy({
     } else {
         return done(null, false, req.flash('login', 'El Usuario No existe'));
     }
-
-    
 }));
 
 router.get('/login',(req, res,next) => {

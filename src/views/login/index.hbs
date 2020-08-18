@@ -1,53 +1,64 @@
-
-<div class="row" style="margin-left: 25%; margin-top: 10%;">
-    <div class="col-sm-5">
+<div class="row" style="margin-left: 15%; margin-top: 10%;">
+    <div class="col-sm-10">
         <div class="card">
             <div class="card-header">
-            <h5><b>Registros de Usuarios</b></h5>
+                <h5><b>Registros de Usuarios</b></h5>
             </div>
             <div class="card-body">
                 <form action="/login" method="post">
-
-                    <div class="form-group">
-                        <span class="small">Usuario</span>
-                        <input type="text" name="user" id="user" class="form-control form-control-sm"
-                            placeholder="Usuario:" required>
-                    </div>
-
-                    <div class="form-group">
-                        <span class="small">Contraseña</span>
-                        <input type="password" name="password" id="password" class="form-control form-control-sm"
-                            placeholder="Contraseña" required>
-                    </div>
-
-                    <div class="form-group">
-                        <span class="small">Sede/area</span>
-                        <input type="text" name="nombre" id="nombre" class="form-control form-control-sm"
-                            placeholder="Sede/Area" required>
-                    </div>
-                    <div class="form-group">
-                        <span class="small">Empleado</span>
-                        <input type="text" name="empleado" id="empleado" class="form-control form-control-sm"
-                            placeholder="Empleado" required>
-                    </div>
-                    <div class="form-group">
-                        <span class="small">Cedula</span>
-                        <input type="text" name="firma" id="firma" class="form-control form-control-sm"
-                            placeholder="Cedula" required>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <span class="small">Usuario</span>
+                            <input type="text" name="user" id="user" class="form-control form-control-sm"
+                                placeholder="Usuario:" onblur="consultarUsuario()" required autocomplete="off">
+                        </div>
+                        <div class="col-sm-6"></div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-8">
-                            <div class="form-group">
-                                <span class="small">perfil</span>
-                                <select name="perfil" id="perfil" class="form-control form-control-sm">
-                                    <option value="">Seleccione</option>
-                                    <option value="admin">Administrador</option>
-                                    <option value="cordinador">cordinador</option>
-                                    <option value="despacho">Usuario Bodega</option>
-                                    <option value="sede"> Usuario sede</option>
-                                </select>
+                        <div class="col-sm-6">
+                            <span class="small">Contraseña</span>
+                            <input type="password" name="password" id="password" class="form-control form-control-sm"
+                                placeholder="Contraseña" required autocomplete="off">
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="small">Repetir contraseña</span>
+                            <input type="password" name="password2" id="password2" onblur="compararPass()" id="password" class="form-control form-control-sm"
+                                placeholder="Contraseña" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <span class="small">Sede/area</span>
+                            <input type="text" name="nombre" id="nombre" class="form-control form-control-sm"
+                                placeholder="Sede/Area" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <span class="small">Empleado</span>
+                            <input type="text" name="empleado" id="empleado" class="form-control form-control-sm"
+                                placeholder="Empleado" required>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="small">Cedula</span>
+                            <input type="text" name="firma" id="firma" class="form-control form-control-sm"
+                                placeholder="Cedula" required>
+                        </div>
+                    </div>
+                    <div class="row m-5" id="chk">
+                        <div class="col-sm-6">
+                            <div class="card mx-auto">
+                                <div class="card-header">
+                                    Perfiles
+                                </div>
+                                <div class="card-body">
+                                   <div id="c1"> Administrador: <input type="checkbox" id="p1" name="p1" value="si"></div>
+                                   <div id="c2"> cordinador: <input type="checkbox" id="p2" name="p2" value="si"></div>
+                                   <div id="c3"> Bodega: <input type="checkbox" id="p3" name="p3" value="si"></div>
+                                   <div id="c4"> Sede: <input type="checkbox" id="p4" name="p4" value="si"></div>
+                                </div>
                             </div>
-                        </div>                         
+                        </div>
                     </div>
                     <div class="form-group">
                         <button class="btn btn-success btn-sm btn-block"> Ingresar </button>

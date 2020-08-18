@@ -665,3 +665,39 @@ function Imprimir() {
   };
   return true;
 }
+
+
+function compararPass() {
+  var c1=$('#password').val();
+  var c2=$('#password2').val();
+  if (c1!=c2) {
+    alert('Las contraseña no coinciden');
+    $('#password').val('');
+    $('#password2').val('');
+  }
+
+}
+
+function consultarUsuario() {
+  var user=$('#user').val();
+  $.ajax({
+      url: '/consultarUsuario',
+      type: 'POST',
+      datatype: 'json',
+      data: {
+          user
+      },
+      success: (data) => {       
+         $('#nombre').val(data.nombre);
+         $('#empleado').val(data.empleado);
+         $('#firma').val(data.medico);
+
+         if(data.admin==1){$('#c1').html(` Administrador <input type="checkbox" id="p1" name="p1" value="si" checked>`);}else{$('#c1').html(` Administrador <input type="checkbox" id="p1" name="p1" value="si">`);}
+         if(data.cordinador==1){$('#c2').html(` Cordinador <input type="checkbox" id="p2" name="p2" value="si" checked>`);}else{$('#c2').html(` Cordinador <input type="checkbox" id="p2" name="p2" value="si" >`);}
+         if(data.despacho==1){$('#c3').html(` Bodega <input type="checkbox" id="p3" name="p3" value="si" checked>`);}else{$('#c3').html(` Bodega <input type="checkbox" id="p3" name="p3" value="si">`);}
+         if(data.sede==1){$('#c4').html(` Sede <input type="checkbox" id="p4" name="p4" value="si" checked>`);}else{$('#c4').html(` Sede <input type="checkbox" id="p4" name="p4" value="si">`);}
+         
+        
+      }
+  });
+}

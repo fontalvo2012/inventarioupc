@@ -408,4 +408,11 @@ router.post('/solicitudes', checkAuthentication, async (req, res) => {
     res.redirect('/solicitudes');
 });
 
+router.post('/consultarUsuario', checkAuthentication, async (req, res) => { 
+    const {user} = req.body;
+    const u = await Users.findOne({username:user});   
+    res.send(u);
+});
+
+
 module.exports = router;
