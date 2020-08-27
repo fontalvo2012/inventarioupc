@@ -180,7 +180,7 @@ router.post('/pedidos', checkAuthentication, async (req, res) => {
     const contador=await Pedidos.find();    
     if(pedido!=""){
         const p=JSON.parse(pedido);
-        const pedi=new Pedidos({nro:contador.length,pedidos:p,estado:'solicitado',usuario:req.user.nombre});
+        const pedi=new Pedidos({nro:contador.length,pedidos:p,estado:'solicitado',usuario:req.user.nombre,supervisor:req.user.jefe});
         await pedi.save();
         console.log(p);
         req.flash('success',"PEDIDO FUE CREADO CORRECTAMENTE!")
@@ -236,7 +236,7 @@ router.get('/consultarPedidos', checkAuthentication, async (req, res) => {
 //PEDIDOS
 // SUPERVISOR
 router.get('/cordinador', checkAuthentication, async (req, res) => { 
-    const pedido=await Pedidos.find({estado:'solicitado'}).lean(); 
+    const pedido=await Pedidos.find({estado:'solicitado',supervisor:req.user.medico}).lean(); 
 
     for (let i = 0; i < pedido.length; i++) {
         var hora=pedido[i].fecha.getHours();
