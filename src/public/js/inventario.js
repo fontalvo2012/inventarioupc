@@ -7445,6 +7445,11 @@ function addProductoPedido() {
     $('#producto').val('');
     $('#cantidad').val('');
 }
+function asigarpedido(datos) {
+    console.log(datos)
+    pedido=JSON.parse(datos);
+    mostrarPedido();
+}
 
 function mostrarPedido() {
     var cadena="";

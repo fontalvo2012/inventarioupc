@@ -175,15 +175,36 @@ router.post('/compras', checkAuthentication, async (req, res) => {
 router.get('/pedidos', checkAuthentication, async (req, res) => {   
     res.render('inventario/pedidos');
 });
+
+router.get('/borrarsolicitud/:id', checkAuthentication, async (req, res) => { 
+    const {id}= req.params;  
+    await Pedidos.remove({_id:id});
+    req.flash('login',"se elimino el pedido!");
+    res.redirect('/pedidos');
+});
 router.post('/pedidos', checkAuthentication, async (req, res) => {
     const {pedido}= req.body;
     const contador=await Pedidos.find();    
     if(pedido!=""){
         const p=JSON.parse(pedido);
-        const pedi=new Pedidos({nro:contador.length,pedidos:p,estado:'solicitado',usuario:req.user.nombre,supervisor:req.user.jefe});
+        var fecha = new Date().toLocaleString("en-VE", {timeZone: "America/Bogota"});
+        const pedi=new Pedidos({nro:contador.length,pedidos:p,estado:'solicitado',fecha,usuario:req.user.nombre,supervisor:req.user.jefe});
         await pedi.save();
         console.log(p);
         req.flash('success',"PEDIDO FUE CREADO CORRECTAMENTE!")
+    }else{
+        req.flash('login',"NO SE ENTONTRARON DATOS EN EL PEDIDO!");
+    }   
+    res.redirect('/pedidos');
+});
+
+router.post('/editarpedidos/:id', checkAuthentication, async (req, res) => {
+    const {pedido}= req.body;
+    const {id}= req.params;    
+    console.log(pedido);  
+    if(pedido!=""){   
+        await Pedidos.updateOne({_id:id},{pedidos:JSON.parse(pedido)})  
+        req.flash('success',"PEDIDO FUE ACTUALIZADO CORRECTAMENTE!")
     }else{
         req.flash('login',"NO SE ENTONTRARON DATOS EN EL PEDIDO!");
     }   
@@ -232,6 +253,14 @@ router.get('/consultarPedidos', checkAuthentication, async (req, res) => {
     
     res.render('inventario/consultarPedidos',{pedidos});
 });
+
+router.get('/editarsolicitud/:id',checkAuthentication,async(req,res)=>{
+    const {id}= req.params;
+    const pedidos=await Pedidos.findOne({_id:id}).lean();  
+    var solicitud=JSON.stringify(pedidos.pedidos);
+    console.log(solicitud);
+    res.render('inventario/editarsolicitud',{solicitud,pedidos});
+})
 
 //PEDIDOS
 // SUPERVISOR
@@ -282,7 +311,7 @@ router.post('/saldos', checkAuthentication, async (req, res) => {
     console.log(total);
     res.send(''+total);
 });
-//SUPERVISOR
+
 
 router.post('/actualizarCantidad', checkAuthentication, async (req, res) => { 
     const {id,cantidad,codigo}=req.body;
