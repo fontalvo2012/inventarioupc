@@ -4,9 +4,10 @@
     </div>
 <div class="card-body">
     {{#each pedido}}
-    <div class="row small">
+    <div class="row">
         <div class="col-sm-1">{{nro}}</div>
-        <div class="col-sm-7">{{fecha}}</div>
+        <div class="col-sm-3">{{fecha}}</div>
+        <div class="col-sm-4">{{observacion}}</div>
         <div class="col-sm-3">{{usuario}}</div>
         <div class="col-sm-1"><a href="/verPedidoSedes/{{_id}}">ver</a></div>
     </div>

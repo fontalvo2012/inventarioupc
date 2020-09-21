@@ -19,7 +19,7 @@ router.get('/inventario', checkAuthentication, async (req, res) => {
     res.render('inventario/index');
 });
 router.get('/informeDespachado', checkAuthentication, async (req, res) => {
-    const users =await Users.find({perfil:'sede'}).lean();  
+    const users =await Users.find({sede:1}).lean();  
     res.render('inventario/informe_despachado',{users});
 });
 
@@ -183,12 +183,12 @@ router.get('/borrarsolicitud/:id', checkAuthentication, async (req, res) => {
     res.redirect('/pedidos');
 });
 router.post('/pedidos', checkAuthentication, async (req, res) => {
-    const {pedido}= req.body;
+    const {pedido,observacion}= req.body;
     const contador=await Pedidos.find();    
     if(pedido!=""){
         const p=JSON.parse(pedido);
         var fecha = new Date().toLocaleString("en-VE", {timeZone: "America/Bogota"});
-        const pedi=new Pedidos({nro:contador.length,pedidos:p,estado:'solicitado',fecha,usuario:req.user.nombre,supervisor:req.user.jefe});
+        const pedi=new Pedidos({nro:contador.length,pedidos:p,estado:'solicitado',observacion,fecha,usuario:req.user.nombre,supervisor:req.user.jefe});
         await pedi.save();
         console.log(p);
         req.flash('success',"PEDIDO FUE CREADO CORRECTAMENTE!")
@@ -248,9 +248,12 @@ router.get('/consultarPedidos', checkAuthentication, async (req, res) => {
             minuto='0'+minuto;
         }
 
-        pedidos[i].fecha=pedidos[i].fecha.getDate()+'/'+(pedidos[i].fecha.getMonth()+1)+'/'+pedidos[i].fecha.getFullYear()+' '+hora+':'+minuto;        
+        pedidos[i].fecha=pedidos[i].fecha.getDate()+'/'+(pedidos[i].fecha.getMonth()+1)+'/'+pedidos[i].fecha.getFullYear()+' '+hora+':'+minuto;
+        if(pedidos[i].estado=='solicitado'){
+            pedidos[i].solicitado=1;
+        }
     }
-    
+    console.log(pedidos);
     res.render('inventario/consultarPedidos',{pedidos});
 });
 

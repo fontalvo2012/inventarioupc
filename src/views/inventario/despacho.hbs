@@ -6,8 +6,9 @@
     {{#each pedidos}}
     <div class="row small">
         <div class="col-sm-1">{{nro}}</div>
-        <div class="col-sm-7">{{fecha}}</div>
+        <div class="col-sm-4">{{fecha}}</div>
         <div class="col-sm-3">{{usuario}}</div>
+        <div class="col-sm-2">{{observacion}}</div>
         <div class="col-sm-1"><a href="/verPedidoDespacho/{{_id}}">ver</a></div>
     </div>
     {{/each}}

@@ -9,6 +9,7 @@
                     <th scope="col">#</th>
                     <th scope="col">Fecha</th>
                     <th scope="col">Estado</th>
+                    <th scope="col">Observacion</th>
                     <th scope="col">Detalles</th>
                 </tr>
             </thead>
@@ -18,12 +19,15 @@
                     <th scope="row">{{nro}}</th>
                     <td>{{fecha}}</td>
                     <td>{{estado}}</td>
+                    <td>{{observacion}}</td>
                     <td> <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
                             data-target="#exampleModal{{nro}}">
                             Detalle
                         </button>
+                        {{#if solicitado}}
                         <a href="/editarsolicitud/{{_id}}" class="btn btn-warning btn-sm">editar</a>
                         <a href="/borrarsolicitud/{{_id}}" class="btn btn-danger btn-sm">borrar</a>
+                        {{/if}}
                     </td>
                 </tr>
                 <!-- Button trigger modal -->

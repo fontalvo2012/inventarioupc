@@ -7623,7 +7623,7 @@ function Despachado(id) {
             id
         },
         success: (data) => {
-            location.href="/despacho";           
+            location.href="/verpedido/"+id;           
         }
     });
 }
