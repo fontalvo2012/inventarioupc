@@ -293,6 +293,17 @@ router.get('/verPedidoSedes/:id', checkAuthentication, async (req, res) => {
     res.render('inventario/verpedido',{pedido,id});
 });
 
+router.get('/productos', checkAuthentication, async (req, res) => { 
+    const productos= await Productos.find().sort({nombre_Articulo:'ASC'}).lean();   
+    res.render('inventario/productosver',{productos});
+})
+router.get('/eliminarproducto/:id', checkAuthentication, async (req, res) => { 
+   const {id}= req.params; 
+   await Productos.deleteOne({_id:id})  
+   req.flash('success','Producto Eliminado');
+   res.redirect('/productos')
+})
+
 router.get('/verPedidoDespacho/:id', checkAuthentication, async (req, res) => { 
     const {id}=req.params;
     const pedido=await Pedidos.findOne({_id:id}).lean();  
