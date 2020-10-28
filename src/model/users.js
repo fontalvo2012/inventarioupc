@@ -8,7 +8,7 @@ const usersSchema= new Schema({
     nombre:{type:String,required:true},
     medico:{type:String,required:true},
     empleado:{type:String,required:false},       
-    jefe:{type:String,required:false},       
+    jefe:{type:Object,required:false},       
     admin:{type:Number,required:false},       
     sede:{type:Number,required:false},       
     cordinador:{type:Number,required:false},

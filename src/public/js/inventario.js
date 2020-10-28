@@ -7627,3 +7627,13 @@ function Despachado(id) {
         }
     });
 }
+
+let jefes=[];
+
+function cargarjefes() {
+    let jefe=$('#jefe').val();
+    let nombre=$('select[name="jefe"] option:selected').text();
+    jefes.push({jefe,nombre});
+    $('#jefes').val(JSON.stringify(jefes));
+    console.log(jefes);
+}

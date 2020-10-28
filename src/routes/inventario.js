@@ -183,12 +183,12 @@ router.get('/borrarsolicitud/:id', checkAuthentication, async (req, res) => {
     res.redirect('/pedidos');
 });
 router.post('/pedidos', checkAuthentication, async (req, res) => {
-    const {pedido,observacion}= req.body;
+    const {pedido,observacion,supervisor}= req.body;
     const contador=await Pedidos.find();    
     if(pedido!=""){
         const p=JSON.parse(pedido);
         var fecha = new Date().toLocaleString("en-VE", {timeZone: "America/Bogota"});
-        const pedi=new Pedidos({nro:contador.length,pedidos:p,estado:'solicitado',observacion,fecha,usuario:req.user.nombre,supervisor:req.user.jefe});
+        const pedi=new Pedidos({nro:contador.length,pedidos:p,estado:'solicitado',observacion,fecha,usuario:req.user.nombre,supervisor});
         await pedi.save();
         console.log(p);
         req.flash('success',"PEDIDO FUE CREADO CORRECTAMENTE!")
@@ -435,7 +435,6 @@ router.get('/saldos', checkAuthentication, async (req, res) => {
     const productos=await Productos.find().lean();  
     res.render('inventario/saldos',{productos});
 });
-
 
 router.get('/solicitudes', checkAuthentication, async (req, res) => {   
     const solicitudes= await Solicitud.find({usuario:req.user.medico}).lean();

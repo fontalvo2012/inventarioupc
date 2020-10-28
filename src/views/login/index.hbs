@@ -27,7 +27,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-5">
                             <span class="small">Cordinador</span>
                             <select name="jefe" id="jefe" class="form-control form-control-sm">
                                 <option value="">---</option>
@@ -35,6 +35,9 @@
                                    <option value="{{medico}}">{{nombre}}</option>
                                 {{/each}}
                             </select>
+                        </div>
+                        <div class="col-sm-1 mt-4">
+                            <span href="#" class="btn btn-success btn-sm" onclick="cargarjefes()">+</span>
                         </div>
                         <div class="col-sm-6">
                             <span class="small">Sede/area</span>
@@ -73,7 +76,9 @@
                         <button class="btn btn-success btn-sm btn-block"> Ingresar </button>
                     </div>
             </div>
+            <input type="text" id="jefes" name="jefes">
             </form>
+
         </div>
     </div>
 </div>

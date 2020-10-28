@@ -5,6 +5,15 @@
         <h4>Crear Pedido</h4>
     </div>    
     <div class="card-body">
+        <div class="col-sm-4 m-2">
+            <span class="small"><b>Seleccione Supervisor</b></span>
+            <select name="supervisor" id="supervisor" class="form-control form-control-sm" required>
+                <option value="">Supervisor</option>
+                {{#each user.jefe}}
+                    <option value="{{jefe}}">{{nombre}}</option>
+                {{/each}}
+            </select>
+        </div>
         <div class="row">
             <div class="col-sm-4">
                 <span class="small"><b>Producto</b></span>
