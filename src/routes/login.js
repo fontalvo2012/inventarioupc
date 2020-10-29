@@ -7,6 +7,7 @@ const strategy = require('passport-local').Strategy;
 const db = admin.firestore();
 
 const Users=require('../model/users');
+const { unuse } = require('passport');
 
 passport.serializeUser((user, done) => {   
     done(null, user.username);
@@ -40,8 +41,10 @@ passport.use('local-singup', new strategy({
                 cordinador,
                 despacho,
                 sede,
+                nombre,
                 jefe:JSON.parse(jefes),
-                empleado
+                empleado,
+                medico:firma
             });
     }else{            
         if (p1=='si') {newUser.admin=1;} else{newUser.admin=0;}
@@ -79,7 +82,15 @@ passport.use('local-singin', new strategy({
 
 router.get('/login',async(req, res,next) => {
     const users= await Users.find({cordinador:1}).lean();
-    res.render('login/index',{users});
+    const userss= await Users.find().lean();
+    res.render('login/index',{users,userss});
+});
+
+router.get('/deluser/:id',async(req, res,next) => {
+    const {id}=req.params;
+    console.log(id);
+    await Users.deleteOne({_id:id});
+    res.redirect('/login');
 });
 
 router.get('/singIn', async (req, res) => {

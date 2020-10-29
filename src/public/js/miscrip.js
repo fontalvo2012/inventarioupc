@@ -678,8 +678,11 @@ function compararPass() {
 
 }
 
-function consultarUsuario() {
-  var user=$('#user').val();
+function consultarUsuario(user) {
+  if (user==1) {
+     user=$('#user').val();
+  }
+ 
   $.ajax({
       url: '/consultarUsuario',
       type: 'POST',
