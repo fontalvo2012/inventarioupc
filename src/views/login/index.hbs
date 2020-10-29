@@ -1,5 +1,5 @@
-<div class="row" style="margin-left: 15%; margin-top: 10%;">
-    <div class="col-sm-10">
+<div class="row" style=" margin-top: 10%;">
+    <div class="col-sm-6">
         <div class="card">
             <div class="card-header">
                 <h5><b>Registros de Usuarios</b></h5>
@@ -10,7 +10,7 @@
                         <div class="col-sm-6">
                             <span class="small">Usuario</span>
                             <input type="text" name="user" id="user" class="form-control form-control-sm"
-                                placeholder="Usuario:" onblur="consultarUsuario()" required autocomplete="off">
+                                placeholder="Usuario:" onblur="consultarUsuario(1)" required autocomplete="off">
                         </div>
                         <div class="col-sm-6"></div>
                     </div>
@@ -22,8 +22,8 @@
                         </div>
                         <div class="col-sm-6">
                             <span class="small">Repetir contraseña</span>
-                            <input type="password" name="password2" id="password2" onblur="compararPass()" id="password" class="form-control form-control-sm"
-                                placeholder="Contraseña" required>
+                            <input type="password" name="password2" id="password2" onblur="compararPass()" id="password"
+                                class="form-control form-control-sm" placeholder="Contraseña" required>
                         </div>
                     </div>
                     <div class="row">
@@ -32,7 +32,7 @@
                             <select name="jefe" id="jefe" class="form-control form-control-sm">
                                 <option value="">---</option>
                                 {{#each users}}
-                                   <option value="{{medico}}">{{nombre}}</option>
+                                <option value="{{medico}}">{{nombre}}</option>
                                 {{/each}}
                             </select>
                         </div>
@@ -64,10 +64,11 @@
                                     Perfiles
                                 </div>
                                 <div class="card-body">
-                                   <div id="c1"> Administrador: <input type="checkbox" id="p1" name="p1" value="si"></div>
-                                   <div id="c2"> Sede: <input type="checkbox" id="p2" name="p2" value="si"></div>
-                                   <div id="c3"> Cordinador: <input type="checkbox" id="p3" name="p3" value="si"></div>
-                                   <div id="c4"> Bodega: <input type="checkbox" id="p4" name="p4" value="si"></div>
+                                    <div id="c1"> Administrador: <input type="checkbox" id="p1" name="p1" value="si">
+                                    </div>
+                                    <div id="c2"> Sede: <input type="checkbox" id="p2" name="p2" value="si"></div>
+                                    <div id="c3"> Cordinador: <input type="checkbox" id="p3" name="p3" value="si"></div>
+                                    <div id="c4"> Bodega: <input type="checkbox" id="p4" name="p4" value="si"></div>
                                 </div>
                             </div>
                         </div>
@@ -79,6 +80,38 @@
             <input type="text" id="jefes" name="jefes">
             </form>
 
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-header">
+                <b>Usuarios</b>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Usuario</th>
+                            <th scope="col">Perfil</th>
+                            <th scope="col">Empleado</th>
+                            <th scope="col">Accion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each userss}}
+                        <tr>
+                            <th scope="row">{{username}}</th>
+                            <td>{{perfil}}</td>
+                            <td>{{empleado}}</td>
+                            <td><a href="/deluser/{{_id}}">eliminar</a> <a href="#" onclick="consultarUsuario({{username}})">editar</a></td>
+                        </tr>
+                        {{/each}}
+
+
+                    </tbody>
+                </table>
+
+            </div>
         </div>
     </div>
 </div>
