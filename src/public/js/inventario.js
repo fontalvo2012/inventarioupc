@@ -7635,5 +7635,33 @@ function cargarjefes() {
     let nombre=$('select[name="jefe"] option:selected').text();
     jefes.push({jefe,nombre});
     $('#jefes').val(JSON.stringify(jefes));
-    console.log(jefes);
+    let cont=0;
+    let li="";
+    jefes.forEach(element => {
+      li+=`<li>${element.nombre} <a href="#" onclick="quitarJefe(${cont})"> quitar</a></li>`;
+      cont++;
+    });
+
+    $("#jef").html(`
+       <ul>
+       ${li}
+      </ul>
+    `);
+}
+function quitarJefe(i) {
+    jefes.splice(i,1);
+    $('#jefes').val(JSON.stringify(jefes));
+    let cont=0;
+     
+    let li="";
+    jefes.forEach(element => {
+      li+=`<li>${element.nombre} <a href="#" onclick="quitarJefe(${cont})"> quitar</a></li>`;
+      cont++;
+    });
+
+    $("#jef").html(`
+       <ul>
+       ${li}
+      </ul>
+    `);
 }
