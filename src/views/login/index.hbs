@@ -12,7 +12,7 @@
                             <input type="text" name="user" id="user" class="form-control form-control-sm"
                                 placeholder="Usuario:" onblur="consultarUsuario(1)" required autocomplete="off">
                         </div>
-                        <div class="col-sm-6"></div>
+                      
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
@@ -30,7 +30,7 @@
                         <div class="col-sm-5">
                             <span class="small">Cordinador</span>
                             <select name="jefe" id="jefe" class="form-control form-control-sm">
-                                <option value="">---</option>
+                                <option value="nadie">nadie</option>
                                 {{#each users}}
                                 <option value="{{medico}}">{{nombre}}</option>
                                 {{/each}}
@@ -73,9 +73,15 @@
                             </div>
                         </div>
                         <div class="col-sm-6" id="jef">
-                           
+
                         </div>
                     </div>
+                      <div class="col-sm-6 m-2">
+                            <span class="small">Carnet</span>
+                            <input type="text" name="carnet" id="carnet" class="form-control form-control-sm"
+                                placeholder="Carnet" required autocomplete="off">
+
+                        </div>
                     <div class="form-group">
                         <button class="btn btn-success btn-sm btn-block"> Ingresar </button>
                     </div>
@@ -106,7 +112,8 @@
                             <th scope="row">{{username}}</th>
                             <td>{{perfil}}</td>
                             <td>{{empleado}}</td>
-                            <td><a href="/deluser/{{_id}}">eliminar</a> <a href="#" onclick="consultarUsuario({{username}})">editar</a></td>
+                            <td><a href="/deluser/{{_id}}">eliminar</a> <a href="#"
+                                    onclick="consultarUsuario('{{username}}')">editar</a></td>
                         </tr>
                         {{/each}}
 

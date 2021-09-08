@@ -13,6 +13,7 @@ const usersSchema= new Schema({
     sede:{type:Number,required:false},       
     cordinador:{type:Number,required:false},
     despacho:{type:Number,required:false},
+    carnet:{type:String,required:false},
 
 });
 

@@ -183,12 +183,13 @@ router.get('/borrarsolicitud/:id', checkAuthentication, async (req, res) => {
     res.redirect('/pedidos');
 });
 router.post('/pedidos', checkAuthentication, async (req, res) => {
-    const {pedido,observacion,supervisor}= req.body;
+    const {pedido,observacion,supervisor,carnet}= req.body;
+    console.log(carnet)
     const contador=await Pedidos.find();    
     if(pedido!=""){
         const p=JSON.parse(pedido);
         var fecha = new Date().toLocaleString("en-VE", {timeZone: "America/Bogota"});
-        const pedi=new Pedidos({nro:contador.length,pedidos:p,estado:'solicitado',observacion,fecha,usuario:req.user.nombre,supervisor});
+        const pedi=new Pedidos({nro:contador.length,pedidos:p,estado:'autorizado',observacion,fecha,carnet,supervisor});
         await pedi.save();
         console.log(p);
         req.flash('success',"PEDIDO FUE CREADO CORRECTAMENTE!")
@@ -400,6 +401,7 @@ router.post('/autorizar', checkAuthentication, async (req, res) => {
 router.post('/despachar', checkAuthentication, async (req, res) => { 
     const {id}=req.body;
     await Pedidos.updateOne({_id:id},{estado:'despachado',supervisor:req.user.nombre});     
+    //AQUI ES LA MAGIA
     res.send('despachado');
 })
 //DESPACHO

@@ -5,10 +5,9 @@
         <h4>Crear Pedido</h4>
     </div>    
     <div class="card-body">
-        <div class="col-sm-4 m-2">
+        <div class="col-sm-4">
             <span class="small"><b>Seleccione Supervisor</b></span>
-            <select name="supervisor" id="supervisor" class="form-control form-control-sm" required>
-                <option value="">Supervisor</option>
+            <select name="supervisor" id="supervisor" class="form-control form-control-sm" required>               
                 {{#each user.jefe}}
                     <option value="{{jefe}}">{{nombre}}</option>
                 {{/each}}
@@ -26,7 +25,10 @@
             </div>
             <div class="col-sm-1 mt-4"><a href="#" class="btn btn-info btn-sm" onclick="verificarProducto()"><i class='fas fa-angle-double-down'
                         style='font-size:16px'></i></a></div>
-            <div class="col-sm-3"><span class="small"><b>Observacion</b></span><textarea name="observacion" id="observacion" cols="30" rows="1" class="form-control form-control-sm" placeholder="Observacion"></textarea></div>
+        </div>
+        <div class="row">
+             <div class="col-sm-3"><span class="small"><b>Observacion</b></span><textarea name="observacion" id="observacion" cols="30" rows="1" class="form-control form-control-sm" placeholder="Observacion"></textarea></div>
+            <div class="col-sm-3"><span class="small"><b>Carnet Empleado</b></span><input type="text" name="carnet" id="carnet" placeholder="Carnet" class="form-control-sm form-control-sm" required></div>           
             <div class="col-sm-3 mt-4"><button class="btn btn-success btn-sm">Crear Pedido</button></a></div>
         </div>
     </div>
