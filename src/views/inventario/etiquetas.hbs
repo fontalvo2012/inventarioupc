@@ -1,0 +1,34 @@
+<div class="col-6">
+    <div class="card">
+
+ <div class="card-header">
+
+    <div class="card-title">
+        <h5>crear etiqueta</h5>
+    </div>
+
+ </div>
+    <card-body class="p-3">
+        <form action="/etiquetas" method="POST">
+            <div class="form-group">
+                <input type="text" class="form-control" name="nombre" placeholder="Etiquetas">
+            </div>
+            <button class="btn-success btn"> guardar</button>
+        </form>
+    </card-body>
+</div>
+</div>
+<div class="col-6">
+    <table border="1" class="table">
+        <tr>
+            <th>NOMBRE DE ETIQUETA</th>
+        </tr>
+        
+            {{#each etiquetas}}
+            <tr><td>{{nombre}}</td></tr>
+                
+            {{/each}}
+        
+
+    </table>
+</div>

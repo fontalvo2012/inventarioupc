@@ -6,6 +6,8 @@ const Compras = require('../model/compras');
 const Pedidos = require('../model/pedidos');
 const Users = require('../model/users');
 const Solicitud = require('../model/solicitudes');
+const Etiquetas = require('../model/etiqueta');
+
 
 function checkAuthentication(req, res, next) {
     if (req.isAuthenticated()) {
@@ -16,7 +18,8 @@ function checkAuthentication(req, res, next) {
 }
 
 router.get('/inventario', checkAuthentication, async (req, res) => {
-    res.render('inventario/index');
+    const etiquetas= await Etiquetas.find().lean();
+    res.render('inventario/index',{etiquetas});
 });
 router.get('/informeDespachado', checkAuthentication, async (req, res) => {
     const users = await Users.find({ sede: 1 }).lean();
@@ -119,8 +122,8 @@ router.post('/completarProducto', checkAuthentication, async (req, res) => {
 });
 
 router.post('/crearInsumosform', checkAuthentication, async (req, res) => {
-    const { codigo, nombre, referencia, linea, marca, medida } = req.body;
-    const productos = new Productos({ codigo_Articulo: codigo, nombre_Articulo: nombre, Referencia: referencia, linea: linea, marca: marca, medida: medida, costo: '0' });
+    const { codigo, nombre, referencia, linea, marca, medida,etiqueta } = req.body;
+    const productos = new Productos({ codigo_Articulo: codigo, nombre_Articulo: nombre, Referencia: referencia, linea: linea, marca: marca, medida: medida, costo: '0',etiqueta });
     await productos.save();
     req.flash('success', 'Datos registrados')
     res.redirect('/inventario');
@@ -192,7 +195,19 @@ router.get('/borrarsolicitud/:id', checkAuthentication, async (req, res) => {
 router.get('/invEmpleados',checkAuthentication,async(req,res)=>{
     res.render('inventario/invEmpleado');
 });
+router.get('/etiquetas',checkAuthentication,async(req,res)=>{
+    const etiquetas= await Etiquetas.find().lean();
+    res.render('inventario/etiquetas',{etiquetas});
+});
 
+router.post('/etiquetas',checkAuthentication,async(req,res)=>{
+   
+    const {nombre} = req.body;
+    const etiquetas= new Etiquetas({nombre});
+    etiquetas.save();
+
+    res.redirect('/etiquetas');
+});
 router.post('/pedidos', checkAuthentication, async (req, res) => {
     const { pedido, observacion, supervisor, carnet } = req.body;
 
