@@ -19,69 +19,75 @@ router.get('/inventario', checkAuthentication, async (req, res) => {
     res.render('inventario/index');
 });
 router.get('/informeDespachado', checkAuthentication, async (req, res) => {
-    const users =await Users.find({sede:1}).lean();  
-    res.render('inventario/informe_despachado',{users});
+    const users = await Users.find({ sede: 1 }).lean();
+    res.render('inventario/informe_despachado', { users });
 });
 
 router.get('/verpedido/:id', checkAuthentication, async (req, res) => {
-    const {id}= req.params;
-    const pedido = await Pedidos.findOne({_id:id}).lean();  
-    var hora=pedido.fecha.getHours();
+    const { id } = req.params;
+    const pedido = await Pedidos.findOne({ _id: id }).lean();
+    var hora = pedido.fecha.getHours();
     var minuto = pedido.fecha.getMinutes();
-    pedido.fecha=pedido.fecha.getDate()+'/'+(pedido.fecha.getMonth()+1)+'/'+pedido.fecha.getFullYear()+' '+hora+':'+minuto;
+    pedido.fecha = pedido.fecha.getDate() + '/' + (pedido.fecha.getMonth() + 1) + '/' + pedido.fecha.getFullYear() + ' ' + hora + ':' + minuto;
     console.log(pedido);
-    res.render('inventario/revisar',{pedido});
+    res.render('inventario/revisar', { pedido });
 });
 
 router.post('/informeDespachado', checkAuthentication, async (req, res) => {
-    const {inicio,final,usuario,tipo}=req.body; 
-    var pedidos=[];
-    var respedidos=[];
-     
-        if(tipo==""){
-             pedidos = await Pedidos.find(
-                {
-                    usuario: usuario,                 
-                    fecha: {
-                        $gte: new Date(inicio),
-                        $lte: new Date(final)
-                    }
-                });
-        }else{
-             pedidos = await Pedidos.find(
-                {
-                    usuario: usuario,
-                    estado: tipo,
-                    fecha: {
-                        $gte: new Date(inicio),
-                        $lte: new Date(final)
-                    }
-                });
-        }
-        var p=pedidos;
-        for (let i = 0; i < p.length; i++) {
-            var hora=p[i].fecha.getHours();
-            var minuto = p[i].fecha.getMinutes();
-    
-            if(hora<10){
-                hora='0'+hora;
-            }
+    const { inicio, final, usuario, tipo } = req.body;
+    var pedidos = [];
+    var respedidos = [];
 
-            if(minuto<10){
-                minuto='0'+minuto;
-            }
-
-            var f=p[i].fecha.getDate()+'/'+(p[i].fecha.getMonth()+1)+'/'+p[i].fecha.getFullYear()+' '+hora+':'+minuto;
-            respedidos.push({
-                _id:p[i]._id,
-                fecha:f,
-                usuario:p[i].usuario,
-                nro:p[i].nro,
-                estado:p[i].estado
+    if (tipo == "") {
+        pedidos = await Pedidos.find(
+            {
+                fecha: {
+                    $gte: new Date(inicio),
+                    $lte: new Date(final)
+                }
             });
-            console.log(respedidos);       
+    } else {
+        pedidos = await Pedidos.find(
+            {
+                estado: tipo,
+                fecha: {
+                    $gte: new Date(inicio),
+                    $lte: new Date(final)
+                }
+            });
+    }
+    var p = pedidos;
+    for (let i = 0; i < p.length; i++) {
+        var hora = p[i].fecha.getHours();
+        var minuto = p[i].fecha.getMinutes();
+
+        if (hora < 10) {
+            hora = '0' + hora;
         }
-      
+
+        if (minuto < 10) {
+            minuto = '0' + minuto;
+        }
+        const user = await Users.findOne({ carnet: p[i].carnet }, (err, doc) => {
+            if (err) {
+                return console.log(err);
+            } else {
+
+                var f = p[i].fecha.getDate() + '/' + (p[i].fecha.getMonth() + 1) + '/' + p[i].fecha.getFullYear() + ' ' + hora + ':' + minuto;
+                respedidos.push({
+                    _id: p[i]._id,
+                    fecha: f,
+                    usuario: doc.empleado,
+                    nro: p[i].nro,
+                    estado: p[i].estado
+                });
+
+            }
+        });
+        console.log('ver:   ====>  ', user)
+
+    }
+
     res.send(respedidos);
 });
 
@@ -143,7 +149,7 @@ router.get('/compras', checkAuthentication, async (req, res) => {
 });
 
 router.post('/compras', checkAuthentication, async (req, res) => {
-    const { datos,proveedor,factura,fecha } = req.body
+    const { datos, proveedor, factura, fecha } = req.body
 
     const d = JSON.parse(datos);
 
@@ -151,9 +157,9 @@ router.post('/compras', checkAuthentication, async (req, res) => {
         const index = d[i].producto.indexOf(':');
         const codigo = d[i].producto.substr(0, index);
         const cantidad = await Productos.findOne({ codigo_Articulo: codigo });
-        await Productos.updateOne({ codigo_Articulo: codigo }, { cantidad_Total: parseInt(cantidad.cantidad_Total) + parseInt(d[i].cantidad) });        
+        await Productos.updateOne({ codigo_Articulo: codigo }, { cantidad_Total: parseInt(cantidad.cantidad_Total) + parseInt(d[i].cantidad) });
     }
-    
+
 
 
     const nombre_factura = req.files.doc.name;
@@ -162,7 +168,7 @@ router.post('/compras', checkAuthentication, async (req, res) => {
         fac.mv('./src/public/img/facturas/' + factura + '.png', (err) => {
             if (err) console.log(err);
         });
-        const compra=new Compras({nro:factura,proveedor,productos:d,fecha});
+        const compra = new Compras({ nro: factura, proveedor, productos: d, fecha });
         compra.save();
     } else {
         req.flash('login', 'El formato de la imagen no es correcto debe ser PDF');
@@ -172,289 +178,310 @@ router.post('/compras', checkAuthentication, async (req, res) => {
 
 });
 //COMPRAS
-router.get('/pedidos', checkAuthentication, async (req, res) => {   
+router.get('/pedidos', checkAuthentication, async (req, res) => {
     res.render('inventario/pedidos');
 });
 
-router.get('/borrarsolicitud/:id', checkAuthentication, async (req, res) => { 
-    const {id}= req.params;  
-    await Pedidos.remove({_id:id});
-    req.flash('login',"se elimino el pedido!");
+router.get('/borrarsolicitud/:id', checkAuthentication, async (req, res) => {
+    const { id } = req.params;
+    await Pedidos.remove({ _id: id });
+    req.flash('login', "se elimino el pedido!");
     res.redirect('/pedidos');
 });
+
+router.get('/invEmpleados',checkAuthentication,async(req,res)=>{
+    res.render('inventario/invEmpleado');
+});
+
 router.post('/pedidos', checkAuthentication, async (req, res) => {
-    const {pedido,observacion,supervisor,carnet}= req.body;
-    console.log(carnet)
-    const contador=await Pedidos.find();    
-    if(pedido!=""){
-        const p=JSON.parse(pedido);
-        var fecha = new Date().toLocaleString("en-VE", {timeZone: "America/Bogota"});
-        const pedi=new Pedidos({nro:contador.length,pedidos:p,estado:'autorizado',observacion,fecha,carnet,supervisor});
-        await pedi.save();
-        console.log(p);
-        req.flash('success',"PEDIDO FUE CREADO CORRECTAMENTE!")
-    }else{
-        req.flash('login',"NO SE ENTONTRARON DATOS EN EL PEDIDO!");
-    }   
+    const { pedido, observacion, supervisor, carnet } = req.body;
+
+    const contador = await Pedidos.find();
+    if (pedido != "") {
+        const p = JSON.parse(pedido);
+        var fecha = new Date();
+        const pedi = new Pedidos({ nro: contador.length, pedidos: p, estado: 'despachado', observacion, fecha, carnet, supervisor });
+        await pedi.save((err, doc) => {
+            if (err) return console.err(err);
+            console.log('datos ==>', p)
+            p.forEach(producto => {
+                const prd= Productos.findOne({codigo_Articulo:producto.codigo},(err,doc)=>{
+                    if (err) console.log(err);
+                    console.log('producto doc==>',doc.cantidad_Total-parseInt(producto.cantidad))
+                    let cantidad=doc.cantidad_Total-parseInt(producto.cantidad);
+                    Productos.updateOne({ codigo_Articulo: producto.codigo }, { cantidad_Total:cantidad }, (err, doc) => {
+                        if (err) return console.log(err);
+                        console.log(doc);
+                    });
+                });
+              
+            });
+
+        });
+        console.log(p[0].cantidad);
+        req.flash('success', "PEDIDO FUE CREADO CORRECTAMENTE!")
+    } else {
+        req.flash('login', "NO SE ENTONTRARON DATOS EN EL PEDIDO!");
+    }
     res.redirect('/pedidos');
 });
 
 router.post('/editarpedidos/:id', checkAuthentication, async (req, res) => {
-    const {pedido}= req.body;
-    const {id}= req.params;    
-    console.log(pedido);  
-    if(pedido!=""){   
-        await Pedidos.updateOne({_id:id},{pedidos:JSON.parse(pedido)})  
-        req.flash('success',"PEDIDO FUE ACTUALIZADO CORRECTAMENTE!")
-    }else{
-        req.flash('login',"NO SE ENTONTRARON DATOS EN EL PEDIDO!");
-    }   
+    const { pedido } = req.body;
+    const { id } = req.params;
+    console.log(pedido);
+    if (pedido != "") {
+        await Pedidos.updateOne({ _id: id }, { pedidos: JSON.parse(pedido) })
+        req.flash('success', "PEDIDO FUE ACTUALIZADO CORRECTAMENTE!")
+    } else {
+        req.flash('login', "NO SE ENTONTRARON DATOS EN EL PEDIDO!");
+    }
     res.redirect('/pedidos');
 });
 
 router.post('/verificarProducto', checkAuthentication, async (req, res) => {
-    const {codigo,cantidad}= req.body;
-    const producto=await Productos.findOne({codigo_Articulo:codigo});
-    var can=parseInt(producto.cantidad_Total); 
-    var total=0;   
-    const pedidos= await Pedidos.find({estado:'solicitado'});
+    const { codigo, cantidad } = req.body;
+    const producto = await Productos.findOne({ codigo_Articulo: codigo });
+    var can = parseInt(producto.cantidad_Total);
+    var total = 0;
+    const pedidos = await Pedidos.find({ estado: 'solicitado' });
     pedidos.forEach(element => {
-       for (let index = 0; index < element.pedidos.length; index++) {
-          if(element.pedidos[index].codigo==codigo){
-              total+=parseInt(element.pedidos[index].cantidad);
-              
-          }           
-       }
-    });  
-    
-    console.log(can-total);
-    if(parseInt(cantidad)>(can-total)){        
-        res.send((can-total)+"");
-    }else{         
+        for (let index = 0; index < element.pedidos.length; index++) {
+            if (element.pedidos[index].codigo == codigo) {
+                total += parseInt(element.pedidos[index].cantidad);
+
+            }
+        }
+    });
+
+    console.log(can - total);
+    if (parseInt(cantidad) > (can - total)) {
+        res.send((can - total) + "");
+    } else {
         res.send('si');
     }
-    
+
 });
-router.get('/consultarPedidos', checkAuthentication, async (req, res) => { 
-    const pedidos=await Pedidos.find({usuario:req.user.nombre}).lean();  
-       
+router.get('/consultarPedidos', checkAuthentication, async (req, res) => {
+    const pedidos = await Pedidos.find({ usuario: req.user.nombre }).lean();
+
     for (let i = 0; i < pedidos.length; i++) {
-        var hora=pedidos[i].fecha.getHours();
+        var hora = pedidos[i].fecha.getHours();
         var minuto = pedidos[i].fecha.getMinutes();
 
-        if(hora<10){
-            hora='0'+hora;
+        if (hora < 10) {
+            hora = '0' + hora;
         }
-        if(minuto<10){
-            minuto='0'+minuto;
+        if (minuto < 10) {
+            minuto = '0' + minuto;
         }
 
-        pedidos[i].fecha=pedidos[i].fecha.getDate()+'/'+(pedidos[i].fecha.getMonth()+1)+'/'+pedidos[i].fecha.getFullYear()+' '+hora+':'+minuto;
-        if(pedidos[i].estado=='solicitado'){
-            pedidos[i].solicitado=1;
+        pedidos[i].fecha = pedidos[i].fecha.getDate() + '/' + (pedidos[i].fecha.getMonth() + 1) + '/' + pedidos[i].fecha.getFullYear() + ' ' + hora + ':' + minuto;
+        if (pedidos[i].estado == 'solicitado') {
+            pedidos[i].solicitado = 1;
         }
     }
     console.log(pedidos);
-    res.render('inventario/consultarPedidos',{pedidos});
+    res.render('inventario/consultarPedidos', { pedidos });
 });
 
-router.get('/editarsolicitud/:id',checkAuthentication,async(req,res)=>{
-    const {id}= req.params;
-    const pedidos=await Pedidos.findOne({_id:id}).lean();  
-    var solicitud=JSON.stringify(pedidos.pedidos);
+router.get('/editarsolicitud/:id', checkAuthentication, async (req, res) => {
+    const { id } = req.params;
+    const pedidos = await Pedidos.findOne({ _id: id }).lean();
+    var solicitud = JSON.stringify(pedidos.pedidos);
     console.log(solicitud);
-    res.render('inventario/editarsolicitud',{solicitud,pedidos});
+    res.render('inventario/editarsolicitud', { solicitud, pedidos });
 })
 
 //PEDIDOS
 // SUPERVISOR
-router.get('/cordinador', checkAuthentication, async (req, res) => { 
-    const pedido=await Pedidos.find({estado:'solicitado',supervisor:req.user.medico}).lean(); 
+router.get('/cordinador', checkAuthentication, async (req, res) => {
+    const pedido = await Pedidos.find({ estado: 'solicitado', supervisor: req.user.medico }).lean();
 
     for (let i = 0; i < pedido.length; i++) {
-        var hora=pedido[i].fecha.getHours();
+        var hora = pedido[i].fecha.getHours();
         var minuto = pedido[i].fecha.getMinutes();
 
-        if(hora<10){
-            hora='0'+hora;
+        if (hora < 10) {
+            hora = '0' + hora;
         }
-        if(minuto<10){
-            minuto='0'+minuto;
+        if (minuto < 10) {
+            minuto = '0' + minuto;
         }
 
-        pedido[i].fecha=pedido[i].fecha.getDate()+'/'+(pedido[i].fecha.getMonth()+1)+'/'+pedido[i].fecha.getFullYear()+' '+hora+':'+minuto;        
+        pedido[i].fecha = pedido[i].fecha.getDate() + '/' + (pedido[i].fecha.getMonth() + 1) + '/' + pedido[i].fecha.getFullYear() + ' ' + hora + ':' + minuto;
     }
-    
-    res.render('inventario/cordinador',{pedido});
+
+    res.render('inventario/cordinador', { pedido });
 });
 
-router.get('/verPedidoSedes/:id', checkAuthentication, async (req, res) => { 
-    const {id}=req.params;
-    const pedido=await Pedidos.findOne({_id:id}).lean();  
-    res.render('inventario/verpedido',{pedido,id});
+router.get('/verPedidoSedes/:id', checkAuthentication, async (req, res) => {
+    const { id } = req.params;
+    const pedido = await Pedidos.findOne({ _id: id }).lean();
+    res.render('inventario/verpedido', { pedido, id });
 });
 
-router.get('/productos', checkAuthentication, async (req, res) => { 
-    const productos= await Productos.find().sort({nombre_Articulo:'ASC'}).lean();   
-    res.render('inventario/productosver',{productos});
+router.get('/productos', checkAuthentication, async (req, res) => {
+    const productos = await Productos.find().sort({ nombre_Articulo: 'ASC' }).lean();
+    res.render('inventario/productosver', { productos });
 })
-router.get('/eliminarproducto/:id', checkAuthentication, async (req, res) => { 
-   const {id}= req.params; 
-   await Productos.deleteOne({_id:id})  
-   req.flash('success','Producto Eliminado');
-   res.redirect('/productos')
+router.get('/eliminarproducto/:id', checkAuthentication, async (req, res) => {
+    const { id } = req.params;
+    await Productos.deleteOne({ _id: id })
+    req.flash('success', 'Producto Eliminado');
+    res.redirect('/productos')
 })
 
-router.get('/verPedidoDespacho/:id', checkAuthentication, async (req, res) => { 
-    const {id}=req.params;
-    const pedido=await Pedidos.findOne({_id:id}).lean();  
-    res.render('inventario/verpedidodespacho',{pedido,id});
+router.get('/verPedidoDespacho/:id', checkAuthentication, async (req, res) => {
+    const { id } = req.params;
+    const pedido = await Pedidos.findOne({ _id: id }).lean();
+    res.render('inventario/verpedidodespacho', { pedido, id });
 });
 
-router.post('/saldos', checkAuthentication, async (req, res) => { 
-    const {codigo}=req.body;
-    var total=0;  
-    const pedidos= await Pedidos.find({estado:'solicitado'});
+router.post('/saldos', checkAuthentication, async (req, res) => {
+    const { codigo } = req.body;
+    var total = 0;
+    const pedidos = await Pedidos.find({ estado: 'solicitado' });
     pedidos.forEach(element => {
-       for (let index = 0; index < element.pedidos.length; index++) {
-          if(element.pedidos[index].codigo==codigo){
-              total+=parseInt(element.pedidos[index].cantidad);
-              
-          }           
-       }
+        for (let index = 0; index < element.pedidos.length; index++) {
+            if (element.pedidos[index].codigo == codigo) {
+                total += parseInt(element.pedidos[index].cantidad);
+
+            }
+        }
     });
     console.log(total);
-    res.send(''+total);
+    res.send('' + total);
 });
 
 
-router.post('/actualizarCantidad', checkAuthentication, async (req, res) => { 
-    const {id,cantidad,codigo}=req.body;
+router.post('/actualizarCantidad', checkAuthentication, async (req, res) => {
+    const { id, cantidad, codigo } = req.body;
 
-    const producto=await Productos.findOne({codigo_Articulo:codigo});
-    var can=parseInt(producto.cantidad_Total); 
-    var total=0;   
-    const pedidos= await Pedidos.find({estado:'solicitado'});
+    const producto = await Productos.findOne({ codigo_Articulo: codigo });
+    var can = parseInt(producto.cantidad_Total);
+    var total = 0;
+    const pedidos = await Pedidos.find({ estado: 'solicitado' });
     pedidos.forEach(element => {
-       for (let index = 0; index < element.pedidos.length; index++) {
-          if(element.pedidos[index].codigo==codigo){
-              total+=parseInt(element.pedidos[index].autorizado);              
-          }           
-       }
-    });  
-    
-    console.log(can-total);
-    if(parseInt(cantidad)>(can-total)){        
-        res.send((can-total)+"");
-    }else{         
-        const pedido=await Pedidos.findOne({_id:id}); 
-        const pe=pedido.pedidos;
-        for (let index = 0; index < pe.length; index++) {
-            if(pe[index].codigo==codigo){
-                pe[index].autorizado=cantidad;
-            }        
+        for (let index = 0; index < element.pedidos.length; index++) {
+            if (element.pedidos[index].codigo == codigo) {
+                total += parseInt(element.pedidos[index].autorizado);
+            }
         }
-        await Pedidos.updateOne({_id:id},{pedidos:pe});
+    });
+
+    console.log(can - total);
+    if (parseInt(cantidad) > (can - total)) {
+        res.send((can - total) + "");
+    } else {
+        const pedido = await Pedidos.findOne({ _id: id });
+        const pe = pedido.pedidos;
+        for (let index = 0; index < pe.length; index++) {
+            if (pe[index].codigo == codigo) {
+                pe[index].autorizado = cantidad;
+            }
+        }
+        await Pedidos.updateOne({ _id: id }, { pedidos: pe });
         res.send('si');
     }
 
 
 });
 
-router.post('/actualizarCantidadDespacho', checkAuthentication, async (req, res) => { 
-    const {id,cantidad,codigo}=req.body;
+router.post('/actualizarCantidadDespacho', checkAuthentication, async (req, res) => {
+    const { id, cantidad, codigo } = req.body;
 
-    const producto=await Productos.findOne({codigo_Articulo:codigo});
-    var can=parseInt(producto.cantidad_Total); 
-    var total=0;   
-    const pedidos= await Pedidos.find({estado:'solicitado'});
+    const producto = await Productos.findOne({ codigo_Articulo: codigo });
+    var can = parseInt(producto.cantidad_Total);
+    var total = 0;
+    const pedidos = await Pedidos.find({ estado: 'solicitado' });
     pedidos.forEach(element => {
-       for (let index = 0; index < element.pedidos.length; index++) {
-          if(element.pedidos[index].codigo==codigo){
-              total+=parseInt(element.pedidos[index].autorizado);              
-          }           
-       }
-    });  
-    
-    console.log(can-total);
-    if(parseInt(cantidad)>(can-total)){        
-        res.send((can-total)+"");
-    }else{         
-        const pedido=await Pedidos.findOne({_id:id}); 
-        const pe=pedido.pedidos;
-        for (let index = 0; index < pe.length; index++) {
-            if(pe[index].codigo==codigo){
-                pe[index].despachado=cantidad;
-            }        
+        for (let index = 0; index < element.pedidos.length; index++) {
+            if (element.pedidos[index].codigo == codigo) {
+                total += parseInt(element.pedidos[index].autorizado);
+            }
         }
-        await Pedidos.updateOne({_id:id},{pedidos:pe});
+    });
+
+    console.log(can - total);
+    if (parseInt(cantidad) > (can - total)) {
+        res.send((can - total) + "");
+    } else {
+        const pedido = await Pedidos.findOne({ _id: id });
+        const pe = pedido.pedidos;
+        for (let index = 0; index < pe.length; index++) {
+            if (pe[index].codigo == codigo) {
+                pe[index].despachado = cantidad;
+            }
+        }
+        await Pedidos.updateOne({ _id: id }, { pedidos: pe });
         res.send('si');
     }
 });
 
-router.post('/autorizar', checkAuthentication, async (req, res) => { 
-    const {id}=req.body;
-    await Pedidos.updateOne({_id:id},{estado:'autorizado',supervisor:req.user.nombre});     
+router.post('/autorizar', checkAuthentication, async (req, res) => {
+    const { id } = req.body;
+    await Pedidos.updateOne({ _id: id }, { estado: 'autorizado', supervisor: req.user.nombre });
     res.send('autorizado');
 })
 
-router.post('/despachar', checkAuthentication, async (req, res) => { 
-    const {id}=req.body;
-    await Pedidos.updateOne({_id:id},{estado:'despachado',supervisor:req.user.nombre});     
+router.post('/despachar', checkAuthentication, async (req, res) => {
+    const { id } = req.body;
+    await Pedidos.updateOne({ _id: id }, { estado: 'despachado', supervisor: req.user.nombre });
     //AQUI ES LA MAGIA
     res.send('despachado');
 })
 //DESPACHO
-router.get('/despacho', checkAuthentication, async (req, res) => { 
-    const pedidos= await Pedidos.find({estado:'autorizado'}).lean();
-   
+router.get('/despacho', checkAuthentication, async (req, res) => {
+    const pedidos = await Pedidos.find({ estado: 'autorizado' }).lean();
+
     for (let i = 0; i < pedidos.length; i++) {
-        var hora=pedidos[i].fecha.getHours();
+        var hora = pedidos[i].fecha.getHours();
         var minuto = pedidos[i].fecha.getMinutes();
 
-        if(hora<10){
-            hora='0'+hora;
+        if (hora < 10) {
+            hora = '0' + hora;
         }
-        if(minuto<10){
-            minuto='0'+minuto;
+        if (minuto < 10) {
+            minuto = '0' + minuto;
         }
 
-        pedidos[i].fecha=pedidos[i].fecha.getDate()+'/'+(pedidos[i].fecha.getMonth()+1)+'/'+pedidos[i].fecha.getFullYear()+' '+hora+':'+minuto;        
+        pedidos[i].fecha = pedidos[i].fecha.getDate() + '/' + (pedidos[i].fecha.getMonth() + 1) + '/' + pedidos[i].fecha.getFullYear() + ' ' + hora + ':' + minuto;
     }
 
     console.log(pedidos)
-    res.render('inventario/despacho',{pedidos});
+    res.render('inventario/despacho', { pedidos });
 });
-router.get('/verPedidoSedesDespacho/:id', checkAuthentication, async (req, res) => { 
-    const {id}=req.params;
-    const pedido=await Pedidos.findOne({_id:id}).lean();  
-    res.render('inventario/pedidosDespacho',{pedido,id});
+router.get('/verPedidoSedesDespacho/:id', checkAuthentication, async (req, res) => {
+    const { id } = req.params;
+    const pedido = await Pedidos.findOne({ _id: id }).lean();
+    res.render('inventario/pedidosDespacho', { pedido, id });
 });
 //DESPACHO
 
 
-router.get('/saldos', checkAuthentication, async (req, res) => {   
-    const productos=await Productos.find().lean();  
-    res.render('inventario/saldos',{productos});
+router.get('/saldos', checkAuthentication, async (req, res) => {
+    const productos = await Productos.find().lean();
+    res.render('inventario/saldos', { productos });
 });
 
-router.get('/solicitudes', checkAuthentication, async (req, res) => {   
-    const solicitudes= await Solicitud.find({usuario:req.user.medico}).lean();
+router.get('/solicitudes', checkAuthentication, async (req, res) => {
+    const solicitudes = await Solicitud.find({ usuario: req.user.medico }).lean();
     console.log(req.user.medico);
     console.log(solicitudes);
-    res.render('inventario/solicitudes',{solicitudes});
+    res.render('inventario/solicitudes', { solicitudes });
 });
 
-router.post('/solicitudes', checkAuthentication, async (req, res) => { 
-    const {cantidad,producto} = req.body;
-    const solicitud = new Solicitud({productos:producto,cantidad,usuario:req.user.medico})
+router.post('/solicitudes', checkAuthentication, async (req, res) => {
+    const { cantidad, producto } = req.body;
+    const solicitud = new Solicitud({ productos: producto, cantidad, usuario: req.user.medico })
     await solicitud.save();
     res.redirect('/solicitudes');
 });
 
-router.post('/consultarUsuario', checkAuthentication, async (req, res) => { 
-    const {user} = req.body;
-    const u = await Users.findOne({username:user});   
+router.post('/consultarUsuario', checkAuthentication, async (req, res) => {
+    const { user } = req.body;
+    const u = await Users.findOne({ username: user });
     res.send(u);
 });
 
