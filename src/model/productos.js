@@ -10,7 +10,7 @@ const productoSchema= new Schema({
     linea:{type:String,required:false},       
     marca:{type:String,required:false},       
     medida:{type:String,required:false},      
-    cantidad_Total:{type:String,default:'1000000'},      
+    cantidad_Total:{type:Number,default:0},      
     costo:{type:String,required:false}
 });
 

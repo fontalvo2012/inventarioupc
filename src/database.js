@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const URI = 'mongodb://localhost/upcinventario';
+const URI = 'mongodb+srv://equipoinventario2023:oIjFnBwzvcGjs31u@cluster0.xyxbc14.mongodb.net/taller?retryWrites=true&w=majority';
 
 
 mongoose.connect(URI, {
