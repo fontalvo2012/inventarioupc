@@ -5,6 +5,7 @@ const Proveedores = require('../model/proveedores');
 const Compras = require('../model/compras');
 const Pedidos = require('../model/pedidos');
 const Users = require('../model/users');
+const Ccostos = require('../model/ccostos');
 const Solicitud = require('../model/solicitudes');
 
 function checkAuthentication(req, res, next) {
@@ -172,6 +173,19 @@ router.get('/pedidos', checkAuthentication, async (req, res) => {
   res.render('inventario/pedidos');
 });
 
+router.get('/ccostos', checkAuthentication, async (req, res) => {
+
+  res.render('inventario/ccostos');
+});
+
+router.post('/ccostos', checkAuthentication, async (req, res) => {
+  const {nombre,descripcion} = req.body
+  const ccostos = new Ccostos({nombre,descripcion})
+  await ccostos.save()
+  req.flash('success', "Centro de costo creado");
+  res.redirect('/ccostos');
+}); 
+
 router.get('/borrarsolicitud/:id', checkAuthentication, async (req, res) => {
   const { id } = req.params;
   await Pedidos.remove({ _id: id });
@@ -184,7 +198,7 @@ router.post('/pedidos', checkAuthentication, async (req, res) => {
   if (pedido != "") {
     const p = JSON.parse(pedido);
     var fecha = new Date().toLocaleString("en-VE", { timeZone: "America/Bogota" });
-    const pedi = new Pedidos({ nro: contador.length, pedidos: p, estado: 'solicitado', observacion, fecha, usuario: req.user.nombre, supervisor });
+    const pedi = new Pedidos({ nro: contador.length, pedidos: p, estado: 'solicitado', observacion, fecha, usuario: req.user.nombre, ccuser: req.user.medico, supervisor });
     await pedi.save();
     console.log(p);
     req.flash('success', "PEDIDO FUE CREADO CORRECTAMENTE!")
@@ -257,7 +271,6 @@ router.get('/editarsolicitud/:id', checkAuthentication, async (req, res) => {
   const { id } = req.params;
   const pedidos = await Pedidos.findOne({ _id: id }).lean();
   var solicitud = JSON.stringify(pedidos.pedidos);
-  console.log(solicitud);
   res.render('inventario/editarsolicitud', { solicitud, pedidos });
 })
 

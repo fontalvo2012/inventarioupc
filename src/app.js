@@ -9,7 +9,7 @@ const fileUpload = require('express-fileupload');
 const app = express();
 //setting
 require('./database');
-app.set('port',process.env.PORT || 80);
+app.set('port',process.env.PORT || 3000);
 app.set('views',path.join(__dirname,'views'));
 app.set('file',path.join(__dirname,'file'));
 

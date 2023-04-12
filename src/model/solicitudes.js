@@ -4,7 +4,7 @@ const {Schema}=mongoose;
 process.env.TZ = "America/New_York"
 d = new Date();
 d.toLocaleTimeString();
-console.log(""+d);
+
 
 const solicitudesSchema= new Schema({
 

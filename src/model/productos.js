@@ -14,5 +14,5 @@ const productoSchema= new Schema({
     costo:{type:String,required:false}
 });
 
-module.exports=mongoose.model('prodocutos',productoSchema);
+module.exports=mongoose.model('productos',productoSchema);
 

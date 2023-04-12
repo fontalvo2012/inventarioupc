@@ -8,6 +8,7 @@ const pedidosSchema= new Schema({
     observacion:{type:String,required:false},   
     estado:{type:String,required:false},
     usuario:{type:String,required:false},
+    ccuser:{type:String,required:false},
     supervisor:{type:String,required:false}
 });
 
