@@ -46,27 +46,29 @@ function cargarlistadescargas() {
 }
 
 function guardarItemCentros(){
-  if(confirm(`Desea Descargar los item en el centro de costo: ${$("#ccostos option:selected").text()}`)){
-    const articulos = []
-    $('input[name^="articulo"]').each(function () {
-      articulos.push({
-        codigo:$(this).data("codigo"),
-        nombre:$(this).data("nombre"),
-        cantidad:$(this).data("cantidad"),
-        empleado:$("#emp").val(),
-        fecha:new Date()
+  if(!lista[0] || $("#ccostos option:selected").text()=="Seleccionar"){
+    alert("debe agregar item a la lista o revisar el centro de costo")
+  }else{
+    if(confirm(`Desea Descargar los item en el centro de costo: ${$("#ccostos option:selected").text()}`)){
+      const articulos = []
+      $('input[name^="articulo"]').each(function () {
+        articulos.push({
+          codigo:$(this).data("codigo"),
+          producto:$(this).data("nombre"),
+          cantidad:$(this).data("cantidad"),
+          empleado:$("#emp").val(),
+          fecha:new Date()
+        })
       })
-    })
-
-
-    const arti = document.createElement('input')
-    arti.type = 'hidden'
-    arti.name = 'articulos'
-    arti.value = JSON.stringify(articulos)
-
-    $('#descargaCcostos').append(arti)
-    $('#descargaCcostos').submit()
+      const arti = document.createElement('input')
+      arti.type = 'hidden'
+      arti.name = 'articulos'
+      arti.value = JSON.stringify(articulos)
+      $('#descargaCcostos').append(arti)
+      $('#descargaCcostos').submit()
+    }
   }
+ 
 }
 
 function consultarmedico(id) {

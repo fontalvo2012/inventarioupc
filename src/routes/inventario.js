@@ -30,7 +30,7 @@ router.get('/verpedido/:id', checkAuthentication, async (req, res) => {
   var hora = pedido.fecha.getHours();
   var minuto = pedido.fecha.getMinutes();
   pedido.fecha = pedido.fecha.getDate() + '/' + (pedido.fecha.getMonth() + 1) + '/' + pedido.fecha.getFullYear() + ' ' + hora + ':' + minuto;
-  console.log(pedido);
+
   res.render('inventario/revisar', { pedido });
 });
 
@@ -80,7 +80,7 @@ router.post('/informeDespachado', checkAuthentication, async (req, res) => {
       nro: p[i].nro,
       estado: p[i].estado
     });
-    console.log(respedidos);
+ 
   }
 
   res.send(respedidos);
@@ -170,20 +170,8 @@ router.post('/compras', checkAuthentication, async (req, res) => {
 });
 //COMPRAS
 router.get('/pedidos', checkAuthentication, async (req, res) => {
-  const inventario = req.user.inventario;
-  let invent = []
-  if (inventario) {
-    invent = Object.values(inventario.reduce((acumulador, elemento) => {
-      if (!acumulador[elemento.producto]) {
-        acumulador[elemento.producto] = { ...elemento };
-      } else {
-        acumulador[elemento.producto].cantidad += parseInt(elemento.cantidad);
-      }
-      return acumulador;
-    }, {}));
-    console.log(invent);
-  }
-  res.render('inventario/pedidos', { invent });
+  invfinal = await Invetario(req.user._id)
+  res.render('inventario/pedidos', { invfinal });
 });
 
 router.get('/ccostos', checkAuthentication, async (req, res) => {
@@ -210,7 +198,7 @@ router.get('/borrarsolicitud/:id', checkAuthentication, async (req, res) => {
 router.post('/pedidos', checkAuthentication, async (req, res) => {
   const { pedido, observacion, supervisor } = req.body;
   const contador = await Pedidos.find();
-  let inventario = {}
+ 
 
   if (pedido != "") {
     const p = JSON.parse(pedido);
@@ -231,7 +219,7 @@ router.post('/pedidos', checkAuthentication, async (req, res) => {
 router.post('/editarpedidos/:id', checkAuthentication, async (req, res) => {
   const { pedido } = req.body;
   const { id } = req.params;
-  console.log(pedido);
+
   if (pedido != "") {
     await Pedidos.updateOne({ _id: id }, { pedidos: JSON.parse(pedido) })
     req.flash('success', "PEDIDO FUE ACTUALIZADO CORRECTAMENTE!")
@@ -256,7 +244,7 @@ router.post('/verificarProducto', checkAuthentication, async (req, res) => {
     }
   });
 
-  console.log(can - total);
+
   if (parseInt(cantidad) > (can - total)) {
     res.send((can - total) + "");
   } else {
@@ -283,7 +271,7 @@ router.get('/consultarPedidos', checkAuthentication, async (req, res) => {
       pedidos[i].solicitado = 1;
     }
   }
-  console.log(pedidos);
+
   res.render('inventario/consultarPedidos', { pedidos });
 });
 
@@ -351,7 +339,7 @@ router.post('/saldos', checkAuthentication, async (req, res) => {
       }
     }
   });
-  console.log(total);
+
   res.send('' + total);
 });
 
@@ -371,7 +359,7 @@ router.post('/actualizarCantidad', checkAuthentication, async (req, res) => {
     }
   });
 
-  console.log(can - total);
+
   if (parseInt(cantidad) > (can - total)) {
     res.send((can - total) + "");
   } else {
@@ -404,7 +392,7 @@ router.post('/actualizarCantidadDespacho', checkAuthentication, async (req, res)
     }
   });
 
-  console.log(can - total);
+
   if (parseInt(cantidad) > (can - total)) {
     res.send((can - total) + "");
   } else {
@@ -423,13 +411,20 @@ router.post('/actualizarCantidadDespacho', checkAuthentication, async (req, res)
 router.post('/autorizar', checkAuthentication, async (req, res) => {
   const { id } = req.body;
   const pedido = await Pedidos.findOne({ _id: id })
-  await Pedidos.updateOne({ _id: id }, { estado: 'autorizado', supervisor: req.user.nombre });
+  const user = await Users.findOne({medico: pedido.ccuser})
+ 
+  
   console.log("AQUI SE AUTORIZA")
+
   let inventario = pedido.pedidos
-  if (req.user.inventario) {
-    inventario = inventario.concat(req.user.inventario)
+  
+  if (user.inventario) {
+    inventario = inventario.concat(user.inventario)
   }
+  console.log("usuario: ", user.inventario)
+  console.log("inventario: ", inventario)
   await Users.updateOne({ medico: pedido.ccuser }, { inventario })
+  await Pedidos.updateOne({ _id: id }, { estado: 'autorizado', supervisor: req.user.nombre });
   res.send('autorizado');
 })
 
@@ -457,7 +452,7 @@ router.get('/despacho', checkAuthentication, async (req, res) => {
     pedidos[i].fecha = pedidos[i].fecha.getDate() + '/' + (pedidos[i].fecha.getMonth() + 1) + '/' + pedidos[i].fecha.getFullYear() + ' ' + hora + ':' + minuto;
   }
 
-  console.log(pedidos)
+  
   res.render('inventario/despacho', { pedidos });
 });
 router.get('/verPedidoSedesDespacho/:id', checkAuthentication, async (req, res) => {
@@ -474,7 +469,6 @@ router.get('/saldos', checkAuthentication, async (req, res) => {
 });
 router.post('/descargarinv', checkAuthentication, async (req, res) => {
   const {articulos,ccostos,} = req.body
-  console.log("ARTICULOS",ccostos,articulos)
   const cc = await Ccostos.findOne({_id:ccostos})
   const user = await Users.findOne({_id:req.user._id})
   let insumos=[]
@@ -485,8 +479,8 @@ router.post('/descargarinv', checkAuthentication, async (req, res) => {
   }else{
     insumos=JSON.parse(articulos)
   }
-  if (user.despacho){
-    despachos=user.despacho.concat(JSON.parse(articulos))
+  if (user.despachos){
+    despachos=user.despachos.concat(JSON.parse(articulos))
   }else{
     despachos=JSON.parse(articulos)
   }
@@ -499,8 +493,17 @@ router.post('/descargarinv', checkAuthentication, async (req, res) => {
 
 router.get('/descargarinv', checkAuthentication, async (req, res) => {
   const ccostos = await Ccostos.find().lean()
-  const inventario = req.user.inventario;
+  invfinal = await Invetario(req.user._id)
+  res.render('inventario/descargarInv', { ccostos,invfinal });
+});
+
+async function Invetario(_id) {
+  const user= await Users.findOne({_id})
+  const inventario = user.inventario;
+  const despachos = user.despachos;
   let invent = []
+  let desp=[]
+  let invfinal=[]
   if (inventario) {
     invent = Object.values(inventario.reduce((acumulador, elemento) => {
       if (!acumulador[elemento.producto]) {
@@ -511,12 +514,39 @@ router.get('/descargarinv', checkAuthentication, async (req, res) => {
       return acumulador;
     }, {}));
   }
-  res.render('inventario/descargarInv', { ccostos,invent });
-});
+  if (despachos) {
+    desp = Object.values(despachos.reduce((acumulador, elemento) => {
+      if (!acumulador[elemento.producto]) {
+        acumulador[elemento.producto] = { ...elemento };
+      } else {
+        acumulador[elemento.producto].cantidad += parseInt(elemento.cantidad);
+      }
+      return acumulador;
+    }, {}));
+  
+  }
+  
+  for (let i = 0; i < Math.max(invent.length, desp.length); i++) {
+    const obj1 = invent[i] || { codigo: null, producto: null, cantidad: 0 };
+    const obj2 = desp[i] || { codigo: null, producto: null, cantidad: 0 };
+    const newValue = obj1.cantidad - obj2.cantidad;
+    if(newValue>0){
+      const newObj = {
+        codigo: obj1.codigo,
+        producto: obj1.producto,
+        cantidad: newValue
+      };
+      invfinal.push(newObj);
+    }
+  
+  }
+ 
+  return invfinal
+}
+
 router.get('/solicitudes', checkAuthentication, async (req, res) => {
   const solicitudes = await Solicitud.find({ usuario: req.user.medico }).lean();
-  console.log(req.user.medico);
-  console.log(solicitudes);
+
   res.render('inventario/solicitudes', { solicitudes });
 });
 

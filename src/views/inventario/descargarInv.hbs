@@ -20,7 +20,7 @@
         <span>Materiales</span>
         <select  id="materiales" class="form-control form-control-sm" onchange="cantidadInv()" required>
           <option value="">Seleccione</option>
-          {{#each invent}}
+          {{#each invfinal}}
           <option value="{{cantidad}}" data-cd="{{codigo}}" data-empleado="{{user.empleado}}">{{producto}}</option>
           {{/each}}
         </select>
@@ -55,7 +55,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each invent}}
+        {{#each invfinal}}
           <tr>
             <td>{{codigo}}</td>
             <td>{{producto}}</td>
