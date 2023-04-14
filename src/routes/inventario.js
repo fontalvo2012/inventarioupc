@@ -171,19 +171,19 @@ router.post('/compras', checkAuthentication, async (req, res) => {
 //COMPRAS
 router.get('/pedidos', checkAuthentication, async (req, res) => {
   const inventario = req.user.inventario;
-  let invent=[]
-  if(inventario){
- invent = Object.values(inventario.reduce((acumulador, elemento) => {
-    if (!acumulador[elemento.producto]) {
-      acumulador[elemento.producto] = { ...elemento };
-    } else {
-      acumulador[elemento.producto].cantidad += parseInt(elemento.cantidad);
-    }
-    return acumulador;
-  }, {}));
-  console.log(invent);
+  let invent = []
+  if (inventario) {
+    invent = Object.values(inventario.reduce((acumulador, elemento) => {
+      if (!acumulador[elemento.producto]) {
+        acumulador[elemento.producto] = { ...elemento };
+      } else {
+        acumulador[elemento.producto].cantidad += parseInt(elemento.cantidad);
+      }
+      return acumulador;
+    }, {}));
+    console.log(invent);
   }
-  res.render('inventario/pedidos',{invent});
+  res.render('inventario/pedidos', { invent });
 });
 
 router.get('/ccostos', checkAuthentication, async (req, res) => {
@@ -191,12 +191,12 @@ router.get('/ccostos', checkAuthentication, async (req, res) => {
 });
 
 router.post('/ccostos', checkAuthentication, async (req, res) => {
-  const {nombre,descripcion} = req.body
-  const ccostos = new Ccostos({nombre,descripcion})
+  const { nombre, descripcion } = req.body
+  const ccostos = new Ccostos({ nombre, descripcion })
   await ccostos.save()
   req.flash('success', "Centro de costo creado");
   res.redirect('/ccostos');
-}); 
+});
 
 router.get('/borrarsolicitud/:id', checkAuthentication, async (req, res) => {
   const { id } = req.params;
@@ -210,17 +210,17 @@ router.get('/borrarsolicitud/:id', checkAuthentication, async (req, res) => {
 router.post('/pedidos', checkAuthentication, async (req, res) => {
   const { pedido, observacion, supervisor } = req.body;
   const contador = await Pedidos.find();
-  let inventario ={}
-  
+  let inventario = {}
+
   if (pedido != "") {
     const p = JSON.parse(pedido);
-  
-   
+
+
     var fecha = new Date().toLocaleString("en-VE", { timeZone: "America/Bogota" });
     const pedi = new Pedidos({ nro: contador.length, pedidos: p, estado: 'solicitado', observacion, fecha, usuario: req.user.nombre, ccuser: req.user.medico, supervisor });
     await pedi.save();
-   
-   
+
+
     req.flash('success', "PEDIDO FUE CREADO CORRECTAMENTE!")
   } else {
     req.flash('login', "NO SE ENTONTRARON DATOS EN EL PEDIDO!");
@@ -422,21 +422,21 @@ router.post('/actualizarCantidadDespacho', checkAuthentication, async (req, res)
 
 router.post('/autorizar', checkAuthentication, async (req, res) => {
   const { id } = req.body;
-  const pedido=await Pedidos.findOne({_id:id})
+  const pedido = await Pedidos.findOne({ _id: id })
   await Pedidos.updateOne({ _id: id }, { estado: 'autorizado', supervisor: req.user.nombre });
   console.log("AQUI SE AUTORIZA")
-  let inventario=pedido.pedidos
-  if(req.user.inventario){
-    inventario=inventario.concat(req.user.inventario)
+  let inventario = pedido.pedidos
+  if (req.user.inventario) {
+    inventario = inventario.concat(req.user.inventario)
   }
-  await Users.updateOne({medico:pedido.ccuser},{inventario})
+  await Users.updateOne({ medico: pedido.ccuser }, { inventario })
   res.send('autorizado');
 })
 
 router.post('/despachar', checkAuthentication, async (req, res) => {
   const { id } = req.body;
   await Pedidos.updateOne({ _id: id }, { estado: 'despachado', supervisor: req.user.nombre });
-  
+
   res.send('despachado');
 })
 //DESPACHO
@@ -472,7 +472,47 @@ router.get('/saldos', checkAuthentication, async (req, res) => {
   const productos = await Productos.find().lean();
   res.render('inventario/saldos', { productos });
 });
+router.post('/descargarinv', checkAuthentication, async (req, res) => {
+  const {articulos,ccostos,} = req.body
+  console.log("ARTICULOS",ccostos,articulos)
+  const cc = await Ccostos.findOne({_id:ccostos})
+  const user = await Users.findOne({_id:req.user._id})
+  let insumos=[]
+  let despachos=[]
 
+  if(cc.insumos){
+    insumos= cc.insumos.concat(JSON.parse(articulos))
+  }else{
+    insumos=JSON.parse(articulos)
+  }
+  if (user.despacho){
+    despachos=user.despacho.concat(JSON.parse(articulos))
+  }else{
+    despachos=JSON.parse(articulos)
+  }
+
+
+  await Ccostos.updateOne({_id:ccostos},{insumos})
+  await Users.updateOne({ medico:req.user.medico }, {despachos})
+  res.redirect('/descargarinv')
+});
+
+router.get('/descargarinv', checkAuthentication, async (req, res) => {
+  const ccostos = await Ccostos.find().lean()
+  const inventario = req.user.inventario;
+  let invent = []
+  if (inventario) {
+    invent = Object.values(inventario.reduce((acumulador, elemento) => {
+      if (!acumulador[elemento.producto]) {
+        acumulador[elemento.producto] = { ...elemento };
+      } else {
+        acumulador[elemento.producto].cantidad += parseInt(elemento.cantidad);
+      }
+      return acumulador;
+    }, {}));
+  }
+  res.render('inventario/descargarInv', { ccostos,invent });
+});
 router.get('/solicitudes', checkAuthentication, async (req, res) => {
   const solicitudes = await Solicitud.find({ usuario: req.user.medico }).lean();
   console.log(req.user.medico);

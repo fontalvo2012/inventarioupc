@@ -18,6 +18,57 @@ var db = firebase.firestore();
 
 
 
+function cantidadInv() {
+  let cadena=` <span>Cantidad</span> <input type="number" max="${$("#materiales").val()}" id="cantidad" class="form-control form-control-sm" placeholder="Tienes ${$("#materiales").val()}">`
+  $("#cantidadInv").html(cadena)
+}
+let lista=[]
+let cadena=""
+function cargarlistadescargas() {
+  if (lista.find(objeto => objeto.ccosto === $("#ccostos option:selected").text()) || !lista[0]) {
+    if (parseInt($("#cantidad").val())>parseInt($("#materiales").val()) || $("#cantidad").val()=="") {
+      alert("no tienes esa cantidad de articulos!")
+    }else{
+      let obj={nombre:$("#materiales option:selected").text(),cantidad:parseInt($("#cantidad").val()),ccosto:$("#ccostos option:selected").text()}
+      if (lista.find(objeto => objeto.nombre === obj.nombre)) {
+          alert("El item ya fue agregado a lista!")
+      }else{
+        cadena +=`<input type="text" readonly class="form-control form-control-sm articulos" data-codigo="${$("#materiales option:selected").data("cd")}"  data-empleado="${$("#materiales option:selected").data("empleado")}" data-nombre="${$("#materiales option:selected").text()}" data-cantidad="${parseInt($("#cantidad").val())}"  name="articulo "value="${$("#materiales option:selected").text()} X cantidad ${parseInt($("#cantidad").val())}"><br>`
+        $("#listaItems").html(cadena)
+        lista.push(obj)
+      } 
+    }
+  }else{
+    alert(`Ya has ingresado algunos productos al centro de costo ${lista[0].ccosto} debes guardar este avence`)
+  }
+  
+
+}
+
+function guardarItemCentros(){
+  if(confirm(`Desea Descargar los item en el centro de costo: ${$("#ccostos option:selected").text()}`)){
+    const articulos = []
+    $('input[name^="articulo"]').each(function () {
+      articulos.push({
+        codigo:$(this).data("codigo"),
+        nombre:$(this).data("nombre"),
+        cantidad:$(this).data("cantidad"),
+        empleado:$("#emp").val(),
+        fecha:new Date()
+      })
+    })
+
+
+    const arti = document.createElement('input')
+    arti.type = 'hidden'
+    arti.name = 'articulos'
+    arti.value = JSON.stringify(articulos)
+
+    $('#descargaCcostos').append(arti)
+    $('#descargaCcostos').submit()
+  }
+}
+
 function consultarmedico(id) {
   $.ajax({
     url: '/ajaxmedico',
