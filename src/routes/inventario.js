@@ -170,11 +170,23 @@ router.post('/compras', checkAuthentication, async (req, res) => {
 });
 //COMPRAS
 router.get('/pedidos', checkAuthentication, async (req, res) => {
-  res.render('inventario/pedidos');
+  const inventario = req.user.inventario;
+  let invent=[]
+  if(inventario){
+ invent = Object.values(inventario.reduce((acumulador, elemento) => {
+    if (!acumulador[elemento.producto]) {
+      acumulador[elemento.producto] = { ...elemento };
+    } else {
+      acumulador[elemento.producto].cantidad += parseInt(elemento.cantidad);
+    }
+    return acumulador;
+  }, {}));
+  console.log(invent);
+  }
+  res.render('inventario/pedidos',{invent});
 });
 
 router.get('/ccostos', checkAuthentication, async (req, res) => {
-
   res.render('inventario/ccostos');
 });
 
@@ -189,18 +201,26 @@ router.post('/ccostos', checkAuthentication, async (req, res) => {
 router.get('/borrarsolicitud/:id', checkAuthentication, async (req, res) => {
   const { id } = req.params;
   await Pedidos.remove({ _id: id });
+
+
   req.flash('login', "se elimino el pedido!");
   res.redirect('/pedidos');
 });
+
 router.post('/pedidos', checkAuthentication, async (req, res) => {
   const { pedido, observacion, supervisor } = req.body;
   const contador = await Pedidos.find();
+  let inventario ={}
+  
   if (pedido != "") {
     const p = JSON.parse(pedido);
+  
+   
     var fecha = new Date().toLocaleString("en-VE", { timeZone: "America/Bogota" });
     const pedi = new Pedidos({ nro: contador.length, pedidos: p, estado: 'solicitado', observacion, fecha, usuario: req.user.nombre, ccuser: req.user.medico, supervisor });
     await pedi.save();
-    console.log(p);
+   
+   
     req.flash('success', "PEDIDO FUE CREADO CORRECTAMENTE!")
   } else {
     req.flash('login', "NO SE ENTONTRARON DATOS EN EL PEDIDO!");
@@ -402,13 +422,21 @@ router.post('/actualizarCantidadDespacho', checkAuthentication, async (req, res)
 
 router.post('/autorizar', checkAuthentication, async (req, res) => {
   const { id } = req.body;
+  const pedido=await Pedidos.findOne({_id:id})
   await Pedidos.updateOne({ _id: id }, { estado: 'autorizado', supervisor: req.user.nombre });
+  console.log("AQUI SE AUTORIZA")
+  let inventario=pedido.pedidos
+  if(req.user.inventario){
+    inventario=inventario.concat(req.user.inventario)
+  }
+  await Users.updateOne({medico:pedido.ccuser},{inventario})
   res.send('autorizado');
 })
 
 router.post('/despachar', checkAuthentication, async (req, res) => {
   const { id } = req.body;
   await Pedidos.updateOne({ _id: id }, { estado: 'despachado', supervisor: req.user.nombre });
+  
   res.send('despachado');
 })
 //DESPACHO

@@ -7436,7 +7436,7 @@ function addProductoPedido() {
     if($('#producto').val()!="" && $('#cantidad').val()!=""){
         var index=$('#producto').val().indexOf(':');
         var codigo=$('#producto').val().substring(0,index);
-        pedido.push({codigo,producto:$('#producto').val(),cantidad:$('#cantidad').val(),autorizado:$('#cantidad').val(),despachado:'0'});
+        pedido.push({codigo,producto:$('#producto').val(),cantidad:parseInt($('#cantidad').val()),autorizado:$('#cantidad').val(),despachado:'0'});
     }else{
         alert('debe llenar la cantida o elegir el producto');
     }
