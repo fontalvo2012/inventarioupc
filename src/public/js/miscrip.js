@@ -773,20 +773,23 @@ function consultarUsuario() {
 
 function consultarRfid() {
 
-$.ajax({
-  url: '/consultarRfid',
-  type: 'POST',
-  data: {
-    rfid:$("#rfid").val()
-  },
-  success: (data) => {
-   $("#foto").attr("src", `/img/${data.foto}`);
-   $("#nombres").val(data.empleado)
-   $("#cedula").val(data.medico)
-   $("#cargo").html(data.nombre)
-   consultarInventario(data._id)
-  }
-});
+  $.ajax({
+    url: '/consultarRfid',
+    type: 'POST',
+    data: {
+      rfid:$("#rfid").val()
+    },
+    success: (data) => {
+     $("#foto").attr("src", `/img/${data.foto}`);
+     $("#nombres").val(data.empleado)
+     $("#cedula").val(data.medico)
+     $("#cargo").html(data.nombre)
+     $("#rfid").val("")
+     consultarInventario(data._id)
+    }
+  })
+
+
 }
 
 function consultarInventario(_id) {

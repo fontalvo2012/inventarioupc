@@ -203,7 +203,11 @@ const {_id}= req.body
 
 //inventario = await Invetario(_id)
 let user = await Users.findOne({_id})
-let inventario = user.inventario
+let inventario=[]
+if(user){
+  inventario = user.inventario
+}
+
 res.send(inventario)
 })
 

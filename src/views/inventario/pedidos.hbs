@@ -5,7 +5,7 @@
   <div class="card mb-1">
     <div class="card-header">
       <div class="col-12">
-        <input type="text" class="form-control-sm form-control" id="rfid" onblur="consultarRfid()">
+        <input type="text" class="form-control-sm form-control rfid"  id="rfid" onblur="consultarRfid()">
       </div>
     </div>
     <div class="card-body">
@@ -21,11 +21,11 @@
           <div class="col-sm-3">
             <div class="form-group">
               <label><b>Nombre:</b></label>
-              <input type="text" class="form-control form-control-sm" id="nombres" name="empleado" placeholder="Nombres">
+              <input type="text" class="form-control form-control-sm"   readonly required id="nombres" name="empleado" placeholder="Nombres">
             </div>
             <div class="form-group">
               <label><b>Cédula:</b></label>
-              <input type="text" class="form-control form-control-sm" id="cedula" name="ccempleado" placeholder="Cedula">
+              <input type="text" class="form-control form-control-sm" id="cedula" readonly required name="ccempleado" placeholder="Cedula">
             </div>
             <div class="form-group">
               <label><b>Cargo:</b></label>
@@ -44,12 +44,12 @@
                     <input type="text" id="producto" name="producto" placeholder="Producto" onchange="ValidarProducto()"
                       class="form-control form-control-sm productos">
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-sm-3">
                     <span class="small"><b>Cantidad</b></span>
                     <input type="text" id="cantidad" name="cantidad" placeholder="#"
                       class="form-control form-control-sm">
                   </div>
-                    <div class="col-sm-12">
+                    <div class="col-sm-9">
                     <span class="small"><b>Centro de costos</b></span>
                     <select name="ccosto" id="ccosto" class="form-control form-control-sm">
                       <option value="">Seleccione</option>
@@ -58,7 +58,7 @@
                       {{/each}}
                     </select>
                   </div>
-                  <div class="col-sm-6 mt-4"><span class="btn btn-info btn-sm" onclick="verificarProducto()"><i
+                  <div class="col-sm-12 mt-4"><span class="btn btn-info btn-block btn-sm" onclick="verificarProducto()"><i
                         class='fas fa-angle-double-down' style='font-size:16px'></i> Agregar a la lista</span></div>
                    
                    <div class="col-sm-12">
