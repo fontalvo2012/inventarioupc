@@ -815,3 +815,10 @@ function consultarInventario(_id) {
     }
   });
   }
+
+
+  //DATATABLE
+
+  $(function() {
+   
+  });
