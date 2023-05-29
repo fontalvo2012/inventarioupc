@@ -7,7 +7,7 @@ const Pedidos = require('../model/pedidos');
 const Users = require('../model/users');
 const Ccostos = require('../model/ccostos');
 const Solicitud = require('../model/solicitudes');
-
+let moment = require('moment');
 function checkAuthentication(req, res, next) {
   if (req.isAuthenticated()) {
     next();
@@ -17,7 +17,8 @@ function checkAuthentication(req, res, next) {
 }
 
 router.get('/inventario', checkAuthentication, async (req, res) => {
-  res.render('inventario/index');
+  const productos = await Productos.find().sort({ nombre_Articulo: 'ASC' }).lean();
+  res.render('inventario/index',{productos});
 });
 router.get('/informeDespachado', checkAuthentication, async (req, res) => {
   const users = await Users.find({ sede: 1 }).lean();
@@ -59,6 +60,8 @@ router.post('/informeDespachado', checkAuthentication, async (req, res) => {
         }
       });
   }
+
+  console.log(pedidos)
   var p = pedidos;
   for (let i = 0; i < p.length; i++) {
     var hora = p[i].fecha.getHours();
@@ -124,7 +127,8 @@ router.post('/crearInsumosform', checkAuthentication, async (req, res) => {
 
 // PROVEEDORES
 router.get('/proveedores', checkAuthentication, async (req, res) => {
-  res.render('inventario/proveedores');
+  const proveedores = await Proveedores.find().lean();
+  res.render('inventario/proveedores',{proveedores});
 });
 
 router.post('/proveedores', checkAuthentication, async (req, res) => {
@@ -172,7 +176,8 @@ router.post('/compras', checkAuthentication, async (req, res) => {
 
 
 router.get('/ccostos', checkAuthentication, async (req, res) => {
-  res.render('inventario/ccostos');
+  const ccosto = await Ccostos.find().lean()
+  res.render('inventario/ccostos',{ccosto});
 });
 
 router.post('/ccostos', checkAuthentication, async (req, res) => {

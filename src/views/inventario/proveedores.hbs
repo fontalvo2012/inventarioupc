@@ -1,5 +1,5 @@
 <form action="/proveedores" method="POST">
-    <div class="card">
+    <div class="card mb-3">
         <div class="card-header">
             <h5>Creacion de proveedores</h5>
         </div>
@@ -19,15 +19,34 @@
                 <div class="col-sm-3"><span class="small"> <b>Telefono</b></span><input type="text" id="telefono"
                         name="telefono" class="form-control form-control-sm" placeholder="Telefono" required></div>
             </div>
+            <button class="btn btn-success btn-block mt-3  btn-sm">Crear</button>
         </div>
-        <div class="card-footer">
-            <div class="row">
-                <div class="col-sm-3">
-                    <button class="btn btn-success btn-block  btn-sm">Crear</button>
-                </div>                
-            </div>
-        </div>
+      
     </div>
 
 
 </form>
+
+  <table class="table dtable">
+          <thead>
+            <tr>
+              <th>Nit</th>
+              <th>Nombre</th>
+              <th>Telefono</th>
+              <th>Direccion</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody >
+             {{#each proveedores}}
+            <tr>
+              <td>{{nit}}</td>
+              <td>{{nombre}}</td>
+              <td>{{telefono}}</td>
+              <td>{{direccion}}</td>
+              <td>{{email}}</td>
+             
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>

@@ -7607,6 +7607,7 @@ function cosultarPedido() {
       usuario: $('#usuario').val(),
     },
     success: (data) => {
+      $('.dtable').DataTable().destroy()
       var cadena = "";
       data.forEach(element => {
         cadena += ` 
@@ -7619,7 +7620,12 @@ function cosultarPedido() {
               </tr>`
       });
       $('#pedido').html(cadena)
-      console.log(data)
+      $('.dtable').DataTable({
+        language: {
+          url: '//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json'
+        },
+        responsive: true
+      })
     }
   });
 }

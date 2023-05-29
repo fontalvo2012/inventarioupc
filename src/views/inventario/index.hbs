@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card mb-3">
     <div class="card-header">
         <h4>Crear Producto</h4>
     </div>
@@ -30,3 +30,35 @@
         </form>
     </div>
 </div>
+
+   <table class="table dtable">
+  <thead>
+    <tr>
+      <th scope="col">codigo</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Referencia</th>
+      <th scope="col">Proveedor</th>
+      <th scope="col">Line</th>
+      <th scope="col">Marca</th>
+      <th scope="col">Medida</th>
+      <th scope="col">Cantidad</th>
+      <th scope="col">Accion</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each productos}}
+    <tr>
+      <th>{{codigo_Articulo}}</th>
+      <td>{{nombre_Articulo}}</td>
+      <td>{{Referencia}}</td>
+      <td>{{proveedor}}</td>
+      <td>{{linea}}</td>
+      <td>{{marca}}</td>
+      <td>{{medida}}</td>
+      <td>{{cantidad_Total}}</td>
+      <td><a href="/eliminarproducto/{{_id}}">Eliminar</a></td>
+    </tr>
+    {{/each}}
+    
+  </tbody>
+</table>

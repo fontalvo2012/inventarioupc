@@ -9,13 +9,17 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Datatables CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.11.3/b-2.0.1/b-colvis-2.0.1/b-html5-2.0.1/b-print-2.0.1/r-2.2.9/datatables.min.css" />
+  
   <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 
   <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-firestore.js"></script>
-  <title>Inventario</title>
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
-  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+<title>Inventario</title>
+
 
   <style>
     #fuera {
@@ -91,6 +95,8 @@
             <a class="dropdown-item" href="/informeDespachado"><i class='fas fa-angle-double-right'
                   style='font-size:12px'></i>
                informe pedidos</a>
+            <a class="dropdown-item" href="/pedidos"><i class='fas fa-angle-double-right' style='font-size:12px'></i>
+              Cargar Pedidos</a>
 
           </div>
         </li>
@@ -188,6 +194,12 @@
 
   {{!-- /datapicker --}}
 
+  {{!-- DATATABLES --}}
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.11.3/b-2.0.1/b-colvis-2.0.1/b-html5-2.0.1/b-print-2.0.1/r-2.2.9/datatables.min.js"></script>
+  
 
 </body>
 

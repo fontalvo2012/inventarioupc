@@ -3,14 +3,28 @@
         <h4>pedidos Solicitados-Despacho</h4>
     </div>
 <div class="card-body">
-    {{#each pedidos}}
-    <div class="row small">
-        <div class="col-sm-1">{{nro}}</div>
-        <div class="col-sm-4">{{fecha}}</div>
-        <div class="col-sm-3">{{usuario}}</div>
-        <div class="col-sm-2">{{observacion}}</div>
-        <div class="col-sm-1"><a href="/verPedidoDespacho/{{_id}}">ver</a></div>
-    </div>
-    {{/each}}
+   <table class="table dtable">
+    <thead>
+        <tr>
+            <th>Nro</th>
+            <th>Fecha</th>
+            <th>Usuario</th>
+            <th>Observacion</th>
+            <th>Accion</th>
+        </tr>
+    </thead>
+    <tbody>
+      {{#each pedidos}}
+        <tr>
+            <td>{{nro}}</td>
+            <td>{{fecha}}</td>
+            <td>{{usuario}}</td>
+            <td>{{observacion}}</td>
+            <td><a href="/verPedidoDespacho/{{_id}}">ver</a></td>
+        </tr>
+       {{/each}}
+    </tbody>
+</table>
 </div>
 </div>
+
