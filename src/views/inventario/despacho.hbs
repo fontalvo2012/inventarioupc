@@ -10,7 +10,7 @@
             <th>Fecha</th>
             <th>Usuario</th>
             <th>Observacion</th>
-            <th>Accion</th>
+            <th>Solicitudes</th>
         </tr>
     </thead>
     <tbody>
@@ -20,7 +20,7 @@
             <td>{{fecha}}</td>
             <td>{{usuario}}</td>
             <td>{{observacion}}</td>
-            <td><a href="/verPedidoDespacho/{{_id}}">ver</a></td>
+            <td><a class="btn btn-warning btn-sm" href="/verPedidoDespacho/{{_id}}">Solicitud</a></td>
         </tr>
        {{/each}}
     </tbody>
