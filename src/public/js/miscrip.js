@@ -770,3 +770,44 @@ function consultarUsuario() {
     }
   });
 }
+
+function consultarRfid() {
+
+$.ajax({
+  url: '/consultarRfid',
+  type: 'POST',
+  data: {
+    rfid:$("#rfid").val()
+  },
+  success: (data) => {
+   $("#foto").attr("src", `/img/${data.foto}`);
+   $("#nombres").val(data.empleado)
+   $("#cedula").val(data.medico)
+   $("#cargo").html(data.nombre)
+   consultarInventario(data._id)
+  }
+});
+}
+
+function consultarInventario(_id) {
+  $.ajax({
+    url: '/invetarioempleado',
+    type: 'POST',
+    data: {
+     _id
+    },
+    success: (data) => {
+     let cadena=""
+      data.forEach(item => {
+        cadena+=`
+        <tr>
+        <td>${item.codigo}</td>
+        <td>${item.producto}</td>
+        <td>${item.cantidad}</td>
+      </tr>
+        `
+      });
+      $("#inventario_contenido").html(cadena)
+    }
+  });
+  }

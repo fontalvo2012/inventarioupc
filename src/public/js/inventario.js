@@ -7389,9 +7389,12 @@ function ValidarProducto() {
             codigo
         },
         success: (data) => {
-            if (data != 'si') {
+          console.log(data)
+            if (data == 'no') {
                 alert('El codigo no existe')
                 $('#producto').val('');
+            }else{
+              $("#cantidad").attr("placeholder", `hay dispobles ${data.cantidad_Total}`)
             }
         }
     });
@@ -7433,17 +7436,20 @@ function mostrarCarrito() {
 var pedido=[];
 var ca=0;
 function addProductoPedido() {
-    if($('#producto').val()!="" && $('#cantidad').val()!=""){
+    if($('#producto').val()!="" && $('#cantidad').val()!="" && $('#ccosto').val()!=""){
         var index=$('#producto').val().indexOf(':');
         var codigo=$('#producto').val().substring(0,index);
-        pedido.push({codigo,producto:$('#producto').val(),cantidad:parseInt($('#cantidad').val()),autorizado:$('#cantidad').val(),despachado:'0'});
+        pedido.push({codigo,ccosto:$("#ccosto").val(),producto:$('#producto').val(),cantidad:parseInt($('#cantidad').val()),autorizado:$('#cantidad').val(),despachado:'0'});
+        mostrarPedido();   
+        $('#pedido').val(JSON.stringify(pedido));
+        $('#producto').val('');
+        $('#cantidad').val('');
+        $('#ccosto').val('');
+        $("#cantidad").attr("placeholder", `cantidad`)
     }else{
-        alert('debe llenar la cantida o elegir el producto');
+        alert('debe llenar todos los campos');
     }
-    mostrarPedido();   
-    $('#pedido').val(JSON.stringify(pedido));
-    $('#producto').val('');
-    $('#cantidad').val('');
+  
 }
 function asigarpedido(datos) {
     console.log(datos)
@@ -7461,7 +7467,8 @@ function mostrarPedido() {
             <th scope="row">${cont}</th>
             <td>${element.producto}</td>
             <td>${element.cantidad}</td>     
-            <td><a href="#" onclick="quirarArrayPedido(${cont})">quitar</a></td>     
+            <td>${element.ccosto}</td>     
+            <td><span  class="btn btn-danger "onclick="quirarArrayPedido(${cont})">quitar</span></td>     
         </tr>
         `;
         cont++;

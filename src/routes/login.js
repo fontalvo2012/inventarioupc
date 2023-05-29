@@ -25,12 +25,16 @@ passport.use('local-singup', new strategy({
 }, async(req, user, password, done) => {
     const newUser= new Users();
     const us=await Users.findOne({username:user});
-    const {nombre,firma,empleado,p1,p2,p3,p4,jefe,jefes}=req.body; 
-    let fotonombre=req.files.foto.name
-    let fac = req.files.foto
-    fac.mv('./src/public/img/' + fotonombre, (err) => {
-      if (err) console.log(err);
-    });
+    const {nombre,firma,empleado,p1,p2,p3,p4,jefe,jefes,rfid}=req.body; 
+    let fotonombre=""
+    if (req.files) {
+      fotonombre=req.files.foto.name
+      let fac = req.files.foto
+      fac.mv('./src/public/img/' + fotonombre, (err) => {
+        if (err) console.log(err);
+      });
+    }
+   
     if (p1=='si') {admin=1;} else{admin=0;}
     if (p2=='si') {sede=1;} else{sede=0;}
     if (p3=='si') {cordinador=1;} else{cordinador=0;}
@@ -47,6 +51,7 @@ passport.use('local-singup', new strategy({
                 sede,
                 nombre,
                 foto:fotonombre,
+                rfid,
                 jefe:JSON.parse(jefes),
                 empleado,
                 medico:firma
@@ -63,6 +68,7 @@ passport.use('local-singup', new strategy({
         newUser.password=bcrypt.hashSync(password);        
         newUser.nombre=nombre;
         newUser.medico=firma;
+        newUser.rfid=rfid;
         newUser.foto=fotonombre;
         newUser.empleado=empleado;     
         newUser.jefe=JSON.parse(jefes);     

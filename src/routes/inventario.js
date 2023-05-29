@@ -98,7 +98,7 @@ router.post('/validarProducto', checkAuthentication, async (req, res) => {
   const { codigo } = req.body;
   const cod = await Productos.findOne({ codigo_Articulo: codigo });
   if (cod) {
-    res.send('si');
+    res.send(cod);
   } else {
     res.send('no');
   }
@@ -194,8 +194,16 @@ router.get('/borrarsolicitud/:id', checkAuthentication, async (req, res) => {
 router.get('/pedidos', checkAuthentication, async (req, res) => {
   invfinal = await Invetario(req.user._id)
    const cordinadores = await Users.find({cordinador:1}).lean()
-  res.render('inventario/pedidos', { invfinal,cordinadores });
+   const ccosto = await Ccostos.find({estado:'open'}).lean()
+  res.render('inventario/pedidos', { invfinal,cordinadores,ccosto });
 });
+
+router.post('/invetarioempleado', checkAuthentication, async (req, res) => {
+const {_id}= req.body
+inventario = await Invetario(_id)
+console.log(inventario)
+res.send(inventario)
+})
 
 router.post('/pedidos', checkAuthentication, async (req, res) => {
   const { pedido, observacion, supervisor,empleado,ccempleado } = req.body;
@@ -409,17 +417,15 @@ router.post('/actualizarCantidadDespacho', checkAuthentication, async (req, res)
 router.post('/autorizar', checkAuthentication, async (req, res) => {
   const { id } = req.body;
   const pedido = await Pedidos.findOne({ _id: id })
+  console.log(pedido)
   const user = await Users.findOne({medico: pedido.ccuser})
  
-  
-  console.log("AQUI SE AUTORIZA")
-
   let inventario = pedido.pedidos
   
   if (user.inventario) {
     inventario = inventario.concat(user.inventario)
   }
-  console.log("usuario: ", user.inventario)
+
   console.log("inventario: ", inventario)
   await Users.updateOne({ medico: pedido.ccuser }, { inventario })
   await Pedidos.updateOne({ _id: id }, { estado: 'autorizado', supervisor: req.user.nombre });
@@ -497,6 +503,7 @@ router.get('/descargarinv', checkAuthentication, async (req, res) => {
 
 async function Invetario(_id) {
   const user= await Users.findOne({_id})
+  console.log(user)
   const inventario = user.inventario;
   const despachos = user.despachos;
   let invent = []
@@ -562,5 +569,10 @@ router.post('/consultarUsuario', checkAuthentication, async (req, res) => {
   res.send(u);
 });
 
+router.post('/consultarRfid', checkAuthentication, async (req, res) => {
+  const { rfid } = req.body;
+  const usuario = await Users.findOne({ rfid });
+  res.send(usuario);
+});
 
 module.exports = router;
