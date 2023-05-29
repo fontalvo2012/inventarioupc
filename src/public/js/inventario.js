@@ -7394,7 +7394,7 @@ function ValidarProducto() {
         alert('El codigo no existe')
         $('#producto').val('');
       } else {
-        $("#cantidad").attr("placeholder", `hay dispobles ${data.cantidad_Total}`)
+        $("#cantidad").attr("placeholder", `hay ${data.cantidad_Total}`)
       }
     }
   });
