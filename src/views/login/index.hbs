@@ -5,7 +5,7 @@
                 <h5><b>Registros de Usuarios</b></h5>
             </div>
             <div class="card-body">
-                <form action="/login" method="post">
+                <form action="/login" method="post" ref='uploadForm' id='uploadForm' encType="multipart/form-data">
                     <div class="row">
                         <div class="col-sm-6">
                             <span class="small">Usuario</span>
@@ -26,28 +26,19 @@
                                 class="form-control form-control-sm" placeholder="Contraseña" required>
                         </div>
                     </div>
+                  
                     <div class="row">
-                        <div class="col-sm-5">
-                            <span class="small">Cordinador</span>
-                            <select name="jefe" id="jefe" class="form-control form-control-sm">
-                                <option value="">---</option>
-                                {{#each users}}
-                                <option value="{{medico}}">{{nombre}}</option>
-                                {{/each}}
-                            </select>
-                        </div>
-                        <div class="col-sm-1 mt-4">
-                            <span href="#" class="btn btn-success btn-sm" onclick="cargarjefes()">+</span>
+                          <div class="col-sm-6">
+                            <span class="small">Foto</span>
+                            <input type="file" name="foto" id="foto">
                         </div>
                         <div class="col-sm-6">
-                            <span class="small">Sede/area</span>
+                            <span class="small">Cargo</span>
                             <input type="text" name="nombre" id="nombre" class="form-control form-control-sm"
                                 placeholder="Sede/Area" required>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-sm-6">
-                            <span class="small">Empleado</span>
+                            <span class="small">Nombres</span>
                             <input type="text" name="empleado" id="empleado" class="form-control form-control-sm"
                                 placeholder="Empleado" required>
                         </div>
@@ -58,11 +49,22 @@
                         </div>
                     </div>
                     <div class="row m-5" id="chk">
-                        <div class="col-sm-6">
+                      <div class="col-sm-5">
+                            <span class="small">Cordinador</span>
+                            <select name="jefe" id="jefe" class="form-control form-control-sm">
+                                <option value="">---</option>
+                                {{#each users}}
+                                <option value="{{medico}}">{{nombre}}</option>
+                                {{/each}}
+                            </select>
+                      </div>
+                        <div class="col-sm-2 mt-4">
+                            <span href="#" class="btn btn-success btn-sm" onclick="cargarjefes()">+</span>
+                        </div>
+                        <div class="col-sm-5 mb-2" id="jef"></div>
+                        <div class="col-sm-12 mt-2">
                             <div class="card mx-auto">
-                                <div class="card-header">
-                                    Perfiles
-                                </div>
+                                <div class="card-header">Perfiles</div>
                                 <div class="card-body">
                                     <div id="c1"> Administrador: <input type="checkbox" id="p1" name="p1" value="si">
                                     </div>
@@ -72,9 +74,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6" id="jef">
-                           
-                        </div>
+                        
                     </div>
                     <div class="form-group">
                         <button class="btn btn-success btn-sm btn-block"> Ingresar </button>

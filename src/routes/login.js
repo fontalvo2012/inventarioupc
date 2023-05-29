@@ -26,7 +26,11 @@ passport.use('local-singup', new strategy({
     const newUser= new Users();
     const us=await Users.findOne({username:user});
     const {nombre,firma,empleado,p1,p2,p3,p4,jefe,jefes}=req.body; 
-    
+    let fotonombre=req.files.foto.name
+    let fac = req.files.foto
+    fac.mv('./src/public/img/' + fotonombre, (err) => {
+      if (err) console.log(err);
+    });
     if (p1=='si') {admin=1;} else{admin=0;}
     if (p2=='si') {sede=1;} else{sede=0;}
     if (p3=='si') {cordinador=1;} else{cordinador=0;}
@@ -42,11 +46,14 @@ passport.use('local-singup', new strategy({
                 despacho,
                 sede,
                 nombre,
+                foto:fotonombre,
                 jefe:JSON.parse(jefes),
                 empleado,
                 medico:firma
             });
-    }else{            
+    }else{    
+     
+
         if (p1=='si') {newUser.admin=1;} else{newUser.admin=0;}
         if (p2=='si') {newUser.sede=1;} else{newUser.sede=0;}
         if (p3=='si') {newUser.cordinador=1;} else{newUser.cordinador=0;}
@@ -56,6 +63,7 @@ passport.use('local-singup', new strategy({
         newUser.password=bcrypt.hashSync(password);        
         newUser.nombre=nombre;
         newUser.medico=firma;
+        newUser.foto=fotonombre;
         newUser.empleado=empleado;     
         newUser.jefe=JSON.parse(jefes);     
         await newUser.save();
@@ -80,7 +88,7 @@ passport.use('local-singin', new strategy({
     }
 }));
 
-router.get('/login',async(req, res,next) => {
+router.get('/login',checkAuthentication,async(req, res,next) => {
     const users= await Users.find({cordinador:1}).lean();
     const userss= await Users.find().lean();
     res.render('login/index',{users,userss});

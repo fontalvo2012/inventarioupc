@@ -169,10 +169,7 @@ router.post('/compras', checkAuthentication, async (req, res) => {
 
 });
 //COMPRAS
-router.get('/pedidos', checkAuthentication, async (req, res) => {
-  invfinal = await Invetario(req.user._id)
-  res.render('inventario/pedidos', { invfinal });
-});
+
 
 router.get('/ccostos', checkAuthentication, async (req, res) => {
   res.render('inventario/ccostos');
@@ -194,21 +191,22 @@ router.get('/borrarsolicitud/:id', checkAuthentication, async (req, res) => {
   req.flash('login', "se elimino el pedido!");
   res.redirect('/pedidos');
 });
+router.get('/pedidos', checkAuthentication, async (req, res) => {
+  invfinal = await Invetario(req.user._id)
+   const cordinadores = await Users.find({cordinador:1}).lean()
+  res.render('inventario/pedidos', { invfinal,cordinadores });
+});
 
 router.post('/pedidos', checkAuthentication, async (req, res) => {
-  const { pedido, observacion, supervisor } = req.body;
+  const { pedido, observacion, supervisor,empleado,ccempleado } = req.body;
   const contador = await Pedidos.find();
  
 
   if (pedido != "") {
     const p = JSON.parse(pedido);
-
-
     var fecha = new Date().toLocaleString("en-VE", { timeZone: "America/Bogota" });
-    const pedi = new Pedidos({ nro: contador.length, pedidos: p, estado: 'solicitado', observacion, fecha, usuario: req.user.nombre, ccuser: req.user.medico, supervisor });
+    const pedi = new Pedidos({ nro: contador.length, pedidos: p, estado: 'solicitado', observacion, fecha, usuario: empleado, ccuser: ccempleado, supervisor });
     await pedi.save();
-
-
     req.flash('success', "PEDIDO FUE CREADO CORRECTAMENTE!")
   } else {
     req.flash('login', "NO SE ENTONTRARON DATOS EN EL PEDIDO!");
@@ -560,6 +558,7 @@ router.post('/solicitudes', checkAuthentication, async (req, res) => {
 router.post('/consultarUsuario', checkAuthentication, async (req, res) => {
   const { user } = req.body;
   const u = await Users.findOne({ username: user });
+  console.log("usuario:",user)
   res.send(u);
 });
 

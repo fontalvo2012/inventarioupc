@@ -19,45 +19,45 @@ var db = firebase.firestore();
 
 
 function cantidadInv() {
-  let cadena=` <span>Cantidad</span> <input type="number" max="${$("#materiales").val()}" id="cantidad" class="form-control form-control-sm" placeholder="Tienes ${$("#materiales").val()}">`
+  let cadena = ` <span>Cantidad</span> <input type="number" max="${$("#materiales").val()}" id="cantidad" class="form-control form-control-sm" placeholder="Tienes ${$("#materiales").val()}">`
   $("#cantidadInv").html(cadena)
 }
-let lista=[]
-let cadena=""
+let lista = []
+let cadena = ""
 function cargarlistadescargas() {
   if (lista.find(objeto => objeto.ccosto === $("#ccostos option:selected").text()) || !lista[0]) {
-    if (parseInt($("#cantidad").val())>parseInt($("#materiales").val()) || $("#cantidad").val()=="") {
+    if (parseInt($("#cantidad").val()) > parseInt($("#materiales").val()) || $("#cantidad").val() == "") {
       alert("no tienes esa cantidad de articulos!")
-    }else{
-      let obj={nombre:$("#materiales option:selected").text(),cantidad:parseInt($("#cantidad").val()),ccosto:$("#ccostos option:selected").text()}
+    } else {
+      let obj = { nombre: $("#materiales option:selected").text(), cantidad: parseInt($("#cantidad").val()), ccosto: $("#ccostos option:selected").text() }
       if (lista.find(objeto => objeto.nombre === obj.nombre)) {
-          alert("El item ya fue agregado a lista!")
-      }else{
-        cadena +=`<input type="text" readonly class="form-control form-control-sm articulos" data-codigo="${$("#materiales option:selected").data("cd")}"  data-empleado="${$("#materiales option:selected").data("empleado")}" data-nombre="${$("#materiales option:selected").text()}" data-cantidad="${parseInt($("#cantidad").val())}"  name="articulo "value="${$("#materiales option:selected").text()} X cantidad ${parseInt($("#cantidad").val())}"><br>`
+        alert("El item ya fue agregado a lista!")
+      } else {
+        cadena += `<input type="text" readonly class="form-control form-control-sm articulos" data-codigo="${$("#materiales option:selected").data("cd")}"  data-empleado="${$("#materiales option:selected").data("empleado")}" data-nombre="${$("#materiales option:selected").text()}" data-cantidad="${parseInt($("#cantidad").val())}"  name="articulo "value="${$("#materiales option:selected").text()} X cantidad ${parseInt($("#cantidad").val())}"><br>`
         $("#listaItems").html(cadena)
         lista.push(obj)
-      } 
+      }
     }
-  }else{
+  } else {
     alert(`Ya has ingresado algunos productos al centro de costo ${lista[0].ccosto} debes guardar este avence`)
   }
-  
+
 
 }
 
-function guardarItemCentros(){
-  if(!lista[0] || $("#ccostos option:selected").text()=="Seleccionar"){
+function guardarItemCentros() {
+  if (!lista[0] || $("#ccostos option:selected").text() == "Seleccionar") {
     alert("debe agregar item a la lista o revisar el centro de costo")
-  }else{
-    if(confirm(`Desea Descargar los item en el centro de costo: ${$("#ccostos option:selected").text()}`)){
+  } else {
+    if (confirm(`Desea Descargar los item en el centro de costo: ${$("#ccostos option:selected").text()}`)) {
       const articulos = []
       $('input[name^="articulo"]').each(function () {
         articulos.push({
-          codigo:$(this).data("codigo"),
-          producto:$(this).data("nombre"),
-          cantidad:$(this).data("cantidad"),
-          empleado:$("#emp").val(),
-          fecha:new Date()
+          codigo: $(this).data("codigo"),
+          producto: $(this).data("nombre"),
+          cantidad: $(this).data("cantidad"),
+          empleado: $("#emp").val(),
+          fecha: new Date()
         })
       })
       const arti = document.createElement('input')
@@ -68,7 +68,7 @@ function guardarItemCentros(){
       $('#descargaCcostos').submit()
     }
   }
- 
+
 }
 
 function consultarmedico(id) {
@@ -205,7 +205,7 @@ function MostarInputPaciente() {
         $('#cddep').val(data.cddep);
         $('#zresidencial').val(data.zresidencial);
         $('#id').val(data._id);
-      }else{
+      } else {
         $('#nombre').val("");
         $('#snombre').val("");
         $('#apellido').val("");
@@ -381,7 +381,7 @@ function consultarFactura() {
           <td><${element.eps.rsocial}/td>
           <td>${element.fecha}</td>
           <td>${element.paciente.nombre}${element.paciente.apellido}${element.paciente.sapellido}</td>
-          <td>$${ number_format(element.total, 2)}</td>
+          <td>$${number_format(element.total, 2)}</td>
             <td><a href="#" class="btn btn-warning btn-sm">ver</a></td>
           </tr>`;
       });
@@ -712,7 +712,7 @@ function Imprimir() {
   ventana.document.write('</body></html>');
   ventana.document.close();
   ventana.focus();
-  ventana.onload = function() {
+  ventana.onload = function () {
     ventana.print();
     ventana.close();
   };
@@ -721,9 +721,9 @@ function Imprimir() {
 
 
 function compararPass() {
-  var c1=$('#password').val();
-  var c2=$('#password2').val();
-  if (c1!=c2) {
+  var c1 = $('#password').val();
+  var c2 = $('#password2').val();
+  if (c1 != c2) {
     alert('Las contraseña no coinciden');
     $('#password').val('');
     $('#password2').val('');
@@ -731,46 +731,42 @@ function compararPass() {
 
 }
 
-function consultarUsuario(user) {
-  if (user==1) {
-     user=$('#user').val();
-  }
- 
+function consultarUsuario() {
+
+    user = $('#user').val();
   $.ajax({
-      url: '/consultarUsuario',
-      type: 'POST',
-      datatype: 'json',
-      data: {
-          user
-      },
-      success: (data) => {    
-        let cont=0;   
-         $('#nombre').val(data.nombre);
-         $('#empleado').val(data.empleado);
-         $('#firma').val(data.medico);
-         $('#jefe').val(data.jefe);
-       
-        
-         let li="";
-         data.jefe.forEach(element => {
-         
-           jefes.push(element);
-           li+=`<li>${element.nombre} <a href="#" onclick="quitarJefe(${cont})"> quitar</a></li>`;
-           cont++;
-         });
-         $("#jef").html(`
+    url: '/consultarUsuario',
+    type: 'POST',
+    data: {
+      user
+    },
+    success: (data) => {
+      console.log(data)
+      let cont = 0;
+      $('#nombre').val(data.nombre);
+      $('#empleado').val(data.empleado);
+      $('#firma').val(data.medico);
+      $('#jefe').val(data.jefe);
+      let li = "";
+      data.jefe.forEach(element => {
+
+        jefes.push(element);
+        li += `<li>${element.nombre} <a href="#" onclick="quitarJefe(${cont})"> quitar</a></li>`;
+        cont++;
+      });
+      $("#jef").html(`
             <ul>
             ${li}
           </ul>
          `);
-       
-         $('#jefes').val(JSON.stringify(jefes));
-         if(data.admin==1){$('#c1').html(` Administrador <input type="checkbox" id="p1" name="p1" value="si" checked>`);}else{$('#c1').html(` Administrador <input type="checkbox" id="p1" name="p1" value="si">`);}
-         if(data.sede==1){$('#c2').html(` Sede <input type="checkbox" id="p2" name="p2" value="si" checked>`);}else{$('#c2').html(` Sede <input type="checkbox" id="p2" name="p2" value="si" >`);}
-         if(data.cordinador==1){$('#c3').html(` Cordinador <input type="checkbox" id="p3" name="p3" value="si" checked>`);}else{$('#c3').html(` Cordinador <input type="checkbox" id="p3" name="p3" value="si">`);}
-         if(data.despacho==1){$('#c4').html(` Bodega <input type="checkbox" id="p4" name="p4" value="si" checked>`);}else{$('#c4').html(` Bodega <input type="checkbox" id="p4" name="p4" value="si">`);}
-         
-        
-      }
+
+      $('#jefes').val(JSON.stringify(jefes));
+      if (data.admin == 1) { $('#c1').html(` Administrador <input type="checkbox" id="p1" name="p1" value="si" checked>`); } else { $('#c1').html(` Administrador <input type="checkbox" id="p1" name="p1" value="si">`); }
+      if (data.sede == 1) { $('#c2').html(` Sede <input type="checkbox" id="p2" name="p2" value="si" checked>`); } else { $('#c2').html(` Sede <input type="checkbox" id="p2" name="p2" value="si" >`); }
+      if (data.cordinador == 1) { $('#c3').html(` Cordinador <input type="checkbox" id="p3" name="p3" value="si" checked>`); } else { $('#c3').html(` Cordinador <input type="checkbox" id="p3" name="p3" value="si">`); }
+      if (data.despacho == 1) { $('#c4').html(` Bodega <input type="checkbox" id="p4" name="p4" value="si" checked>`); } else { $('#c4').html(` Bodega <input type="checkbox" id="p4" name="p4" value="si">`); }
+
+
+    }
   });
 }
