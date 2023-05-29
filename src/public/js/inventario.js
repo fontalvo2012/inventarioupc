@@ -7439,7 +7439,7 @@ function addProductoPedido() {
     if($('#producto').val()!="" && $('#cantidad').val()!="" && $('#ccosto').val()!=""){
         var index=$('#producto').val().indexOf(':');
         var codigo=$('#producto').val().substring(0,index);
-        pedido.push({codigo,ccosto:$("#ccosto").val(),producto:$('#producto').val(),cantidad:parseInt($('#cantidad').val()),autorizado:$('#cantidad').val(),despachado:'0'});
+        pedido.push({codigo,fecha:new Date(),ccosto:$("#ccosto").val(),producto:$('#producto').val(),cantidad:parseInt($('#cantidad').val()),autorizado:$('#cantidad').val(),despachado:'0'});
         mostrarPedido();   
         $('#pedido').val(JSON.stringify(pedido));
         $('#producto').val('');

@@ -40,15 +40,6 @@
               <div class="card-body">
                 <div class="row">
                   <div class="col-sm-12">
-                    <span class="small"><b>Seleccione Supervisor</b></span>
-                    <select name="supervisor" id="supervisor" class="form-control form-control-sm" required>
-                      <option value="">Supervisor</option>
-                      {{#each cordinadores}}
-                      <option value="{{medico}}">{{empleado}}</option>
-                      {{/each}}
-                    </select>
-                  </div>
-                  <div class="col-sm-12">
                     <span class="small"><b>Producto</b></span>
                     <input type="text" id="producto" name="producto" placeholder="Producto" onchange="ValidarProducto()"
                       class="form-control form-control-sm productos">
@@ -69,6 +60,17 @@
                   </div>
                   <div class="col-sm-6 mt-4"><span class="btn btn-info btn-sm" onclick="verificarProducto()"><i
                         class='fas fa-angle-double-down' style='font-size:16px'></i> Agregar a la lista</span></div>
+                   
+                   <div class="col-sm-12">
+                    <hr>
+                    <span class="small"><b>Seleccione Supervisor</b></span>
+                    <select name="supervisor" id="supervisor" class="form-control form-control-sm" required>
+                      <option value="">Supervisor</option>
+                      {{#each cordinadores}}
+                      <option value="{{medico}}">{{empleado}}</option>
+                      {{/each}}
+                    </select>
+                  </div>
                   <div class="col-sm-12"><span class="small"><b>Observacion</b></span><textarea name="observacion"
                       id="observacion" cols="30" rows="1" class="form-control form-control-sm"
                       placeholder="Observacion"></textarea></div>
@@ -110,7 +112,7 @@
 
     <div class="card">
       <div class="card-header">
-        <h3> Inventario</h3>
+        <h3> Historial de entregas</h3>
       </div>
       <div class="card-body">
         <table class="table">
@@ -118,6 +120,7 @@
             <tr>
               <th>Codigo</th>
               <th>Producto</th>
+              <th>fecha</th>
               <th>Cantidad</th>
             </tr>
           </thead>

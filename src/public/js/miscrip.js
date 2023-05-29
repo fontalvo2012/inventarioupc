@@ -803,6 +803,7 @@ function consultarInventario(_id) {
         <tr>
         <td>${item.codigo}</td>
         <td>${item.producto}</td>
+        <td>${item.fecha}</td>
         <td>${item.cantidad}</td>
       </tr>
         `

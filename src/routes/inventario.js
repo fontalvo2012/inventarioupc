@@ -200,8 +200,10 @@ router.get('/pedidos', checkAuthentication, async (req, res) => {
 
 router.post('/invetarioempleado', checkAuthentication, async (req, res) => {
 const {_id}= req.body
-inventario = await Invetario(_id)
-console.log(inventario)
+
+//inventario = await Invetario(_id)
+let user = await Users.findOne({_id})
+let inventario = user.inventario
 res.send(inventario)
 })
 
@@ -539,6 +541,7 @@ async function Invetario(_id) {
       const newObj = {
         codigo: obj1.codigo,
         producto: obj1.producto,
+        fecha: obj1.fecha,
         cantidad: newValue
       };
       invfinal.push(newObj);
