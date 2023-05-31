@@ -18,7 +18,9 @@ function checkAuthentication(req, res, next) {
 
 router.get('/inventario', checkAuthentication, async (req, res) => {
   const productos = await Productos.find().sort({ nombre_Articulo: 'ASC' }).lean();
-  res.render('inventario/index',{productos});
+  const cont = productos.length
+  console.log(cont)
+  res.render('inventario/index',{productos,cont});
 });
 router.get('/informeDespachado', checkAuthentication, async (req, res) => {
   const users = await Users.find({ sede: 1 }).lean();
@@ -156,19 +158,18 @@ router.post('/compras', checkAuthentication, async (req, res) => {
     const index = d[i].producto.indexOf(':');
     const codigo = d[i].producto.substr(0, index);
     const cantidad = await Productos.findOne({ codigo_Articulo: codigo });
-    await Productos.updateOne({ codigo_Articulo: codigo }, { cantidad_Total: parseInt(cantidad.cantidad_Total) + parseInt(d[i].cantidad) });
+    await Productos.updateOne({ codigo_Articulo: codigo }, { cantidad_Total: parseInt(cantidad.cantidad_Total) + parseInt(d[i].cantidad),costo:d[i].costo });
   }
   const nombre_factura = req.files.doc.name;
   let fac = req.files.doc;
-  if (nombre_factura.substr(-3) == 'pdf') {
-    fac.mv('./src/public/img/facturas/' + factura + '.png', (err) => {
+  let imagen =factura+"_"+nombre_factura
+    fac.mv('./src/public/img/facturas/' + imagen, (err) => {
       if (err) console.log(err);
     });
-    const compra = new Compras({ nro: factura, proveedor, productos: d, fecha });
+    const compra = new Compras({ nro: factura, proveedor, productos: d, fecha,imagen });
+    
     compra.save();
-  } else {
-    req.flash('login', 'El formato de la imagen no es correcto debe ser PDF');
-  }
+ 
   res.redirect('/compras');
 
 });
@@ -446,8 +447,15 @@ router.post('/autorizar', checkAuthentication, async (req, res) => {
 router.post('/despachar', checkAuthentication, async (req, res) => {
   const { id } = req.body;
   await Pedidos.updateOne({ _id: id }, { estado: 'despachado', supervisor: req.user.nombre });
+  const pedido = await Pedidos.findOne({_id:id})
 
-  res.send('despachado');
+  for (let index = 0; index < pedido.pedidos.length; index++) {
+    const element = pedido.pedidos[index];
+    console.log("CODIGO",element.codigo,"cantidad",element.cantidad)
+    await Productos.updateOne({codigo_Articulo:element.codigo}, { $inc: { cantidad_Total: -element.cantidad } })
+  }
+
+  res.send('despachado')
 })
 //DESPACHO
 router.get('/despacho', checkAuthentication, async (req, res) => {

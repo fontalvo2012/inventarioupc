@@ -7406,16 +7406,16 @@ function mostrarCarrito() {
   var total = 0
   compra.forEach(element => {
     cont++;
-    total += (parseInt(element.costo) + parseInt(element.iva) - parseInt(element.ica)) * parseInt(element.cantidad);
+    total += (parseInt(element.costo) + (parseInt(element.costo)*(parseInt(element.iva)/100)) - (parseInt(element.costo)*(parseInt(element.ica)/100))) * parseInt(element.cantidad)
     cadena += `
     <tr>
       <th>${cont}</th>
       <td>${element.cantidad}</td>
       <td>${element.producto}</td>
       <td>$${number_format(element.costo, 1)}</td>
-      <td>$${number_format(element.iva, 1)}</td>
-      <td style="color: red;" >$${number_format(element.ica, 1)}</td>
-      <th>$${number_format((parseInt(element.costo) + parseInt(element.iva) - parseInt(element.ica)) * parseInt(element.cantidad), 1)}</th>
+      <td>${number_format(element.iva, 1)}%</td>
+      <td style="color: red;" >${number_format(element.ica, 1)}%</td>
+      <th>$${(parseInt(element.costo) + (parseInt(element.costo)*(parseInt(element.iva)/100)) - (parseInt(element.costo)*(parseInt(element.ica)/100))) * parseInt(element.cantidad)}</th>
       <td><a href="#" >quitar</a></td>
     </tr>
         `;

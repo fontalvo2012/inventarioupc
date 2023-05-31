@@ -11,7 +11,7 @@ const productoSchema= new Schema({
     marca:{type:String,required:false},       
     medida:{type:String,required:false},      
     cantidad_Total:{type:Number,default:0},      
-    costo:{type:String,required:false}
+    costo:{type:Number,required:false}
 });
 
 module.exports=mongoose.model('productos',productoSchema);
