@@ -119,8 +119,8 @@ router.post('/completarProducto', checkAuthentication, async (req, res) => {
 });
 
 router.post('/crearInsumosform', checkAuthentication, async (req, res) => {
-  const { codigo, nombre, referencia, linea, marca, medida } = req.body;
-  const productos = new Productos({ codigo_Articulo: codigo, nombre_Articulo: nombre, Referencia: referencia, linea: linea, marca: marca, medida: medida, costo: '0' });
+  const { codigo, nombre, referencia, linea, marca, medida,cantidad_minima } = req.body;
+  const productos = new Productos({ codigo_Articulo: codigo, nombre_Articulo: nombre, Referencia: referencia, linea: linea, marca: marca, medida: medida, costo: '0',cantidad_minima });
   await productos.save();
   req.flash('success', 'Datos registrados')
   res.redirect('/inventario');
@@ -157,8 +157,19 @@ router.post('/compras', checkAuthentication, async (req, res) => {
   for (let i = 0; i < d.length; i++) {
     const index = d[i].producto.indexOf(':');
     const codigo = d[i].producto.substr(0, index);
-    const cantidad = await Productos.findOne({ codigo_Articulo: codigo });
-    await Productos.updateOne({ codigo_Articulo: codigo }, { cantidad_Total: parseInt(cantidad.cantidad_Total) + parseInt(d[i].cantidad),costo:d[i].costo });
+    const producto = await Productos.findOne({ codigo_Articulo: codigo });
+    let nuevoCosto 
+    if(producto.costo > 0){
+      console.log("Cantidad Actual",producto.cantidad_Total,"costo actual",producto.costo,"Cantidad Nuevo",d[i].cantidad,"costo nuevo",d[i].costo)
+      const cantidadActual = producto.cantidad_Total;
+      const costoActual = producto.costo;
+      nuevoCosto = ((cantidadActual * costoActual) + (parseInt(d[i].cantidad)* parseInt(d[i].costo))) / (cantidadActual + parseInt(d[i].cantidad));
+    }else{
+      nuevoCosto= d[i].costo
+    }
+    console.log(nuevoCosto)
+   
+    await Productos.updateOne({ codigo_Articulo: codigo }, { cantidad_Total: parseInt(producto.cantidad_Total) + parseInt(d[i].cantidad),costo:nuevoCosto});
   }
   const nombre_factura = req.files.doc.name;
   let fac = req.files.doc;
