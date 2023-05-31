@@ -5,26 +5,38 @@
     <div class="card-body">
         <form action="/crearInsumosform" method="POST">
             <div class="row">
-                <div class="col-sm-2"><span class="small">Codigo</span><input type="text" id="codigo" name="codigo"
+                <div class="col-sm-2"><span class="small"><b>Codigo</b></span><input type="text" id="codigo" name="codigo"
                         class="form-control form-control-sm" placeholder="Codigo de Productos" required></div>
-                <div class="col-sm-6"><span class="small">Nombres</span><input type="text" id="nombre" name="nombre"
+                <div class="col-sm-6"><span class="small"><b>Nombres</b></span><input type="text" id="nombre" name="nombre"
                         class="form-control form-control-sm" placeholder="Nombre Producto" autocomplete="off" required>
                 </div>
-                <div class="col-sm-4"><span class="small">Referencia</span><input type="text" id="referencia"
+                <div class="col-sm-4"><span class="small"><b>Referencia</b></span><input type="text" id="referencia"
                         name="referencia" class="form-control form-control-sm" placeholder="Referencia Producto."
                         required></div>
             </div>
             <div class="row">
-                <div class="col-sm-4"><span class="small">Linea</span><input type="text" id="linea" name="linea"
-                        class="form-control form-control-sm" placeholder="Linea de Productos" required></div>
-                <div class="col-sm-4"><span class="small">Marca</span><input type="text" id="marca" name="marca"
+                <div class="col-sm-4"><span class="small"><b>Linea</b></span>
+                <select name="linea" id="linea" class="form-control form-control-sm" required>
+                  <option value="">selecciones</option>
+                  <option>CONSUMIBLE</option>
+                  <option>HERRAMIENTA</option>
+                  <option>OTRO</option>
+                </select>
+                </div>
+                <div class="col-sm-4"><span class="small"><b>Marca</b></span><input type="text" id="marca" name="marca"
                         class="form-control form-control-sm" placeholder="Marca Producto" required></div>
-                <div class="col-sm-4"><span class="small">Medida</span><input type="text" id="medida" name="medida"
-                        class="form-control form-control-sm" placeholder="Medida Producto." required></div>
+                <div class="col-sm-4"><span class="small"><b>Medida</b></span>
+                <select name="medida" id="medida" class="form-control form-control-sm">
+                  <option value="">seleccione</option>
+                  <option>UNIDAD</option>
+                  <option>LITROS</option>
+                  <option>METROS</option>
+                </select>
+                </div>
             </div>
             <div class="row">
-                <div class="col-sm-3 mt-3">
-                    <button class="btn btn-success btn-sm">Crear</button>
+                <div class="col-sm-12 mt-3">
+                    <button class="btn btn-success btn-sm btn-block">Crear Producto</button>
                 </div>
             </div>
         </form>
@@ -36,8 +48,6 @@
     <tr>
       <th scope="col">codigo</th>
       <th scope="col">Nombre</th>
-      <th scope="col">Referencia</th>
-      <th scope="col">Proveedor</th>
       <th scope="col">Line</th>
       <th scope="col">Marca</th>
       <th scope="col">Medida</th>
@@ -50,13 +60,11 @@
     <tr>
       <th>{{codigo_Articulo}}</th>
       <td>{{nombre_Articulo}}</td>
-      <td>{{Referencia}}</td>
-      <td>{{proveedor}}</td>
       <td>{{linea}}</td>
       <td>{{marca}}</td>
       <td>{{medida}}</td>
       <td>{{cantidad_Total}}</td>
-      <td><a href="/eliminarproducto/{{_id}}">Eliminar</a></td>
+      <td><a class="btn btn-warning btn-sm" href="/eliminarproducto/{{_id}}"><i class="fas fa-trash"></i>Eliminar</a></td>
     </tr>
     {{/each}}
     
