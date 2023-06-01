@@ -264,43 +264,36 @@ router.post('/verificarProducto', checkAuthentication, async (req, res) => {
   var can = parseInt(producto.cantidad_Total);
   var total = 0;
   const pedidos = await Pedidos.find({ estado: 'solicitado' });
+  
   pedidos.forEach(element => {
     for (let index = 0; index < element.pedidos.length; index++) {
       if (element.pedidos[index].codigo == codigo) {
         total += parseInt(element.pedidos[index].cantidad);
-
       }
     }
   });
-
-
   if (parseInt(cantidad) > (can - total)) {
     res.send((can - total) + "");
   } else {
-    res.send('si');
+    res.send({opt:'si',producto});
   }
-
 });
 router.get('/consultarPedidos', checkAuthentication, async (req, res) => {
   const pedidos = await Pedidos.find({ usuario: req.user.nombre }).lean();
-
   for (let i = 0; i < pedidos.length; i++) {
     var hora = pedidos[i].fecha.getHours();
     var minuto = pedidos[i].fecha.getMinutes();
-
     if (hora < 10) {
       hora = '0' + hora;
     }
     if (minuto < 10) {
       minuto = '0' + minuto;
     }
-
     pedidos[i].fecha = pedidos[i].fecha.getDate() + '/' + (pedidos[i].fecha.getMonth() + 1) + '/' + pedidos[i].fecha.getFullYear() + ' ' + hora + ':' + minuto;
     if (pedidos[i].estado == 'solicitado') {
       pedidos[i].solicitado = 1;
     }
   }
-
   res.render('inventario/consultarPedidos', { pedidos });
 });
 

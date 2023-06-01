@@ -821,9 +821,20 @@ function consultarInventario(_id) {
 
   $(function() {
     $('.dtable').DataTable({
+      dom: 'lfrBtip',
       language: {
         url: '//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json'
       },
-      responsive: true
+      responsive: true,
+      buttons: [
+        {
+          extend: 'excel',
+          filename: 'Informe',
+          text: 'Informe',
+          className: 'informe',
+          sheetName: 'informe',
+          title: null
+        }
+      ]
     })
   });

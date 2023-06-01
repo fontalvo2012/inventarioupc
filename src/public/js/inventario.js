@@ -7435,11 +7435,11 @@ function mostrarCarrito() {
 //PEDIDO
 var pedido = [];
 var ca = 0;
-function addProductoPedido() {
+function addProductoPedido(costo) {
   if ($('#producto').val() != "" && $('#cantidad').val() != "" && $('#ccosto').val() != "") {
     var index = $('#producto').val().indexOf(':');
     var codigo = $('#producto').val().substring(0, index);
-    pedido.push({ codigo, fecha: new Date(), ccosto: $("#ccosto").val(), producto: $('#producto').val(), cantidad: parseInt($('#cantidad').val()), autorizado: $('#cantidad').val(), despachado: '0' });
+    pedido.push({ codigo, fecha: new Date(), ccosto: $("#ccosto").val(), producto: $('#producto').val(), cantidad: parseInt($('#cantidad').val()), autorizado: $('#cantidad').val(), despachado: '0',costo });
     mostrarPedido();
     $('#pedido').val(JSON.stringify(pedido));
     $('#producto').val('');
@@ -7449,7 +7449,7 @@ function addProductoPedido() {
   } else {
     alert('debe llenar todos los campos');
   }
-
+console.log(pedido)
 }
 function asigarpedido(datos) {
   console.log(datos)
@@ -7498,8 +7498,8 @@ function verificarProducto() {
         cantidad
       },
       success: (data) => {
-        if (data == 'si') {
-          addProductoPedido();
+        if (data.opt == 'si') {
+          addProductoPedido(data.producto.costo);
         } else {
           $('#cantidad').val('');
           alert('Este pedido solo cuenta con ' + data + ' en el Inventario');
