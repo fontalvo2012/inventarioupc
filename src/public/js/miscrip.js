@@ -831,8 +831,8 @@ function consultarInventario(_id) {
           extend: 'excel',
           filename: 'Informe',
           text: 'Informe',
-          className: 'informe',
-          sheetName: 'informe',
+          className: 'Informe',
+          sheetName: 'Informe',
           title: null
         }
       ]

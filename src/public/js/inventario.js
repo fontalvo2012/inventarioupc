@@ -7451,6 +7451,7 @@ function addProductoPedido(costo) {
   }
 console.log(pedido)
 }
+
 function asigarpedido(datos) {
   console.log(datos)
   pedido = JSON.parse(datos);

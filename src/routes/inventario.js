@@ -32,8 +32,7 @@ router.get('/verpedido/:id', checkAuthentication, async (req, res) => {
   const pedido = await Pedidos.findOne({ _id: id }).lean();
   var hora = pedido.fecha.getHours();
   var minuto = pedido.fecha.getMinutes();
-  pedido.fecha = pedido.fecha.getDate() + '/' + (pedido.fecha.getMonth() + 1) + '/' + pedido.fecha.getFullYear() + ' ' + hora + ':' + minuto;
-
+  pedido.fecha = pedido.fecha.getDate() + '/' + (pedido.fecha.getMonth() + 1) + '/' + pedido.fecha.getFullYear() + ' ' + hora + ':' + minuto
   res.render('inventario/revisar', { pedido });
 });
 

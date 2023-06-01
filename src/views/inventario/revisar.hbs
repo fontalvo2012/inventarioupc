@@ -1,6 +1,10 @@
 <h5>Informe de pedidos</h5>
     <a href="#" class="btn btn-primary btn-sm" onclick="Imprimir()">Imprimir</a>
 <div id="imp">
+
+    <div class="row">
+      <div class="col"><h4>Orden #{{pedido.nro}}</h4></div>
+    </div>
     <div class="row pb-2">
         <div class="col-sm-3"><b>Estado: </b> {{pedido.estado}}</div>
         <div class="col-sm-3"><b>Usuario:</b> {{pedido.usuario}}</div>
@@ -17,8 +21,6 @@
                     <th scope="col">Nombre</th>
                     <th scope="col">Solicitado</th>
                     <th scope="col">Autorizado</th>
-                    <th scope="col">Despachado</th>
-
                 </tr>
             </thead>
             <tbody>              
@@ -28,7 +30,6 @@
                     <td>{{producto}}</td>
                     <td>{{cantidad}}</td>
                     <td>{{autorizado}}</td>
-                    <td>{{despachado}}</td>
                 </tr>
                 {{/each}}
               
