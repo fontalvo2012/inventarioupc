@@ -1,27 +1,37 @@
 <div class="card">
     <input type="hidden" value="{{id}}" id="id">
     <div class="card-header">
-        <h4> Pedidos Solicitados por {{pedido.usuario}}</h4>
+        <h4>Solicitados por {{pedido.usuario}}</h4>
     </div>
 <div class="card-body">
-    <div class="row small">
-        <div class="col-sm-7"><b>Insumo</b></div>
-        <div class="col-sm-1"><b>Can</b></div>
-        <div class="col-sm-1"><b>Aut</b></div>
-        <div class="col-sm-2"><b>Modificar</b></div>
-        <div class="col-sm-1"><b>..</b></div>
-    </div>
-    {{#each pedido.pedidos}}
-    <div class="row small mt-1">
-        <div class="col-sm-7">{{producto}}</div>
-        <div class="col-sm-1">{{cantidad}}</div>
-        <div class="col-sm-1" style="color: royalblue;">{{autorizado}}</div>
-        <div class="col-sm-2"><input type="text" id="cantidad{{codigo}}" class="form-control form-control-sm" name="cantidad" placeholder="Cantidad"></div>
-        <div class="col-sm-1"><a href="#" class="btn btn-info btn-sm" onclick="cambiarCantidad('{{codigo}}')"><i class='fas fa-edit' style='font-size:16px'></i></a></div>
-    </div>
-    {{/each}}
+
+   <table class="table dtable">
+          <thead>
+            <tr>
+              <th>Produco</th>
+              <th>Ccosto</th>
+              <th>Solicitado</th>
+              <th>Autorizado</th>
+              <th>Modifica</th>
+              <th>Accion</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each pedido.pedidos}}
+          <tr>
+            <th>{{producto}}</th>
+            <th>{{nccosto}}</th>
+            <th>{{cantidad}}</th>
+            <th>{{autorizado}}</th>
+            <th><input type="text" id="cantidad{{codigo}}" class="form-control form-control-sm" name="cantidad" placeholder="Cantidad"></th>
+            <th><span class="btn btn-info btn-sm" onclick="cambiarCantidad('{{codigo}}')"><i class='fas fa-edit' style='font-size:16px'></i></span></th>
+          </tr>
+           {{/each}}
+          </tbody>
+        </table>
+ 
 </div>
 <div class="card-footer">
-    <button class="btn btn-success btn-sm" onclick="Autorizar()">Autorizar pedido</button>
+    <button class="btn btn-success btn-sm btn-block" onclick="Autorizar()">Autorizar pedido</button>
 </div>
 </div>

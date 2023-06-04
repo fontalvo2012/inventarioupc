@@ -7439,7 +7439,8 @@ function addProductoPedido(costo) {
   if ($('#producto').val() != "" && $('#cantidad').val() != "" && $('#ccosto').val() != "") {
     var index = $('#producto').val().indexOf(':');
     var codigo = $('#producto').val().substring(0, index);
-    pedido.push({ codigo, fecha: new Date(), ccosto: $("#ccosto").val(), producto: $('#producto').val(), cantidad: parseInt($('#cantidad').val()), autorizado: $('#cantidad').val(), despachado: '0',costo });
+    var nccosto =$('#ccosto option:selected').text()
+    pedido.push({ codigo, fecha: new Date(), ccosto: $("#ccosto").val(), producto: $('#producto').val(), cantidad: parseInt($('#cantidad').val()), autorizado: $('#cantidad').val(), despachado: '0',costo,nccosto });
     mostrarPedido();
     $('#pedido').val(JSON.stringify(pedido));
     $('#producto').val('');
@@ -7468,7 +7469,7 @@ function mostrarPedido() {
             <th scope="row">${cont}</th>
             <td>${element.producto}</td>
             <td>${element.cantidad}</td>     
-            <td>${element.ccosto}</td>     
+            <td>${element.nccosto}</td>     
             <td><span  class="btn btn-danger "onclick="quirarArrayPedido(${cont})">quitar</span></td>     
         </tr>
         `;
