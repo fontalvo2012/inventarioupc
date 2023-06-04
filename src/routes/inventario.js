@@ -331,6 +331,14 @@ router.get('/verPedidoSedes/:id', checkAuthentication, async (req, res) => {
   res.render('inventario/verpedido', { pedido, id });
 });
 
+router.get('/consolidadoCompras', checkAuthentication, async (req, res) => {
+  res.render('inventario/informeCompras');
+});
+router.get('/consolidadoCcostos', checkAuthentication, async (req, res) => {
+  const ccostos = await Ccostos.find().lean()
+  res.render('inventario/informesCcostos',{ccostos});
+});
+
 router.get('/productos', checkAuthentication, async (req, res) => {
   const productos = await Productos.find().sort({ nombre_Articulo: 'ASC' }).lean();
   res.render('inventario/productosver', { productos });
