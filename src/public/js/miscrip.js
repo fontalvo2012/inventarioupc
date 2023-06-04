@@ -816,7 +816,15 @@ function consultarInventario(_id) {
   });
   }
 
+  $("#crearPedido").click(()=>{
 
+    if($("#nombre").val()=="" || $("#cedula").val()=="" || $("#supervisor").val()=="" || $("#pedido").val()=="" ){
+      alert("Debes verificar que la informacion este completa")
+    }else{
+      $("#formPedido").submit()
+    }
+    
+  })
   //DATATABLE
 
   $(function() {
