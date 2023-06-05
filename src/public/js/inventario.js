@@ -7435,12 +7435,12 @@ function mostrarCarrito() {
 //PEDIDO
 var pedido = [];
 var ca = 0;
-function addProductoPedido(costo,linea) {
+function addProductoPedido(costo,linea,medida) {
   if ($('#producto').val() != "" && $('#cantidad').val() != "" && $('#ccosto').val() != "") {
     var index = $('#producto').val().indexOf(':');
     var codigo = $('#producto').val().substring(0, index);
     var nccosto =$('#ccosto option:selected').text()
-    pedido.push({ codigo, fecha: new Date(), ccosto: $("#ccosto").val(), producto: $('#producto').val(), cantidad: parseInt($('#cantidad').val()), autorizado: $('#cantidad').val(), despachado: '0',costo,nccosto,linea });
+    pedido.push({ codigo, fecha: new Date(), ccosto: $("#ccosto").val(), producto: $('#producto').val(), cantidad: parseInt($('#cantidad').val()), autorizado: $('#cantidad').val(), despachado: '0',costo,nccosto,linea,medida });
     mostrarPedido();
     $('#pedido').val(JSON.stringify(pedido));
     $('#producto').val('');
@@ -7468,7 +7468,7 @@ function mostrarPedido() {
         <tr>
             <th scope="row">${cont}</th>
             <td>${element.producto}</td>
-            <td>${element.cantidad}</td>     
+            <td>${element.cantidad} ${element.medida}</td>     
             <td>${element.nccosto}</td>     
             <td><span  class="btn btn-danger "onclick="quirarArrayPedido(${cont})">quitar</span></td>     
         </tr>
@@ -7501,7 +7501,7 @@ function verificarProducto() {
       },
       success: (data) => {
         if (data.opt == 'si') {
-          addProductoPedido(data.producto.costo,data.producto.linea);
+          addProductoPedido(data.producto.costo,data.producto.linea,data.producto.medida);
         } else {
           $('#cantidad').val('');
           alert('Este pedido solo cuenta con ' + data + ' en el Inventario');
