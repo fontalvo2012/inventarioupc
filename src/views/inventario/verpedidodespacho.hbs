@@ -4,24 +4,26 @@
         <h4> Pedidos Solicitados por {{pedido.usuario}}</h4>
     </div>
 <div class="card-body">
-    <div class="row small">
-        <div class="col-sm-6"><b>Insumo</b></div>
-        <div class="col-sm-1"><b>Cant</b></div>
-        <div class="col-sm-1"><b>Dep</b></div>
-        <div class="col-sm-1"><b>Aut</b></div>
-        <div class="col-sm-2"><b>Despachar</b></div>
-        <div class="col-sm-1"><b>..</b></div>
-    </div>
-    {{#each pedido.pedidos}}
-    <div class="row small mt-1">
-        <div class="col-sm-6">{{producto}}</div>
-        <div class="col-sm-1">{{cantidad}}</div>
-        <div class="col-sm-1">{{despachado}}</div>
-        <div class="col-sm-1" style="color: royalblue;">{{autorizado}}</div>
-        <div class="col-sm-2"><input type="text" id="cantidad{{codigo}}" readonly class="form-control form-control-sm" name="cantidad" value="{{autorizado}}" placeholder="Cantidad"></div>
-      {{!--   <div class="col-sm-1"><a href="#" class="btn btn-info btn-sm" onclick="cambiarCantidadDespacho('{{codigo}}')">Cerrar</a></div> --}}
-    </div>
-    {{/each}}
+   <table class="table dtable">
+    <thead>
+      <tr>
+        <th scope="col">Produco</th>
+        <th scope="col">Autorizado</th>
+        <th scope="col">Centro Costo</th>
+      </tr>
+    </thead>
+    <tbody>
+       {{#each pedido.pedidos}}
+       <tr>
+        <td>{{producto}}</td>
+        <td>{{autorizado}} {{medida}}</td>
+        <td>{{nccosto}}</td>
+       </tr>
+        <input type="hidden" id="cantidad{{codigo}}" readonly class="form-control form-control-sm" name="cantidad" value="{{autorizado}}" placeholder="Cantidad">
+       {{/each}}
+    </tbody>
+  </table>
+  
 </div>
 <div class="row">
   <div class="col-sm-12"><button class="btn btn-success btn-sm btn-block" onclick="Despachado('{{id}}')">Despachar pedido</button></div>
