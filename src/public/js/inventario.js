@@ -7435,12 +7435,12 @@ function mostrarCarrito() {
 //PEDIDO
 var pedido = [];
 var ca = 0;
-function addProductoPedido(costo) {
+function addProductoPedido(costo,linea) {
   if ($('#producto').val() != "" && $('#cantidad').val() != "" && $('#ccosto').val() != "") {
     var index = $('#producto').val().indexOf(':');
     var codigo = $('#producto').val().substring(0, index);
     var nccosto =$('#ccosto option:selected').text()
-    pedido.push({ codigo, fecha: new Date(), ccosto: $("#ccosto").val(), producto: $('#producto').val(), cantidad: parseInt($('#cantidad').val()), autorizado: $('#cantidad').val(), despachado: '0',costo,nccosto });
+    pedido.push({ codigo, fecha: new Date(), ccosto: $("#ccosto").val(), producto: $('#producto').val(), cantidad: parseInt($('#cantidad').val()), autorizado: $('#cantidad').val(), despachado: '0',costo,nccosto,linea });
     mostrarPedido();
     $('#pedido').val(JSON.stringify(pedido));
     $('#producto').val('');
@@ -7501,7 +7501,7 @@ function verificarProducto() {
       },
       success: (data) => {
         if (data.opt == 'si') {
-          addProductoPedido(data.producto.costo);
+          addProductoPedido(data.producto.costo,data.producto.linea);
         } else {
           $('#cantidad').val('');
           alert('Este pedido solo cuenta con ' + data + ' en el Inventario');

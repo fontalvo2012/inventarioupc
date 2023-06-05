@@ -335,8 +335,9 @@ router.get('/consolidadoCompras', checkAuthentication, async (req, res) => {
   res.render('inventario/informeCompras');
 });
 router.get('/consolidadoCcostos', checkAuthentication, async (req, res) => {
+  const pedidos = await Pedidos.find().lean()
   const ccostos = await Ccostos.find().lean()
-  res.render('inventario/informesCcostos',{ccostos});
+  res.render('inventario/informesCcostos',{pedidos,ccostos});
 });
 
 router.get('/productos', checkAuthentication, async (req, res) => {

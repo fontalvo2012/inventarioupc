@@ -1,1 +1,55 @@
-<h4>Ccostos</h4>
+<div class="container">
+  <div class="card mb-2">
+    <div class="card-header">
+      <h4>Centro de costos</h4>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-6">
+          <span><b>Centro de costos</b></span>
+          <select name="ccosto" id="ccosto" class="form-control form-control-sm" >
+            <option value="">Seleccionar</option>
+            {{#each ccostos}}
+            <option value="{{_id}}">{{nombre}}</option>
+            {{/each}}
+          </select>
+        </div>
+        <div class="col-sm-6 mt-4">
+          <button class="btn btn-success btn-sm btn-block">Buscar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+ <table class="table dtable">
+          <thead>
+            <tr>
+              <th>codigo</th>
+              <th>fecha</th>
+              <th>Empleado</th>
+              <th>Ccosto</th>
+              <th>Producto</th>
+              <th>Linea</th>
+              <th>Cantidad</th>
+              <th>costo</th>
+              
+            </tr>
+          </thead>
+          <tbody>
+            {{#each pedidos}}
+              {{#each pedidos}} 
+              <tr>
+                <th>{{codigo}}</th>
+                <th>{{fecha}}</th>
+                <th>{{../usuario}}</th>
+                <th>{{nccosto}}</th>
+                <th>{{producto}}</th>
+                <th>{{linea}}</th>
+                <th>{{autorizado}}</th>
+                <th>{{costo}}</th>
+              </tr>
+            {{/each}}
+           {{/each}}
+          </tbody>
+        </table>
