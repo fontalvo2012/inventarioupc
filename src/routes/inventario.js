@@ -441,20 +441,22 @@ router.post('/actualizarCantidadDespacho', checkAuthentication, async (req, res)
 router.post('/autorizar', checkAuthentication, async (req, res) => {
   const { id } = req.body;
   const pedido = await Pedidos.findOne({ _id: id })
-  console.log(pedido)
   const user = await Users.findOne({medico: pedido.ccuser})
- 
   let inventario = pedido.pedidos
-  
   if (user.inventario) {
     inventario = inventario.concat(user.inventario)
   }
-
-  console.log("inventario: ", inventario)
   await Users.updateOne({ medico: pedido.ccuser }, { inventario })
   await Pedidos.updateOne({ _id: id }, { estado: 'autorizado', supervisor: req.user.nombre });
   res.send('autorizado');
 })
+
+router.post('/cancelarPedido', checkAuthentication, async (req, res) => {
+  const { id } = req.body
+  await Pedidos.updateOne({ _id: id }, { estado: 'cancelado', supervisor: req.user.nombre });
+  res.send('cancelado');
+})
+
 
 router.post('/despachar', checkAuthentication, async (req, res) => {
   const { id } = req.body;

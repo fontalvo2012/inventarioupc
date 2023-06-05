@@ -7597,6 +7597,20 @@ function Autorizar() {
     }
   });
 }
+function cancelarPedido() {
+  var id = $('#id').val();
+  $.ajax({
+    url: '/cancelarPedido',
+    type: 'POST',
+    datatype: 'json',
+    data: {
+      id
+    },
+    success: (data) => {
+      location.href = "/cordinador";
+    }
+  });
+}
 function cosultarPedido() {
   $.ajax({
     url: '/informeDespachado  ',
