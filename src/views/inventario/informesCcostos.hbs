@@ -15,7 +15,7 @@
           </select>
         </div>
         <div class="col-sm-6 mt-4">
-          <button class="btn btn-success btn-sm btn-block">Buscar</button>
+          <button class="btn btn-success btn-sm btn-block" id="btninfccosto">Buscar</button>
         </div>
       </div>
     </div>
@@ -36,7 +36,7 @@
               
             </tr>
           </thead>
-          <tbody>
+          <tbody id="infccostos">
             {{#each pedidos}}
               {{#each pedidos}} 
               <tr>
@@ -46,7 +46,7 @@
                 <th>{{nccosto}}</th>
                 <th>{{producto}}</th>
                 <th>{{linea}}</th>
-                <th>{{autorizado}}</th>
+                <th>{{autorizado}} {{medida}}</th>
                 <th>{{costo}}</th>
               </tr>
             {{/each}}

@@ -90,7 +90,61 @@ function consultarmedico(id) {
   });
 }
 
+function infCostos() {
+  $.ajax({
+    url: '/infCostos',
+    type: 'POST',
+    datatype: 'json',
+    data: {
+      ccostos: $('#ccostos').val()
+    },
+    success: (data) => {
+      $('.dtable').DataTable().destroy()
+      let cadena = ""
+      for (const pedido of data) {
+        for (const p of pedido.pedidos) {
+          if (p.ccosto === $('#ccosto').val() && parseInt(p.autorizado)> 0) {
+            console.log(p)
 
+            cadena += `<tr>
+                      <td>${p.codigo}</td>
+                      <td>${pedido.fecha}</td>
+                      <td>${pedido.usuario}</td>
+                      <td>${p.nccosto}</td>
+                      <td>${p.producto}</td>
+                      <td>${p.linea}</td>
+                      <td>${p.autorizado} ${p.medida}</td>
+                      <td>${p.costo}</td>
+                    </tr>`
+          }
+        }
+
+      }
+      $('#infccostos').html(cadena)
+      $('.dtable').DataTable({
+        dom: 'lfrBtip',
+        language: {
+          url: '//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json'
+        },
+        responsive: true,
+        buttons: [
+          {
+            extend: 'excel',
+            filename: 'Informe',
+            text: 'Excel',
+            className: 'Excel',
+            sheetName: 'Informe',
+            title: null
+          }
+        ]
+      })
+    }
+  });
+}
+
+$('#btninfccosto').click(() => {
+  infCostos()
+})
 // --- SELECT ---
 function selectEntidad() {
 
@@ -733,7 +787,7 @@ function compararPass() {
 
 function consultarUsuario() {
 
-    user = $('#user').val();
+  user = $('#user').val();
   $.ajax({
     url: '/consultarUsuario',
     type: 'POST',
@@ -777,15 +831,15 @@ function consultarRfid() {
     url: '/consultarRfid',
     type: 'POST',
     data: {
-      rfid:$("#rfid").val()
+      rfid: $("#rfid").val()
     },
     success: (data) => {
-     $("#foto").attr("src", `/img/${data.foto}`);
-     $("#nombres").val(data.empleado)
-     $("#cedula").val(data.medico)
-     $("#cargo").html(data.nombre)
-     $("#rfid").val("")
-     consultarInventario(data._id)
+      $("#foto").attr("src", `/img/${data.foto}`);
+      $("#nombres").val(data.empleado)
+      $("#cedula").val(data.medico)
+      $("#cargo").html(data.nombre)
+      $("#rfid").val("")
+      consultarInventario(data._id)
     }
   })
 
@@ -797,12 +851,12 @@ function consultarInventario(_id) {
     url: '/invetarioempleado',
     type: 'POST',
     data: {
-     _id
+      _id
     },
     success: (data) => {
-     let cadena=""
+      let cadena = ""
       data.forEach(item => {
-        cadena+=`
+        cadena += `
         <tr>
         <td>${item.codigo}</td>
         <td>${item.producto}</td>
@@ -814,35 +868,35 @@ function consultarInventario(_id) {
       $("#inventario_contenido").html(cadena)
     }
   });
+}
+
+$("#crearPedido").click(() => {
+
+  if ($("#nombre").val() == "" || $("#cedula").val() == "" || $("#supervisor").val() == "" || $("#pedido").val() == "") {
+    alert("Debes verificar que la informacion este completa")
+  } else {
+    $("#formPedido").submit()
   }
 
-  $("#crearPedido").click(()=>{
+})
+//DATATABLE
 
-    if($("#nombre").val()=="" || $("#cedula").val()=="" || $("#supervisor").val()=="" || $("#pedido").val()=="" ){
-      alert("Debes verificar que la informacion este completa")
-    }else{
-      $("#formPedido").submit()
-    }
-    
+$(function () {
+  $('.dtable').DataTable({
+    dom: 'lfrBtip',
+    language: {
+      url: '//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json'
+    },
+    responsive: true,
+    buttons: [
+      {
+        extend: 'excel',
+        filename: 'Informe',
+        text: 'Excel',
+        className: 'Excel',
+        sheetName: 'Informe',
+        title: null
+      }
+    ]
   })
-  //DATATABLE
-
-  $(function() {
-    $('.dtable').DataTable({
-      dom: 'lfrBtip',
-      language: {
-        url: '//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json'
-      },
-      responsive: true,
-      buttons: [
-        {
-          extend: 'excel',
-          filename: 'Informe',
-          text: 'Excel',
-          className: 'Excel',
-          sheetName: 'Informe',
-          title: null
-        }
-      ]
-    })
-  });
+});

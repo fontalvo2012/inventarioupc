@@ -193,6 +193,7 @@ router.get('/ccostos', checkAuthentication, async (req, res) => {
 
 router.post('/ccostos', checkAuthentication, async (req, res) => {
   const { nombre, descripcion } = req.body
+  
   const ccostos = new Ccostos({ nombre, descripcion })
   await ccostos.save()
   req.flash('success', "Centro de costo creado");
@@ -357,6 +358,11 @@ router.get('/verPedidoDespacho/:id', checkAuthentication, async (req, res) => {
   res.render('inventario/verpedidodespacho', { pedido, id });
 });
 
+router.post('/infCostos', checkAuthentication, async (req, res) => {
+  const { ccostos } = req.body;
+  const pedido = await Pedidos.find({ 'pedidos.ccostos': ccostos }).lean();
+  res.send(pedido);
+});
 router.post('/saldos', checkAuthentication, async (req, res) => {
   const { codigo } = req.body;
   var total = 0;
