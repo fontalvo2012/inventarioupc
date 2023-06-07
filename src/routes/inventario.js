@@ -19,7 +19,6 @@ function checkAuthentication(req, res, next) {
 router.get('/inventario', checkAuthentication, async (req, res) => {
   const productos = await Productos.find().sort({ nombre_Articulo: 'ASC' }).lean();
   const cont = productos.length
-  console.log(cont)
   res.render('inventario/index',{productos,cont});
 });
 router.get('/informeDespachado', checkAuthentication, async (req, res) => {
@@ -61,8 +60,6 @@ router.post('/informeDespachado', checkAuthentication, async (req, res) => {
         }
       });
   }
-
-  console.log(pedidos)
   var p = pedidos;
   for (let i = 0; i < p.length; i++) {
     var hora = p[i].fecha.getHours();
@@ -159,15 +156,12 @@ router.post('/compras', checkAuthentication, async (req, res) => {
     const producto = await Productos.findOne({ codigo_Articulo: codigo });
     let nuevoCosto 
     if(producto.costo > 0){
-      console.log("Cantidad Actual",producto.cantidad_Total,"costo actual",producto.costo,"Cantidad Nuevo",d[i].cantidad,"costo nuevo",d[i].costo)
       const cantidadActual = producto.cantidad_Total;
       const costoActual = producto.costo;
       nuevoCosto = ((cantidadActual * costoActual) + (parseInt(d[i].cantidad)* parseInt(d[i].costo))) / (cantidadActual + parseInt(d[i].cantidad));
     }else{
       nuevoCosto= d[i].costo
     }
-    console.log(nuevoCosto)
-   
     await Productos.updateOne({ codigo_Articulo: codigo }, { cantidad_Total: parseInt(producto.cantidad_Total) + parseInt(d[i].cantidad),costo:nuevoCosto});
   }
   const nombre_factura = req.files.doc.name;
@@ -177,11 +171,16 @@ router.post('/compras', checkAuthentication, async (req, res) => {
       if (err) console.log(err);
     });
     const compra = new Compras({ nro: factura, proveedor, productos: d, fecha,imagen });
-    
     compra.save();
- 
   res.redirect('/compras');
 
+});
+
+router.get('/consolidadoCompras', checkAuthentication, async (req, res) => {
+  const proveedores = await Proveedores.find().lean();
+  const compras = await Compras.find().lean()
+  console.log(compras)
+  res.render('inventario/informeCompras',{proveedores,compras});
 });
 //COMPRAS
 
@@ -193,7 +192,7 @@ router.get('/ccostos', checkAuthentication, async (req, res) => {
 
 router.post('/ccostos', checkAuthentication, async (req, res) => {
   const { nombre, descripcion } = req.body
-  
+
   const ccostos = new Ccostos({ nombre, descripcion })
   await ccostos.save()
   req.flash('success', "Centro de costo creado");
@@ -332,9 +331,7 @@ router.get('/verPedidoSedes/:id', checkAuthentication, async (req, res) => {
   res.render('inventario/verpedido', { pedido, id });
 });
 
-router.get('/consolidadoCompras', checkAuthentication, async (req, res) => {
-  res.render('inventario/informeCompras');
-});
+
 router.get('/consolidadoCcostos', checkAuthentication, async (req, res) => {
   const pedidos = await Pedidos.find().lean()
   const ccostos = await Ccostos.find().lean()
@@ -471,7 +468,6 @@ router.post('/despachar', checkAuthentication, async (req, res) => {
 
   for (let index = 0; index < pedido.pedidos.length; index++) {
     const element = pedido.pedidos[index];
-    console.log("CODIGO",element.codigo,"cantidad",element.cantidad)
     await Productos.updateOne({codigo_Articulo:element.codigo}, { $inc: { cantidad_Total: -element.cantidad } })
   }
 
@@ -542,7 +538,6 @@ router.get('/descargarinv', checkAuthentication, async (req, res) => {
 
 async function Invetario(_id) {
   const user= await Users.findOne({_id})
-  console.log(user)
   const inventario = user.inventario;
   const despachos = user.despachos;
   let invent = []
@@ -605,7 +600,6 @@ router.post('/solicitudes', checkAuthentication, async (req, res) => {
 router.post('/consultarUsuario', checkAuthentication, async (req, res) => {
   const { user } = req.body;
   const u = await Users.findOne({ username: user });
-  console.log("usuario:",user)
   res.send(u);
 });
 

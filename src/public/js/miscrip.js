@@ -43,7 +43,11 @@ function cargarlistadescargas() {
   }
 
 
+
 }
+
+
+
 
 function guardarItemCentros() {
   if (!lista[0] || $("#ccostos option:selected").text() == "Seleccionar") {
@@ -68,8 +72,8 @@ function guardarItemCentros() {
       $('#descargaCcostos').submit()
     }
   }
-
 }
+
 
 function consultarmedico(id) {
   $.ajax({
