@@ -18,7 +18,7 @@
           <button class="btn btn-success btn-sm btn-block" id="btninfccosto">Buscar</button>
         </div>
         <div class="col-sm-12">
-          <span><b>Gasto total:</b></span><h4><span id="gastototal"></span></h4>
+          <span><b>Gasto total:</b></span><h4><span id="gastototal" style="background-color:blue ;"></span></h4>
         </div>
       </div>
     </div>
@@ -28,11 +28,10 @@
  <table class="table dtable">
           <thead>
             <tr>
-              <th>codigo</th>
+               <th>Producto</th>
               <th>fecha</th>
               <th>Empleado</th>
               <th>Ccosto</th>
-              <th>Producto</th>
               <th>Linea</th>
               <th>Cantidad</th>
               <th>costo</th>
@@ -43,11 +42,10 @@
             {{#each pedidos}}
               {{#each pedidos}} 
               <tr>
-                <th>{{codigo}}</th>
+                <th>{{producto}}</th>
                 <th>{{fecha}}</th>
                 <th>{{../usuario}}</th>
                 <th>{{nccosto}}</th>
-                <th>{{producto}}</th>
                 <th>{{linea}}</th>
                 <th>{{autorizado}} {{medida}}</th>
                 <th>{{costo}}</th>

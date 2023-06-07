@@ -128,14 +128,13 @@ function infCostos() {
             console.log(p)
             totalccosto += parseInt(p.costo)
             cadena += `<tr>
-                      <td>${p.codigo}</td>
+                      <td>${p.producto}</td>
                       <td>${pedido.fecha}</td>
                       <td>${pedido.usuario}</td>
                       <td>${p.nccosto}</td>
-                      <td>${p.producto}</td>
                       <td>${p.linea}</td>
                       <td>${p.autorizado} ${p.medida}</td>
-                      <td>${p.costo}</td>
+                      <td>$${number_format(p.costo)}</td>
                     </tr>`
           }
         }
