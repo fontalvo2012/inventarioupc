@@ -44,6 +44,7 @@ function cargarlistadescargas() {
 }
 
 function cargarPdfFactutas(img) {
+  console.log("/img/facturas/"+img)
   $("#pdffactura").attr("src", "/img/facturas/"+img);
 }
 
