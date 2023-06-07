@@ -13,15 +13,13 @@
           </thead>
           <tbody id="infcompras">
             {{#each compras}}
-            
               <tr>
                 <th>{{nro}}</th>
                 <th>{{fecha}}</th>
                 <th>{{proveedor}}</th>
                 <th><button type="button" class="btn btn-primary" data-toggle="modal"  onclick="cargarPdfFactutas('{{imagen}}')" data-target="#imgFacturas">Ver Soporte</button></th>
-                <th><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ListaProductos">Ver Productos</button></th>
+                <th><button type="button" class="btn btn-primary" data-toggle="modal" onclick="cargarProductos('{{productos}}')" data-target="#ListaProductos">Ver Productos</button></th>
               </tr>
-          
            {{/each}}
           </tbody>
         </table>
@@ -40,7 +38,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <img src="" alt="fatutas" id="pdffactura">
+        <img src="" alt="facturas" id="pdffactura" width="80%">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -66,7 +64,20 @@
         </button>
       </div>
       <div class="modal-body">
-        PROBANDO
+        <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Producto</th>
+        <th scope="col">Cantidad</th>
+        <th scope="col">Costo</th>
+        <th scope="col">Iva</th>
+        <th scope="col">Total</th>
+      </tr>
+    </thead>
+    <tbody id="lproductos">
+      
+    </tbody>
+  </table>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

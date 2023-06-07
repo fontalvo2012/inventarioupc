@@ -1,5 +1,6 @@
 
 
+
 const inventario = [
   {
     "codigo_Articulo": "000356",
@@ -7340,21 +7341,27 @@ function crearInsumos() {
 }
 
 
-var compra = [];
+let compra = [];
 function AgregarProducto() {
-  var proveedor = $('#proveedor').val();
-  var producto = $('#producto').val();
-  var cantidad = $('#cantidad').val();
-  var costo = $('#costo').val();
-  var iva = $('#iva').val();
-  var ica = $('#ica').val();
+  let proveedor = $('#proveedor').val();
+  let producto = $('#producto').val();
+  let pocision =producto.indexOf(':')
+  let codigo = producto.substring(0,pocision)
+  producto = producto.substring(pocision+1,producto.length)
+  let cantidad = parseInt($('#cantidad').val());
+  let descuento = parseInt($('#descuento').val());
+  let costo = parseInt($('#costo').val()) - descuento
+  let iva = parseInt(costo)*(parseInt($('#iva').val())/100);
+  let total = (cantidad*costo) + (cantidad*iva)
+
   if (producto != "" && costo != "" && cantidad != "") {
-    compra.push({ proveedor, producto, cantidad, costo, iva, ica });
+    compra.push({ codigo,proveedor, producto, cantidad, costo,descuento,iva,total });
     mostrarCarrito();
     $('#producto').val("");
     $('#cantidad').val("");
     $('#costo').val("0");
-    $('#iva').val("0");
+    $('#iva').val("19");
+    $('#descuento').val("0");
     $('#ica').val("0");
     $('#datos').val(JSON.stringify(compra));
   } else {
@@ -7406,16 +7413,16 @@ function mostrarCarrito() {
   var total = 0
   compra.forEach(element => {
     cont++;
-    total += (parseInt(element.costo) + (parseInt(element.costo)*(parseInt(element.iva)/100)) - (parseInt(element.costo)*(parseInt(element.ica)/100))) * parseInt(element.cantidad)
+    total += element.total
     cadena += `
     <tr>
-      <th>${cont}</th>
-      <td>${element.cantidad}</td>
+      <th>${element.codigo}</th>
       <td>${element.producto}</td>
+      <td>${element.cantidad}</td>
       <td>$${number_format(element.costo, 1)}</td>
-      <td>${number_format(element.iva, 1)}%</td>
-      <td style="color: red;" >${number_format(element.ica, 1)}%</td>
-      <th>$${(parseInt(element.costo) + (parseInt(element.costo)*(parseInt(element.iva)/100)) - (parseInt(element.costo)*(parseInt(element.ica)/100))) * parseInt(element.cantidad)}</th>
+      <td>$${number_format(element.iva,1)}</td>
+      <td>$${number_format(element.descuento,1)}</td>
+      <th>$${number_format(element.total,1)}</th>
       <td><a href="#" >quitar</a></td>
     </tr>
         `;

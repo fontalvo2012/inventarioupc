@@ -48,6 +48,22 @@ function cargarPdfFactutas(img) {
   $("#pdffactura").attr("src", "/img/facturas/"+img);
 }
 
+function cargarProductos(productos) {
+  const p=JSON.parse(productos)
+  let cadena=""
+  for (item  of p) {
+    cadena+=`
+    <tr>
+        <td>${item.producto}</td>
+        <td>${item.cantidad}</td>
+        <td>${item.costo}</td>
+        <td>${item.iva}</td>
+        <td>${parseInt(item.costo)*parseInt(item.cantidad)}</td>
+      </tr>
+    `
+  }
+  $('#lproductos').html(cadena)
+}
 
 function guardarItemCentros() {
   if (!lista[0] || $("#ccostos option:selected").text() == "Seleccionar") {
@@ -103,13 +119,14 @@ function infCostos() {
       ccostos: $('#ccostos').val()
     },
     success: (data) => {
+      let totalccosto=0;
       $('.dtable').DataTable().destroy()
       let cadena = ""
       for (const pedido of data) {
         for (const p of pedido.pedidos) {
           if (p.ccosto === $('#ccosto').val() && parseInt(p.autorizado)> 0) {
             console.log(p)
-
+            totalccosto += parseInt(p.costo)
             cadena += `<tr>
                       <td>${p.codigo}</td>
                       <td>${pedido.fecha}</td>
@@ -125,6 +142,7 @@ function infCostos() {
 
       }
       $('#infccostos').html(cadena)
+      $('#gastototal').html("$  "+number_format(totalccosto,1))
       $('.dtable').DataTable({
         dom: 'lfrBtip',
         language: {

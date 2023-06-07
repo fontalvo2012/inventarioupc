@@ -109,7 +109,7 @@ router.post('/completarProducto', checkAuthentication, async (req, res) => {
   const productos = await Productos.find();
   var array = []
   productos.forEach(element => {
-    array.push(element.codigo_Articulo + '::' + element.nombre_Articulo + '::' + element.Referencia);
+    array.push(element.codigo_Articulo + ':' + element.nombre_Articulo);
   });
   res.send(array);
 });
@@ -166,7 +166,7 @@ router.post('/compras', checkAuthentication, async (req, res) => {
   }
   const nombre_factura = req.files.doc.name;
   let fac = req.files.doc;
-  let imagen =factura+"_"+nombre_factura
+  let imagen =factura+"_"+nombre_factura.replace(/\s/g, "");
     fac.mv('./src/public/img/facturas/' + imagen, (err) => {
       if (err) console.log(err);
     });
@@ -179,7 +179,9 @@ router.post('/compras', checkAuthentication, async (req, res) => {
 router.get('/consolidadoCompras', checkAuthentication, async (req, res) => {
   const proveedores = await Proveedores.find().lean();
   const compras = await Compras.find().lean()
-  console.log(compras)
+  for (let index = 0; index < compras.length; index++) {
+      compras[index].productos=JSON.stringify(compras[index].productos)
+     }
   res.render('inventario/informeCompras',{proveedores,compras});
 });
 //COMPRAS
