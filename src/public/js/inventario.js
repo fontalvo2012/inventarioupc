@@ -7433,14 +7433,16 @@ function mostrarCarrito() {
 
 
 //PEDIDO
-var pedido = [];
-var ca = 0;
+let pedido = [];
+let ca = 0;
 function addProductoPedido(costo,linea,medida) {
   if ($('#producto').val() != "" && $('#cantidad').val() != "" && $('#ccosto').val() != "") {
-    var index = $('#producto').val().indexOf(':');
-    var codigo = $('#producto').val().substring(0, index);
-    var nccosto =$('#ccosto option:selected').text()
-    pedido.push({ codigo, fecha: new Date(), ccosto: $("#ccosto").val(), producto: $('#producto').val(), cantidad: parseInt($('#cantidad').val()), autorizado: $('#cantidad').val(), despachado: '0',costo,nccosto,linea,medida });
+    let index = $('#producto').val().indexOf(':');
+    let codigo = $('#producto').val().substring(0, index);
+    let nccosto =$('#ccosto option:selected').text()
+    let ccostodes = $('#ccosto').data('des')
+    console.log(ccostodes)
+    pedido.push({ codigo, fecha: new Date(), ccosto: $("#ccosto").val(), producto: $('#producto').val(), cantidad: parseInt($('#cantidad').val()), autorizado: $('#cantidad').val(), despachado: '0',costo,nccosto,linea,medida,ccostodes });
     mostrarPedido();
     $('#pedido').val(JSON.stringify(pedido));
     $('#producto').val('');
