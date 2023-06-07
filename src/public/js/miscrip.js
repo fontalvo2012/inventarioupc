@@ -41,12 +41,11 @@ function cargarlistadescargas() {
   } else {
     alert(`Ya has ingresado algunos productos al centro de costo ${lista[0].ccosto} debes guardar este avence`)
   }
-
-
-
 }
 
-
+function cargarPdfFactutas(img) {
+  $("#pdffactura").attr("src", "/img/facturas/"+img);
+}
 
 
 function guardarItemCentros() {
