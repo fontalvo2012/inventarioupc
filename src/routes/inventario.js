@@ -359,7 +359,7 @@ router.get('/verPedidoDespacho/:id', checkAuthentication, async (req, res) => {
 
 router.post('/infCostos', checkAuthentication, async (req, res) => {
   const { ccostos } = req.body;
-  const pedido = await Pedidos.find({ 'pedidos.ccostos': ccostos }).lean();
+  const pedido = await Pedidos.find({ 'pedidos.ccostos': ccostos,estado:'despachado' }).lean();
   res.send(pedido);
 });
 router.post('/saldos', checkAuthentication, async (req, res) => {
