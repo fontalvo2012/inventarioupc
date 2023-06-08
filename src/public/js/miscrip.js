@@ -51,7 +51,10 @@ function cargarPdfFactutas(img) {
 function cargarProductos(productos) {
   const p=JSON.parse(productos)
   let cadena=""
+  let v=0,t=0
   for (item  of p) {
+    v =(parseInt(item.costo)*parseInt(item.cantidad))+(parseInt(item.iva)*parseInt(item.cantidad))
+    t += v
     cadena+=`
     <tr>
         <td>${item.producto}</td>
@@ -62,6 +65,15 @@ function cargarProductos(productos) {
       </tr>
     `
   }
+  cadena+=`
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>${t}</td>
+    </tr>
+  `
   $('#lproductos').html(cadena)
 }
 
