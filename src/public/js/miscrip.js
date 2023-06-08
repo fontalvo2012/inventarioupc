@@ -71,7 +71,7 @@ function cargarProductos(productos) {
       <td></td>
       <td></td>
       <td></td>
-      <td>${t}</td>
+      <td>$${number_format(t,1)}</td>
     </tr>
   `
   $('#lproductos').html(cadena)
