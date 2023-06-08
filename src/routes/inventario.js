@@ -342,7 +342,20 @@ router.get('/consolidadoCcostos', checkAuthentication, async (req, res) => {
 
 router.get('/productos', checkAuthentication, async (req, res) => {
   const productos = await Productos.find().sort({ nombre_Articulo: 'ASC' }).lean();
-  res.render('inventario/productosver', { productos });
+  let total=0;
+  for (let index = 0; index < productos.length; index++) {
+    total+=parseInt(productos[index].costo)
+    productos[index].costo=parseInt(productos[index].costo).toLocaleString('es-CO', {
+      style: 'currency',
+      currency: 'COP'
+    });
+  }
+  console.log(total)
+  total=total.toLocaleString('es-CO', {
+    style: 'currency',
+    currency: 'COP'
+  });
+  res.render('inventario/productosver', { productos,total });
 })
 router.get('/eliminarproducto/:id', checkAuthentication, async (req, res) => {
   const { id } = req.params;
@@ -359,7 +372,7 @@ router.get('/verPedidoDespacho/:id', checkAuthentication, async (req, res) => {
 
 router.post('/infCostos', checkAuthentication, async (req, res) => {
   const { ccostos } = req.body;
-  const pedido = await Pedidos.find({ 'pedidos.ccostos': ccostos,estado:'despachado' }).lean();
+  const pedido = await Pedidos.find({ 'pedidos.ccostos': ccostos,estado:'despachado' }).sort({_id:-1}).lean();
   res.send(pedido);
 });
 router.post('/saldos', checkAuthentication, async (req, res) => {

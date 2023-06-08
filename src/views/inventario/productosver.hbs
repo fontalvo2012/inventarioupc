@@ -1,21 +1,23 @@
-
-<div class="card">
-  <div class="card-header">
-    <h4>Inventario</h4>
+<div class="container">
+  <h3>INVENTARIO</h3>
+  <div class="row">
+    <div class="col-6  mb-4">
+      <h4>Costo total del inventario <b> {{total}}</b></h4>
+    </div>
   </div>
-  <div class="card-body">
-    <table class="table dtable">
+  <table class="table dtable">
   <thead>
     <tr>
       <th scope="col">codigo</th>
       <th scope="col">Nombre</th>
-      <th scope="col">Referencia</th>
-      <th scope="col">Proveedor</th>
       <th scope="col">Line</th>
       <th scope="col">Marca</th>
       <th scope="col">Medida</th>
       <th scope="col">Cantidad</th>
-      <th scope="col">Accion</th>
+      <th scope="col">Cantidad Minima</th>
+      <th scope="col">Costo</th>
+      <th scope="col">Referencia</th>
+      <th scope="col">Proveedor</th>
     </tr>
   </thead>
   <tbody>
@@ -23,17 +25,18 @@
     <tr>
       <th>{{codigo_Articulo}}</th>
       <td>{{nombre_Articulo}}</td>
-      <td>{{Referencia}}</td>
-      <td>{{proveedor}}</td>
       <td>{{linea}}</td>
       <td>{{marca}}</td>
       <td>{{medida}}</td>
       <td>{{cantidad_Total}}</td>
-      <td><a href="/eliminarproducto/{{_id}}">Eliminar</a></td>
+      <td>{{cantidad_minima}}</td>
+      <td>{{costo}}</td>
+      <td>{{Referencia}}</td>
+      <td>{{proveedor}}</td>
     </tr>
     {{/each}}
     
   </tbody>
 </table>
-  </div>
+
 </div>

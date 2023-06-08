@@ -129,12 +129,12 @@ function infCostos() {
             totalccosto += parseInt(p.costo)
             cadena += `<tr>
                       <td>${p.producto}</td>
-                      <td>${pedido.fecha}</td>
                       <td>${pedido.usuario}</td>
-                      <td>${p.nccosto}</td>
                       <td>${p.linea}</td>
                       <td>${p.autorizado} ${p.medida}</td>
                       <td>$${number_format(p.costo)}</td>
+                      <td>${p.nccosto}</td>
+                      <td>${pedido.fecha}</td>
                     </tr>`
           }
         }
@@ -920,4 +920,14 @@ $(function () {
       }
     ]
   })
+})
+
+
+$(".rfid").on("keypress", function(event) {
+  if (event.which === 13) {
+    console.log("tecleando enter")
+    $("#producto").focus()
+  }
 });
+
+
