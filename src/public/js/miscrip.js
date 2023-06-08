@@ -56,9 +56,9 @@ function cargarProductos(productos) {
     <tr>
         <td>${item.producto}</td>
         <td>${item.cantidad}</td>
-        <td>${item.costo}</td>
-        <td>${item.iva}</td>
-        <td>${parseInt(item.costo)*parseInt(item.cantidad)}</td>
+        <td>${number_format(item.costo,1)}</td>
+        <td>${number_format(item.iva,1)}</td>
+        <td>${number_format((parseInt(item.costo)*parseInt(item.cantidad))+(parseInt(item.iva)*parseInt(item.cantidad)),1)}</td>
       </tr>
     `
   }

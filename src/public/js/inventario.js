@@ -7371,6 +7371,12 @@ function AgregarProducto() {
 
 }
 
+function quitarItemCompra(indice) {
+  compra.splice(indice,1)
+  $('#datos').val(JSON.stringify(compra));
+  mostrarCarrito()
+}
+
 function completarProducto() {
   $.ajax({
     url: '/completarProducto',
@@ -7408,11 +7414,11 @@ function ValidarProducto() {
 }
 
 function mostrarCarrito() {
-  var cadena = '';
-  var cont = 0;
+  var cadena = ''
+  var cont = 0
   var total = 0
   compra.forEach(element => {
-    cont++;
+    
     total += element.total
     cadena += `
     <tr>
@@ -7423,10 +7429,11 @@ function mostrarCarrito() {
       <td>$${number_format(element.iva,1)}</td>
       <td>$${number_format(element.descuento,1)}</td>
       <th>$${number_format(element.total,1)}</th>
-      <td><a href="#" >quitar</a></td>
+      <td><span class="btn btn-warning btn-sm" onclick="quitarItemCompra(${cont})">quitar</span></td>
     </tr>
-        `;
-  });
+        `
+        cont++
+  })
   cadena += `
     <tr>
       <th colspan="6"></th>    

@@ -150,11 +150,17 @@ router.post('/compras', checkAuthentication, async (req, res) => {
 
   const d = JSON.parse(datos);
 
+  const prove = await Proveedores.findOne({nit:proveedor})
+
+
+  const nproveedor = prove.nombre
+
+  console.log(prove)
   for (let i = 0; i < d.length; i++) {
-    const index = d[i].producto.indexOf(':');
-    const codigo = d[i].producto.substr(0, index);
+    const codigo = d[i].codigo;
     const producto = await Productos.findOne({ codigo_Articulo: codigo });
     let nuevoCosto 
+    
     if(producto.costo > 0){
       const cantidadActual = producto.cantidad_Total;
       const costoActual = producto.costo;
@@ -170,7 +176,7 @@ router.post('/compras', checkAuthentication, async (req, res) => {
     fac.mv('./src/public/img/facturas/' + imagen, (err) => {
       if (err) console.log(err);
     });
-    const compra = new Compras({ nro: factura, proveedor, productos: d, fecha,imagen });
+    const compra = new Compras({ nro: factura, proveedor,nproveedor,productos: d, fecha,imagen });
     compra.save();
   res.redirect('/compras');
 
