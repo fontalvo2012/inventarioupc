@@ -103,6 +103,22 @@
             </div>
           </li>
         {{/if}}
+        {{#if user.consulta}}
+          <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <i class='fas fa-unlock-alt' style='font-size:16px'></i> Informes
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="/consolidadoCompras"><i class='fas fa-angle-double-right' style='font-size:12px'></i>
+              Consolidados Compras</a>
+               <a class="dropdown-item" href="/consolidadoCcostos"><i class='fas fa-angle-double-right' style='font-size:12px'></i>
+              Consolidados C.Costos</a>
+               <a class="dropdown-item" href="/productos"><i class='fas fa-angle-double-right' style='font-size:12px'></i>
+              Inventario</a>
+          </div>
+        </li>
+        {{/if}}
         {{#if user.despacho}}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
