@@ -125,14 +125,15 @@ function infCostos() {
       for (const pedido of data) {
         for (const p of pedido.pedidos) {
           if (p.ccosto === $('#ccosto').val() && parseInt(p.autorizado)> 0) {
-            console.log(p)
-            totalccosto += parseInt(p.costo)
+            
+            totalccosto += parseInt(p.costo)*parseInt(p.autorizado)
             cadena += `<tr>
                       <td>${p.producto}</td>
                       <td>${pedido.usuario}</td>
-                      <td>${p.linea}</td>
                       <td>${p.autorizado} ${p.medida}</td>
                       <td>$${number_format(p.costo)}</td>
+                      <td>$${number_format(parseInt(p.costo)*parseInt(p.autorizado))}</td>
+                      <td>${p.linea}</td>
                       <td>${p.nccosto}</td>
                       <td>${pedido.fecha}</td>
                     </tr>`
