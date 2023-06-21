@@ -147,37 +147,38 @@ router.get('/compras', checkAuthentication, async (req, res) => {
 
 router.post('/compras', checkAuthentication, async (req, res) => {
   const { datos, proveedor, factura, fecha } = req.body
-
+  
   const d = JSON.parse(datos);
-
   const prove = await Proveedores.findOne({nit:proveedor})
-
-
   const nproveedor = prove.nombre
-
-  console.log(prove)
-  for (let i = 0; i < d.length; i++) {
-    const codigo = d[i].codigo;
-    const producto = await Productos.findOne({ codigo_Articulo: codigo });
-    let nuevoCosto 
-    
-    if(producto.costo > 0){
-      const cantidadActual = producto.cantidad_Total;
-      const costoActual = producto.costo;
-      nuevoCosto = ((cantidadActual * costoActual) + (parseInt(d[i].cantidad)* parseInt(d[i].costo))) / (cantidadActual + parseInt(d[i].cantidad));
-    }else{
-      nuevoCosto= d[i].costo
+  const compras = await Compras.findOne({nro:factura})
+  if (compras) {
+    req.flash('login', "Ya existe una factura creada con el numero "+factura);
+  } else {
+    for (let i = 0; i < d.length; i++) {
+      const codigo = d[i].codigo;
+      const producto = await Productos.findOne({ codigo_Articulo: codigo });
+      let nuevoCosto 
+      
+      if(producto.costo > 0){
+        const cantidadActual = producto.cantidad_Total;
+        const costoActual = producto.costo;
+        nuevoCosto = ((cantidadActual * costoActual) + (parseInt(d[i].cantidad)* parseInt(d[i].costo))) / (cantidadActual + parseInt(d[i].cantidad));
+      }else{
+        nuevoCosto= d[i].costo
+      }
+      await Productos.updateOne({ codigo_Articulo: codigo }, { cantidad_Total: parseInt(producto.cantidad_Total) + parseInt(d[i].cantidad),costo:nuevoCosto});
     }
-    await Productos.updateOne({ codigo_Articulo: codigo }, { cantidad_Total: parseInt(producto.cantidad_Total) + parseInt(d[i].cantidad),costo:nuevoCosto});
+    const nombre_factura = req.files.doc.name;
+    let fac = req.files.doc;
+    let imagen =factura+"_"+nombre_factura.replace(/\s/g, "");
+      fac.mv('./src/public/img/facturas/' + imagen, (err) => {
+        if (err) console.log(err);
+      });
+      const compra = new Compras({ nro: factura, proveedor,nproveedor,productos: d, fecha,imagen });
+      compra.save();
   }
-  const nombre_factura = req.files.doc.name;
-  let fac = req.files.doc;
-  let imagen =factura+"_"+nombre_factura.replace(/\s/g, "");
-    fac.mv('./src/public/img/facturas/' + imagen, (err) => {
-      if (err) console.log(err);
-    });
-    const compra = new Compras({ nro: factura, proveedor,nproveedor,productos: d, fecha,imagen });
-    compra.save();
+  
   res.redirect('/compras');
 
 });
@@ -211,8 +212,7 @@ router.get('/borrarsolicitud/:id', checkAuthentication, async (req, res) => {
   const { id } = req.params;
   await Pedidos.remove({ _id: id });
 
-
-  req.flash('login', "se elimino el pedido!");
+  req.flash('success', "Centro de costo creado");
   res.redirect('/pedidos');
 });
 router.get('/pedidos', checkAuthentication, async (req, res) => {

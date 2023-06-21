@@ -7348,14 +7348,16 @@ function AgregarProducto() {
   let pocision =producto.indexOf(':')
   let codigo = producto.substring(0,pocision)
   producto = producto.substring(pocision+1,producto.length)
-  let cantidad = parseInt($('#cantidad').val());
-  let descuento = parseInt($('#descuento').val());
-  let costo = parseInt($('#costo').val()) - descuento
-  let iva = parseInt(costo)*(parseInt($('#iva').val())/100);
+  let cantidad = parseFloat($('#cantidad').val());
+  let descuento = parseFloat($('#descuento').val()).toFixed(2);
+  let costo = Number($('#costo').val())
+  console.log(costo)
+  let iva = parseFloat(costo)*(parseFloat($('#iva').val())/100);
   let total = (cantidad*costo) + (cantidad*iva)
-
+  let c=new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(costo);
+  console.log(c)
   if (producto != "" && costo != "" && cantidad != "") {
-    compra.push({ codigo,proveedor, producto, cantidad, costo,descuento,iva,total });
+    compra.push({ codigo,proveedor, producto, cantidad, costo:c,descuento,iva,total });
     mostrarCarrito();
     $('#producto').val("");
     $('#cantidad').val("");
@@ -7413,10 +7415,12 @@ function ValidarProducto() {
   });
 }
 
+
+
 function mostrarCarrito() {
-  var cadena = ''
-  var cont = 0
-  var total = 0
+  let cadena = ''
+  let cont = 0
+  let total = 0
   compra.forEach(element => {
     
     total += element.total
@@ -7425,10 +7429,10 @@ function mostrarCarrito() {
       <th>${element.codigo}</th>
       <td>${element.producto}</td>
       <td>${element.cantidad}</td>
-      <td>$${number_format(element.costo, 1)}</td>
-      <td>$${number_format(element.iva,1)}</td>
-      <td>$${number_format(element.descuento,1)}</td>
-      <th>$${number_format(element.total,1)}</th>
+      <td>$${element.costo}</td>
+      <td>$${number_format(element.iva,2)}</td>
+      <td>$${number_format(element.descuento,2)}</td>
+      <th>$${number_format(element.total,2)}</th>
       <td><span class="btn btn-warning btn-sm" onclick="quitarItemCompra(${cont})">quitar</span></td>
     </tr>
         `
