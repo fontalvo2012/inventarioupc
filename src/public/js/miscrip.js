@@ -59,9 +59,9 @@ function cargarProductos(productos) {
     <tr>
         <td>${item.producto}</td>
         <td>${item.cantidad}</td>
-        <td>${number_format(item.costo,1)}</td>
-        <td>${number_format(item.iva,1)}</td>
-        <td>${number_format((parseInt(item.costo)*parseInt(item.cantidad))+(parseInt(item.iva)*parseInt(item.cantidad)),1)}</td>
+        <td>${number_format(item.costo,2)}</td>
+        <td>${number_format(item.iva,2)}</td>
+        <td>${number_format((parseInt(item.costo)*parseInt(item.cantidad))+(parseInt(item.iva)*parseInt(item.cantidad)),2)}</td>
       </tr>
     `
   }
@@ -71,7 +71,7 @@ function cargarProductos(productos) {
       <td></td>
       <td></td>
       <td></td>
-      <td>$${number_format(t,1)}</td>
+      <td>$${number_format(t,2)}</td>
     </tr>
   `
   $('#lproductos').html(cadena)
