@@ -7440,7 +7440,7 @@ function mostrarCarrito() {
   })
   cadena += `
     <tr>
-      <th colspan="6"></th>    
+      <th colspan="7"></th>    
       <th>$${number_format(total, 1)}</th>
       <th></th>    
     </tr>
