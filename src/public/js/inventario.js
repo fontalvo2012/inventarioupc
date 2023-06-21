@@ -7351,13 +7351,12 @@ function AgregarProducto() {
   let cantidad = parseFloat($('#cantidad').val());
   let descuento = parseFloat($('#descuento').val()).toFixed(2);
   let costo = Number($('#costo').val())
-  console.log(costo)
-  let iva = parseFloat(costo)*(parseFloat($('#iva').val())/100);
-  let total = (cantidad*costo) + (cantidad*iva)
+  let subtotal = parseFloat((cantidad*costo) - descuento)
+  let iva = subtotal*(parseInt($('#iva').val())/100);
+  let total = subtotal +iva
   let c=new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(costo);
-  console.log(c)
   if (producto != "" && costo != "" && cantidad != "") {
-    compra.push({ codigo,proveedor, producto, cantidad, costo:c,descuento,iva,total });
+    compra.push({ codigo,proveedor, producto, cantidad, costo:c,descuento,iva,total,subtotal });
     mostrarCarrito();
     $('#producto').val("");
     $('#cantidad').val("");
@@ -7430,8 +7429,9 @@ function mostrarCarrito() {
       <td>${element.producto}</td>
       <td>${element.cantidad}</td>
       <td>$${element.costo}</td>
-      <td>$${number_format(element.iva,2)}</td>
       <td>$${number_format(element.descuento,2)}</td>
+      <td>$${number_format(element.subtotal,2)}</td>
+      <td>$${number_format(element.iva,2)}</td>
       <th>$${number_format(element.total,2)}</th>
       <td><span class="btn btn-warning btn-sm" onclick="quitarItemCompra(${cont})">quitar</span></td>
     </tr>

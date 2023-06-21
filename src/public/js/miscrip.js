@@ -51,22 +51,25 @@ function cargarPdfFactutas(img) {
 function cargarProductos(productos) {
   const p=JSON.parse(productos)
   let cadena=""
-  let v=0,t=0
+  let t=0
   for (item  of p) {
-    v =(parseInt(item.costo)*parseInt(item.cantidad))+(parseInt(item.iva)*parseInt(item.cantidad))
-    t += v
+    t += item.total
     cadena+=`
     <tr>
         <td>${item.producto}</td>
         <td>${item.cantidad}</td>
-        <td>${number_format(item.costo,2)}</td>
-        <td>${number_format(item.iva,2)}</td>
-        <td>${number_format((parseInt(item.costo)*parseInt(item.cantidad))+(parseInt(item.iva)*parseInt(item.cantidad)),2)}</td>
+        <td>$${item.costo}</td>
+        <td>$${number_format(item.descuento)}</td>
+        <td>$${number_format(item.subtotal,2)}</td>
+        <td>$${number_format(item.iva,2)}</td>
+        <td>$${number_format(item.total,2)}</td>
       </tr>
     `
   }
   cadena+=`
     <tr>
+      <td></td>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>
