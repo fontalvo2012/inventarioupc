@@ -127,5 +127,6 @@ app.use(require('./routes/inventario'));
 //static file
 app.use(express.static(path.join(__dirname,'public')));
 
+require('./cron')
 
 module.exports= app;
