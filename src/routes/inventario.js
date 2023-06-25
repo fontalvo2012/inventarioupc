@@ -157,16 +157,15 @@ router.post('/compras', checkAuthentication, async (req, res) => {
   } else {
     for (let i = 0; i < d.length; i++) {
       const codigo = d[i].codigo;
+      let costo =parseFloat(d[i].subtotal)/parseInt(d[i].cantidad)
       const producto = await Productos.findOne({ codigo_Articulo: codigo });
       let nuevoCosto 
-      console.log("valor del producto en la bd ",producto.costo)
-      console.log("valor del producto en la tabla ",d[i].costo)
       if(producto.costo > 0){
         const cantidadActual = producto.cantidad_Total;
-        const costoActual = producto.costo;
-        nuevoCosto = ((cantidadActual * costoActual) + (parseInt(d[i].cantidad)* parseFloat(d[i].costo))) / (cantidadActual + parseInt(d[i].cantidad));
+        const costoActual = producto.costo
+        nuevoCosto = ((cantidadActual * costoActual) + (parseInt(d[i].cantidad)*costo)) / (cantidadActual + parseInt(d[i].cantidad));
       }else{
-        nuevoCosto= d[i].costo
+        nuevoCosto= costo
       }
       await Productos.updateOne({ codigo_Articulo: codigo }, { cantidad_Total: parseInt(producto.cantidad_Total) + parseInt(d[i].cantidad),costo:nuevoCosto});
     }
