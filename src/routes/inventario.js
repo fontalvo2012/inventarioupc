@@ -159,11 +159,12 @@ router.post('/compras', checkAuthentication, async (req, res) => {
       const codigo = d[i].codigo;
       const producto = await Productos.findOne({ codigo_Articulo: codigo });
       let nuevoCosto 
-      
+      console.log("valor del producto en la bd ",producto.costo)
+      console.log("valor del producto en la tabla ",d[i].costo)
       if(producto.costo > 0){
         const cantidadActual = producto.cantidad_Total;
         const costoActual = producto.costo;
-        nuevoCosto = ((cantidadActual * costoActual) + (parseInt(d[i].cantidad)* parseInt(d[i].costo))) / (cantidadActual + parseInt(d[i].cantidad));
+        nuevoCosto = ((cantidadActual * costoActual) + (parseInt(d[i].cantidad)* parseFloat(d[i].costo))) / (cantidadActual + parseInt(d[i].cantidad));
       }else{
         nuevoCosto= d[i].costo
       }
@@ -345,22 +346,44 @@ router.get('/consolidadoCcostos', checkAuthentication, async (req, res) => {
   const ccostos = await Ccostos.find().lean()
   res.render('inventario/informesCcostos',{pedidos,ccostos});
 });
+router.get('/remplazarPuntos', checkAuthentication, async (req, res) => {
+ await Productos.updateMany(
+    { costo: { $regex: /^[0-9]{1,9}\.[0-9]+$/ } },
+    [
+      {
+        $set: {
+          costo: {
+            $replaceAll: {
+              input: "$costo",
+              find: ".",
+              replacement: ","
+            }
+          }
+        }
+      }
+    ]
+  )
+  res.send('remplazados');
+});
 
 router.get('/productos', checkAuthentication, async (req, res) => {
   const productos = await Productos.find().sort({ nombre_Articulo: 'ASC' }).lean();
   let total=0;
   for (let index = 0; index < productos.length; index++) {
-    total+=parseInt(productos[index].costo)
-    productos[index].costo=parseInt(productos[index].costo).toLocaleString('es-CO', {
+    total+=parseFloat(productos[index].costo)*parseInt(productos[index].cantidad_Total)
+    let c =parseFloat(productos[index].costo).toLocaleString('es-CO', {
       style: 'currency',
       currency: 'COP'
-    });
+    })
+    productos[index].costo=c
   }
-  console.log(total)
+
+
+
   total=total.toLocaleString('es-CO', {
     style: 'currency',
     currency: 'COP'
-  });
+  })
   res.render('inventario/productosver', { productos,total });
 })
 router.get('/eliminarproducto/:id', checkAuthentication, async (req, res) => {
