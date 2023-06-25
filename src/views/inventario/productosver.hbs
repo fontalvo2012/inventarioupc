@@ -22,7 +22,8 @@
   </thead>
   <tbody>
     {{#each productos}}
-    <tr>
+    {{#compare cantidad_minima '>=' cantidad_Total  }}
+    <tr style="color:red ;">
       <th>{{codigo_Articulo}}</th>
       <td>{{nombre_Articulo}}</td>
       <td>{{linea}}</td>
@@ -34,6 +35,20 @@
       <td>{{Referencia}}</td>
       <td>{{proveedor}}</td>
     </tr>
+    {{else}}
+      <tr>
+      <th>{{codigo_Articulo}}</th>
+      <td>{{nombre_Articulo}}</td>
+      <td>{{linea}}</td>
+      <td>{{marca}}</td>
+      <td>{{medida}}</td>
+      <td>{{cantidad_Total}}</td>
+      <td>{{cantidad_minima}}</td>
+      <td>{{costo}}</td>
+      <td>{{Referencia}}</td>
+      <td>{{proveedor}}</td>
+    </tr>
+     {{/compare}}
     {{/each}}
     
   </tbody>
