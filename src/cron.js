@@ -63,7 +63,7 @@ schedule.scheduleJob('30 18 * * *', async () => {
   const mailOptions = {
     from: 'hclinicas@hcontrolmedical.com',
     to: 'fontalvo2012@hotmail.com;jgmo519@hotmail.com;',
-    subject: 'Informe de Cantidades Minimas INVEMETAL',
+    subject: 'Informe de Cantidades Minimas INBEMETAL',
     html: htmlCorreo
   }
 
