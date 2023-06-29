@@ -26,6 +26,8 @@ router.get('/informeDespachado', checkAuthentication, async (req, res) => {
   res.render('inventario/informe_despachado', { users });
 });
 
+
+
 router.get('/verpedido/:id', checkAuthentication, async (req, res) => {
   const { id } = req.params;
   const pedido = await Pedidos.findOne({ _id: id }).lean();
@@ -114,11 +116,25 @@ router.post('/completarProducto', checkAuthentication, async (req, res) => {
   res.send(array);
 });
 
+
+router.post('/editarProducto', checkAuthentication, async (req, res) => {
+  const {codigo_Articulo} = req.body;
+  const producto = await Productos.findOne({ codigo_Articulo }).lean();
+  res.send(producto);
+});
+
 router.post('/crearInsumosform', checkAuthentication, async (req, res) => {
   const { codigo, nombre, referencia, linea, marca, medida,cantidad_minima } = req.body;
-  const productos = new Productos({ codigo_Articulo: codigo, nombre_Articulo: nombre, Referencia: referencia, linea: linea, marca: marca, medida: medida, costo: '0',cantidad_minima });
-  await productos.save();
-  req.flash('success', 'Datos registrados')
+  const producto = await Productos.findOne({ codigo_Articulo:codigo }).lean();
+  const parametros={ codigo_Articulo: codigo, nombre_Articulo: nombre, Referencia: referencia, linea: linea, marca: marca, medida: medida, costo: '0',cantidad_minima }
+  if(producto){
+    await Productos.updateOne({codigo_Articulo:codigo},parametros)
+    req.flash('success', 'Producto Actualizado')
+  }else{
+    const productos = new Productos(parametros);
+    await productos.save();
+    req.flash('success', 'Producto creado')
+  }
   res.redirect('/inventario');
 });
 // PRODUCTOS

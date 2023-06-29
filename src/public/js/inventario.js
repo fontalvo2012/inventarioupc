@@ -7718,3 +7718,28 @@ function quitarJefe(i) {
       </ul>
     `);
 }
+
+
+function editarProducto(codigo_Articulo) {
+  $.ajax({
+    url: '/editarProducto',
+    type: 'POST',
+    datatype: 'json',
+    data: {
+      codigo_Articulo
+    },
+    success: (data) => {
+      console.log(data)
+      $('#nombre').val(data.nombre_Articulo)
+      $('#codigo').val(data.codigo_Articulo)
+      $('#referencia').val(data.Referencia)
+      $('#linea').val(data.linea)
+      $('#marca').val(data.marca)
+      $('#medida').val(data.medida)
+      $('#cantidad_minima').val(data.cantidad_minima)
+      $('#btnCrearProducto').text("Actualizar")
+      $('#btnCrearProducto').removeClass("btn-success").addClass("btn-warning");
+
+    }
+  });
+}
