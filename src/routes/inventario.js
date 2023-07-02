@@ -18,7 +18,7 @@ function checkAuthentication(req, res, next) {
 
 router.get('/inventario', checkAuthentication, async (req, res) => {
   const productos = await Productos.find().sort({ nombre_Articulo: 'ASC' }).lean();
-  const cont = productos.length
+  const cont = productos.length+1
   res.render('inventario/index',{productos,cont});
 });
 router.get('/informeDespachado', checkAuthentication, async (req, res) => {
