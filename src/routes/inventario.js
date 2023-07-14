@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const router = Router();
 const Productos = require('../model/productos');
+const Cliente = require('../model/clientes');
 const Proveedores = require('../model/proveedores');
 const Compras = require('../model/compras');
 const Pedidos = require('../model/pedidos');
@@ -154,6 +155,40 @@ router.post('/proveedores', checkAuthentication, async (req, res) => {
 });
 
 // PROVEEDORES
+//VENTAS
+
+router.get('/ventas', checkAuthentication, async (req, res) => {
+
+  const clientes = await Cliente.find().lean()
+  res.render('inventario/ventas',{clientes});
+});
+//FIN VENTAS
+
+
+//CLIENTES
+router.get('/clientes', checkAuthentication, async (req, res) => {
+  const clientes = await Cliente.find().lean()
+  res.render('inventario/clientes',{clientes});
+});
+
+router.post('/crearCliente', checkAuthentication, async (req, res) => {
+  const {cedula,nombres,direccion,telefono,email} = req.body
+
+  const cl = await Cliente.findOne({cedula})
+
+  if(cl){
+    await Cliente.updateOne({cedula},{nombres,direccion,telefono,email})
+    req.flash('success', 'El cliente ha sido actualizado')
+  }else{
+    const cliente = new Cliente({cedula,nombres,direccion,telefono,email})
+    await cliente.save()
+    req.flash('success', 'Producto Creado')
+  }
+ 
+  
+  res.redirect('clientes');
+});
+//FIN CLIENTES
 
 //COMPRAS
 router.get('/compras', checkAuthentication, async (req, res) => {

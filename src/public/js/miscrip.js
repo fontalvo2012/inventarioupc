@@ -80,6 +80,28 @@ function cargarProductos(productos) {
   $('#lproductos').html(cadena)
 }
 
+
+//CLIENTES
+
+function editarCliente(cedula,nombres,direccion,email,telefono){
+
+  $('#cedula').val(cedula)
+  $('#nombres').val(nombres)
+  $('#direccion').val(direccion)
+  $('#email').val(email)
+  $('#telefono').val(telefono)
+}
+
+function cargarPaciente(){
+  $('#cedula').html($('#cliente').val())
+  $('#direccion').html($('#cliente').data("direccion"))
+  $('#email').html($('#cliente').data('direccion'))
+  $('#telefono').html('')
+  var direccion = $('#cliente').data('direccion');
+  console.log(direccion);
+}
+
+//FIN CLIENTES
 function guardarItemCentros() {
   if (!lista[0] || $("#ccostos option:selected").text() == "Seleccionar") {
     alert("debe agregar item a la lista o revisar el centro de costo")

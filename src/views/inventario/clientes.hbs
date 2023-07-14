@@ -1,0 +1,65 @@
+<h4>clientes</h4>
+
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      <h4>Creacion de clientes</h4>
+    </div>
+  </div>
+  <div class="card-body">
+    <form action="/crearCliente" method="post">
+    
+    <div class="row">
+      <div class="col-sm-6">
+        <span>Documento</span>
+        <input type="text" name="cedula" id="cedula" placeholder="Cedula" class="form-control form-control-sm" required>
+      </div>
+      <div class="col-sm-6">
+        <span>Nombres</span>
+        <input type="text" name="nombres" id="nombres" placeholder="Nombres" class="form-control form-control-sm" required>
+      </div>
+       <div class="col-sm-6">
+        <span>Direccion</span>
+        <input type="text" name="direccion" id="direccion" placeholder="Direccion" class="form-control form-control-sm">
+      </div>
+       <div class="col-sm-6">
+        <span>Telefono<span>
+        <input type="text" name="telefono" id="telefono" placeholder="Telefono" class="form-control form-control-sm">
+      </div>
+       <div class="col-sm-6">
+        <span>email</span>
+        <input type="email" name="email" id="email" placeholder="Email" class="form-control form-control-sm">
+      </div>
+       <div class="col-sm-12 mt-4">
+        <button class="btn btn-success btn-sm btn-block"> Guardar Cliente</button>
+      </div>
+    </div>
+    </form>
+  </div>
+</div>
+
+
+ <table class="table dtable mt-2">
+    <thead>
+        <tr>
+            <th>Cedula</th>
+            <th>Nombres</th> 
+            <th>Direccion</th>
+            <th>Telefono</th>
+            <th>Email</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+      {{#each clientes}}
+        <tr>
+            <td>{{cedula}}</td>
+            <td>{{nombres}}</td>
+            <td>{{direccion}}</td>
+            <td>{{telefono}}</td>
+            <td>{{email}}</td>
+            <th><span class="btn btn-warning btn-sm" onclick="editarCliente('{{cedula}}','{{nombres}}','{{direccion}}','{{email}}','{{telefono}}')">Editar</span></th>
+        </tr>
+      {{/each}}
+    </tbody>
+</table>

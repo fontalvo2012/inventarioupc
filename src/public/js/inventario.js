@@ -7459,7 +7459,6 @@ function addProductoPedido(costo,linea,medida) {
     let codigo = $('#producto').val().substring(0, index);
     let nccosto =$('#ccosto option:selected').text()
     let ccostodes = $('#ccosto').data('des')
-    console.log(ccostodes)
     pedido.push({ codigo, fecha: new Date(), ccosto: $("#ccosto").val(), producto: $('#producto').val(), cantidad: parseInt($('#cantidad').val()), autorizado: $('#cantidad').val(), despachado: '0',costo,nccosto,linea,medida,ccostodes });
     mostrarPedido();
     $('#pedido').val(JSON.stringify(pedido));
@@ -7472,7 +7471,24 @@ function addProductoPedido(costo,linea,medida) {
   }
 console.log(pedido)
 }
-
+function addProductoPedidoVentas(valor,linea,medida) {
+  if ($('#producto').val() != "" && $('#cantidad').val() != "" && $('#valor').val() != "") {
+    let index = $('#producto').val().indexOf(':');
+    let codigo = $('#producto').val().substring(0, index);
+    let nccosto =$('#ccosto option:selected').text()
+    let ccostodes = $('#ccosto').data('des')
+    pedido.push({ codigo, fecha: new Date(), ccosto: $("#ccosto").val(), producto: $('#producto').val(), cantidad: parseInt($('#cantidad').val()), autorizado: $('#cantidad').val(), despachado: '0',valor,nccosto,linea,medida,ccostodes });
+    mostrarPedidoVenta();
+    $('#venta').val(JSON.stringify(pedido));
+    $('#producto').val('');
+    $('#cantidad').val('');
+    $('#valor').val('');
+    $("#cantidad").attr("placeholder", `cantidad`)
+  } else {
+    alert('debe llenar todos los campos');
+  }
+console.log('PEDIDO',pedido)
+}
 function asigarpedido(datos) {
   console.log(datos)
   pedido = JSON.parse(datos);
@@ -7497,7 +7513,36 @@ function mostrarPedido() {
   });
   $('#contenido').html(cadena);
 }
+function mostrarPedidoVenta() {
+  let cadena = "";
+  let cont = 0;
+  let sumatoria = 0
+  pedido.forEach(element => {
+    let vtotal =parseInt(element.valor)*parseInt(element.cantidad)
+    cadena += `
+        <tr>
+            <th scope="row">${cont}</th>
+            <td>${element.producto}</td>
+            <td>${element.cantidad} ${element.medida}</td>     
+            <td>${number_format(element.valor,2)}</td>     
+            <td>${number_format(vtotal,2)}</td>     
+            <td><span  class="btn btn-danger "onclick="quirarArrayPedido(${cont})">quitar</span></td>     
+        </tr>
+        `;
+    cont++;
+    sumatoria+=vtotal
+  });
+  cadena +=`<tr>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td>${number_format(sumatoria,2)}</td>
+  <td></td>
+  </tr>`
 
+  $('#contenido').html(cadena);
+}
 function quirarArrayPedido(i) {
   pedido.splice(i);
   mostrarPedido();
@@ -7530,7 +7575,34 @@ function verificarProducto() {
     });
   }
 }
-
+function verificarProductoVentas() {
+  var producto = $('#producto').val();
+  var cantidad = $('#cantidad').val();
+  var valor = $('#valor').val();
+  var index = producto.indexOf(':');
+  var codigo = producto.substring(0, index);
+  if ($("#cantidad").val() == "" || $("producto").val() == "" || $("#ccosto").val() == "") {
+    alert("Faltan datos por Ingresar")
+  } else {
+    $.ajax({
+      url: '/verificarProducto',
+      type: 'POST',
+      datatype: 'json',
+      data: {
+        codigo,
+        cantidad
+      },
+      success: (data) => {
+        if (data.opt == 'si') {
+          addProductoPedidoVentas(valor,data.producto.linea,data.producto.medida);
+        } else {
+          $('#cantidad').val('');
+          alert('Este pedido solo cuenta con ' + data + ' en el Inventario');
+        }
+      }
+    });
+  }
+}
 function totalCantidad() {
   var producto = $('#producto').val();
   var index = producto.indexOf(':');

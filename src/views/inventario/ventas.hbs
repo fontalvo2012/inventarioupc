@@ -1,0 +1,87 @@
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      <h4>Vender</h4>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-sm-4">
+        <span>Cliente</span><br />
+        <select class="selectpicker" data-show-subtext="true" data-live-search="true" id="cliente"
+          onchange="cargarPaciente()">
+          <option value="" selected="true">Seleccionar el Cliente</option>
+          {{#each clientes}}
+          <option value="{{cedula}}" data-direccion="valor direccion" data-telefono="{{telefono}}">{{nombres}} </option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="col-sm-2">
+        Cedula:
+        <br /><span id="cedula"></span>
+      </div>
+      <div class="col-sm-2">
+        Direccion:
+        <br /><span id="direccion"></span>
+      </div>
+      <div class="col-sm-2">
+        Telefono:
+        <br /><span id="telefono"></span>
+      </div>
+      <div class="col-sm-2">
+        Email:
+        <br /><span id="email"></span>
+      </div>
+      <div class="col-sm-4">
+        <span class="small"><b>Producto</b></span>
+        <input type="text" id="producto" name="producto" placeholder="Producto" onchange="ValidarProducto()"
+          class="form-control form-control-sm productos" />
+      </div>
+      <div class="col-sm-2">
+        <span class="small"><b>Cantidad</b></span>
+        <input type="text" id="cantidad" name="cantidad" placeholder="#" class="form-control form-control-sm" />
+      </div>
+      <div class="col-sm-3">
+        <span class="small"><b>Valor</b></span>
+        <input type="number" id="valor" name="cantidad" placeholder="$" class="form-control form-control-sm" />
+      </div>
+      <div class="col-sm-3">
+        <span class="small"><b>iva</b></span>
+        <input type="number" id="cantidad" name="cantidad" placeholder="#" value="0"
+          class="form-control form-control-sm" />
+      </div>
+      <div class="col-sm-12 mt-4">
+        <button class="btn btn-warning btn-block btn-sm" onclick="verificarProductoVentas()">Agregar a la lista</button>
+      </div>
+      <div class="col-sm-12">
+
+        <div class="col-sm-12 mt-4">
+          <div class="card">
+            <div class="card-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Valor</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">accion</th>
+                  </tr>
+                </thead>
+                <tbody id="contenido">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <input type="hidden" value="" id="venta">
+      </div>
+
+      <div class="col-sm-12 mt-4">
+        <button class="btn btn-success btn-sm btn-block">Generar Venta</button>
+      </div>
+    </div>
+
+  </div>
+</div>
