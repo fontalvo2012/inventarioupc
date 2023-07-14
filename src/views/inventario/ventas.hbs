@@ -9,10 +9,10 @@
       <div class="col-sm-4">
         <span>Cliente</span><br />
         <select class="selectpicker" data-show-subtext="true" data-live-search="true" id="cliente"
-          onchange="cargarPaciente()">
+          onchange="cargarCliente()">
           <option value="" selected="true">Seleccionar el Cliente</option>
           {{#each clientes}}
-          <option value="{{cedula}}" data-direccion="valor direccion" data-telefono="{{telefono}}">{{nombres}} </option>
+          <option value="{{cedula}}" data-direccion="{{direccion}}" data-telefono="{{telefono}}" data-email="{{email}}">{{nombres}} </option>
           {{/each}}
         </select>
       </div>
@@ -43,11 +43,11 @@
       </div>
       <div class="col-sm-3">
         <span class="small"><b>Valor</b></span>
-        <input type="number" id="valor" name="cantidad" placeholder="$" class="form-control form-control-sm" />
+        <input type="number" id="valor" name="valor" placeholder="$" class="form-control form-control-sm" />
       </div>
       <div class="col-sm-3">
         <span class="small"><b>iva</b></span>
-        <input type="number" id="cantidad" name="cantidad" placeholder="#" value="0"
+        <input type="number" id="iva" name="iva" placeholder="#" value="0"
           class="form-control form-control-sm" />
       </div>
       <div class="col-sm-12 mt-4">

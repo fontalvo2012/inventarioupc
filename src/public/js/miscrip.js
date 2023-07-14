@@ -92,13 +92,11 @@ function editarCliente(cedula,nombres,direccion,email,telefono){
   $('#telefono').val(telefono)
 }
 
-function cargarPaciente(){
-  $('#cedula').html($('#cliente').val())
-  $('#direccion').html($('#cliente').data("direccion"))
-  $('#email').html($('#cliente').data('direccion'))
-  $('#telefono').html('')
-  var direccion = $('#cliente').data('direccion');
-  console.log(direccion);
+function cargarCliente(){
+  $('#cedula').text($('#cliente').val())
+  $('#direccion').text($('#cliente option:selected').data("direccion"))
+  $('#email').text($('#cliente option:selected').data('email'))
+  $('#telefono').text($('#cliente option:selected').data('telefono'))
 }
 
 //FIN CLIENTES
