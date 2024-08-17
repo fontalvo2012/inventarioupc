@@ -7459,7 +7459,7 @@ function addProductoPedido(costo,linea,medida) {
     let codigo = $('#producto').val().substring(0, index);
     let nccosto =$('#ccosto option:selected').text()
     let ccostodes = $('#ccosto').data('des')
-    pedido.push({ codigo, fecha: new Date(), ccosto: $("#ccosto").val(), producto: $('#producto').val(), cantidad: parseInt($('#cantidad').val()), autorizado: $('#cantidad').val(), despachado: '0',costo,nccosto,linea,medida,ccostodes });
+    pedido.push({ codigo, fecha: new Date(), ccosto: $("#ccosto").val(), producto: $('#producto').val(), cantidad: parseFloat($('#cantidad').val()), autorizado: $('#cantidad').val(), despachado: '0',costo,nccosto,linea,medida,ccostodes });
     mostrarPedido();
     $('#pedido').val(JSON.stringify(pedido));
     $('#producto').val('');

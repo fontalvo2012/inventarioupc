@@ -562,9 +562,9 @@ router.post('/despachar', checkAuthentication, async (req, res) => {
 
   for (let index = 0; index < pedido.pedidos.length; index++) {
     const element = pedido.pedidos[index];
-    await Productos.updateOne({codigo_Articulo:element.codigo}, { $inc: { cantidad_Total: -element.cantidad } })
+    await Productos.updateOne({codigo_Articulo:element.codigo}, { $inc: { cantidad_Total: - parseFloat(element.cantidad) } })
   }
-
+ 
   res.send('despachado')
 })
 //DESPACHO

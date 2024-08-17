@@ -146,6 +146,7 @@ function consultarmedico(id) {
 }
 
 function infCostos() {
+  console.log("#### INFO COSTOS ####")
   $.ajax({
     url: '/infCostos',
     type: 'POST',
@@ -159,15 +160,15 @@ function infCostos() {
       let cadena = ""
       for (const pedido of data) {
         for (const p of pedido.pedidos) {
-          if (p.ccosto === $('#ccosto').val() && parseInt(p.autorizado)> 0) {
+          if (p.ccosto === $('#ccosto').val() && parseFloat(p.autorizado)> 0) {
             
-            totalccosto += parseInt(p.costo)*parseInt(p.autorizado)
+            totalccosto += parseFloat(p.costo)*parseFloat(p.autorizado)
             cadena += `<tr>
                       <td>${p.producto}</td>
                       <td>${pedido.usuario}</td>
                       <td>${p.autorizado} ${p.medida}</td>
                       <td>$${number_format(p.costo)}</td>
-                      <td>$${number_format(parseInt(p.costo)*parseInt(p.autorizado))}</td>
+                      <td>$${number_format(parseFloat(p.costo)*parseFloat(p.autorizado))}</td>
                       <td>${p.linea}</td>
                       <td>${p.nccosto}</td>
                       <td>${pedido.fecha}</td>
